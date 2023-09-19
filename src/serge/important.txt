@@ -1,0 +1,4 @@
+linkage flags
+-lboost_system -lpthread
+boost extern lib (not sure how to compile)
+g++ -o server2 server.cpp -I/vers/boost/ -L/vers/boost.libs/ -lboost_filesystem
