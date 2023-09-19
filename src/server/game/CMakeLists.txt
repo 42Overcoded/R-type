@@ -1,0 +1,2 @@
+add_library(GameServerLibrary game.cpp)
+target_include_directories(GameServerLibrary PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

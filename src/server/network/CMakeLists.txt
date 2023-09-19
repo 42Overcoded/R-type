@@ -1,0 +1,2 @@
+add_library(NetworkServerLibrary network.cpp)
+target_include_directories(NetworkServerLibrary PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

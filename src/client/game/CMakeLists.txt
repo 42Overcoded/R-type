@@ -1,0 +1,2 @@
+add_library(GameClientLibrary game.cpp)
+target_include_directories(GameClientLibrary PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
