@@ -4,10 +4,18 @@
 ** File description:
 ** SERVER
 */
-#include <iostream>
-#include <boost/asio.hpp>
+#include "Network.hpp"
 
-int main() {
+Network::Network()
+{
+
+}
+
+Network::~Network(){
+    
+}
+
+int Network::create_server(void) {
     boost::asio::io_context io_context;
     
     boost::asio::ip::udp::socket socket(io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 9876));
