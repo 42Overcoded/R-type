@@ -36,6 +36,18 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/vcpkg")
     message(FATAL_ERROR "vcpkg was not downloaded! Please update submodules and try again.")
 endif()
 
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/vcpkg")
+    # Install vcpkg
+    message(STATUS "Installing vcpkg")
+    execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/vcpkg install boost-system sfml
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
+        RESULT_VARIABLE VCPKG_INSTALL_RESULT)
+
+    if(NOT VCPKG_INSTALL_RESULT EQUAL "0")
+        message(FATAL_ERROR "vcpkg install failed with ${VCPKG_INSTALL_RESULT}")
+    endif()
+endif()
+
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
     CACHE STRING "Vcpkg toolchain file")
 
