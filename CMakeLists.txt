@@ -1,5 +1,7 @@
-find_package(Git QUIET)
+project("RType" LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.12)
 
+find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
     # Update submodules as needed
     option(GIT_SUBMODULE "Check submodules during build" ON)
@@ -76,9 +78,6 @@ endif()
 
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
     CACHE STRING "Vcpkg toolchain file")
-
-project("RType" LANGUAGES CXX)
-cmake_minimum_required(VERSION 3.12)
 
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(SFML REQUIRED COMPONENTS graphics window system)
