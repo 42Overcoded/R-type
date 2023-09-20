@@ -1,5 +1,5 @@
 project("RType" LANGUAGES CXX)
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.22)
 
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
@@ -22,41 +22,42 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmak
     message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
-message(STATUS "OS is : ${CMAKE_SYSTEM_NAME}")
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/vcpkg")
+    message(STATUS "OS is : ${CMAKE_SYSTEM_NAME}")
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux"  AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh")
+        # Bootstrap vcpkg
+        message(STATUS "Bootstrapping vcpkg")
+        execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
+            RESULT_VARIABLE VCPKG_BOOTSTRAP_RESULT)
 
-if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux"  AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh")
-    # Bootstrap vcpkg
-    message(STATUS "Bootstrapping vcpkg")
-    execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
-        RESULT_VARIABLE VCPKG_BOOTSTRAP_RESULT)
-
-    if(NOT VCPKG_BOOTSTRAP_RESULT EQUAL "0")
-        message(FATAL_ERROR "vcpkg bootstrap failed with ${VCPKG_BOOTSTRAP_RESULT}")
+        if(NOT VCPKG_BOOTSTRAP_RESULT EQUAL "0")
+            message(FATAL_ERROR "vcpkg bootstrap failed with ${VCPKG_BOOTSTRAP_RESULT}")
+        endif()
     endif()
-endif()
 
-if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat")
-    # Bootstrap vcpkg
-    message(STATUS "Bootstrapping vcpkg")
-    execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
-        RESULT_VARIABLE VCPKG_BOOTSTRAP_RESULT)
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat")
+        # Bootstrap vcpkg
+        message(STATUS "Bootstrapping vcpkg")
+        execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
+            RESULT_VARIABLE VCPKG_BOOTSTRAP_RESULT)
 
-    if(NOT VCPKG_BOOTSTRAP_RESULT EQUAL "0")
-        message(FATAL_ERROR "vcpkg bootstrap failed with ${VCPKG_BOOTSTRAP_RESULT}")
+        if(NOT VCPKG_BOOTSTRAP_RESULT EQUAL "0")
+            message(FATAL_ERROR "vcpkg bootstrap failed with ${VCPKG_BOOTSTRAP_RESULT}")
+        endif()
     endif()
-endif()
 
-if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh")
-    # Bootstrap vcpkg
-    message(STATUS "Bootstrapping vcpkg")
-    execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
-        RESULT_VARIABLE VCPKG_BOOTSTRAP_RESULT)
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh")
+        # Bootstrap vcpkg
+        message(STATUS "Bootstrapping vcpkg")
+        execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
+            RESULT_VARIABLE VCPKG_BOOTSTRAP_RESULT)
 
-    if(NOT VCPKG_BOOTSTRAP_RESULT EQUAL "0")
-        message(FATAL_ERROR "vcpkg bootstrap failed with ${VCPKG_BOOTSTRAP_RESULT}")
+        if(NOT VCPKG_BOOTSTRAP_RESULT EQUAL "0")
+            message(FATAL_ERROR "vcpkg bootstrap failed with ${VCPKG_BOOTSTRAP_RESULT}")
+        endif()
     endif()
 endif()
 
@@ -64,23 +65,11 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/vcpkg")
     message(FATAL_ERROR "vcpkg was not downloaded! Please update submodules and try again.")
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/vcpkg")
-    # Install vcpkg
-    message(STATUS "Installing vcpkg")
-    execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/vcpkg install boost-system sfml
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
-        RESULT_VARIABLE VCPKG_INSTALL_RESULT)
-
-    if(NOT VCPKG_INSTALL_RESULT EQUAL "0")
-        message(FATAL_ERROR "vcpkg install failed with ${VCPKG_INSTALL_RESULT}")
-    endif()
-endif()
-
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
     CACHE STRING "Vcpkg toolchain file")
 
-find_package(Boost REQUIRED COMPONENTS system)
-find_package(SFML REQUIRED COMPONENTS graphics window system)
+find_package(boost-asio REQUIRED COMPONENTS boost-core)
+find_package(sfml REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(lib)
