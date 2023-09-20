@@ -20,6 +20,8 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmak
     message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
+message(STATUS "OS is : ${CMAKE_SYSTEM_NAME}")
+
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux"  AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh")
     # Bootstrap vcpkg
     message(STATUS "Bootstrapping vcpkg")
