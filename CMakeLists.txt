@@ -20,10 +20,22 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmak
     message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh")
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux"  AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh")
     # Bootstrap vcpkg
     message(STATUS "Bootstrapping vcpkg")
     execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.sh
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
+        RESULT_VARIABLE VCPKG_BOOTSTRAP_RESULT)
+
+    if(NOT VCPKG_BOOTSTRAP_RESULT EQUAL "0")
+        message(FATAL_ERROR "vcpkg bootstrap failed with ${VCPKG_BOOTSTRAP_RESULT}")
+    endif()
+endif()
+
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat")
+    # Bootstrap vcpkg
+    message(STATUS "Bootstrapping vcpkg")
+    execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg
         RESULT_VARIABLE VCPKG_BOOTSTRAP_RESULT)
 
