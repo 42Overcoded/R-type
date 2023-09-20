@@ -1,0 +1,29 @@
+{
+    "mob_list": [
+        {
+            "name": "mob1",
+            "sprite": "mob1.png",
+            "health": 100
+        },
+        {
+            "name": "mob2",
+            "sprite": "mob2.png",
+            "health": 100
+        },
+        {
+            "name": "mob3",
+            "sprite": "mob3.png",
+            "health": 100
+        },
+        {
+            "name": "mob4",
+            "sprite": "mob4.png",
+            "health": 100
+        },
+        {
+            "name": "wall",
+            "sprite": "wall.png",
+            "health": 100
+        }
+    ]
+}
