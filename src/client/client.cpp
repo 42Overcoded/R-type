@@ -1,6 +1,10 @@
 #include <iostream>
+#include "ecs/SparseArray.hpp"
+#include "ecs/EcsCore.hpp"
+#include "ecs/Components/Components.hpp"
 
 int main() {
-    std::cout << "Hello, i'm the client function" << std::endl;
+    registry reg;
+    reg.register_component<Speed>();
     return 0;
 }
