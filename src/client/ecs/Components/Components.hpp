@@ -10,7 +10,7 @@
 
 class Speed {
     public:
-        Speed(int speed);
+        Speed();
         void setSpeed(int speed);
         ~Speed();
     protected:
@@ -20,7 +20,7 @@ class Speed {
 
 class Position {
     public:
-        Position(int x, int y);
+        Position();
         void setPosition(int x, int y);
         ~Position();
     private:

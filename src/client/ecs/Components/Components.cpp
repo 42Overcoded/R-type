@@ -7,9 +7,8 @@
 
 #include "Components.hpp"
 
-Speed::Speed(int speed)
+Speed::Speed()
 {
-    _speed = speed;
 }
 
 void Speed::setSpeed(int speed)
@@ -22,10 +21,8 @@ Speed::~Speed()
 
 }
 
-Position::Position(int x, int y)
+Position::Position()
 {
-    _x = x;
-    _y = y;
 }
 
 void Position::setPosition(int x, int y)

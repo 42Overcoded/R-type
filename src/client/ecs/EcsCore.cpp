@@ -5,5 +5,9 @@
 ** EcsCore
 */
 
+#include "Components/Components.hpp"
 #include "Entity.hpp"
 #include "EcsCore.hpp"
+#include "SparseArray.hpp"
+#include <any>
+#include <cstddef>

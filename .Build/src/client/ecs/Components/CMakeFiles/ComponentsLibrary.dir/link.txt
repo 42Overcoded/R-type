@@ -1,2 +1,0 @@
-/usr/bin/ar qc libComponentsLibrary.a CMakeFiles/ComponentsLibrary.dir/Components.cpp.o
-/usr/bin/ranlib libComponentsLibrary.a

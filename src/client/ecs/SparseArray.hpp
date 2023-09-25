@@ -68,6 +68,7 @@ class SparseArray {
             else {
                 _data[pos] = Component();
             }
+            return _data[pos];
         };
         
         template <class... Params>
