@@ -8,7 +8,7 @@
 
 Network::Network()
 {
-
+    totalReceived = 0;
 }
 
 Network::~Network()
@@ -16,24 +16,27 @@ Network::~Network()
     
 }
 
-int Network::create_server(void)
+int Network::create_server(int portServer)
 {
-    char cliMessage[500];
-    size_t totalReceived = 0;
     boost::asio::io_context io_context;
-    boost::asio::ip::udp::socket servSock(io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 4242));
+    ptrServSocket = std::make_shared<boost::asio::ip::udp::socket>(io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
 
-    boost::asio::ip::udp::endpoint client_endpoint;
-    boost::system::error_code erc;
+    ptrCliEndpoint = std::make_shared<boost::asio::ip::udp::endpoint>(boost::asio::ip::udp::endpoint());
+    ptrError = std::make_shared<boost::system::error_code>(boost::system::error_code());
+
+    return 0;
+}
+
+int Network::listen_info_from_clients(void)
+{
     while (true) {
-        totalReceived = servSock.receive_from(boost::asio::buffer(cliMessage), client_endpoint, 0, erc);
+        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(cliMessage), *ptrCliEndpoint, 0, *ptrError);
 
-        if (erc.failed() == true && erc != boost::asio::error::message_size) {
-            std::cout << "Erreur de connexion: " << erc.message() << std::endl;
+        if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
+            std::cout << "Erreur de connexion: " << ptrError->message() << std::endl;
             break;
         }
         std::cout << "Client: " << cliMessage << std::endl;
     }
-
     return 0;
 }

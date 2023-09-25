@@ -16,15 +16,19 @@ Network::~Network()
 
 }
 
-int Network::create_client(void)
+int Network::create_client(std::string ipServer, int portServer)
 {
     boost::asio::io_context io_context;
-    boost::asio::ip::udp::socket cliSocket(io_context, boost::asio::ip::udp::v4());
 
-    boost::asio::ip::udp::endpoint server_endpoint(boost::asio::ip::address::from_string("10.15.193.252"), 4242);
+    ptrCliSocket = std::make_shared<boost::asio::ip::udp::socket>(boost::asio::ip::udp::socket(io_context, boost::asio::ip::udp::v4()));
+    ptrServEndpoint = std::make_shared<boost::asio::ip::udp::endpoint>(boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(ipServer), portServer));
 
+    return 0;
+}
+
+int Network::send_info_to_server(void *object_player, void *object_command)
+{
     std::string playerCommand = "Commande Joueur";
-    cliSocket.send_to(boost::asio::buffer(playerCommand), server_endpoint);
-
+    ptrCliSocket->send_to(boost::asio::buffer(playerCommand), *ptrServEndpoint);
     return 0;
 }
