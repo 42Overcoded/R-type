@@ -1,5 +1,7 @@
 include(FetchContent)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 # Fetch and include SFML
 FetchContent_Declare(
     SFML
