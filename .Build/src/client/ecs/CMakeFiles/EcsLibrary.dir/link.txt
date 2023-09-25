@@ -1,0 +1,2 @@
+/usr/bin/ar qc libEcsLibrary.a CMakeFiles/EcsLibrary.dir/EcsCore.cpp.o CMakeFiles/EcsLibrary.dir/SparseArray.cpp.o
+/usr/bin/ranlib libEcsLibrary.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libGameClientLibrary.a CMakeFiles/GameClientLibrary.dir/game.cpp.o
+/usr/bin/ranlib libGameClientLibrary.a

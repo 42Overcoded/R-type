@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/MyTests.dir/tests.cpp.o -o MyTests  ../lib/libMyLibrary.a 

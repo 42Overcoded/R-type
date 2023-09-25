@@ -1,0 +1,2 @@
+/usr/bin/ar qc libGameServerLibrary.a CMakeFiles/GameServerLibrary.dir/game.cpp.o
+/usr/bin/ranlib libGameServerLibrary.a
