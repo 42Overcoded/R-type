@@ -1,4 +1,6 @@
 {
+    "comportment_id_range":[0,2],
+    "comportment_id_interval":1,
     "comportment": [
         {
             "comportment_id": 0,

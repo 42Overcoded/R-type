@@ -2,6 +2,11 @@
     "map_name": "Test Map",
     "map_description": "This is a test map",
     "map_difficulty": "Easy",
+    "map_size": {
+        "x": 12,
+        "y": 12,
+        "desc": "y is the height of the map, x is the width of the map can also represent progression in the level"
+    },
     "mob_spawn": [
         {
             "type": "mob1",
