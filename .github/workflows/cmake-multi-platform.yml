@@ -51,7 +51,7 @@ jobs:
       name: Install ubuntu dependencies
       run: |
         sudo apt-get update && sudo apt upgrade -y
-        sudo apt-get install freeglut3-dev libfreetype6-dev libx11-dev libxrandr-dev libudev-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libvorbisenc2 libvorbisfile3 libopenal-dev libpthread-stubs0-dev libx11-dev -y
+        sudo apt-get install freeglut3-dev libfreetype6-dev libxrandr-dev libudev-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libvorbisenc2 libvorbisfile3 libopenal-dev libpthread-stubs0-dev -y
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
