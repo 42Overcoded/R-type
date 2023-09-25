@@ -47,12 +47,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: install dependencies
+    - if: matrix.os != 'windows-latest'
+      name: Install dependencies
       run: |
-       if [[ "$RUNNER_OS" == "Linux" ]]; then
         sudo apt-get update
         sudo apt-get install libgl1-mesa-dev libudev-dev
-       fi
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
