@@ -44,6 +44,5 @@ public:
     };
 
 private:
-    // Conteneur associatif pour stocker les tableaux de composants
     std::unordered_map<std::string, std::any> _components_arrays;
 };
