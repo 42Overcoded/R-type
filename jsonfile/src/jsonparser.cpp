@@ -25,8 +25,8 @@ JsonParser::JsonParser()
     this->is_a_generated_map = false;
 
     std::cout << "JsonParser ok" << std::endl;
-    loadComporment();
-    std::cout << "loadComporment ok" << std::endl;
+    loadComportment();
+    std::cout << "loadComportment ok" << std::endl;
     loadMob();
     std::cout << "loadMob ok" << std::endl;
     loadMap_Name();
@@ -41,12 +41,35 @@ JsonParser::~JsonParser()
 
 void JsonParser::debug()
 {
-    //Display this->maplist
-    std::cout << "maplist:" << std::endl;
+    //Comportment debug
+    std::cout << "\ncomportments:" << std::endl;
+    std::cout << "idRange.min: " << this->comportments.idRange.min << std::endl;
+    std::cout << "idRange.max: " << this->comportments.idRange.max << std::endl;
+    for (int i = 0; i < this->comportments.comportmentslenght; i++) {
+        std::cout << "comportment[" << i << "].id: " << this->comportments.comportments[i].id << std::endl;
+        std::cout << "comportment[" << i << "].description: " << this->comportments.comportments[i].description << std::endl;
+        std::cout << "comportment[" << i << "].MovementVectorLoop: " << this->comportments.comportments[i].MovementVectorLoop << std::endl;
+        std::cout << "comportment[" << i << "].movementVectorTick: " << this->comportments.comportments[i].movementVectorTick << std::endl;
+        for (int j = 0; j < this->comportments.comportments[i].movementVector.size(); j++) {
+            std::cout << "comportment[" << i << "].movementVector[" << j << "].x: " << this->comportments.comportments[i].movementVector[j].x << std::endl;
+            std::cout << "comportment[" << i << "].movementVector[" << j << "].y: " << this->comportments.comportments[i].movementVector[j].y << std::endl;
+        }
+    }
+
+    //Mob debug
+    std::cout << "\nmobs:" << std::endl;
+    std::cout << "mobslength: " << this->mobs.mobslength << std::endl;
+    for (int i = 0; i < this->mobs.mobs.size(); i++) {
+        std::cout << "mobs[" << i << "].name: " << this->mobs.mobs[i].name << std::endl;
+        std::cout << "mobs[" << i << "].sprite_path: " << this->mobs.mobs[i].sprite_path << std::endl;
+        std::cout << "mobs[" << i << "].stats.hp: " << this->mobs.mobs[i].stats.hp << std::endl;
+    }
+
+    //Map debug
+    std::cout << "\nmaplist:" << std::endl;
     for (std::map<std::string, std::string>::iterator it = this->maplist.begin(); it != this->maplist.end(); ++it) {
         std::cout << it->first << " => " << it->second << '\n';
     }
-
 }
 
 void JsonParser::Generate_Map_init(std::string name, std::string difficulty, int lenght)
@@ -123,56 +146,29 @@ void parseComportment(const boost::property_tree::ptree& cptree, JsonComportment
  * @brief Open the Comportment json and fill the JsonComportments struct
  * 
  */
-void JsonParser::loadComporment()
+void JsonParser::loadComportment()
 {
     boost::property_tree::ptree pt;
     boost::property_tree::json_parser::read_json(PATH_TO_COMPORTEMENT, pt);
-
-    JsonComportments jsonComportments;
-
+    
     const boost::property_tree::ptree& idRangeArray = pt.get_child("comportment_id_range");
     int index = 0;
     for (const auto& item : idRangeArray) {
         if (index == 0) {
-            jsonComportments.idRange.min = item.second.get_value<int>();
+            comportments.idRange.min = item.second.get_value<int>();
         } else if (index == 1) {
-            jsonComportments.idRange.max = item.second.get_value<int>();
+            comportments.idRange.max = item.second.get_value<int>();
         }
         ++index;
     }
-
-
     const boost::property_tree::ptree& comportmentsTree = pt.get_child("comportment");
     for (const auto& item : comportmentsTree) {
         JsonComportment comportment;
         parseComportment(item.second, comportment);
-        jsonComportments.comportments.push_back(comportment);
+        comportments.comportments.push_back(comportment);
     }
-
-    // Now you have parsed the JSON into the JsonComportments structure.
-    
-    // Access the parsed data:
-    std::cout << "ID Range: " << jsonComportments.idRange.min << " - " << jsonComportments.idRange.max << std::endl;
-    for (const auto& comportment : jsonComportments.comportments) {
-        std::cout << "Comportment ID: " << comportment.id << std::endl;
-        std::cout << "Description: " << comportment.description << std::endl;
-        std::cout << "Movement Vector Loop: " << (comportment.MovementVectorLoop ? "true" : "false") << std::endl;
-        std::cout << "Movement Vector Tick: " << comportment.movementVectorTick << std::endl;
-        std::cout << "Movement Vector: ";
-        for (const auto& mv : comportment.movementVector) {
-            std::cout << "(" << mv.x << ", " << mv.y << ") ";
-        }
-        std::cout << std::endl;
-    }
-
+    comportments.comportmentslenght = comportments.comportments.size();
 }
-
-
-// #include <iostream>
-// #include <string>
-// #include <vector>
-// #include <boost/property_tree/ptree.hpp>
-// #include <boost/property_tree/json_parser.hpp>
 
 /**
  * @brief Open the Mob json and fill the JsonMobs struct
@@ -180,25 +176,16 @@ void JsonParser::loadComporment()
  */
 void JsonParser::loadMob()
 {
-    // Parse the JSON string
     boost::property_tree::ptree pt;
     boost::property_tree::read_json(PATH_TO_MOB, pt);
 
-    // Extract mobs array
-    JsonMobs jsonMobs;
-    jsonMobs.mobslength = pt.get_child("mob_list").size();
+    mobs.mobslength = pt.get_child("mob_list").size();
     for (const auto& mob : pt.get_child("mob_list")) {
         Mob newMob;
         newMob.name = mob.second.get<std::string>("name");
         newMob.sprite_path = mob.second.get<std::string>("sprite");
         newMob.stats.hp = mob.second.get<int>("stat.health");
-        jsonMobs.mobs.push_back(newMob);
-    }
-
-    // Print the parsed data
-    std::cout << "JsonMobs Length: " << jsonMobs.mobslength << std::endl;
-    for (const auto& mob : jsonMobs.mobs) {
-        std::cout << "Name: " << mob.name << ", Sprite Path: " << mob.sprite_path << ", HP: " << mob.stats.hp << std::endl;
+        mobs.mobs.push_back(newMob);
     }
 }
 
@@ -209,7 +196,6 @@ void JsonParser::loadMob()
 void JsonParser::loadMap_Name() {
     namespace fs = boost::filesystem;
 
-    // Iterate through the files in the directory
     fs::path directory(PATH_TO_MAP_FOLDER);
     if (fs::is_directory(directory)) {
         for (const fs::directory_entry& entry : fs::directory_iterator(directory)) {
@@ -220,7 +206,6 @@ void JsonParser::loadMap_Name() {
                     try {
                         boost::property_tree::json_parser::read_json(jsonFile, pt);
                         std::string map_name = pt.get<std::string>("map_name");
-                        // std::cout << "File: " << entry.path().string() << " - map_name: " << map_name << std::endl;
                         maplist.insert(std::pair<std::string, std::string>(map_name, entry.path().string()));
                     } catch (const boost::property_tree::json_parser_error& e) {
                         std::cerr << "Error parsing JSON in file: " << entry.path().string() << " - " << e.what() << std::endl;

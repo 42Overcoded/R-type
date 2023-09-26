@@ -23,7 +23,7 @@
 #define NO_MAP_LOADED "No map loaded"
 #define min_level_lenght 100
 #define max_level_lenght 1000
-#define debugmode false
+#define debugmode true
 
 class JsonParser {
     public:
@@ -46,7 +46,7 @@ class JsonParser {
         std::string difficulty; // Either "easy", "medium" or "hard"
         int lenght; // Beetween min_level_lenght and max_level_lenght
         std::string GeneratedMap; //Content of the json file
-        void loadComporment();
+        void loadComportment();
         void loadMob();
         void loadMap_Name();
         bool is_a_generated_map;
