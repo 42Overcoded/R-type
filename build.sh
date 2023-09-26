@@ -5,8 +5,8 @@
 ## build
 ##
 
-mkdir .Build > /dev/null 2>&1
-cd .Build > /dev/null 2>&1
+mkdir build > /dev/null 2>&1
+cd build > /dev/null 2>&1
 cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build .
+cmake --build . -j
 cd - > /dev/null 2>&1

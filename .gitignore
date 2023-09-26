@@ -36,7 +36,7 @@ MyTests
 
 #Makefile
 Makefile
-.Build
+build
 CMakeFiles
 CMakeCache.txt
 cmake_install.cmake

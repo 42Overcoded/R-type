@@ -41,6 +41,11 @@ sudo apt-get install freeglut3-dev libfreetype6-dev libx11-dev libxrandr-dev lib
 ./build.sh
 ```
 
+You can now find the executable in the `build` folder.
+
+- r type server : `build/server/server`
+- r type client : `build/client/client`
+
 ### Windows
 
 Using **cmake-gui.exe**
