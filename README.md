@@ -9,6 +9,8 @@ A R-type like game made in C++.
   - [Official supported platforms](#official-supported-platforms)
   - [How to build](#how-to-build)
     - [Linux](#linux)
+    - [Dependencies](#dependencies)
+    - [Build](#build)
     - [Windows](#windows)
   - [How to run](#how-to-run)
   - [Authors](#authors)
@@ -24,6 +26,16 @@ A R-type like game made in C++.
 ## How to build
 
 ### Linux
+
+### Dependencies
+
+On debian based distributions :
+
+```bash
+sudo apt-get install freeglut3-dev libfreetype6-dev libx11-dev libxrandr-dev libudev-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libvorbisenc2 libvorbisfile3 libopenal-dev libpthread-stubs0-dev xorg-dev
+```
+
+### Build
 
 ```bash
 ./build.sh
