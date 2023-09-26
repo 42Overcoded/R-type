@@ -28,7 +28,7 @@ struct Mob {
  */
 struct JsonMobs {
     std::vector <Mob> mobs; //Array of mobs
-    int mobslenght; //Lenght of the array
+    int mobslength; //Lenght of the array
 };
 
 #endif /* !MOB_HPP_ */

@@ -27,7 +27,7 @@ JsonParser::JsonParser()
     std::cout << "JsonParser ok" << std::endl;
     loadComporment();
     std::cout << "loadComporment ok" << std::endl;
-    // loadMob();
+    loadMob();
     std::cout << "loadMob ok" << std::endl;
     loadMap_Name();
     std::cout << "loadMap_Name ok" << std::endl;
@@ -167,18 +167,39 @@ void JsonParser::loadComporment()
 
 }
 
+
+// #include <iostream>
+// #include <string>
+// #include <vector>
+// #include <boost/property_tree/ptree.hpp>
+// #include <boost/property_tree/json_parser.hpp>
+
 /**
  * @brief Open the Mob json and fill the JsonMobs struct
  * 
  */
 void JsonParser::loadMob()
-{   
-    
-    std::string file_content = getfilecontent(PATH_TO_MOB);
+{
+    // Parse the JSON string
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_json(PATH_TO_MOB, pt);
 
-    // boost::property_tree::ptree pt;
-    // std::istringstream json_stream(file_content);
-    // boost::property_tree::json_parser::read_json(file_content, pt);
+    // Extract mobs array
+    JsonMobs jsonMobs;
+    jsonMobs.mobslength = pt.get_child("mob_list").size();
+    for (const auto& mob : pt.get_child("mob_list")) {
+        Mob newMob;
+        newMob.name = mob.second.get<std::string>("name");
+        newMob.sprite_path = mob.second.get<std::string>("sprite");
+        newMob.stats.hp = mob.second.get<int>("stat.health");
+        jsonMobs.mobs.push_back(newMob);
+    }
+
+    // Print the parsed data
+    std::cout << "JsonMobs Length: " << jsonMobs.mobslength << std::endl;
+    for (const auto& mob : jsonMobs.mobs) {
+        std::cout << "Name: " << mob.name << ", Sprite Path: " << mob.sprite_path << ", HP: " << mob.stats.hp << std::endl;
+    }
 }
 
 /**
@@ -216,27 +237,6 @@ void JsonParser::loadMap_Name() {
     else {
         std::cerr << "Error opening directory: " << directory.string() << std::endl;
     }
-}
-
-std::string JsonParser::getfilecontent(std::string path)
-{
-    std::ifstream file;
-    file.open(path);
-    if (!file.is_open()) {
-        std::cout << "Unable to open file" << std::endl;
-        return "";
-    }
-    std::string file_content = "";
-
-    int i = 0;
-    std::string line;
-    while (getline(file, line)) {
-        file_content += "\n" + line;
-        i++;
-    }
-    file.close();
-    std::cout << file_content << std::endl;
-    return file_content;
 }
 
 int main()
