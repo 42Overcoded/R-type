@@ -11,7 +11,7 @@ int main() {
     //std::cout << "Hello, i'm the client function" << std::endl;
     Network network;
 
-    network.create_client("10.15.193.252", 4242);
+    network.create_client("10.15.190.96", 4242);
     network.send_info_to_server();
     return 0;
 }

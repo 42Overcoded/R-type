@@ -5,6 +5,7 @@
 ** CLIENT
 */
 #include "Network.hpp"
+#include "testClassPlayer.hpp"
 
 Network::Network()
 {
@@ -29,6 +30,15 @@ int Network::create_client(std::string ipServer, int portServer)
 int Network::send_info_to_server(void *object_player, void *object_command)
 {
     std::string playerCommand = "Commande Joueur";
-    ptrCliSocket->send_to(boost::asio::buffer(playerCommand), *ptrServEndpoint);
+
+    testPlayer *TestPlayer = new testPlayer();
+
+    TestPlayer->hp = 34;
+    TestPlayer->armor = 155;
+    TestPlayer->name = "serge";
+
+    // &TestPlayer, sizeof(TestPlayer)
+    std::cout << "bytes: " << sizeof(*TestPlayer) << std::endl;
+    ptrCliSocket->send_to(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrServEndpoint);
     return 0;
 }
