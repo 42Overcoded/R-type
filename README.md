@@ -43,8 +43,8 @@ sudo apt-get install freeglut3-dev libfreetype6-dev libx11-dev libxrandr-dev lib
 
 You can now find the executable in the `build` folder.
 
-- r type server : `build/server/server`
-- r type client : `build/client/client`
+- r type server : `build/server/r-type_server`
+- r type client : `build/client/r-type_client`
 
 ### Windows
 
