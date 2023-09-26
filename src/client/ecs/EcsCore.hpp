@@ -69,7 +69,8 @@ class registry {
         template <class Component>
         void register_component() {
             std::type_index type = typeid(Component);
-            _components_arrays.insert(std::make_pair(type, SparseArray<Component>()));
+            SparseArray<Component> array;
+            _components_arrays.insert(std::make_pair(type, array));
         };
 
         template <class Component>
