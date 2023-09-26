@@ -19,9 +19,9 @@ A R-type like game made in C++.
 
 ## Official supported platforms
 
-- [x] Fedora
-- [x] Linux Mint
-- [x] Windows 11
+- [X] Fedora
+- [X] Linux Mint
+- [X] Windows 11
 
 ## How to build
 
@@ -43,8 +43,8 @@ sudo apt-get install freeglut3-dev libfreetype6-dev libx11-dev libxrandr-dev lib
 
 You can now find the executable in the `build` folder.
 
-- r type server : `build/server/r-type_server`
-- r type client : `build/client/r-type_client`
+- r type server : `build/src/server/r-type_server`
+- r type client : `build/src/client/r-type_client`
 
 ### Windows
 
