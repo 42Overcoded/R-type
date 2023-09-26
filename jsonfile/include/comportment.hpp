@@ -14,7 +14,6 @@
 struct JsonIDRange {
     int min; //Min ID
     int max; //Max ID
-    int interval; //Interval between each ID
 };
 
 struct MovementVector {
