@@ -10,22 +10,20 @@
 
 class Speed {
     public:
-        Speed();
-        void setSpeed(int speed);
-        ~Speed();
+        Speed() = default;
+        int speed = 2432384;
+        ~Speed() = default;
     protected:
-        int _speed;
     private:
 };
 
 class Position {
     public:
-        Position();
-        void setPosition(int x, int y);
-        ~Position();
+        Position() = default;
+        int x=91;
+        int y=1384;
+        ~Position() = default;
     private:
-        int _x;
-        int _y;
 };
 
 #endif /* !COMPONENTS_HPP_ */

@@ -8,6 +8,7 @@
 #ifndef SPARSEARRAY_HPP
 #define SPARSEARRAY_HPP
 
+#include <optional>
 #include <vector>
 #include <iostream>
 #include <any>
@@ -18,7 +19,7 @@ class SparseArray {
         using value_type = Component;
         using reference_type = value_type &;
         using const_reference_type = const value_type &;
-        using container_t = std::vector<value_type>;
+        using container_t = std::vector<std::optional<value_type>>;
         using size_type = typename container_t::size_type;
         using iterator = typename container_t::iterator;
         using const_iterator = typename container_t::const_iterator;
@@ -28,10 +29,21 @@ class SparseArray {
         SparseArray(SparseArray &&) noexcept = default;
         ~SparseArray() = default;
 
-        SparseArray &operator=(const SparseArray &);
-        SparseArray &operator=(SparseArray &&) noexcept;
-        reference_type operator[](size_t idx);
-        const_reference_type operator[](size_t idx) const;
+        SparseArray &operator=(const SparseArray &)
+        {
+            return *this;
+        };
+        SparseArray &operator=(SparseArray &&) noexcept
+        {
+            return *this;
+        };
+        reference_type operator[](size_t idx) {
+            return _data[idx];
+        };
+        const_reference_type operator[](size_t idx) const
+        {
+            return *_data[idx];
+        };
 
         iterator begin() {
             return _data.begin();
@@ -55,30 +67,29 @@ class SparseArray {
             return _data.size();
         };
 
-        reference_type insert_at(size_type pos, const Component &) {
-            if (pos > _data.size())
+        void insert_at(size_type pos, const Component &) {
+            if (pos >= _data.size())
                 _data.resize(pos + 1);
             else {
                 _data[pos] = Component();
             }
         };
-        reference_type insert_at(size_type pos, Component &&) {
-            if (pos > _data.size())
+
+        void insert_at(size_type pos, Component &&) {
+            if (pos >= _data.size()) {
                 _data.resize(pos + 1);
-            else {
-                _data[pos] = Component();
             }
-            return _data[pos];
+            _data[pos] = Component();
         };
         
         template <class... Params>
-        reference_type emplace_at(size_type pos, Params &&...); // Optional
+        void emplace_at(size_type pos, Params &&...); // Optional
         
         void erase(size_type pos)
         {
-            if (pos > _data.size())
-                return;
-            _data[pos] = nullptr;
+            if (pos >= _data.size())
+                _data.resize(pos + 1);
+            _data[pos] = std::nullopt;
         };
 
         size_type get_index(const value_type &type) const
