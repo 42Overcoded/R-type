@@ -67,17 +67,17 @@ class SparseArray {
             return _data.size();
         };
 
-        void insert_at(size_type pos, const Component &) {
+        void insert_at(size_type pos, const Component &component) {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
-            _data[pos] = Component();
+            _data[pos] = component;
         };
 
-        void insert_at(size_type pos, Component &&) {
+        void insert_at(size_type pos, Component &&component) {
             if (pos >= _data.size()) {
                 _data.resize(pos + 1);
             }
-            _data[pos] = Component();
+            _data[pos] = component;
         };
         
         template <class... Params>

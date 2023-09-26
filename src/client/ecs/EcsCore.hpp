@@ -26,12 +26,12 @@ class registry {
             for (auto &component : _components_arrays) {
                 if (component.first == typeid(Speed)) {
                     SparseArray<Speed> array = std::any_cast<SparseArray<Speed>>(component.second);
-                    array.insert_at(entity, Speed());
+                    array.erase(entity);
                     _components_arrays.at(typeid(Speed)) = array;
                 }
                 if (component.first == typeid(Position)) {
                     SparseArray<Position> array = std::any_cast<SparseArray<Position>>(component.second);
-                    array.insert_at(entity, Position());
+                    array.erase(entity);
                     _components_arrays.at(typeid(Position)) = array;
                 }
             }

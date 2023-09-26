@@ -31,8 +31,8 @@ int main() {
     entity_t entity2 = reg.spawn_entity();
     reg.add_component<Speed>(entity, s);
     reg.add_component<Position>(entity2, p);
-    reg.add_component<Speed>(entity2, s);
-    reg.add_component<Position>(entity, p);
+    reg.add_component<Speed>(entity2, Speed());
+    reg.add_component<Position>(entity, Position());
     logging_system(reg);
     reg.kill_entity(entity);
     return 0;
