@@ -17,6 +17,10 @@ void logging_system(registry& r) {
 }
 
 int main() {
+
+
+    std::cout << "macéo t'es pas tres fut fut" << std::endl;
+
     registry reg;
     Speed s;
     Position p;

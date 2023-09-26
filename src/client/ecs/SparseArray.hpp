@@ -70,7 +70,6 @@ class SparseArray {
         void insert_at(size_type pos, const Component &) {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
-            std::cout << "insert at " << pos << std::endl;
             _data[pos] = Component();
         };
 

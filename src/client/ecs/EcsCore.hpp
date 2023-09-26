@@ -24,10 +24,16 @@ class registry {
         entity_t spawn_entity() {
             entity_t entity(_entity_number);
             for (auto &component : _components_arrays) {
-                if (component.first == typeid(Speed))
-                    std::any_cast<SparseArray<Speed>>(component.second).erase(entity);
-                if (component.first == typeid(Position))
-                    std::any_cast<SparseArray<Position>>(component.second).erase(entity);
+                if (component.first == typeid(Speed)) {
+                    SparseArray<Speed> array = std::any_cast<SparseArray<Speed>>(component.second);
+                    array.insert_at(entity, Speed());
+                    _components_arrays.at(typeid(Speed)) = array;
+                }
+                if (component.first == typeid(Position)) {
+                    SparseArray<Position> array = std::any_cast<SparseArray<Position>>(component.second);
+                    array.insert_at(entity, Position());
+                    _components_arrays.at(typeid(Position)) = array;
+                }
             }
             _entity_number++;
             return entity;
@@ -59,10 +65,16 @@ class registry {
         {
             entity_t entity(_entity_number);
             for (auto &component : _components_arrays) {
-                if (component.first == typeid(Speed))
-                    std::any_cast<SparseArray<Speed>>(component.second).erase(entity);
-                if (component.first == typeid(Position))
-                    std::any_cast<SparseArray<Position>>(component.second).erase(entity);
+                if (component.first == typeid(Speed)) {
+                    SparseArray<Speed> array = std::any_cast<SparseArray<Speed>>(component.second);
+                    array.erase(e);
+                    _components_arrays.at(typeid(Speed)) = array;
+                }
+                if (component.first == typeid(Position)) {
+                    SparseArray<Position> array = std::any_cast<SparseArray<Position>>(component.second);
+                    array.erase(e);
+                    _components_arrays.at(typeid(Position)) = array;
+                }
             }
         };
 
