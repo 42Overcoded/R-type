@@ -1,6 +1,13 @@
 #include <SFML/Graphics.hpp>
 
 void box_system(registry &r) {
+    /**
+     * @brief Setting a box system
+     * 
+     * @param r The registry where are stored the components
+     * 
+     * @return void Do not return anything
+    */
     auto const &box = r.get_components<Component::box>();
     auto const &position = r.get_components<Component::position>();
     auto const &size = r.get_components<Component::size>();
@@ -18,6 +25,13 @@ void box_system(registry &r) {
 }
 
 void text_system(registru &r) {
+    /**
+     * @brief Setting a text system
+     * 
+     * @param r The registry where are stored the components
+     * 
+     * @return void Do not return anything
+    */
     auto const &text = r.get_components<Component::text>();
     auto const &position = r.get_components<Component::position>();
     auto const &font_size = r.get_components<Component::font_size>();
@@ -36,6 +50,13 @@ void text_system(registru &r) {
 }
 
 void draw_system(registry &r) {
+    /**
+     * @brief Setting a draw system
+     * 
+     * @param r The registry where are stored the components
+     * 
+     * @return void Do not return anything
+    */
     auto const &window = r.get_components<component::window>();
     if (window) {
         window.draw()
