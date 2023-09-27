@@ -14,6 +14,7 @@ class Network {
     private:
         std::shared_ptr<boost::asio::ip::udp::endpoint> ptrServEndpoint;
         std::shared_ptr<boost::asio::ip::udp::socket> ptrCliSocket;
+        std::shared_ptr<boost::system::error_code> ptrError;
     public:
         Network();
         ~Network();

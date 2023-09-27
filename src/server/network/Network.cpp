@@ -8,6 +8,11 @@
 
 #include "testClassPlayer.hpp"
 
+#include "boost/archive/text_iarchive.hpp"
+
+#include <sstream>
+
+
 Network::Network()
 {
     totalReceived = 0;
@@ -34,42 +39,50 @@ int Network::listen_info_from_clients(void)
 {
     // boost::asio::buffer(cliMessage)
 
-    testPlayer *TestPlayer = new testPlayer(); 
+    testPlayer *TestPlayer = new testPlayer; 
     size_t sizeTestPlayer = 500;
 
-    testPlayer *TestPlayer2 = NULL;
+    std::string _name = "";
 
-    // boost::asio::buffer(TestPlayer, sizeTestPlayer)
+    // std::stringstream strstr;
+    // boost::archive::text_iarchive ia{strstr};
+    // ia >> TestPlayer;
+
+    //boost::asio::buffer(TestPlayer, sizeTestPlayer)
+
+    std::string info = "";
+    char info2[500];
+
     while (true) {
-        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(TestPlayer, sizeTestPlayer), *ptrCliEndpoint, 0, *ptrError);
-        std::cout << "bytes: " << sizeTestPlayer << std::endl;
+        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(info2), *ptrCliEndpoint, 0, *ptrError);
+
+        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrCliEndpoint, 0, *ptrError);
 
         if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
             std::cout << "Erreur de connexion: " << ptrError->message() << std::endl;
             break;
         }
-        std::cout << "Client: " << cliMessage << std::endl;
-        std::cout << "ici" << std::endl;
 
         if (TestPlayer != NULL) {
-            std::cout << TestPlayer->hp << std::endl;
-            std::cout << "1" << std::endl;
-            std::cout << TestPlayer->armor << std::endl;
-            std::cout << "2" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
             std::cout << TestPlayer->name << std::endl;
-            std::cout << "3" << std::endl;
-        } else
+            //std::cout << "-----------------------------------------------" << std::endl;
+            //std::cout << TestPlayer->level << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << TestPlayer->hp << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << TestPlayer->armor << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << TestPlayer->drip << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << TestPlayer->c << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << TestPlayer->array << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+        } else {
             std::cout << "NULL" << std::endl;
+        }
 
-        if (TestPlayer2 != NULL) {
-            std::cout << TestPlayer2->hp << std::endl;
-            std::cout << "1" << std::endl;
-            std::cout << TestPlayer2->name << std::endl;
-            std::cout << "2" << std::endl;
-        } else
-            std::cout << "NULL" << std::endl;
-
-        std::cout << "là" << std::endl;
     }
     delete TestPlayer;
     return 0;
