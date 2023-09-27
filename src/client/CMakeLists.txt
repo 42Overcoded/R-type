@@ -1,6 +1,9 @@
-include(FetchContent)
-
+cmake_minimum_required(VERSION 3.20)
+set(PROJECT_NAME client)
+project(${PROJECT_NAME} VERSION 1.0)
+set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+include(FetchContent)
 
 # Fetch and include SFML
 FetchContent_Declare(
@@ -9,13 +12,27 @@ FetchContent_Declare(
     GIT_TAG 2.6.0
 )
 FetchContent_MakeAvailable(SFML)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
 
-add_subdirectory(network)
-add_subdirectory(gameEngine)
-add_subdirectory(ecs)
+set(INCLUDES
+    ecs/Registry.hpp
+    ecs/ComponentsArray/SparseArray.hpp
+    ecs/ComponentsArray/Components/Components.hpp
+    ecs/ComponentsArray/Systems/System.hpp
+    gameEngine/gameEngine.hpp
+)
 
-add_executable(r-type_client client.cpp)
-target_include_directories(r-type_client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set(EXEC_SRC
+    client.cpp
+    ecs/Registry.cpp
+    ecs/ComponentsArray/Components/Components.cpp
+    ecs/ComponentsArray/Systems/System.cpp
+    gameEngine/gameEngine.cpp
+    gameEngine/game/game.cpp
+    gameEngine/graphics/graphic.cpp
+)
 
-target_link_libraries(r-type_client sfml-graphics sfml-window sfml-system)
-target_link_libraries(r-type_client ComponentsLibrary NetworkClientLibrary GameEngineLibrary EcsLibrary)
+add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
