@@ -2,6 +2,7 @@
     "map_name": "Test Map copy 3",
     "map_description": "This is a test map",
     "map_difficulty": "Easy",
+    "seed": "Made with even more love manually",
     "map_size": {
         "x": 12,
         "y": 12,

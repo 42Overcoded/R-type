@@ -1,11 +1,12 @@
 {
     "map_name": "Test Map",
-    "map_description": "This is a test map",
+    "map_description": "This is a test map, made manually",
     "map_difficulty": "Easy",
+    "seed": "Made manually",
     "map_size": {
         "x": 12,
         "y": 12,
-        "desc": "y is the height of the map, x is the width of the map can also represent progression in the level"
+        "desc": "Only for dev: REMOVE: y is the height of the map, x is the width of the map can also represent progression in the level"
     },
     "mob_spawn": [
         {
