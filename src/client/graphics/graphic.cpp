@@ -1,44 +1,40 @@
 #include <SFML/Graphics.hpp>
 
+void box_position_system(registry &r) {
+    auto const &box = r.get_components<component::box>();
+    auto const &position = r.get_components<component::position>();
+    auto &window = r.get_components<component::window>();
+    for (size_t i = 0; i < box.size(); ++i) {
+        if (window[i] && box[i] && position[i]) {
+            box[i].x = position[i].x;
+            box[i].y = position[i].y;
+        }
+    }
+}
+
+void draw_system(registry &r) {
+    auto const &window = r.get_components<component::window>();
+    if (window) {
+        window.draw()
+    }
+}
+
 int main() {
-    // Créer une fenêtre SFML
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Ma Interface Graphique");
 
-    // Créer un bouton
-    sf::RectangleShape button(sf::Vector2f(200, 50));
-    button.setPosition(300, 250);
-    button.setFillColor(sf::Color::Blue);
-
-    // Créer le texte du bouton
-    sf::Font font;
-    font.loadFromFile("./Arial.ttf");
-    sf::Text buttonText("Cliquez ici !", font, 20);
-    buttonText.setPosition(310, 260);
+    sf::RectangleShape box(sf::Vector2f(200, 50));
+    box.setPosition(300, 250);
+    box.setFillColor(sf::Color::Blue);
 
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
-
-            // Gérer le clic de souris
-            if (event.type == sf::Event::MouseButtonPressed) {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                sf::Vector2f buttonPos = button.getPosition();
-                sf::Vector2f buttonSize = button.getSize();
-
-                if (mousePos.x >= buttonPos.x && mousePos.x <= buttonPos.x + buttonSize.x &&
-                    mousePos.y >= buttonPos.y && mousePos.y <= buttonPos.y + buttonSize.y) {
-                    // Le bouton a été cliqué !
-                    button.setFillColor(sf::Color::Red);
-                    buttonText.setString("Clic' effectué !");
-                }
-            }
         }
 
         window.clear();
-        window.draw(button);
-        window.draw(buttonText);
+        window.draw(box);
         window.display();
     }
 
