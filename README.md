@@ -59,6 +59,7 @@ Using **cmake-gui.exe**
 
 ## Authors
 
+- **Sergey Borisenko**
 - **Macéo JALBERT**
 - **Florian AZEMA**
 - **Mickael PEIRETO**
