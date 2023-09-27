@@ -22,23 +22,23 @@ void draw_system(registry &r) {
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Ma Interface Graphique");
+    // sf::RenderWindow window(sf::VideoMode(1920, 1080), "Ma Interface Graphique");
 
-    sf::RectangleShape box(sf::Vector2f(200, 50));
-    box.setPosition(300, 250);
-    box.setFillColor(sf::Color::Blue);
+    // sf::RectangleShape box(sf::Vector2f(200, 50));
+    // box.setPosition(300, 250);
+    // box.setFillColor(sf::Color::Blue);
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+    // while (window.isOpen()) {
+    //     sf::Event event;
+    //     while (window.pollEvent(event)) {
+    //         if (event.type == sf::Event::Closed)
+    //             window.close();
+    //     }
 
-        window.clear();
-        window.draw(box);
-        window.display();
-    }
+    //     window.clear();
+    //     window.draw(box);
+    //     window.display();
+    // }
 
     return 0;
 }
