@@ -140,6 +140,28 @@ void control_system(registry &r) {
     }
 }
 
+/**
+ * @brief Setting a logic system
+ * 
+ * @param r The registry where are stored the components
+ * 
+ * @return void Do not return anything
+*/
+void logic_system(registry &r) {
+    auto const position = r.get_components<Component::position>();
+    auto const velocity = r.get_components<Component::velocity>();
+
+    for (size_t i = 0; i < position.size() && i < velocity.size(); ++i) {
+        auto const &pos = position[i];
+        auto const &vel = velocity[i];
+        
+        if (pos && vel) {
+            std::cout << "Position: " << pos.x << ", " << pos.y << std::endl;
+            std::cout << "Velocity: " << vel.x << ", " << vel.y << std::endl;
+        }
+    }
+}
+
 int main() {
     // sf::RenderWindow window(sf::VideoMode(1920, 1080), "Ma Interface Graphique");
 
