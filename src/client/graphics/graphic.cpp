@@ -1,11 +1,13 @@
 #include <SFML/Graphics.hpp>
 
-void box_position_system(registry &r) {
+void box_system(registry &r) {
     auto const &box = r.get_components<component::box>();
     auto const &position = r.get_components<component::position>();
+    auto const &size = r.get_components<component::size>();
+    auto const &color = r.get_components<component::color>();
     auto &window = r.get_components<component::window>();
     for (size_t i = 0; i < box.size(); ++i) {
-        if (window[i] && box[i] && position[i]) {
+        if (window[i] && box[i] && position[i] && size[i] && color[i]) {
             box[i].x = position[i].x;
             box[i].y = position[i].y;
         }
