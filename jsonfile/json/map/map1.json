@@ -1,0 +1,92 @@
+{
+    "map_name": "Test Map",
+    "map_description": "This is a test map, made manually",
+    "map_difficulty": "Easy",
+    "seed": "Made manually",
+    "map_size": {
+        "x": 12,
+        "y": 12,
+        "desc": "Only for dev: REMOVE: y is the height of the map, x is the width of the map can also represent progression in the level"
+    },
+    "mob_spawn": [
+        {
+            "type": "mob1",
+            "comportment": 2,
+            "coordinates": [
+                {
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "x": 0,
+                    "y": 2
+                },
+                {
+                    "x": 10,
+                    "y": 0
+                },
+                {
+                    "x": 11,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "type": "mob2",
+            "comportment": 2,
+            "coordinates": [
+                {
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "x": 0,
+                    "y": 2
+                },
+                {
+                    "x": 10,
+                    "y": 0
+                },
+                {
+                    "x": 11,
+                    "y": 0
+                }
+            ]
+        },
+        {
+            "type": "mob3",
+            "comportment": 2,
+            "coordinates": [
+                {
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "x": 0,
+                    "y": 2
+                },
+                {
+                    "x": 10,
+                    "y": 0
+                },
+                {
+                    "x": 11,
+                    "y": 0
+                }
+            ]
+        }
+
+    ]
+}
