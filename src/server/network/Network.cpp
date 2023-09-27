@@ -5,11 +5,12 @@
 ** SERVER
 */
 #include "Network.hpp"
-
 #include "testClassPlayer.hpp"
 
+#include "boost/archive/text_oarchive.hpp"
 #include "boost/archive/text_iarchive.hpp"
 
+#include <iostream>
 #include <sstream>
 
 
@@ -21,53 +22,47 @@ Network::Network()
 
 Network::~Network()
 {
-    
+    ptrServSocket->close();
+
+    delete ptrServSocket;
+    delete ptrCliEndpoint;
+    delete ptrError;
 }
 
 int Network::create_server(int portServer)
 {
     boost::asio::io_context io_context;
-    ptrServSocket = std::make_shared<boost::asio::ip::udp::socket>(io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
+    ptrServSocket = new boost::asio::ip::udp::socket(io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
 
-    ptrCliEndpoint = std::make_shared<boost::asio::ip::udp::endpoint>(boost::asio::ip::udp::endpoint());
-    ptrError = std::make_shared<boost::system::error_code>(boost::system::error_code());
+    ptrCliEndpoint = new boost::asio::ip::udp::endpoint(boost::asio::ip::udp::endpoint());
+    ptrError = new boost::system::error_code(boost::system::error_code());
 
     return 0;
 }
 
 int Network::listen_info_from_clients(void)
 {
-    // boost::asio::buffer(cliMessage)
-
-    testPlayer *TestPlayer = new testPlayer; 
-    size_t sizeTestPlayer = 500;
-
-    std::string _name = "";
-
-    // std::stringstream strstr;
-    // boost::archive::text_iarchive ia{strstr};
-    // ia >> TestPlayer;
-
-    //boost::asio::buffer(TestPlayer, sizeTestPlayer)
-
-    std::string info = "";
-    char info2[500];
+    testPlayer *TestPlayer = new testPlayer(); 
 
     while (true) {
-        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(info2), *ptrCliEndpoint, 0, *ptrError);
-
-        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrCliEndpoint, 0, *ptrError);
+        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(cliMessage), *ptrCliEndpoint, 0, *ptrError);
+        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrCliEndpoint, 0, *ptrError);
 
         if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
             std::cout << "Erreur de connexion: " << ptrError->message() << std::endl;
             break;
         }
 
+        std::stringstream strstr;
+        strstr << cliMessage;
+        boost::archive::text_iarchive ia(strstr);
+        ia >> *TestPlayer;
+
         if (TestPlayer != NULL) {
             std::cout << "-----------------------------------------------" << std::endl;
             std::cout << TestPlayer->name << std::endl;
-            //std::cout << "-----------------------------------------------" << std::endl;
-            //std::cout << TestPlayer->level << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << TestPlayer->level << std::endl;
             std::cout << "-----------------------------------------------" << std::endl;
             std::cout << TestPlayer->hp << std::endl;
             std::cout << "-----------------------------------------------" << std::endl;
@@ -82,7 +77,7 @@ int Network::listen_info_from_clients(void)
         } else {
             std::cout << "NULL" << std::endl;
         }
-
+        break;
     }
     delete TestPlayer;
     return 0;

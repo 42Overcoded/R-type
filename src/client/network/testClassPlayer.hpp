@@ -1,10 +1,13 @@
-
 #ifndef TESTCLASSPLAYER
 #define TESTCLASSPLAYER
 
 #include <string>
 
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
 #include <boost/serialization/serialization.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/export.hpp>
 
 class testPlayer {
@@ -18,14 +21,19 @@ class testPlayer {
         char array[30];
         testPlayer();
         ~testPlayer();
-    
-        // https://www.boost.org/doc/libs/1_32_0/libs/serialization/doc/special.html#derivedpointers
+
         friend class boost::serialization::access;
-        //...
-        // only required when using method 1 below
-        // no real serialization required - specify a vestigial one
-        template<class Archive>
-        void serialize(Archive & ar, const unsigned int file_version){}
+
+        template <typename Archive>
+        void serialize(Archive& ar, const unsigned int version) {
+            //ar & name;
+            ar & level;
+            ar & hp;
+            ar & armor;
+            ar & drip;
+            ar & c;
+            //ar & array;
+        }
 };
 
 #endif

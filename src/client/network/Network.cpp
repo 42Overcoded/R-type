@@ -7,40 +7,50 @@
 #include "Network.hpp"
 #include "testClassPlayer.hpp"
 
+#include <iostream>
 #include <sstream>
 
-#include <boost/archive/text_iarchive.hpp>
-
-#include <iostream>
-
 #include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 
 Network::Network()
 {
 
-};
+}
 
 Network::~Network()
 {
+    if (ptrIOcontext != NULL) {
+        ptrIOcontext->stop();
+        delete ptrIOcontext;
+    }
 
+    if (ptrCliSocket != NULL) {
+        ptrCliSocket->close();
+        delete ptrCliSocket;
+    }
+    if (ptrServEndpoint != NULL)
+        delete ptrServEndpoint;
+    if (ptrError != NULL)
+        delete ptrError;
 }
 
 int Network::create_client(std::string ipServer, int portServer)
 {
-    boost::asio::io_context io_context;
+    ptrIOcontext = new boost::asio::io_context;
 
-    ptrCliSocket = std::make_shared<boost::asio::ip::udp::socket>(io_context, boost::asio::ip::udp::v4());
-    ptrServEndpoint = std::make_shared<boost::asio::ip::udp::endpoint>(boost::asio::ip::address::from_string(ipServer), portServer);
+    ptrCliSocket = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::v4());
+    ptrServEndpoint = new boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(ipServer), portServer);
 
-    ptrError = std::make_shared<boost::system::error_code>();
+    ptrError = new boost::system::error_code;
 
     return 0;
 }
 
 int Network::send_info_to_server(void *object_player, void *object_command)
 {
-    testPlayer *TestPlayer = new testPlayer;
+    testPlayer *TestPlayer = new testPlayer();
 
     TestPlayer->name = "serge";
     TestPlayer->level = "skeleton";
@@ -50,13 +60,18 @@ int Network::send_info_to_server(void *object_player, void *object_command)
     TestPlayer->c = 'E';
     strcpy(TestPlayer->array, "array fonctionne");
 
-    // std::stringstream strstr;
-    // boost::archive::text_oarchive oa(strstr);
-    // oa << *TestPlayer;
+
+    std::stringstream strstr;
+    boost::archive::text_oarchive oa(strstr);
+    oa << *TestPlayer;
 
 
-    ptrCliSocket->send_to(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrServEndpoint, 0, *ptrError);
-    //ptrCliSocket->send_to(boost::asio::buffer(strstr.str()), *ptrServEndpoint, 0, *ptrError);
+    //ptrCliSocket->send_to(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrServEndpoint, 0, *ptrError);
+    ptrCliSocket->send_to(boost::asio::buffer(strstr.str()), *ptrServEndpoint, 0, *ptrError);
+
+    // testPlayer TestPlayer2;
+    // boost::archive::text_iarchive ia(strstr);
+    // ia >> TestPlayer2;
 
     delete TestPlayer;
     return 0;

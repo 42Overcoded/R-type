@@ -13,5 +13,6 @@ int main() {
 
     network.create_client("10.15.194.6", 4242);
     network.send_info_to_server();
+    std::cout << "hors fonction" << std::endl;
     return 0;
 }

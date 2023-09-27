@@ -7,16 +7,15 @@
 #ifndef NETWORK_HPP_
 #define NETWORK_HPP_
 
-#include <iostream>
 #include <boost/asio.hpp>
 
 class Network {
     private:
-        std::shared_ptr<boost::asio::ip::udp::socket> ptrServSocket;
-        std::shared_ptr<boost::asio::ip::udp::endpoint> ptrCliEndpoint;
-        std::shared_ptr<boost::system::error_code> ptrError;
+        boost::asio::ip::udp::socket *ptrServSocket;
+        boost::asio::ip::udp::endpoint *ptrCliEndpoint;
+        boost::system::error_code *ptrError;
 
-        char cliMessage[500];
+        char cliMessage[1000];
         size_t totalReceived;
     public:
         Network();
