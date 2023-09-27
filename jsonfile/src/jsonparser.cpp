@@ -6,20 +6,20 @@
 */
 
 #include "../include/jsonparser.hpp"
+#include <vector>
 
+/**
+ * @brief Constructor of the JsonParser class
+ */
 JsonParser::JsonParser()
 {
     this->Loaded_MapName = NO_MAP_LOADED;
     this->is_a_generated_map = false;
 
-    // std::cout << "JsonParser ok" << std::endl;
     loadComportment();
-    // std::cout << "loadComportment ok" << std::endl;
     loadMob();
-    // std::cout << "loadMob ok" << std::endl;
     loadMap_Name();
-    // std::cout << "loadMap_Name ok" << std::endl;
-    Load_Map("Test Map");
+    Load_Map("Test Map"); //Only here temporarly for the purpose of the debug
     if (debugmode)
         debug();
 }
@@ -28,6 +28,9 @@ JsonParser::~JsonParser()
 {
 }
 
+/**
+ * @brief Display the collected data in the console
+ */
 void JsonParser::debug()
 {
     //Comportment debug
@@ -61,6 +64,12 @@ void JsonParser::debug()
     }
 
     //Level debug
+    if (this->Loaded_MapName != NO_MAP_LOADED)
+        std::cout << "\nName of the selected map: " << this->Loaded_MapName << std::endl;
+    else {
+        std::cout << "no level loaded" << std::endl;
+        return;
+    }
     std::cout << "\nlevel:" << std::endl;
     std::cout << "level.difficulty: " << this->level.difficulty << std::endl;
     std::cout << "level.description: " << this->level.description << std::endl;
@@ -78,10 +87,27 @@ void JsonParser::debug()
     }
 }
 
-//Write the content of this->GeneratedMap in a file
+/**
+ * @brief save this->level in a json file
+ * @param mapName the name of the save
+ */
 void JsonParser::Save_Map(std::string mapName)
 {
 
+}
+
+/**
+ * @brief return all the names of the maps in the map folder
+ * @return the vector list of the map names
+ */
+std::vector<std::string> JsonParser::getMapNames()
+{
+    std::vector<std::string> mapNames;
+
+    for (std::map<std::string, std::string>::iterator it = this->maplist.begin(); it != this->maplist.end(); ++it) {
+        mapNames.push_back(it->first);
+    }
+    return mapNames;
 }
 
 int main()

@@ -7,6 +7,12 @@
 
 #include "../include/jsonparser.hpp"
 
+/**
+ * @brief get the coordinate object and fill the coordinate_spawn struct
+ * 
+ * @param mvptree boost::property_tree::ptree
+ * @param coordinate the coordinate_spawn struct to fill
+ */
 void JsonParser::parseCoordinate(const boost::property_tree::ptree& mvptree, std::vector<coordinate_spawn>& coordinate) {
     coordinate_spawn co;
     co.x = mvptree.get<int>("x");
@@ -14,6 +20,12 @@ void JsonParser::parseCoordinate(const boost::property_tree::ptree& mvptree, std
     coordinate.push_back(co);
 }
 
+/**
+ * @brief Get the mob_spawn object and fill the mobspawn struct
+ * 
+ * @param cptree boost::property_tree::ptree
+ * @param mob the mobspawn struct to fill
+ */
 void JsonParser::parseMobsSpawn(const boost::property_tree::ptree& cptree, mobspawn& mob) {
     mob.comportment_id = cptree.get<int>("comportment");
     mob.mob_name = cptree.get<std::string>("type");
@@ -24,7 +36,11 @@ void JsonParser::parseMobsSpawn(const boost::property_tree::ptree& cptree, mobsp
     }
 }
 
-
+/**
+ * @brief Open the specified map json and fill the JsonLevel struct
+ * 
+ * @param mapName name of the map to load
+ */
 void JsonParser::Load_Map(std::string mapName)
 {
     if (this->Loaded_MapName == mapName) //If the map is already loaded, we don't need to load it again
@@ -52,8 +68,9 @@ void JsonParser::Load_Map(std::string mapName)
 }
 
 /**
- * @brief Open all file in the map folder and get the name of the map and the path to the map
- * 
+ * @brief Open all file in the map folder
+  and fill this->maplist (map) with : the name(string) and path(string) 
+  to each game level 
  */
 void JsonParser::loadMap_Name() {
     namespace fs = boost::filesystem;
