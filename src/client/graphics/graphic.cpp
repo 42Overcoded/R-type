@@ -88,6 +88,13 @@ void draw_system(registry &r) {
     local_window.display();
 }
 
+/**
+ * @brief Setting a position system
+ * 
+ * @param r The registry where are stored the components
+ * 
+ * @return void Do not return anything
+*/
 void position_system(registry &r) {
     auto const &position = r.get_components<Component::position>();
     auto const &velocity = r.get_components<Component::velocity>();
