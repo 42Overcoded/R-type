@@ -7,6 +7,8 @@
 
 #ifndef JSONPARSER_HPP_
 #define JSONPARSER_HPP_
+#include "map_level.hpp"
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
 
 #include <iostream>
 #include <vector>
@@ -14,8 +16,13 @@
 #include <functional>
 #include <fstream>
 #include <map>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/filesystem.hpp>
 #include "comportment.hpp"
 #include "mob.hpp"
+#include "map_level.hpp"
 
 #define PATH_TO_COMPORTEMENT "jsonfile/json/comportment.json"
 #define PATH_TO_MOB "jsonfile/json/mob.json"
@@ -43,15 +50,17 @@ class JsonParser {
         //If a map is loaded, this variable is equal to the name of the map
         //If a map is generated, this variable is equal to the seed of the map (random or not)
         std::string Loaded_MapName; 
-        std::string difficulty; // Either "easy", "medium" or "hard"
-        int lenght; // Beetween min_level_lenght and max_level_lenght
-        std::string GeneratedMap; //Content of the json file
         void loadComportment();
+        void parseMovementVector(const boost::property_tree::ptree& mvptree, std::vector<MovementVector>& movementVector);
+        void parseComportment(const boost::property_tree::ptree& cptree, JsonComportment& comportment);
         void loadMob();
         void loadMap_Name();
+        void parseCoordinate(const boost::property_tree::ptree& mvptree, std::vector<coordinate_spawn>& coordinate);
+        void parseMobsSpawn(const boost::property_tree::ptree& cptree, mobspawn& level);
         bool is_a_generated_map;
         struct JsonComportments comportments;
         struct JsonMobs mobs;
+        struct JsonLevel level;
         void debug();
 
 };
