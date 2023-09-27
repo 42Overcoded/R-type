@@ -95,9 +95,3 @@ std::vector<std::string> JsonParser::getMapNames()
     }
     return mapNames;
 }
-
-int main()
-{
-    JsonParser jsonParser;
-    return 0;
-}
