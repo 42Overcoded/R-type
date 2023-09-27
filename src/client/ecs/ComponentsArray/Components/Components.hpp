@@ -12,6 +12,11 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <iostream>
 
+/**
+ * @brief Components of the ecs can add more if needed
+ * 
+ */
+
 struct Speed {
     int x;
     int y;

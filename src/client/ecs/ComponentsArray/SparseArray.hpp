@@ -45,6 +45,11 @@ class SparseArray {
             return *_data[idx];
         };
 
+        /**
+         * @brief Encapsulation of std::vector functions
+         * 
+         * @return iterator 
+         */
         iterator begin() {
             return _data.begin();
         };
@@ -67,6 +72,12 @@ class SparseArray {
             return _data.size();
         };
 
+        /**
+         * @brief link an entity with a component
+         * 
+         * @param pos 
+         * @param component 
+         */
         void insert_at(size_type pos, const Component &component) {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
@@ -80,9 +91,11 @@ class SparseArray {
             _data[pos] = component;
         };
         
-        template <class... Params>
-        void emplace_at(size_type pos, Params &&...); // Optional
-        
+        /**
+         * @brief function to delink the component of an entity / kill an entity
+         * 
+         * @param pos 
+         */
         void erase(size_type pos)
         {
             if (pos >= _data.size())
@@ -90,6 +103,12 @@ class SparseArray {
             _data[pos] = std::nullopt;
         };
 
+        /**
+         * @brief Get the index object
+         * 
+         * @param type 
+         * @return size_type 
+         */
         size_type get_index(const value_type &type) const
         {
             for (size_t i = 0; i < _data.size(); i++) {
