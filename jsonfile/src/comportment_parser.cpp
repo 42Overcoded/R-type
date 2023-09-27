@@ -7,12 +7,6 @@
 
 #include "../include/jsonparser.hpp"
 
-/**
- * @brief Get the movement vector object and fill the MovementVector struct
- * 
- * @param mvptree boost::property_tree::ptree
- * @param movementVector the MovementVector struct to fill
- */
 void JsonParser::parseMovementVector(const boost::property_tree::ptree& mvptree, std::vector<MovementVector>& movementVector) {
     MovementVector mv;
     mv.x = mvptree.get<int>("x");
@@ -20,12 +14,6 @@ void JsonParser::parseMovementVector(const boost::property_tree::ptree& mvptree,
     movementVector.push_back(mv);
 }
 
-/**
- * @brief Get the comportment object and fill the JsonComportment struct
- * 
- * @param cptree boost::property_tree::ptree
- * @param comportment the JsonComportment struct to fill
- */
 void JsonParser::parseComportment(const boost::property_tree::ptree& cptree, JsonComportment& comportment) {
     comportment.id = cptree.get<int>("comportment_id");
     comportment.description = cptree.get<std::string>("comportment_description");
@@ -38,10 +26,6 @@ void JsonParser::parseComportment(const boost::property_tree::ptree& cptree, Jso
     }
 }
 
-/**
- * @brief Open the Comportment json and fill the JsonComportments struct
- * 
- */
 void JsonParser::loadComportment()
 {
     boost::property_tree::ptree pt;

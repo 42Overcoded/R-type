@@ -7,10 +7,6 @@
 
 #include "../include/jsonparser.hpp"
 
-/**
- * @brief Open the mob json and fill the JsonMobs struct
- * 
- */
 void JsonParser::loadMob()
 {
     boost::property_tree::ptree pt;

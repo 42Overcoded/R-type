@@ -8,9 +8,6 @@
 #include "../include/jsonparser.hpp"
 #include <vector>
 
-/**
- * @brief Constructor of the JsonParser class
- */
 JsonParser::JsonParser()
 {
     this->Loaded_MapName = NO_MAP_LOADED;
@@ -28,9 +25,6 @@ JsonParser::~JsonParser()
 {
 }
 
-/**
- * @brief Display the collected data in the console
- */
 void JsonParser::debug()
 {
     //Comportment debug
@@ -87,19 +81,11 @@ void JsonParser::debug()
     }
 }
 
-/**
- * @brief save this->level in a json file
- * @param mapName the name of the save
- */
 void JsonParser::Save_Map(std::string mapName)
 {
 
 }
 
-/**
- * @brief return all the names of the maps in the map folder
- * @return the vector list of the map names
- */
 std::vector<std::string> JsonParser::getMapNames()
 {
     std::vector<std::string> mapNames;
