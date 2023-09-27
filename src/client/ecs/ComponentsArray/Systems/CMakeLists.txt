@@ -1,6 +1,5 @@
-add_library(EcsLibrary
-    Registry.cpp
+add_library(SystemLibrary
+    System.cpp
 )
 
-add_subdirectory(ComponentsArray)
 target_include_directories(EcsLibrary PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

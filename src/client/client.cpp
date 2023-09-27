@@ -1,8 +1,6 @@
 #include <cstddef>
 #include <iostream>
-#include "ecs/SparseArray.hpp"
-#include "ecs/EcsCore.hpp"
-#include "ecs/Components/Components.hpp"
+#include "ecs/Registry.hpp"
 
 void logging_system(registry& r) {
     std::cout << "Logging system" << std::endl;
@@ -31,8 +29,6 @@ int main() {
     entity_t entity2 = reg.spawn_entity();
     reg.add_component<Speed>(entity, s);
     reg.add_component<Position>(entity2, p);
-    reg.add_component<Speed>(entity2, Speed());
-    reg.add_component<Position>(entity, Position());
     logging_system(reg);
     reg.kill_entity(entity);
     return 0;
