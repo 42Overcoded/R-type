@@ -6,6 +6,7 @@
 */
 
 #include "Registry.hpp"
+#include "ComponentsArray/Components/Components.hpp"
 
 entity_t registry::spawn_entity() {
     entity_t entity(_entity_number);
@@ -44,6 +45,21 @@ void registry::kill_entity(entity_t const &e)
             SparseArray<Position> array = std::any_cast<SparseArray<Position>>(component.second);
             array.erase(e);
             _components_arrays.at(typeid(Position)) = array;
+        }
+        if (component.first == typeid(Health)) {
+            SparseArray<Health> array = std::any_cast<SparseArray<Health>>(component.second);
+            array.erase(e);
+            _components_arrays.at(typeid(Health)) = array;
+        }
+        // if (component.first == typeid(WindowComponent)) {
+        //     SparseArray<WindowComponent> array = std::any_cast<SparseArray<WindowComponent>>(component.second);
+        //     array.erase(e);
+        //     _components_arrays.at(typeid(WindowComponent)) = array;
+        // }
+        if (component.first == typeid(Sprite)) {
+            SparseArray<Sprite> array = std::any_cast<SparseArray<Sprite>>(component.second);
+            array.erase(e);
+            _components_arrays.at(typeid(Sprite)) = array;
         }
     }
 };

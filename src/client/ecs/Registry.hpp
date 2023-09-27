@@ -5,6 +5,8 @@
 ** ecs
 */
 
+#ifndef ECS_HPP_
+#define ECS_HPP_
 
 #include "ComponentsArray/Components/Components.hpp"
 #include "ComponentsArray/SparseArray.hpp"
@@ -115,3 +117,5 @@ class registry {
         std::unordered_map<std::type_index, std::any> _components_arrays;
         std::size_t _entity_number = 0;
 };
+
+#endif /* !ECS_HPP_ */

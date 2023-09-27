@@ -9,7 +9,6 @@
 #define COMPONENTS_HPP_
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <iostream>
 
 /**
@@ -31,9 +30,9 @@ struct Sprite {
     sf::Sprite sprite;
 };
 
-struct Window {
-    sf::RenderWindow window;
-};
+// struct WindowComponent {
+//     sf::RenderWindow window;
+// };
 
 struct Player {
     int id;

@@ -12,7 +12,7 @@
 
 class gameEngine {
     public:
-        gameEngine() = default;
+        gameEngine(registry &registry) : _registry(registry) {}
         ~gameEngine() = default;
         void launch_game();
     protected:

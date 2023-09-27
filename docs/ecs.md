@@ -14,9 +14,13 @@ A simple example to help you understand how to use the ecs :
 ```cpp
 int main() {
     registry reg;
+    reg.register_component<Speed>();
+    reg.register_component<Position>();
     entity_t entity = reg.spawn_entity();
-    reg.add_component<Speed>(entity, Speed());;
-    auto const& positions = r.get_components<Position>();
+    reg.add_component<Speed>(entity, Speed());
+    reg.add_component<Position>(entity, Position());
+
+    auto const& positions = reg.get_components<Position>();
     for (size_t i = 0; i < positions.size(); i++) {
 
         auto const& pos = positions[i];
