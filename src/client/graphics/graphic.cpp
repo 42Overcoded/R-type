@@ -107,6 +107,39 @@ void position_system(registry &r) {
     }
 }
 
+/**
+ * @brief Setting a control system
+ * 
+ * @param r The registry where are stored the components
+ * 
+ * @return void Do not return anything
+*/
+void control_system(registry &r) {
+    auto const &controllable = r.get_components<Component::controllable>();
+    auto const &velocity = r.get_components<Component::velocity>();
+
+    for (size_t i = 0; i < controllable.size(); ++i) {
+        if (controllable[i] && velocity[i]) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                velocity[i].y = -1;
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                velocity[i].y = 1;
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                velocity[i].x = -1;
+            }
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                velocity[i].x = 1;
+            }
+            else {
+                velocity[i].x = 0;
+                velocity[i].y = 0;
+            }
+        }
+    }
+}
+
 int main() {
     // sf::RenderWindow window(sf::VideoMode(1920, 1080), "Ma Interface Graphique");
 
