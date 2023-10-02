@@ -44,6 +44,11 @@ set(EXEC_SRC
     network/TestClassPlayer.cpp
 )
 
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
+
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

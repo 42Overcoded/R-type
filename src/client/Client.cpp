@@ -7,9 +7,9 @@
 
 #include <cstddef>
 #include <iostream>
-#include "ecs/Registry.hpp"
-#include "gameEngine/GameEngine.hpp"
-#include "network/Network.hpp"
+#include "Registry.hpp"
+#include "GameEngine.hpp"
+#include "Network.hpp"
 
 int main() {
 
@@ -28,10 +28,10 @@ int main() {
     }
     reg.remove_component<Speed>(entity);
     reg.kill_entity(entity);
-    //std::cout << "Hello, i'm the client function" << std::endl;
-    //Network network;
+    std::cout << "Hello, i'm the client function" << std::endl;
+    Network network;
 
-    //network.create_client("10.15.194.6", 4242);
-    //network.send_info_to_server();
-    //std::cout << "hors fonction" << std::endl;
+    network.create_client("10.15.194.6", 4242);
+    network.send_info_to_server();
+    std::cout << "hors fonction" << std::endl;
 }

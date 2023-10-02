@@ -44,6 +44,8 @@ set(INCLUDES
     ecs/ComponentsArray/Components/Components.hpp
     ecs/ComponentsArray/Systems/System.hpp
     gameEngine/GameEngine.hpp
+    network/Network.hpp
+    network/TestClassPlayer.hpp
 )
 
 set(EXEC_SRC
@@ -54,7 +56,19 @@ set(EXEC_SRC
     gameEngine/GameEngine.cpp
     gameEngine/game/Game.cpp
     gameEngine/graphics/Graphic.cpp
+    network/Network.cpp
+    network/TestClassPlayer.cpp
 )
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ecs)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ecs/ComponentsArray)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ecs/ComponentsArray/Components)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ecs/ComponentsArray/Systems)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gameEngine)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gameEngine/game)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gameEngine/graphics)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio Boost::serialization)
