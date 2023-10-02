@@ -19,7 +19,7 @@ void draw_system(registry &r) {
     auto const &position = r.get_components<Component::position>();
     auto const &box = r.get_components<Component::box>();
     auto const &text = r.get_components<Component::text>();
-    auto &local_window;
+    sf::RenderWindow &local_window;
 
     for (size_t i = 0; i < window.size(); ++i) {
         if (window[i]) {
@@ -33,10 +33,9 @@ void draw_system(registry &r) {
             local_box.setPosition(position[i].x, position[i].y);
             local_box.setFillColor(box[i].color);
             local_window.draw(local_box);
-        }
-        else if (text[i] && position[i]) {
+        } else if (text[i] && position[i]) {
             sf::Font font;
-            font.loadFromFile("src/client/graphics/arial.ttf");
+            font.loadFromFile(text[i].font_path);
             sf::Text local_text(text[i].text_content, font, text[i].font_size);
             local_text.setPosition(position[i].x, position[i].y);
             local_text.setFillColor(text[i].color);
@@ -80,17 +79,13 @@ void control_system(registry &r) {
         if (controllable[i] && velocity[i]) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 velocity[i].y = -1;
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 velocity[i].y = 1;
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 velocity[i].x = -1;
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 velocity[i].x = 1;
-            }
-            else {
+            } else {
                 velocity[i].x = 0;
                 velocity[i].y = 0;
             }
@@ -112,7 +107,7 @@ void logic_system(registry &r) {
     for (size_t i = 0; i < position.size() && i < velocity.size(); ++i) {
         auto const &pos = position[i];
         auto const &vel = velocity[i];
-        
+
         if (pos && vel) {
             std::cout << "Position: " << pos.x << ", " << pos.y << std::endl;
             std::cout << "Velocity: " << vel.x << ", " << vel.y << std::endl;
