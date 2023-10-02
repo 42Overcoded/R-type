@@ -69,9 +69,6 @@ int Network::send_info_to_server(void *object_player, void *object_command)
     //ptrCliSocket->send_to(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrServEndpoint, 0, *ptrError);
     ptrCliSocket->send_to(boost::asio::buffer(strstr.str()), *ptrServEndpoint, 0, *ptrError);
 
-    // testPlayer TestPlayer2;
-    // boost::archive::text_iarchive ia(strstr);
-    // ia >> TestPlayer2;
 
     delete TestPlayer;
     return 0;

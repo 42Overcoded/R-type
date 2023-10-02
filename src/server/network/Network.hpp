@@ -11,6 +11,7 @@
 
 class Network {
     private:
+        boost::asio::io_context *ptrIOcontext;
         boost::asio::ip::udp::socket *ptrServSocket;
         boost::asio::ip::udp::endpoint *ptrCliEndpoint;
         boost::system::error_code *ptrError;
