@@ -12,6 +12,28 @@ FetchContent_Declare(
     GIT_TAG 2.6.0
 )
 FetchContent_MakeAvailable(SFML)
+
+set(BOOST_INCLUDE_LIBRARIES asio)
+set(BOOST_ENABLE_CMAKE ON)
+
+# Fetch and include Boost.Asio
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
+    FetchContent_Declare(
+        GIT_REPOSITORY https://github.com/boostorg/boost.git
+        GIT_TAG boost-1.83.0
+    )
+    FetchContent_MakeAvailable(Boost)
+endif()
+
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+    FetchContent_Declare(
+        Boost
+        GIT_REPOSITORY https://github.com/boostorg/boost.git
+        GIT_TAG boost-1.83.0
+    )
+    FetchContent_MakeAvailable(Boost)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
@@ -34,5 +56,5 @@ set(EXEC_SRC
 )
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
