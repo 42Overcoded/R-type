@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-set(PROJECT_NAME client)
+set(PROJECT_NAME r-type_client)
 project(${PROJECT_NAME} VERSION 1.0)
 set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
