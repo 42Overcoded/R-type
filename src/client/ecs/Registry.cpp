@@ -21,6 +21,31 @@ entity_t registry::spawn_entity() {
             array.erase(entity);
             _components_arrays.at(typeid(Position)) = array;
         }
+        if (component.first == typeid(Health)) {
+            SparseArray<Health> array = std::any_cast<SparseArray<Health>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Health)) = array;
+        }
+        if (component.first == typeid(Sprite)) {
+            SparseArray<Sprite> array = std::any_cast<SparseArray<Sprite>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Sprite)) = array;
+        }
+        if (component.first == typeid(Drawable)) {
+            SparseArray<Drawable> array = std::any_cast<SparseArray<Drawable>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Drawable)) = array;
+        }
+        if (component.first == typeid(Text)) {
+            SparseArray<Text> array = std::any_cast<SparseArray<Text>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Text)) = array;
+        }
+        if (component.first == typeid(Control)) {
+            SparseArray<Control> array = std::any_cast<SparseArray<Control>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Control)) = array;
+        }
     }
     _entity_number++;
     return entity;
@@ -51,11 +76,6 @@ void registry::kill_entity(entity_t const &e)
             array.erase(e);
             _components_arrays.at(typeid(Health)) = array;
         }
-        // if (component.first == typeid(WindowComponent)) {
-        //     SparseArray<WindowComponent> array = std::any_cast<SparseArray<WindowComponent>>(component.second);
-        //     array.erase(e);
-        //     _components_arrays.at(typeid(WindowComponent)) = array;
-        // }
         if (component.first == typeid(Sprite)) {
             SparseArray<Sprite> array = std::any_cast<SparseArray<Sprite>>(component.second);
             array.erase(e);
