@@ -31,17 +31,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
-    server.hpp
-    game/game.hpp
-    network/network.hpp
-    network/testClassPlayer.hpp
+    Server.hpp
+    game/Game.hpp
+    network/Network.hpp
+    network/TestClassPlayer.hpp
 )
 
 set(EXEC_SRC
-    server.cpp
-    game/game.cpp
-    network/network.cpp
-    network/testClassPlayer.cpp
+    Server.cpp
+    game/Game.cpp
+    network/Network.cpp
+    network/TestClassPlayer.cpp
 )
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})

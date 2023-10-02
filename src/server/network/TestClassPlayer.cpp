@@ -1,4 +1,4 @@
-#include "testClassPlayer.hpp"
+#include "TestClassPlayer.hpp"
 #include <cstring>
 
 testPlayer::testPlayer()

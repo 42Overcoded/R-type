@@ -8,8 +8,8 @@
 #include <cstddef>
 #include <iostream>
 #include "ecs/Registry.hpp"
-#include "gameEngine/gameEngine.hpp"
-#include "network/network.hpp"
+#include "gameEngine/GameEngine.hpp"
+#include "network/Network.hpp"
 
 int main() {
 

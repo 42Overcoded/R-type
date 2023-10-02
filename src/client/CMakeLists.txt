@@ -43,17 +43,17 @@ set(INCLUDES
     ecs/ComponentsArray/SparseArray.hpp
     ecs/ComponentsArray/Components/Components.hpp
     ecs/ComponentsArray/Systems/System.hpp
-    gameEngine/gameEngine.hpp
+    gameEngine/GameEngine.hpp
 )
 
 set(EXEC_SRC
-    client.cpp
+    Client.cpp
     ecs/Registry.cpp
     ecs/ComponentsArray/Components/Components.cpp
     ecs/ComponentsArray/Systems/System.cpp
-    gameEngine/gameEngine.cpp
-    gameEngine/game/game.cpp
-    gameEngine/graphics/graphic.cpp
+    gameEngine/GameEngine.cpp
+    gameEngine/game/Game.cpp
+    gameEngine/graphics/Graphic.cpp
 )
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
