@@ -13,7 +13,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
-set(BOOST_INCLUDE_LIBRARIES asio)
+set(BOOST_INCLUDE_LIBRARIES asio serialization)
 set(BOOST_ENABLE_CMAKE ON)
 
 # Fetch and include Boost.Asio
@@ -57,5 +57,5 @@ set(EXEC_SRC
 )
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio)
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio Boost::serialization)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

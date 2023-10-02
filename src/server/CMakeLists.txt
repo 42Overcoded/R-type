@@ -5,7 +5,7 @@ set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(FetchContent)
 
-set(BOOST_INCLUDE_LIBRARIES asio)
+set(BOOST_INCLUDE_LIBRARIES asio serialization)
 set(BOOST_ENABLE_CMAKE ON)
 
 # Fetch and include Boost.Asio
@@ -34,14 +34,16 @@ set(INCLUDES
     server.hpp
     game/game.hpp
     network/network.hpp
+    network/testClassPlayer.hpp
 )
 
 set(EXEC_SRC
     server.cpp
     game/game.cpp
     network/network.cpp
+    network/testClassPlayer.cpp
 )
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} Boost::asio)
+target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

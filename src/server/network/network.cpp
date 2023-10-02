@@ -4,7 +4,7 @@
 ** File description:
 ** SERVER
 */
-#include "Network.hpp"
+#include "network.hpp"
 #include "testClassPlayer.hpp"
 
 #include "boost/archive/text_oarchive.hpp"
@@ -42,7 +42,7 @@ int Network::create_server(int portServer)
 
 int Network::listen_info_from_clients(void)
 {
-    testPlayer *TestPlayer = new testPlayer(); 
+    testPlayer *TestPlayer = new testPlayer();
 
     while (true) {
         totalReceived = ptrServSocket->receive_from(boost::asio::buffer(cliMessage), *ptrCliEndpoint, 0, *ptrError);

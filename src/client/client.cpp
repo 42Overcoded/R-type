@@ -9,7 +9,7 @@
 #include <iostream>
 #include "ecs/Registry.hpp"
 #include "gameEngine/gameEngine.hpp"
-#include "network/Network.hpp"
+#include "network/network.hpp"
 
 int main() {
 

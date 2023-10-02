@@ -6,7 +6,7 @@
 */
 #include <iostream>
 #include "game/game.hpp"
-#include "network/Network.hpp"
+#include "network/network.hpp"
 
 int main() {
     std::cout << "Hello, i'm the server function" << std::endl;
