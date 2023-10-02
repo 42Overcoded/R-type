@@ -1,9 +1,47 @@
+cmake_minimum_required(VERSION 3.20)
+set(PROJECT_NAME server)
+project(${PROJECT_NAME} VERSION 1.0)
+set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+include(FetchContent)
 
-add_subdirectory(network)
-add_subdirectory(game)
+set(BOOST_INCLUDE_LIBRARIES asio)
+set(BOOST_ENABLE_CMAKE ON)
 
-add_executable(r-type_server server.cpp)
-target_include_directories(r-type_server PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(r-type_server GameServerLibrary)
-target_link_libraries(r-type_server NetworkServerLibrary)
+# Fetch and include Boost.Asio
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
+    FetchContent_Declare(
+        Boost
+        GIT_REPOSITORY https://github.com/boostorg/boost.git
+        GIT_TAG boost-1.83.0
+    )
+    FetchContent_MakeAvailable(Boost)
+endif()
+
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+    FetchContent_Declare(
+        Boost
+        GIT_REPOSITORY https://github.com/boostorg/boost.git
+        GIT_TAG boost-1.83.0
+    )
+    FetchContent_MakeAvailable(Boost)
+endif()
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
+
+set(INCLUDES
+    server.hpp
+    game/game.hpp
+    network/network.hpp
+)
+
+set(EXEC_SRC
+    server.cpp
+    game/game.cpp
+    network/network.cpp
+)
+
+add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
+target_link_libraries(${PROJECT_NAME} Boost::asio)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
