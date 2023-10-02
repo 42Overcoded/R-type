@@ -11,6 +11,7 @@ set(BOOST_ENABLE_CMAKE ON)
 # Fetch and include Boost.Asio
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
     FetchContent_Declare(
+        Boost
         GIT_REPOSITORY https://github.com/boostorg/boost.git
         GIT_TAG boost-1.83.0
     )
@@ -26,8 +27,8 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "D
     FetchContent_MakeAvailable(Boost)
 endif()
 
-# set(CMAKE_CXX_STANDARD 17)
-# set(CMAKE_CXX_STANDARD_REQUIRED true)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
     server.hpp
