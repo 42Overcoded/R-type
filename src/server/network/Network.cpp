@@ -4,8 +4,8 @@
 ** File description:
 ** SERVER
 */
-#include "network.hpp"
-#include "testClassPlayer.hpp"
+#include "Network.hpp"
+#include "TestClassPlayer.hpp"
 
 #include "boost/archive/text_oarchive.hpp"
 #include "boost/archive/text_iarchive.hpp"

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-set(PROJECT_NAME client)
+set(PROJECT_NAME r-type_client)
 project(${PROJECT_NAME} VERSION 1.0)
 set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -43,18 +43,32 @@ set(INCLUDES
     ecs/ComponentsArray/SparseArray.hpp
     ecs/ComponentsArray/Components/Components.hpp
     ecs/ComponentsArray/Systems/System.hpp
-    gameEngine/gameEngine.hpp
+    gameEngine/GameEngine.hpp
+    network/Network.hpp
+    network/TestClassPlayer.hpp
 )
 
 set(EXEC_SRC
-    client.cpp
+    Client.cpp
     ecs/Registry.cpp
     ecs/ComponentsArray/Components/Components.cpp
     ecs/ComponentsArray/Systems/System.cpp
-    gameEngine/gameEngine.cpp
-    gameEngine/game/game.cpp
-    gameEngine/graphics/graphic.cpp
+    gameEngine/GameEngine.cpp
+    gameEngine/game/Game.cpp
+    gameEngine/graphics/Graphic.cpp
+    network/Network.cpp
+    network/TestClassPlayer.cpp
 )
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ecs)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ecs/ComponentsArray)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ecs/ComponentsArray/Components)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ecs/ComponentsArray/Systems)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gameEngine)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gameEngine/game)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gameEngine/graphics)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio Boost::serialization)

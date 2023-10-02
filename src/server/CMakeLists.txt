@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-set(PROJECT_NAME server)
+set(PROJECT_NAME r-type_server)
 project(${PROJECT_NAME} VERSION 1.0)
 set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -31,18 +31,23 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
-    server.hpp
-    game/game.hpp
-    network/network.hpp
-    network/testClassPlayer.hpp
+    Server.hpp
+    game/Game.hpp
+    network/Network.hpp
+    network/TestClassPlayer.hpp
 )
 
 set(EXEC_SRC
-    server.cpp
-    game/game.cpp
-    network/network.cpp
-    network/testClassPlayer.cpp
+    Server.cpp
+    game/Game.cpp
+    network/Network.cpp
+    network/TestClassPlayer.cpp
 )
+
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization)
