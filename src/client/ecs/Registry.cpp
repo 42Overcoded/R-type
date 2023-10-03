@@ -71,6 +71,11 @@ entity_t registry::spawn_entity() {
             array.erase(entity);
             _components_arrays.at(typeid(Tag)) = array;
         }
+        if (component.first == typeid(Pattern)) {
+            SparseArray<Pattern> array = std::any_cast<SparseArray<Pattern>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Pattern)) = array;
+        }
     }
     _entity_number++;
     return entity;
