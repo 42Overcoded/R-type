@@ -86,4 +86,13 @@ struct Control {
     bool shoot;
 };
 
+struct Pattern {
+    std::vector<Speed> pattern;
+    int pattern_length;
+    int pattern_type;
+
+    int switch_index;
+    int pattern_index;
+};
+
 #endif /* !COMPONENTS_HPP_ */

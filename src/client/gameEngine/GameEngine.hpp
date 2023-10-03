@@ -23,6 +23,7 @@ class gameEngine {
         entity_t init_enemy();
         void init_texture();
         void launch_game();
+        void modify_pattern(registry &r);
     protected:
     private:
         sf::Time elapsed;

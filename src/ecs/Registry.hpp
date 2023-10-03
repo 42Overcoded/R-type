@@ -40,7 +40,6 @@ class registry {
          */
         entity_t spawn_entity();
 
-
         /**
          * @brief take a size_t to return a entity_t (its a size_t) pretty useless function
          * 
