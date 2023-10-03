@@ -114,10 +114,10 @@ class registry {
         {
             return std::any_cast<SparseArray<Component> const&>(_components_arrays.at(typeid(Component)));
         };
+        std::size_t _entity_number = 0;
     private:
         std::vector<entity_t> reusable_entities;
         std::unordered_map<std::type_index, std::any> _components_arrays;
-        std::size_t _entity_number = 0;
 };
 
 #endif /* !ECS_HPP_ */

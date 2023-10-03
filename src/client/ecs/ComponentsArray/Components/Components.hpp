@@ -95,4 +95,9 @@ struct Pattern {
     int pattern_index;
 };
 
+struct Hitbox {
+    int width;
+    int height;
+};
+
 #endif /* !COMPONENTS_HPP_ */

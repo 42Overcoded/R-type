@@ -18,6 +18,7 @@ class System {
         void set_texture(registry &r);
         void control_system(registry &r);
         void velocity_system(registry &r, sf::Time &elapsed);
+        void hitbox_system(registry &r);
         ~System() = default;
     protected:
     private:

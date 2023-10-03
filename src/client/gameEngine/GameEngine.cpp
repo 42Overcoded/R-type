@@ -29,6 +29,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Texture>();
     _registry.register_component<Tag>();
     _registry.register_component<Pattern>();
+    _registry.register_component<Hitbox>();
 };
 
 void gameEngine::init_texture()
@@ -57,7 +58,7 @@ void gameEngine::modify_pattern(registry &r)
     auto &speed = r.get_components<Speed>();
     auto &pattern = r.get_components<Pattern>();
 
-    for (size_t i = 0; i < speed.size(); i++) {
+    for (size_t i = 0; i < r._entity_number; i++) { 
         if (speed[i] && pattern[i]) {
             if (pattern[i]->pattern_index < pattern[i]->switch_index) {
                 pattern[i]->pattern_index++;
@@ -67,7 +68,6 @@ void gameEngine::modify_pattern(registry &r)
                 pattern[i]->pattern_type %= pattern[i]->pattern_length;
                 speed[i]->speedx = pattern[i]->pattern[pattern[i]->pattern_type].speedx;
                 speed[i]->speedy = pattern[i]->pattern[pattern[i]->pattern_type].speedy;
-                std::cout << "pattern type : " << pattern[i]->pattern_type << std::endl;
             }
         }
     }
@@ -120,14 +120,20 @@ entity_t gameEngine::init_enemy()
     _registry.add_component<Enemy>(enemy, Enemy());
     _registry.add_component<Tag>(enemy, {"enemy"});
     _registry.add_component<Pattern>(enemy, Pattern());
-
-    auto &texture = _registry.get_components<Texture>();
-    auto &sprite = _registry.get_components<Sprite>();
-
-    sprite[enemy]->sprite.setTexture(texture[0]->enemy);
-    sprite[enemy]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
+    _registry.add_component<Health>(enemy, Health());
+    _registry.add_component<Hitbox>(enemy, Hitbox());
 
     auto &speed = _registry.get_components<Speed>();
+    auto &texture = _registry.get_components<Texture>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &health = _registry.get_components<Health>();
+    auto &hitbox = _registry.get_components<Hitbox>();
+
+    hitbox[enemy]->width = 33;
+    hitbox[enemy]->height = 100;
+    health[enemy]->health = 5;
+    sprite[enemy]->sprite.setTexture(texture[0]->enemy);
+    sprite[enemy]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
     speed[enemy]->speedx -= 0.0f;
     speed[enemy]->speedy = 0.0f;
 
@@ -180,6 +186,7 @@ void gameEngine::launch_game() {
         _system.control_system(_registry);
         _system.shoot_system(_registry, clockShoot, elapsedShoot);
         _system.velocity_system(_registry, elapsed);
+        _system.hitbox_system(_registry);
 
         clock.restart();
 
