@@ -13,12 +13,28 @@ JsonParser::JsonParser()
     this->Loaded_MapName = NO_MAP_LOADED;
     this->is_a_generated_map = false;
 
+    if (debugmode) {
+        std::cout << "JsonParser constructor" << std::endl;
+        std::cout << "Loading comportment" << std::endl;
+    }
     loadComportment();
+
+    if (debugmode) {
+        std::cout << "Loaded comportment" << std::endl;
+        std::cout << "Loading mob" << std::endl;
+    }
     loadMob();
+
+    if (debugmode) {
+        std::cout << "Loaded mob" << std::endl;
+        std::cout << "Loading map name" << std::endl;
+    }
     loadMap_Name();
-    Load_Map("Test Map"); //Only here temporarly for the purpose of the debug
-    if (debugmode)
+
+    if (debugmode) {
+        std::cout << "Loaded map name" << std::endl;
         debug();
+    }
 }
 
 JsonParser::~JsonParser()
