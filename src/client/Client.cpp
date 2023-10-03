@@ -12,10 +12,13 @@
 #include "Network.hpp"
 
 int main() {
-    registry r;
-    gameEngine gameEngine(r);
 
-    gameEngine.launch_game();
+    registry reg;
+    reg.register_component<Speed>();
+    reg.register_component<Position>();
+    entity_t entity = reg.spawn_entity();
+    reg.add_component<Speed>(entity, Speed());
+    reg.add_component<Position>(entity, Position());
 
     auto const& positions = reg.get_components<Position>();
     for (size_t i = 0; i < positions.size(); i++) {
