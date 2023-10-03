@@ -19,10 +19,11 @@
 #include <typeinfo>
 #include <typeindex>
 #include <optional>
+#include <functional>
 
 class entity_t {
     public:
-        explicit entity_t(std::size_t value) : value_(value) {}   
+        explicit entity_t(std::size_t value) : value_(value) {}
 
         operator std::size_t() const {
             return value_;
@@ -97,6 +98,10 @@ class registry {
             std::type_index type = typeid(Component);
             SparseArray<Component> array;
             _components_arrays.insert(std::make_pair(type, array));
+            _rm_components_arrays.insert(std::make_pair(type, [](registry &reg, std::size_t idx) {
+                SparseArray<Component> &array = std::any_cast<SparseArray<Component> &>(reg._components_arrays.at(typeid(Component)));
+                array.erase(reg.entity_from_index(idx));
+            }));
         };
 
         /**
@@ -119,6 +124,7 @@ class registry {
         std::vector<entity_t> reusable_entities;
         std::vector<std::string> _entity_tags;
         std::unordered_map<std::type_index, std::any> _components_arrays;
+        std::unordered_map<std::type_index, std::function<void(registry &, std::size_t)>> _rm_components_arrays;
         std::size_t _entity_number = 0;
 };
 
