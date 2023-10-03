@@ -60,5 +60,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization -lboost_filesystem -I/path/to/boost/include)
+#-I/path/to/boost/headers -L/path/to/boost/libraries -lboost_system -lboost_filesystem -lboost_property_tree
+target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization -lboost_filesystem -lboost_system -lboost_property_tree -I/path/to/boost/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
