@@ -88,29 +88,30 @@ entity_t gameEngine::init_starship()
 entity_t gameEngine::init_enemy()
 
 {
-    entity_t enemy = _registry.spawn_entity("enemy");
+    entity_t enemy = _registry.spawn_entity();
 
     _registry.add_component<Position>(enemy, Position());
     _registry.add_component<Speed>(enemy, Speed());
     _registry.add_component<Sprite>(enemy, Sprite());
     _registry.add_component<Drawable>(enemy, Drawable());
     _registry.add_component<Enemy>(enemy, Enemy());
+    _registry.add_component<Tag>(enemy, {"enemy"});
 
     auto &texture = _registry.get_components<Texture>();
     auto &sprite = _registry.get_components<Sprite>();
 
     sprite[enemy]->sprite.setTexture(texture[0]->enemy);
+    sprite[enemy]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
 
     auto &speed = _registry.get_components<Speed>();
-    speed[enemy]->speedx = 0.5f;
+    speed[enemy]->speedx -= 0.2f;
     speed[enemy]->speedy = 0.0f;
 
     auto &position = _registry.get_components<Position>();
-    position[enemy]->x = 1000;
+    position[enemy]->x = 2000;
     position[enemy]->y = 500;
 
     sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
     sprite[enemy]->sprite.setScale(3, 3);
 
     return enemy;
@@ -123,6 +124,7 @@ void gameEngine::launch_game() {
     register_component_to_game();
 
     init_texture();
+
     entity_t starship = init_starship();
     entity_t enemy = init_enemy();
 
