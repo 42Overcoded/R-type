@@ -16,26 +16,36 @@
 
 Network::Network()
 {
+    std::cout << "Message perso" << std::endl;
+
     totalReceived = 0;
     cliMessage[500] = 0;
 }
 
 Network::~Network()
 {
-    ptrServSocket->close();
+    if (ptrIOcontext != NULL) {
+        ptrIOcontext->stop();
+        delete ptrIOcontext;
+    }
 
-    delete ptrServSocket;
-    delete ptrCliEndpoint;
-    delete ptrError;
+    if (ptrServSocket != NULL) {
+        ptrServSocket->close();
+        delete ptrServSocket;
+    }
+    if (ptrCliEndpoint != NULL)
+        delete ptrCliEndpoint;
+    if (ptrError != NULL)
+        delete ptrError;
 }
 
 int Network::create_server(int portServer)
 {
-    boost::asio::io_context io_context;
-    ptrServSocket = new boost::asio::ip::udp::socket(io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
+    ptrIOcontext = new boost::asio::io_context;
+    ptrServSocket = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
 
-    ptrCliEndpoint = new boost::asio::ip::udp::endpoint(boost::asio::ip::udp::endpoint());
-    ptrError = new boost::system::error_code(boost::system::error_code());
+    ptrCliEndpoint = new boost::asio::ip::udp::endpoint;
+    ptrError = new boost::system::error_code;
 
     return 0;
 }

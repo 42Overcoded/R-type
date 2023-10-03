@@ -9,7 +9,7 @@
 #include <iostream>
 #include "Registry.hpp"
 #include "GameEngine.hpp"
-#include "Network.hpp"
+#include "network/Network.hpp"
 
 int main() {
 
@@ -31,7 +31,6 @@ int main() {
     std::cout << "Hello, i'm the client function" << std::endl;
     Network network;
 
-    network.create_client("10.15.194.6", 4242);
+    network.create_client("10.15.191.37", 4242);
     network.send_info_to_server();
-    std::cout << "hors fonction" << std::endl;
 }
