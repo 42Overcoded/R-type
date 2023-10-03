@@ -35,6 +35,10 @@ set(INCLUDES
     game/Game.hpp
     network/Network.hpp
     network/TestClassPlayer.hpp
+    jsonfile/include/comportment.hpp
+    jsonfile/include/jsonparser.hpp
+    jsonfile/include/map_level.hpp
+    jsonfile/include/mob.hpp
 )
 
 set(EXEC_SRC
@@ -42,6 +46,12 @@ set(EXEC_SRC
     game/Game.cpp
     network/Network.cpp
     network/TestClassPlayer.cpp
+    jsonfile/src/comportment_parser.cpp
+    jsonfile/src/generate_map.cpp
+    jsonfile/src/jsonparser.cpp
+    jsonfile/src/map_parser.cpp
+    jsonfile/src/mob_parser.cpp
+    jsonfile/src/handlingEcs.cpp
 )
 
 include_directories(${Boost_INCLUDE_DIRS})
@@ -50,5 +60,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization)
+target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization -lboost_filesystem -I/path/to/boost/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
