@@ -5,7 +5,7 @@
 ** gameEngine
 */
 
-#include "gameEngine.hpp"
+#include "GameEngine.hpp"
 #include <optional>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>

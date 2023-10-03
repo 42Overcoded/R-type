@@ -5,7 +5,7 @@
 ** CLIENT
 */
 #include "Network.hpp"
-#include "testClassPlayer.hpp"
+#include "TestClassPlayer.hpp"
 
 #include <iostream>
 #include <sstream>
