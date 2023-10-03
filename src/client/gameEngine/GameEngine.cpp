@@ -36,10 +36,10 @@ void gameEngine::init_texture()
     _registry.add_component<Texture>(texture, Texture());
     auto &textureComponent = _registry.get_components<Texture>();
     if (!textureComponent[texture]->starship.loadFromFile("../../sprites/starship.png"))
-        exit(84);
-    // if (!textureComponent[texture]->enemy.loadFromFile("../../sprites/enemy.png"))
-    //     exit(84);
+        std::cout << "error" << std::endl;
     if (!textureComponent[texture]->bullet.loadFromFile("../../sprites/playerBullet.png"))
+        exit(84);
+    if (!textureComponent[texture]->enemy.loadFromFile("../../sprites/starship.png"))
         exit(84);
     textureComponent[texture]->rectBullet = sf::IntRect(0, 0, 33, 100);
     textureComponent[texture]->rectStarship = sf::IntRect(0, 70, 33, 100);
@@ -76,6 +76,37 @@ entity_t gameEngine::init_starship()
     return starship;
 }
 
+entity_t gameEngine::init_enemy()
+
+{
+    entity_t enemy = _registry.spawn_entity("enemy");
+
+    _registry.add_component<Position>(enemy, Position());
+    _registry.add_component<Speed>(enemy, Speed());
+    _registry.add_component<Sprite>(enemy, Sprite());
+    _registry.add_component<Drawable>(enemy, Drawable());
+    _registry.add_component<Enemy>(enemy, Enemy());
+
+    auto &texture = _registry.get_components<Texture>();
+    auto &sprite = _registry.get_components<Sprite>();
+
+    sprite[enemy]->sprite.setTexture(texture[0]->enemy);
+
+    auto &speed = _registry.get_components<Speed>();
+    speed[enemy]->speedx = 0.5f;
+    speed[enemy]->speedy = 0.0f;
+
+    auto &position = _registry.get_components<Position>();
+    position[enemy]->x = 1000;
+    position[enemy]->y = 500;
+
+    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
+    sprite[enemy]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
+    sprite[enemy]->sprite.setScale(3, 3);
+
+    return enemy;
+}
+
 void gameEngine::launch_game() {
     _window.create(sf::VideoMode(1920, 1080), "R-Type");
     _window.setFramerateLimit(60);
@@ -84,6 +115,7 @@ void gameEngine::launch_game() {
 
     init_texture();
     entity_t starship = init_starship();
+    entity_t enemy = init_enemy();
 
     while (_window.isOpen())
     {
