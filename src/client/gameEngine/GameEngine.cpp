@@ -183,7 +183,7 @@ void gameEngine::launch_game() {
 
         clock.restart();
 
-        _window.clear();
+        _window.clear(sf::Color::Black);
         _system.draw_system(_registry, _window);
         _window.display();
     }
