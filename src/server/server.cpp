@@ -11,10 +11,10 @@
 int main() {
     std::cout << "Hello, i'm the server function" << std::endl;
     game();
-    // Network network;
+    Network network;
 
-    // network.create_server(4242);
-    // network.listen_info_from_clients();
+    network.create_server(4242);
+    network.listen_info_from_clients();
     
     return 0;
 }
