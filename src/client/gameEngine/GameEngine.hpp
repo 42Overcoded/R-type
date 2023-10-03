@@ -20,6 +20,7 @@ class gameEngine {
         void register_component_to_game();
         sf::RenderWindow &get_window();
         entity_t init_starship();
+        entity_t init_enemy();
         void init_texture();
         void launch_game();
     protected:
