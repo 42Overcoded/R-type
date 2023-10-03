@@ -27,16 +27,22 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Drawable>();
     _registry.register_component<Control>();
     _registry.register_component<Texture>();
+    _registry.register_component<Tag>();
 };
 
 void gameEngine::init_texture()
 {
-    entity_t texture = _registry.spawn_entity("texture");
+    entity_t texture = _registry.spawn_entity();
 
     _registry.add_component<Texture>(texture, Texture());
+    _registry.add_component<Tag>(texture, Tag());
+
     auto &textureComponent = _registry.get_components<Texture>();
+    auto &tag = _registry.get_components<Tag>();
+
+    tag[texture]->tag = "texture";
     if (!textureComponent[texture]->starship.loadFromFile("../../sprites/starship.png"))
-        std::cout << "error" << std::endl;
+        exit(84);
     if (!textureComponent[texture]->bullet.loadFromFile("../../sprites/playerBullet.png"))
         exit(84);
     if (!textureComponent[texture]->enemy.loadFromFile("../../sprites/starship.png"))
@@ -47,7 +53,7 @@ void gameEngine::init_texture()
 
 entity_t gameEngine::init_starship()
 {
-    entity_t starship = _registry.spawn_entity("starship");
+    entity_t starship = _registry.spawn_entity();
 
     _registry.add_component<Position>(starship, Position());
     _registry.add_component<Speed>(starship, Speed());
@@ -55,7 +61,10 @@ entity_t gameEngine::init_starship()
     _registry.add_component<Drawable>(starship, Drawable());
     _registry.add_component<Control>(starship, Control());
     _registry.add_component<Player>(starship, Player());
+    _registry.add_component<Tag>(starship, Tag());
 
+    auto &tag = _registry.get_components<Tag>();
+    tag[starship]->tag = "starship";
     auto &texture = _registry.get_components<Texture>();
     auto &sprite = _registry.get_components<Sprite>();
 
@@ -131,8 +140,9 @@ void gameEngine::launch_game() {
         auto &control = _registry.get_components<Control>();
         auto &speed = _registry.get_components<Speed>();
 
-        _system.control_system(_registry, elapsed);
-        _system.shoot_system(_registry, elapsedShoot, clockShoot);
+        _system.control_system(_registry);
+        _system.shoot_system(_registry, clockShoot, elapsedShoot);
+        _system.velocity_system(_registry, elapsed);
 
         clock.restart();
 

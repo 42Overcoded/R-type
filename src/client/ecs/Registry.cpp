@@ -8,14 +8,12 @@
 #include "Registry.hpp"
 #include "ComponentsArray/Components/Components.hpp"
 
-entity_t registry::spawn_entity(std::string tag) {
+entity_t registry::spawn_entity() {
     if (reusable_entities.size() > 0) {
         entity_t entity = reusable_entities.back();
         reusable_entities.pop_back();
-        _entity_tags[entity] = tag;
         return entity;
     }
-    _entity_tags.push_back(tag);
     entity_t entity(_entity_number);
     for (auto &component : _components_arrays) {
         if (component.first == typeid(Speed)) {
@@ -68,6 +66,11 @@ entity_t registry::spawn_entity(std::string tag) {
             array.erase(entity);
             _components_arrays.at(typeid(Bullet)) = array;
         }
+        if (component.first == typeid(Tag)) {
+            SparseArray<Tag> array = std::any_cast<SparseArray<Tag>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Tag)) = array;
+        }
     }
     _entity_number++;
     return entity;
@@ -105,6 +108,5 @@ void registry::kill_entity(entity_t const &e)
         }
     }
     //
-    _entity_tags[e] = "";
     reusable_entities.push_back(e);
 };

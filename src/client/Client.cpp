@@ -9,12 +9,11 @@
 #include <iostream>
 #include "Registry.hpp"
 #include "GameEngine.hpp"
-#include "Network.hpp"
+#include "network/Network.hpp"
 
 int main() {
-
-    registry reg;
-    gameEngine game(reg);
+    registry registry;
+    gameEngine game(registry);
 
     game.launch_game();
 }
