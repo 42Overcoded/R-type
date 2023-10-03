@@ -16,10 +16,10 @@
 template <typename Component>
 class SparseArray {
     public:
-        using value_type = Component;
+        using value_type = std::optional<Component>;
         using reference_type = value_type &;
         using const_reference_type = const value_type &;
-        using container_t = std::vector<std::optional<value_type>>;
+        using container_t = std::vector<value_type>;
         using size_type = typename container_t::size_type;
         using iterator = typename container_t::iterator;
         using const_iterator = typename container_t::const_iterator;
@@ -42,7 +42,7 @@ class SparseArray {
         };
         const_reference_type operator[](size_t idx) const
         {
-            return *_data[idx];
+            return _data[idx];
         };
 
         /**
@@ -82,6 +82,8 @@ class SparseArray {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
             _data[pos] = component;
+            if (_data[pos] == std::nullopt)
+                std::cout << "nullopt" << std::endl;
         };
 
         void insert_at(size_type pos, Component &&component) {

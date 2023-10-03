@@ -9,6 +9,10 @@
 #define COMPONENTS_HPP_
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Rect.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <iostream>
 
 /**
@@ -17,8 +21,16 @@
  */
 
 struct Speed {
-    int x;
-    int y;
+    float speedy;
+    float speedx;
+};
+
+struct Texture {
+    sf::Texture starship;
+    sf::Texture enemy;
+    sf::Texture bullet;
+    sf::IntRect rectBullet;
+    sf::IntRect rectStarship;
 };
 
 struct Position {
@@ -29,10 +41,6 @@ struct Position {
 struct Sprite {
     sf::Sprite sprite;
 };
-
-// struct WindowComponent {
-//     sf::RenderWindow window;
-// };
 
 struct Player {
     int id;
@@ -46,6 +54,10 @@ struct Bullet {
     int id;
 };
 
+struct Tag {
+    std::string tag;
+};
+
 struct Health {
     int health;
 };
@@ -56,6 +68,22 @@ struct Damage {
 
 struct Score {
     int score;
+};
+
+struct Text {
+    sf::Text text;
+};
+
+struct Drawable {
+    bool drawable;
+};
+
+struct Control {
+    bool up = false;
+    bool down = false;
+    bool left = false;
+    bool right = false;
+    bool shoot;
 };
 
 #endif /* !COMPONENTS_HPP_ */
