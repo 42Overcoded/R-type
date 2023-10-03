@@ -7,16 +7,7 @@
 
 #include "System.hpp"
 #include <optional>
-
-void System::set_texture(registry &r)
-{
-    auto &texture = r.get_components<Sprite>();
-    for (size_t i = 0; i < texture.size(); i++) {
-        if (texture[i] != std::nullopt) {
-            texture[i]->sprite.setTexture(texture[i]->texture);
-        }
-    }
-}
+#include <SFML/Window/Keyboard.hpp>
 
 void System::draw_system(registry &r, sf::RenderWindow &window)
 {
@@ -36,6 +27,26 @@ void System::draw_system(registry &r, sf::RenderWindow &window)
                 window.draw(_text->text);
         }
     }
+}
+
+void System::shoot_system(registry &r, sf::Time &elapsed, sf::Clock &clockShoot)
+{
+    // if (elapsed.asMilliseconds() < 500)
+    //     return;
+    // clockShoot.restart();
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+    //     entity_t bullet = r.spawn_entity("bullet");
+    //     auto &position = r.get_components<Position>();
+    //     auto &player = r.get_components<Player>();
+    //     for (size_t i = 0; i < position.size(); i++) {
+    //         auto &_position = position[i];
+    //         auto &_player = player[i];
+    //         if (_player != std::nullopt) {
+    //             r.add_component<Bullet>(bullet, {});
+    //             r.add_component<Position>(bullet, {_position->x + 50, _position->y + 50});
+    //         }
+    //     }
+    // }
 }
 
 void System::control_system(registry &r, sf::Time &elapsed)

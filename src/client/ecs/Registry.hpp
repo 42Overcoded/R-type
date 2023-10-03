@@ -38,7 +38,7 @@ class registry {
          * everything must be an entity (missile, player, shoots ...)
          * @return entity_t 
          */
-        entity_t spawn_entity();
+        entity_t spawn_entity(std::string tag);
 
 
         /**
@@ -116,6 +116,8 @@ class registry {
             return std::any_cast<SparseArray<Component> const&>(_components_arrays.at(typeid(Component)));
         };
     private:
+        std::vector<entity_t> reusable_entities;
+        std::vector<std::string> _entity_tags;
         std::unordered_map<std::type_index, std::any> _components_arrays;
         std::size_t _entity_number = 0;
 };

@@ -26,22 +26,40 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Text>();
     _registry.register_component<Drawable>();
     _registry.register_component<Control>();
+    _registry.register_component<Texture>();
 };
+
+void gameEngine::init_texture()
+{
+    entity_t texture = _registry.spawn_entity("texture");
+
+    _registry.add_component<Texture>(texture, Texture());
+    auto &textureComponent = _registry.get_components<Texture>();
+    if (!textureComponent[texture]->starship.loadFromFile("../../sprites/starship.png"))
+        exit(84);
+    // if (!textureComponent[texture]->enemy.loadFromFile("../../sprites/enemy.png"))
+    //     exit(84);
+    if (!textureComponent[texture]->bullet.loadFromFile("../../sprites/playerBullet.png"))
+        exit(84);
+    textureComponent[texture]->rectBullet = sf::IntRect(0, 0, 33, 100);
+    textureComponent[texture]->rectStarship = sf::IntRect(0, 70, 33, 100);
+}
 
 entity_t gameEngine::init_starship()
 {
-
-    sf::Texture texture;
-    if (!texture.loadFromFile("../../sprites/starship.png"))
-        exit(84);
-
-    entity_t starship = _registry.spawn_entity();
+    entity_t starship = _registry.spawn_entity("starship");
 
     _registry.add_component<Position>(starship, Position());
     _registry.add_component<Speed>(starship, Speed());
-    _registry.add_component<Sprite>(starship, Sprite(texture));
+    _registry.add_component<Sprite>(starship, Sprite());
     _registry.add_component<Drawable>(starship, Drawable());
     _registry.add_component<Control>(starship, Control());
+    _registry.add_component<Player>(starship, Player());
+
+    auto &texture = _registry.get_components<Texture>();
+    auto &sprite = _registry.get_components<Sprite>();
+
+    sprite[starship]->sprite.setTexture(texture[0]->starship);
 
     auto &speed = _registry.get_components<Speed>();
     speed[starship]->speedx = 0.0f;
@@ -51,7 +69,6 @@ entity_t gameEngine::init_starship()
     position[starship]->x = 100;
     position[starship]->y = 500;
 
-    auto &sprite = _registry.get_components<Sprite>();
     sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
     sprite[starship]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
     sprite[starship]->sprite.setScale(3, 3);
@@ -65,13 +82,13 @@ void gameEngine::launch_game() {
 
     register_component_to_game();
 
+    init_texture();
     entity_t starship = init_starship();
-
-    _system.set_texture(_registry);
 
     while (_window.isOpen())
     {
         elapsed = clock.getElapsedTime();
+        elapsedShoot = clockShoot.getElapsedTime();
         sf::Event event;
         while (_window.pollEvent(event))
         {
@@ -83,6 +100,7 @@ void gameEngine::launch_game() {
         auto &speed = _registry.get_components<Speed>();
 
         _system.control_system(_registry, elapsed);
+        _system.shoot_system(_registry, elapsedShoot, clockShoot);
 
         clock.restart();
 

@@ -8,7 +8,14 @@
 #include "Registry.hpp"
 #include "ComponentsArray/Components/Components.hpp"
 
-entity_t registry::spawn_entity() {
+entity_t registry::spawn_entity(std::string tag) {
+    if (reusable_entities.size() > 0) {
+        entity_t entity = reusable_entities.back();
+        reusable_entities.pop_back();
+        _entity_tags[entity] = tag;
+        return entity;
+    }
+    _entity_tags.push_back(tag);
     entity_t entity(_entity_number);
     for (auto &component : _components_arrays) {
         if (component.first == typeid(Speed)) {
@@ -46,6 +53,21 @@ entity_t registry::spawn_entity() {
             array.erase(entity);
             _components_arrays.at(typeid(Control)) = array;
         }
+        if (component.first == typeid(Player)) {
+            SparseArray<Player> array = std::any_cast<SparseArray<Player>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Player)) = array;
+        }
+        if (component.first == typeid(Enemy)) {
+            SparseArray<Enemy> array = std::any_cast<SparseArray<Enemy>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Enemy)) = array;
+        }
+        if (component.first == typeid(Bullet)) {
+            SparseArray<Bullet> array = std::any_cast<SparseArray<Bullet>>(component.second);
+            array.erase(entity);
+            _components_arrays.at(typeid(Bullet)) = array;
+        }
     }
     _entity_number++;
     return entity;
@@ -82,4 +104,7 @@ void registry::kill_entity(entity_t const &e)
             _components_arrays.at(typeid(Sprite)) = array;
         }
     }
+    //
+    _entity_tags[e] = "";
+    reusable_entities.push_back(e);
 };

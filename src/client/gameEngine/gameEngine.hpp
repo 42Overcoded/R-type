@@ -20,11 +20,14 @@ class gameEngine {
         void register_component_to_game();
         sf::RenderWindow &get_window();
         entity_t init_starship();
+        void init_texture();
         void launch_game();
     protected:
     private:
         sf::Time elapsed;
         sf::Clock clock;
+        sf::Time elapsedShoot;
+        sf::Clock clockShoot;
         sf::RenderWindow _window;
         System _system;
         registry _registry;

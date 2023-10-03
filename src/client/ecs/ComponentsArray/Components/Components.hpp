@@ -26,6 +26,14 @@ struct Speed {
     int valid;
 };
 
+struct Texture {
+    sf::Texture starship;
+    sf::Texture enemy;
+    sf::Texture bullet;
+    sf::IntRect rectBullet;
+    sf::IntRect rectStarship;
+};
+
 struct Position {
     int x;
     int y;
@@ -33,15 +41,7 @@ struct Position {
 };
 
 struct Sprite {
-    Sprite(sf::Texture texture) : texture(texture) {}
     sf::Sprite sprite;
-    sf::IntRect rect {
-        0,
-        0,
-        0,
-        0
-    };
-    sf::Texture texture;
     int valid;
 };
 
