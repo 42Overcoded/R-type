@@ -5,7 +5,7 @@
 ** handlingEcs
 */
 
-#include "../include/jsonparser.hpp"
+#include "../include/JsonParser.hpp"
 
 void JsonParser::Load_Map_in_ECS(registry &reg, std::string mapName)
 {

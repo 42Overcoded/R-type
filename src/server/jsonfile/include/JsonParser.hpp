@@ -10,9 +10,9 @@
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS
 
 #include <map>
-#include "comportment.hpp"
-#include "map_level.hpp"
-#include "mob.hpp"
+#include "Comportment.hpp"
+#include "MapLevel.hpp"
+#include "Mob.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>

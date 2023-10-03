@@ -5,7 +5,7 @@
 ** map_parser
 */
 
-#include "../include/jsonparser.hpp"
+#include "../include/JsonParser.hpp"
 #include "filesystem"
 
 void JsonParser::parseCoordinate(const boost::property_tree::ptree& mvptree, std::vector<coordinate_spawn>& coordinate) {

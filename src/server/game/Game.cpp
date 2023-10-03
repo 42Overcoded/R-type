@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../jsonfile/include/jsonparser.hpp"
+#include "../jsonfile/include/JsonParser.hpp"
 #include "../../client/ecs/Registry.hpp"
 #include "Game.hpp"
 

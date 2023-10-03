@@ -5,7 +5,7 @@
 ** comportment_parser
 */
 
-#include "../include/jsonparser.hpp"
+#include "../include/JsonParser.hpp"
 
 void JsonParser::parseMovementVector(const boost::property_tree::ptree& mvptree, std::vector<MovementVector>& movementVector) {
     MovementVector mv;

@@ -46,12 +46,12 @@ set(EXEC_SRC
     game/Game.cpp
     network/Network.cpp
     network/TestClassPlayer.cpp
-    jsonfile/src/comportment_parser.cpp
-    jsonfile/src/generate_map.cpp
-    jsonfile/src/jsonparser.cpp
-    jsonfile/src/map_parser.cpp
-    jsonfile/src/mob_parser.cpp
-    jsonfile/src/handlingEcs.cpp
+    jsonfile/src/ComportmentParser.cpp
+    jsonfile/src/GenerateMap.cpp
+    jsonfile/src/JsonParser.cpp
+    jsonfile/src/MapParser.cpp
+    jsonfile/src/MobParser.cpp
+    jsonfile/src/HandlingEcs.cpp
 )
 
 include_directories(${Boost_INCLUDE_DIRS})

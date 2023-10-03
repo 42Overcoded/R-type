@@ -5,7 +5,7 @@
 ** jsonparser
 */
 
-#include "../include/jsonparser.hpp"
+#include "../include/JsonParser.hpp"
 #include <vector>
 
 JsonParser::JsonParser()
