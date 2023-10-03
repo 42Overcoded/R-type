@@ -22,8 +22,6 @@ class testPlayer {
         testPlayer();
         ~testPlayer();
 
-        friend class boost::serialization::access;
-
         template <typename Archive>
         void serialize(Archive& ar, const unsigned int version) {
             //ar & name;
@@ -32,7 +30,7 @@ class testPlayer {
             ar & armor;
             ar & drip;
             ar & c;
-            //ar & array;
+            ar & array;
         }
 };
 
