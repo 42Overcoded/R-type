@@ -23,7 +23,6 @@
 struct Speed {
     float speedy;
     float speedx;
-    int valid;
 };
 
 struct Texture {
@@ -37,52 +36,46 @@ struct Texture {
 struct Position {
     int x;
     int y;
-    int valid;
 };
 
 struct Sprite {
     sf::Sprite sprite;
-    int valid;
 };
 
 struct Player {
     int id;
-    int valid;
 };
 
 struct Enemy {
     int id;
-    int valid;
 };
 
 struct Bullet {
     int id;
-    int valid;
+};
+
+struct Tag {
+    std::string tag;
 };
 
 struct Health {
     int health;
-    int valid;
 };
 
 struct Damage {
     int damage;
-    int valid;
 };
 
 struct Score {
     int score;
-    int valid;
 };
 
 struct Text {
     sf::Text text;
-    int valid;
 };
 
 struct Drawable {
     bool drawable;
-    int valid;
 };
 
 struct Control {
@@ -91,7 +84,6 @@ struct Control {
     bool left = false;
     bool right = false;
     bool shoot;
-    int valid;
 };
 
 #endif /* !COMPONENTS_HPP_ */
