@@ -32,7 +32,7 @@ void registry::kill_entity(entity_t const &e)
 {
     entity_t entity(_entity_number);
     for (auto &component : _components_arrays) {
-        _rm_components_arrays[component.first](*this, entity);
+        _rm_components_arrays[component.first](*this, e);
     }
     reusable_entities.push_back(e);
 };
