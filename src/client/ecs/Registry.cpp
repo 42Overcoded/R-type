@@ -34,6 +34,5 @@ void registry::kill_entity(entity_t const &e)
     for (auto &component : _components_arrays) {
         _rm_components_arrays[component.first](*this, entity);
     }
-    _entity_tags[e] = "";
     reusable_entities.push_back(e);
 };
