@@ -35,10 +35,10 @@ set(INCLUDES
     game/Game.hpp
     network/Network.hpp
     network/TestClassPlayer.hpp
-    jsonfile/include/comportment.hpp
-    jsonfile/include/jsonparser.hpp
-    jsonfile/include/map_level.hpp
-    jsonfile/include/mob.hpp
+    jsonfile/include/Comportment.hpp
+    jsonfile/include/JsonParser.hpp
+    jsonfile/include/MapLevel.hpp
+    jsonfile/include/Mob.hpp
 )
 
 set(EXEC_SRC
