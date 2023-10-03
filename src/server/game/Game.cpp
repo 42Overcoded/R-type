@@ -1,7 +1,7 @@
 #include <iostream>
-#include "game.hpp"
 #include "../jsonfile/include/jsonparser.hpp"
 #include "../../client/ecs/Registry.hpp"
+#include "Game.hpp"
 
 int game() {
 

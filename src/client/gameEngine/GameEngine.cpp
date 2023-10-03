@@ -5,7 +5,7 @@
 ** gameEngine
 */
 
-#include "gameEngine.hpp"
+#include "GameEngine.hpp"
 #include <optional>
 
 void gameEngine::launch_game() {

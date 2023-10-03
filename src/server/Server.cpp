@@ -5,8 +5,8 @@
 ** server
 */
 #include <iostream>
-#include "game/game.hpp"
-#include "network/network.hpp"
+#include "game/Game.hpp"
+#include "network/Network.hpp"
 
 int main() {
     std::cout << "Hello, i'm the server function" << std::endl;
