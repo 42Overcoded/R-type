@@ -13,10 +13,11 @@
 class System {
     public:
         System() = default;
-        void shoot_system(registry &r, sf::Time &elapsed, sf::Clock &clockShoot);
+        void shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedShoot);
         void draw_system(registry &r, sf::RenderWindow &window);
         void set_texture(registry &r);
-        void control_system(registry &r, sf::Time &elapsed);
+        void control_system(registry &r);
+        void velocity_system(registry &r, sf::Time &elapsed);
         ~System() = default;
     protected:
     private:
