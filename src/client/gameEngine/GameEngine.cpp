@@ -139,7 +139,13 @@ void gameEngine::launch_game() {
     _system.load_texture(_registry);
 
     entity_t starship = init_starship();
-    entity_t enemy = init_enemy();
+    for (int i = 0; i < 10; i++) {
+        entity_t enemy = init_enemy();
+        auto &position = _registry.get_components<Position>();
+        position[enemy]->x = 1930 + i * 100;
+        position[enemy]->y = 600 + i * 30;
+    }
+
 
     while (_window.isOpen())
     {
