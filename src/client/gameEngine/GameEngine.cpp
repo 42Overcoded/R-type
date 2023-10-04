@@ -26,32 +26,10 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Text>();
     _registry.register_component<Drawable>();
     _registry.register_component<Control>();
-    _registry.register_component<Texture>();
     _registry.register_component<Tag>();
     _registry.register_component<Pattern>();
     _registry.register_component<Hitbox>();
 };
-
-void gameEngine::init_texture()
-{
-    entity_t texture = _registry.spawn_entity();
-
-    _registry.add_component<Texture>(texture, Texture());
-    _registry.add_component<Tag>(texture, Tag());
-
-    auto &textureComponent = _registry.get_components<Texture>();
-    auto &tag = _registry.get_components<Tag>();
-
-    tag[texture]->tag = "texture";
-    if (!textureComponent[texture]->starship.loadFromFile("../../sprites/starship.png"))
-        exit(84);
-    if (!textureComponent[texture]->bullet.loadFromFile("../../sprites/playerBullet.png"))
-        exit(84);
-    if (!textureComponent[texture]->enemy.loadFromFile("../../sprites/starship.png"))
-        exit(84);
-    textureComponent[texture]->rectBullet = sf::IntRect(0, 0, 33, 100);
-    textureComponent[texture]->rectStarship = sf::IntRect(0, 70, 33, 100);
-}
 
 void gameEngine::modify_pattern(registry &r)
 {
@@ -87,10 +65,9 @@ entity_t gameEngine::init_starship()
 
     auto &tag = _registry.get_components<Tag>();
     tag[starship]->tag = "starship";
-    auto &texture = _registry.get_components<Texture>();
     auto &sprite = _registry.get_components<Sprite>();
 
-    sprite[starship]->sprite.setTexture(texture[0]->starship);
+    sprite[starship]->sprite.setTexture(_system.get_map()["starship"]);
 
     auto &speed = _registry.get_components<Speed>();
     speed[starship]->speedx = 0.0f;
@@ -124,7 +101,6 @@ entity_t gameEngine::init_enemy()
     _registry.add_component<Hitbox>(enemy, Hitbox());
 
     auto &speed = _registry.get_components<Speed>();
-    auto &texture = _registry.get_components<Texture>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &health = _registry.get_components<Health>();
     auto &hitbox = _registry.get_components<Hitbox>();
@@ -132,8 +108,7 @@ entity_t gameEngine::init_enemy()
     hitbox[enemy]->width = 33;
     hitbox[enemy]->height = 100;
     health[enemy]->health = 5;
-    sprite[enemy]->sprite.setTexture(texture[0]->enemy);
-    sprite[enemy]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
+    sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
     speed[enemy]->speedx -= 0.0f;
     speed[enemy]->speedy = 0.0f;
 
@@ -161,7 +136,7 @@ void gameEngine::launch_game() {
 
     register_component_to_game();
 
-    init_texture();
+    _system.load_texture(_registry);
 
     entity_t starship = init_starship();
     entity_t enemy = init_enemy();
@@ -191,6 +166,7 @@ void gameEngine::launch_game() {
         clock.restart();
 
         _window.clear(sf::Color::Black);
+        _system.set_textures(_registry);
         _system.draw_system(_registry, _window);
         _window.display();
     }

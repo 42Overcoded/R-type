@@ -19,9 +19,13 @@ class System {
         void control_system(registry &r);
         void velocity_system(registry &r, sf::Time &elapsed);
         void hitbox_system(registry &r);
+        void load_texture(registry &r);
+        void set_textures(registry &r);
+        std::unordered_map<std::string, sf::Texture> get_map();
         ~System() = default;
     protected:
     private:
+        std::unordered_map<std::string, sf::Texture> _textures;
 };
 
 #endif /* !SYSTEM_HPP_ */

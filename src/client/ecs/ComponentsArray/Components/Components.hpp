@@ -25,14 +25,6 @@ struct Speed {
     float speedx;
 };
 
-struct Texture {
-    sf::Texture starship;
-    sf::Texture enemy;
-    sf::Texture bullet;
-    sf::IntRect rectBullet;
-    sf::IntRect rectStarship;
-};
-
 struct Position {
     int x;
     int y;

@@ -82,8 +82,6 @@ class SparseArray {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
             _data[pos] = component;
-            if (_data[pos] == std::nullopt)
-                std::cout << "nullopt" << std::endl;
         };
 
         void insert_at(size_type pos, Component &&component) {
