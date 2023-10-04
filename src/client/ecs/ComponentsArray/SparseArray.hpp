@@ -24,10 +24,18 @@ class SparseArray {
         using iterator = typename container_t::iterator;
         using const_iterator = typename container_t::const_iterator;
     public:
-        SparseArray() = default; // You can add more constructors.
-        SparseArray(const SparseArray &) = default;
-        SparseArray(SparseArray &&) noexcept = default;
-        ~SparseArray() = default;
+        SparseArray() {
+            _data = container_t();
+        };
+        SparseArray(const SparseArray &cpy) {
+            _data = cpy._data;
+        };
+        SparseArray(SparseArray &&cpy) noexcept {
+            _data = std::move(cpy._data);
+        };
+        ~SparseArray() {
+            _data.clear();
+        };
 
         SparseArray &operator=(const SparseArray &)
         {
@@ -79,8 +87,10 @@ class SparseArray {
          * @param component 
          */
         void insert_at(size_type pos, const Component &component) {
-            if (pos >= _data.size())
-                _data.resize(pos + 1);
+            if (pos >= _data.size()) {
+                _data.push_back(component);
+                return;
+            }
             _data[pos] = component;
             if (_data[pos] == std::nullopt)
                 std::cout << "nullopt" << std::endl;
@@ -88,11 +98,12 @@ class SparseArray {
 
         void insert_at(size_type pos, Component &&component) {
             if (pos >= _data.size()) {
-                _data.resize(pos + 1);
+                _data.push_back(component);
+                return;
             }
             _data[pos] = component;
         };
-        
+
         /**
          * @brief function to delink the component of an entity / kill an entity
          * 
@@ -100,8 +111,10 @@ class SparseArray {
          */
         void erase(size_type pos)
         {
-            if (pos >= _data.size())
-                _data.resize(pos + 1);
+            if (pos >= _data.size()) {
+                _data.push_back(std::nullopt);
+                return;
+            }
             _data[pos] = std::nullopt;
         };
 
