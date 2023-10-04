@@ -1,30 +1,35 @@
 /*
 ** EPITECH PROJECT, 2023
-** undefined
+** R-type
 ** File description:
-** network
+** Network
 */
-#ifndef NETWORK_HPP_
-#define NETWORK_HPP_
 
+#include <boost/array.hpp>
 #include <boost/asio.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <ctime>
+#include <iostream>
+#include <string>
 
-class Network {
-    private:
-        boost::asio::io_context ioContext;
-        boost::asio::ip::udp::socket servSocket;
-        boost::asio::ip::udp::endpoint cliEndpoint;
-        boost::system::error_code error;
+class UdpServer
+{
+public:
+    UdpServer(int portNumber);
+    void run();
 
-        char cliMessage[1000];
-        size_t totalReceived = 0;
+private:
+    std::string make_daytime_string();
+    void start_receive();
+    void handle_receive(const boost::system::error_code &error, std::size_t /*bytes_transferred*/);
+    void handle_send(
+        boost::shared_ptr<std::string> message,
+        const boost::system::error_code &error,
+        std::size_t bytes_transferred);
 
-    public:
-        Network(int portNumber);
-        ~Network();
-
-        int listen_info_from_clients(void);
-        std::string make_daytime_string();
+    boost::asio::io_context io_context_;
+    boost::asio::ip::udp::socket socket_;
+    boost::asio::ip::udp::endpoint remote_endpoint_;
+    boost::array<char, 1> recv_buffer_;
 };
-
-#endif /* !NETWORK_HPP_ */

@@ -4,68 +4,57 @@
 ** File description:
 ** SERVER
 */
+
 #include "Network.hpp"
-#include "TestClassPlayer.hpp"
-
-#include "boost/archive/text_iarchive.hpp"
-#include "boost/archive/text_oarchive.hpp"
-
 #include <ctime>
 #include <iostream>
 #include <sstream>
 
-
-Network::Network(int portNumber)
-    : servSocket(ioContext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
-    , cliEndpoint()
-    , error()
+UdpServer::UdpServer(int portNumber)
+    : io_context_(), socket_(io_context_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
 {
+    start_receive();
 }
 
-Network::~Network()
+void UdpServer::start_receive()
 {
-    ioContext.stop();
-    servSocket.close();
+    socket_.async_receive_from(
+        boost::asio::buffer(recv_buffer_), remote_endpoint_,
+        boost::bind(
+            &UdpServer::handle_receive, this, boost::asio::placeholders::error,
+            boost::asio::placeholders::bytes_transferred));
 }
 
-int Network::listen_info_from_clients(void)
+void UdpServer::handle_receive(
+    const boost::system::error_code &error, std::size_t /*bytes_transferred*/)
 {
-    testPlayer TestPlayer;
-    try
+    if (!error)
     {
-        while (true)
-        {
-            totalReceived = servSocket.receive_from(boost::asio::buffer(cliMessage), cliEndpoint, 0, error);
-            if (error.failed() == true && error != boost::asio::error::message_size)
-            {
-                std::cout << "Erreur de connexion: " << error.message() << std::endl;
-                break;
-            }
+        boost::shared_ptr<std::string> message(new std::string(make_daytime_string()));
 
-            std::stringstream strstr;
-            strstr << cliMessage;
-            boost::archive::text_iarchive ia(strstr);
-            ia >> TestPlayer;
+        socket_.async_send_to(
+            boost::asio::buffer(*message), remote_endpoint_,
+            boost::bind(
+                &UdpServer::handle_send, this, message, boost::asio::placeholders::error,
+                boost::asio::placeholders::bytes_transferred));
 
-            boost::array<char, 1> recv_buf;
-            boost::asio::ip::udp::endpoint remote_endpoint;
-            servSocket.receive_from(boost::asio::buffer(recv_buf), remote_endpoint);
-
-            std::string message = make_daytime_string();
-
-            boost::system::error_code ignored_error;
-            servSocket.send_to(boost::asio::buffer(message), remote_endpoint, 0, ignored_error);
-        }
+        start_receive();
     }
-    catch (std::exception &e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
-    return 0;
 }
 
-std::string Network::make_daytime_string()
+void UdpServer::handle_send(
+    boost::shared_ptr<std::string> message,
+    const boost::system::error_code & error,
+    std::size_t bytes_transferred)
+{
+}
+
+std::string UdpServer::make_daytime_string()
 {
     std::time_t now = time(0);
     return ctime(&now);
+}
+
+void UdpServer::run() {
+    io_context_.run();
 }

@@ -10,10 +10,8 @@
 
 int main() {
     game();
-    Network network;
+    UdpServer network(4242);
 
-    network.create_server(4242);
-    network.listen_info_from_clients();
-    
+    network.run();
     return 0;
 }
