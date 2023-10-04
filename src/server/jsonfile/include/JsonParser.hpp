@@ -9,16 +9,18 @@
 #define JSONPARSER_HPP_
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS
 
-#include "comportment.hpp"
-#include "map_level.hpp"
-#include "mob.hpp"
+#include <map>
+#include "Comportment.hpp"
+#include "MapLevel.hpp"
+#include "Mob.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+#include "../../../client/ecs/Registry.hpp"
 
-#define PATH_TO_COMPORTEMENT "jsonfile/json/comportment.json"
-#define PATH_TO_MOB "jsonfile/json/mob.json"
-#define PATH_TO_MAP_FOLDER "jsonfile/json/map/"
+#define PATH_TO_COMPORTEMENT "src/server/jsonfile/json/comportment.json"
+#define PATH_TO_MOB "src/server/jsonfile/json/mob.json"
+#define PATH_TO_MAP_FOLDER "src/server/jsonfile/json/map/"
 #define NO_MAP_LOADED "No map loaded"
 #define min_level_lenght 100  // Temporarily set to 100 [random value]
 #define max_level_lenght 1000 // Temporarily set to 1000 [random value]
@@ -55,16 +57,18 @@ public:
    */
   void Save_Map(std::string name);
   /**
-   * @brief Open the specified map json and fill the JsonLevel struct
-   *
-   * @param mapName name of the map to load
-   */
-  void Load_Map(std::string name);
-  /**
    * @brief return all the names of the maps in the map folder
    * @return the vector list of the map names
    */
   std::vector<std::string> getMapNames();
+
+  /**
+   * @brief Load the specified map data in the registry ECS
+   * @param address of the registry
+   * @param mapName name of the map to load
+   */
+  void Load_Map_in_ECS(registry &reg, std::string mapName);
+
 
 protected:
 private:
@@ -74,7 +78,8 @@ private:
   int int_seed;                               // Seed of the map
   std::string Loaded_MapName;                 // Name of the loaded map
 
-  // Functions
+  ///// Functions
+
   /**
    * @brief Generate a map
    *
@@ -83,7 +88,8 @@ private:
    * @param lenght of the map you generate
    */
   void Generate_Map(std::string name, std::string difficulty, int lenght);
-  // Load needed data
+  //// Load needed data
+
   /**
    * @brief Open the mob json and fill the JsonMobs struct
    *
@@ -97,11 +103,18 @@ private:
    */
   void loadMap_Name();
   /**
+   * @brief Open the specified map json and fill the JsonLevel struct
+   *
+   * @param mapName name of the map to load
+   */
+  void Load_Map(std::string name);
+  /**
    * @brief Open the Comportment json and fill the JsonComportments struct
    *
    */
   void loadComportment();
-  // Load_Comportment dependencies
+  /// Load_Comportment dependencies
+  
   /**
    * @brief Get the movement vector object and fill the MovementVector struct
    *
