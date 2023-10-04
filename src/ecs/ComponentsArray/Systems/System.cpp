@@ -7,8 +7,8 @@
 
 #include "System.hpp"
 #include <optional>
-#include "Components.hpp"
-#include "Registry.hpp"
+#include "../Components/Components.hpp"
+#include "../ecs/Registry.hpp"
 #include <SFML/Window/Keyboard.hpp>
 
 void System::draw_system(registry &r, sf::RenderWindow &window)
