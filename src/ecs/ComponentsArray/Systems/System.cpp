@@ -7,9 +7,8 @@
 
 #include "System.hpp"
 #include <optional>
-#include "Components.hpp"
-#include "Registry.hpp"
-#include "SFML/Graphics/Texture.hpp"
+#include "../Components/Components.hpp"
+#include "../ecs/Registry.hpp"
 #include <SFML/Window/Keyboard.hpp>
 #include <unordered_map>
 

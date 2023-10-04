@@ -33,25 +33,25 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(INCLUDES
     Server.hpp
     game/Game.hpp
-    network/Network.hpp
-    network/TestClassPlayer.hpp
-    jsonfile/include/Comportment.hpp
-    jsonfile/include/JsonParser.hpp
-    jsonfile/include/MapLevel.hpp
-    jsonfile/include/Mob.hpp
+    ../network_s/Network.hpp
+    ../network_s/TestClassPlayer.hpp
+    ../jsonfile/include/Comportment.hpp
+    ../jsonfile/include/JsonParser.hpp
+    ../jsonfile/include/MapLevel.hpp
+    ../jsonfile/include/Mob.hpp
 )
 
 set(EXEC_SRC
     Server.cpp
     game/Game.cpp
-    network/Network.cpp
-    network/TestClassPlayer.cpp
-    jsonfile/src/ComportmentParser.cpp
-    jsonfile/src/GenerateMap.cpp
-    jsonfile/src/JsonParser.cpp
-    jsonfile/src/MapParser.cpp
-    jsonfile/src/MobParser.cpp
-    jsonfile/src/HandlingEcs.cpp
+    ../network_s/Network.cpp
+    ../network_s/TestClassPlayer.cpp
+    ../jsonfile/src/ComportmentParser.cpp
+    ../jsonfile/src/GenerateMap.cpp
+    ../jsonfile/src/JsonParser.cpp
+    ../jsonfile/src/MapParser.cpp
+    ../jsonfile/src/MobParser.cpp
+    ../jsonfile/src/HandlingEcs.cpp
 )
 
 include_directories(${Boost_INCLUDE_DIRS})
