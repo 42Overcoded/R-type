@@ -58,12 +58,14 @@ class registry {
          */
         template <typename Component >
         void add_component(entity_t const&to, Component&& c) {
-            (std::any_cast<SparseArray<Component>>(_components_arrays.at(typeid(Component))).insert_at(to, c));
+            auto& sparse_array = std::any_cast<SparseArray<Component>&>(_components_arrays.at(typeid(Component)));
+            sparse_array.insert_at(to, std::forward<Component>(c));
         };
 
         template <typename Component >
         void add_component(entity_t const&to, Component& c) {
-            (std::any_cast<SparseArray<Component>>(_components_arrays.at(typeid(Component))).insert_at(to, c));
+            auto& sparse_array = std::any_cast<SparseArray<Component>&>(_components_arrays.at(typeid(Component)));
+            sparse_array.insert_at(to, std::forward<Component>(c));
         };
 
         /**
@@ -114,6 +116,7 @@ class registry {
             return std::any_cast<SparseArray<Component> const&>(_components_arrays.at(typeid(Component)));
         };
     private:
+        std::vector<entity_t> reusable_entities;
         std::unordered_map<std::type_index, std::any> _components_arrays;
         std::size_t _entity_number = 0;
 };

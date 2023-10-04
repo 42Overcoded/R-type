@@ -15,6 +15,8 @@
 #include "network/SystemOUT.hpp"
 
 int main() {
+    registry registry;
+    gameEngine gameEngine(registry);
 
     registry reg;
     reg.register_component<Speed>();
@@ -39,6 +41,8 @@ int main() {
     reg.remove_component<Speed>(entity);
     reg.kill_entity(entity);
     std::cout << "Hello, i'm the client function" << std::endl;
+    gameEngine.launch_game();
+
     Network network;
 
     network.create_client("10.15.191.37", 4242);

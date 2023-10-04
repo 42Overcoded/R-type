@@ -1,6 +1,6 @@
 # Ecs documentation
 
-![assets/ecs_graph.jpg]
+![ECS graph](assets/ecs_graph.jpg)
 
 To use the ecs, first you need to create one unique registry.
 Secondly, add all the component you want to use for your game with the fonction from the registry register_component.
@@ -30,3 +30,4 @@ int main() {
     reg.kill_entity(entity);
     return 0;
 }```
+```
