@@ -7,7 +7,7 @@
 
 #include "SystemOUT.hpp"
 #include <iterator>
-#include "ecs/ComponentsArray/Systems/System.hpp"
+#include "../ecs/ComponentsArray/Systems/System.hpp"
 
 SystemOUT::SystemOUT()
 {

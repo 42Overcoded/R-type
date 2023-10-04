@@ -9,10 +9,10 @@
 #include <iostream>
 #include "../ecs/Registry.hpp"
 #include "GameEngine.hpp"
-#include "network/Network.hpp"
+#include "../network_c/Network.hpp"
 
-#include "ecs/ComponentsArray/Components/Components.hpp"
-#include "network/SystemOUT.hpp"
+#include "../ecs/ComponentsArray/Components/Components.hpp"
+#include "../network_c/SystemOUT.hpp"
 
 int main() {
     registry registry;
