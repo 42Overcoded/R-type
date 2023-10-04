@@ -58,6 +58,8 @@ set(EXEC_SRC
     gameEngine/graphics/Graphic.cpp
     network/Network.cpp
     network/TestClassPlayer.cpp
+    network/TestStructPlayer.cpp
+    network/SystemOUT.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

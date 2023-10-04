@@ -58,4 +58,12 @@ struct Score {
     int score;
 };
 
+struct ComponentIN {
+    char buffer[1024];
+};
+
+struct ComponentOUT {
+    char buffer[1024];
+};
+
 #endif /* !COMPONENTS_HPP_ */

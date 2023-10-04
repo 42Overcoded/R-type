@@ -6,6 +6,7 @@
 */
 #include "Network.hpp"
 #include "TestClassPlayer.hpp"
+#include "TestStructPlayer.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -66,9 +67,19 @@ int Network::send_info_to_server(void *object_player, void *object_command)
     oa << *TestPlayer;
 
 
-    //ptrCliSocket->send_to(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrServEndpoint, 0, *ptrError);
-    ptrCliSocket->send_to(boost::asio::buffer(strstr.str()), *ptrServEndpoint, 0, *ptrError);
+    // const char *name;
+    // std::string level;
+    // int hp;
+    // int armor;
+    // bool drip;
+    // char c;
+    // char array[30];
+    struct testPlayer2 tPlay = {"serge", "serge2", 888, 987, true, 'R', "serge3"};
 
+    //ptrCliSocket->send_to(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrServEndpoint, 0, *ptrError);
+    //ptrCliSocket->send_to(boost::asio::buffer(strstr.str()), *ptrServEndpoint, 0, *ptrError);
+
+    ptrCliSocket->send_to(boost::asio::buffer(&tPlay, sizeof(tPlay)), *ptrServEndpoint, 0, *ptrError);
 
     delete TestPlayer;
     return 0;

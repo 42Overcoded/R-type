@@ -42,6 +42,7 @@ set(EXEC_SRC
     game/Game.cpp
     network/Network.cpp
     network/TestClassPlayer.cpp
+    network/TestStructPlayer.cpp
 )
 
 include_directories(${Boost_INCLUDE_DIRS})

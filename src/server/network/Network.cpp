@@ -6,6 +6,7 @@
 */
 #include "Network.hpp"
 #include "TestClassPlayer.hpp"
+#include "TestStructPlayer.hpp"
 
 #include "boost/archive/text_oarchive.hpp"
 #include "boost/archive/text_iarchive.hpp"
@@ -54,41 +55,55 @@ int Network::listen_info_from_clients(void)
 {
     testPlayer *TestPlayer = new testPlayer();
 
+    struct testPlayer2 tPlay;
+
     while (true) {
-        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(cliMessage), *ptrCliEndpoint, 0, *ptrError);
+        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(cliMessage), *ptrCliEndpoint, 0, *ptrError);
         //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrCliEndpoint, 0, *ptrError);
+
+        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(&tPlay, sizeof(tPlay)), *ptrCliEndpoint, 0, *ptrError);
+
+        //totalReceived = ptrServSocket->receive_from(&tPlay, *ptrCliEndpoint, 0, *ptrError);
 
         if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
             std::cout << "Erreur de connexion: " << ptrError->message() << std::endl;
             break;
         }
 
-        std::stringstream strstr;
-        strstr << cliMessage;
-        boost::archive::text_iarchive ia(strstr);
-        ia >> *TestPlayer;
+        // std::stringstream strstr;
+        // strstr << cliMessage;
+        // boost::archive::text_iarchive ia(strstr);
+        // ia >> *TestPlayer;
 
-        if (TestPlayer != NULL) {
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->name << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->level << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->hp << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->armor << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->drip << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->c << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->array << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-        } else {
-            std::cout << "NULL" << std::endl;
-        }
-        break;
+        // if (TestPlayer != NULL) {
+        //     std::cout << "-----------------------------------------------" << std::endl;
+        //     std::cout << TestPlayer->name << std::endl;
+        //     std::cout << "-----------------------------------------------" << std::endl;
+        //     std::cout << TestPlayer->level << std::endl;
+        //     std::cout << "-----------------------------------------------" << std::endl;
+        //     std::cout << TestPlayer->hp << std::endl;
+        //     std::cout << "-----------------------------------------------" << std::endl;
+        //     std::cout << TestPlayer->armor << std::endl;
+        //     std::cout << "-----------------------------------------------" << std::endl;
+        //     std::cout << TestPlayer->drip << std::endl;
+        //     std::cout << "-----------------------------------------------" << std::endl;
+        //     std::cout << TestPlayer->c << std::endl;
+        //     std::cout << "-----------------------------------------------" << std::endl;
+        //     std::cout << TestPlayer->array << std::endl;
+        //     std::cout << "-----------------------------------------------" << std::endl;
+        // } else {
+        //     std::cout << "NULL" << std::endl;
+        // }
+        //break;
+
+        //std::cout << tPlay.name << std::endl;
+        //std::cout << tPlay.level << std::endl;
+        std::cout << tPlay.hp << std::endl;
+        std::cout << tPlay.armor << std::endl;
+        std::cout << tPlay.drip << std::endl;
+        std::cout << tPlay.c << std::endl;
+        std::cout << tPlay.array << std::endl;
     }
-    delete TestPlayer;
+    //delete TestPlayer;
     return 0;
 }
