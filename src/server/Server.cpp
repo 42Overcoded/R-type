@@ -6,7 +6,7 @@
 */
 #include <iostream>
 #include "game/Game.hpp"
-#include "network/Network.hpp"
+#include "../network_s/Network.hpp"
 
 int main() {
     game();

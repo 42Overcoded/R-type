@@ -16,15 +16,15 @@
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include "../../../client/ecs/Registry.hpp"
+#include "../ecs/Registry.hpp"
 
-#define PATH_TO_COMPORTEMENT "src/server/jsonfile/json/comportment.json"
-#define PATH_TO_MOB "src/server/jsonfile/json/mob.json"
-#define PATH_TO_MAP_FOLDER "src/server/jsonfile/json/map/"
-#define NO_MAP_LOADED "No map loaded"
-#define min_level_lenght 100  // Temporarily set to 100 [random value]
-#define max_level_lenght 1000 // Temporarily set to 1000 [random value]
-#define debugmode false // Set to true to enable debug mode, false to disable it
+const std::string PATH_TO_COMPORTEMENT = "src/jsonfile/json/comportment.json";
+const std::string PATH_TO_MOB = "src/jsonfile/json/mob.json";
+const std::string PATH_TO_MAP_FOLDER = "src/jsonfile/json/map/";
+const std::string NO_MAP_LOADED = "No map loaded";
+const int min_level_lenght = 100;  // Temporarily set to 100 [random value]
+const int max_level_lenght = 1000; // Temporarily set to 1000 [random value]
+const bool debugmode = false; // Set to true to enable debug mode, false to disable it
 
 class JsonParser {
 public:

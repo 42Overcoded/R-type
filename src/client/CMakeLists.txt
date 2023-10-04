@@ -39,25 +39,25 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
-    ecs/Registry.hpp
-    ecs/ComponentsArray/SparseArray.hpp
-    ecs/ComponentsArray/Components/Components.hpp
-    ecs/ComponentsArray/Systems/System.hpp
+    ../ecs/Registry.hpp
+    ../ecs/ComponentsArray/SparseArray.hpp
+    ../ecs/ComponentsArray/Components/Components.hpp
+    ../ecs/ComponentsArray/Systems/System.hpp
     gameEngine/GameEngine.hpp
-    network/Network.hpp
-    network/TestClassPlayer.hpp
+    ../network_c/Network.hpp
+    ../network_c/TestClassPlayer.hpp
 )
 
 set(EXEC_SRC
     Client.cpp
-    ecs/Registry.cpp
-    ecs/ComponentsArray/Components/Components.cpp
-    ecs/ComponentsArray/Systems/System.cpp
+    ../ecs/Registry.cpp
+    ../ecs/ComponentsArray/Components/Components.cpp
+    ../ecs/ComponentsArray/Systems/System.cpp
     gameEngine/GameEngine.cpp
     gameEngine/game/Game.cpp
     gameEngine/graphics/Graphic.cpp
-    network/Network.cpp
-    network/TestClassPlayer.cpp
+    ../network_c/Network.cpp
+    ../network_c/TestClassPlayer.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

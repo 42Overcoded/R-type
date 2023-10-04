@@ -17,13 +17,21 @@ JsonParser::JsonParser()
         std::cout << "JsonParser constructor" << std::endl;
         std::cout << "Loading comportment" << std::endl;
     }
-    loadComportment();
+    try {
+        loadComportment();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 
     if (debugmode) {
         std::cout << "Loaded comportment" << std::endl;
         std::cout << "Loading mob" << std::endl;
     }
-    loadMob();
+    try {
+        loadMob();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 
     if (debugmode) {
         std::cout << "Loaded mob" << std::endl;
