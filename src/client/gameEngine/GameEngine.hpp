@@ -34,6 +34,8 @@ class gameEngine {
         sf::Clock clockShoot;
         sf::Time elapsedShootLoad;
         sf::Clock clockShootLoad;
+        sf::Time elapsedDeath;
+        sf::Clock clockDeath;
         sf::RenderWindow _window;
         System _system;
         registry _registry;

@@ -8,6 +8,7 @@
 #ifndef SYSTEM_HPP_
 #define SYSTEM_HPP_
 
+#include <cstddef>
 #include "../../Registry.hpp"
 #include "SFML/Graphics/Rect.hpp"
 
@@ -22,6 +23,7 @@ class System {
         void hitbox_system(registry &r);
         void load_texture(registry &r);
         void set_textures(registry &r);
+        void death_animation(registry &r, sf::Clock &clockDeath, sf::Time &elapsedDeath);
         std::unordered_map<std::string, sf::Texture> get_map();
         std::unordered_map<std::string, sf::IntRect> get_rect();
         ~System() = default;

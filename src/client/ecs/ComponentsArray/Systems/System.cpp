@@ -124,6 +124,7 @@ void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedS
         auto &sprite = r.get_components<Sprite>();
         auto &position = r.get_components<Position>();
         auto &hitbox = r.get_components<Hitbox>();
+        auto &state = r.get_components<State>();
 
         tag[bullet]->tag = "bullet";
         speed[bullet]->speedy = 0;
@@ -131,16 +132,26 @@ void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedS
         hitbox[bullet]->width = 32;
         hitbox[bullet]->height = 20;
         sprite[bullet]->sprite.setTexture(_textures["bullet"]);
-        sprite[bullet]->sprite.setTextureRect(sf::IntRect(200, 115, 32, 20));
+        sprite[bullet]->sprite.setTextureRect(sf::IntRect(249, 80, 16, 16));
+        sprite[bullet]->sprite.setScale(3, 3);
         for (size_t i = 0; i < r._entity_number; i++) {
             if (tag[i] == std::nullopt) {
                 continue;
             }
             if (tag[i]->tag == "starship") {
-                r.add_component<Position>(bullet, {position[i]->x + 100, position[i]->y + 20});
-                sprite[bullet]->sprite.setPosition(position[i]->x + 100, position[i]->y + 20);
+                r.add_component<Position>(bullet, {position[i]->x + 100, position[i]->y});
+                sprite[bullet]->sprite.setPosition(position[i]->x + 100, position[i]->y);
             }
             if (tag[i]->tag == "fullbeambar") {
+                state[bullet]->state = 0;
+                if (health[i]->health > 30 && health[i]->health < 85) {
+                    state[bullet]->state = 1;
+                    sprite[bullet]->sprite.setTextureRect(sf::IntRect(200, 115, 32, 20));
+                }
+                if (health[i]->health >= 85) {
+                    state[bullet]->state = 2;
+                    sprite[bullet]->sprite.setTextureRect(sf::IntRect(185, 170, 80, 16));
+                }
                 health[i]->health = 0;
                 sprite[i]->sprite.setTextureRect(sf::IntRect(0, 26, (health[i]->health / 100) * 220, 25));
             }
@@ -216,6 +227,7 @@ void System::hitbox_system(registry &r)
     auto &health = r.get_components<Health>();
     auto &sprite = r.get_components<Sprite>();
     auto &hitbox = r.get_components<Hitbox>();
+    auto &state = r.get_components<State>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -227,11 +239,22 @@ void System::hitbox_system(registry &r)
                     continue;
                 if (tag[j]->tag == "enemy") {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
-                        health[j]->health -= 1;
-                        if (health[j]->health <= 0) {
-                            r.kill_entity(entity_t(j));
+                        if (state[i]->state == 0) {
+                            health[j]->health -= 1;
+                            r.kill_entity(entity_t(i));
                         }
-                        r.kill_entity(entity_t(i));
+                        if (state[i]->state == 1) {
+                            health[j]->health -= 5;
+                            r.kill_entity(entity_t(i));
+                        }
+                        if (state[i]->state == 2) {
+                            std::cout << "full beam" << std::endl;
+                            health[j]->health -= 10;
+                            if (health[j]->health >= 10) {
+                                r.kill_entity(entity_t(i));
+                            }
+                        }
+                        health[j]->health -= 1;
                         break;
                     }
                 }
@@ -267,6 +290,62 @@ void System::set_textures(registry &r)
         if (tag[i]->tag == "load_shoot") {
             sprite[i]->sprite.setTexture(_textures["bullet"]);
         }
+        if (tag[i]->tag == "explosion") {
+            sprite[i]->sprite.setTexture(_textures["explosion"]);
+        }
+    }
+}
+
+void System::death_animation(registry &r, sf::Clock &clockDeath, sf::Time &elapsedDeath)
+{
+    auto &drawable = r.get_components<Drawable>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
+    auto &health = r.get_components<Health>();
+    auto &state = r.get_components<State>();
+
+
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt) {
+            continue;
+        }
+        if (tag[i]->tag == "explosion") {
+            if (elapsedDeath.asMilliseconds() > 50) {
+                if (state[i]->state >= 6) {
+                    r.kill_entity(entity_t(i));
+                }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["explosionRect"].left + (32*state[i]->state), _rect["explosionRect"].top, _rect["explosionRect"].width, _rect["explosionRect"].height));
+                state[i]->state += 1;
+                clockDeath.restart();
+            }
+        }
+        if (tag[i]->tag == "enemy") {
+            if (health[i]->health <= 0) {
+                entity_t explosion = r.spawn_entity();
+                r.add_component<Position>(explosion, Position());
+                r.add_component<Sprite>(explosion, Sprite());
+                r.add_component<Drawable>(explosion, Drawable());
+                r.add_component<Tag>(explosion, Tag());
+                r.add_component<State>(explosion, State());
+
+                auto &state = r.get_components<State>();
+                auto &drawable = r.get_components<Drawable>();
+                auto &tag = r.get_components<Tag>();
+                auto &sprite = r.get_components<Sprite>();
+                auto &position = r.get_components<Position>();
+
+                state[explosion]->state = 0;
+                position[explosion]->x = position[i]->x;
+                position[explosion]->y = position[i]->y;
+                tag[explosion]->tag = "explosion";
+                drawable[explosion]->drawable = true;
+                sprite[explosion]->sprite.setTexture(_textures["explosion"]);
+                sprite[explosion]->sprite.setTextureRect(sf::IntRect(0, 0, 0, 0));
+                sprite[explosion]->sprite.setScale(3, 3);
+                r.kill_entity(entity_t(i));
+            }
+        }
     }
 }
 
@@ -276,31 +355,37 @@ void System::load_texture(registry &r)
     sf::Texture starship;
     sf::Texture enemy;
     sf::Texture beambar;
+    sf::Texture explosion;
     sf::IntRect LoadBulletRect = sf::IntRect(0, 50, 32, 32);
     sf::IntRect BulletRect = sf::IntRect(200, 115, 32, 20);
     sf::IntRect StarshipRect = sf::IntRect(0, 70, 33, 100);
     sf::IntRect EnemyRect = sf::IntRect(0, 70, 33, 16);
     sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
     sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);
+    sf::IntRect ExplosionRect = sf::IntRect(130, 0, 32, 32);
 
-    if (!bullet.loadFromFile("../../assets/playerBullet.png"))
+    if (!bullet.loadFromFile("./assets/playerBullet.png"))
         exit(84);
-    if (!starship.loadFromFile("../../assets/starship.png"))
+    if (!starship.loadFromFile("./assets/starship.png"))
         exit(84);
-    if (!enemy.loadFromFile("../../assets/starship.png"))
+    if (!enemy.loadFromFile("./assets/starship.png"))
         exit(84);
-    if (!beambar.loadFromFile("../../assets/beam.png"))
+    if (!beambar.loadFromFile("./assets/beam.png"))
+        exit(84);
+    if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
     _textures.insert(std::make_pair("bullet", bullet));
     _textures.insert(std::make_pair("starship", starship));
     _textures.insert(std::make_pair("enemy", enemy));
     _textures.insert(std::make_pair("beambar", beambar));
+    _textures.insert(std::make_pair("explosion", explosion));
     _rect.insert(std::make_pair("bulletRect", BulletRect));
     _rect.insert(std::make_pair("starshipRect", StarshipRect));
     _rect.insert(std::make_pair("enemyRect", EnemyRect));
     _rect.insert(std::make_pair("beambarRect", BeambarRect));
     _rect.insert(std::make_pair("fullbeambarRect", FullBeambarRect));
     _rect.insert(std::make_pair("loadbulletRect", LoadBulletRect));
+    _rect.insert(std::make_pair("explosionRect", ExplosionRect));
 }
 
 std::unordered_map<std::string, sf::Texture> System::get_map()

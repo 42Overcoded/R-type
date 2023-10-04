@@ -29,6 +29,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Tag>();
     _registry.register_component<Pattern>();
     _registry.register_component<Hitbox>();
+    _registry.register_component<State>();
 };
 
 void gameEngine::modify_pattern(registry &r)
@@ -217,6 +218,8 @@ void gameEngine::launch_game() {
         elapsed = clock.getElapsedTime();
         elapsedShoot = clockShoot.getElapsedTime();
         elapsedShootLoad = clockShootLoad.getElapsedTime();
+        elapsedDeath = clockDeath.getElapsedTime();
+
         sf::Event event;
         while (_window.pollEvent(event))
         {
@@ -230,6 +233,7 @@ void gameEngine::launch_game() {
         _system.shoot_system(_registry, clockShoot, elapsedShoot, elapsed, clockShootLoad, elapsedShootLoad);
         _system.velocity_system(_registry, elapsed);
         _system.hitbox_system(_registry);
+        _system.death_animation(_registry, clockDeath, elapsedDeath);
 
         clock.restart();
 

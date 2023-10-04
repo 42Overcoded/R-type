@@ -8,6 +8,7 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
+#include "boost/thread/futures/future_status.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -20,13 +21,17 @@
  * 
  */
 struct Speed {
-    float speedy;
-    float speedx;
+    float speedy = 0;
+    float speedx = 0;
+};
+
+struct State {
+    int state = 0;
 };
 
 struct Position {
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
 };
 
 struct Sprite {
