@@ -26,27 +26,29 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Text>();
     _registry.register_component<Drawable>();
     _registry.register_component<Control>();
-    _registry.register_component<Texture>();
     _registry.register_component<Tag>();
+    _registry.register_component<Pattern>();
+    _registry.register_component<Hitbox>();
 };
 
-void gameEngine::init_texture()
+void gameEngine::modify_pattern(registry &r)
 {
-    entity_t texture = _registry.spawn_entity();
+    auto &speed = r.get_components<Speed>();
+    auto &pattern = r.get_components<Pattern>();
 
-    _registry.add_component<Texture>(texture, Texture());
-    _registry.add_component<Tag>(texture, Tag());
-
-    auto &textureComponent = _registry.get_components<Texture>();
-    auto &tag = _registry.get_components<Tag>();
-
-    tag[texture]->tag = "texture";
-    if (!textureComponent[texture]->starship.loadFromFile("../../sprites/starship.png"))
-        exit(84);
-    if (!textureComponent[texture]->bullet.loadFromFile("../../sprites/playerBullet.png"))
-        exit(84);
-    textureComponent[texture]->rectBullet = sf::IntRect(0, 0, 33, 100);
-    textureComponent[texture]->rectStarship = sf::IntRect(0, 70, 33, 100);
+    for (size_t i = 0; i < r._entity_number; i++) { 
+        if (speed[i] && pattern[i]) {
+            if (pattern[i]->pattern_index < pattern[i]->switch_index) {
+                pattern[i]->pattern_index++;
+            } else {
+                pattern[i]->pattern_index = 0;
+                pattern[i]->pattern_type++;
+                pattern[i]->pattern_type %= pattern[i]->pattern_length;
+                speed[i]->speedx = pattern[i]->pattern[pattern[i]->pattern_type].speedx;
+                speed[i]->speedy = pattern[i]->pattern[pattern[i]->pattern_type].speedy;
+            }
+        }
+    }
 }
 
 entity_t gameEngine::init_starship()
@@ -63,10 +65,9 @@ entity_t gameEngine::init_starship()
 
     auto &tag = _registry.get_components<Tag>();
     tag[starship]->tag = "starship";
-    auto &texture = _registry.get_components<Texture>();
     auto &sprite = _registry.get_components<Sprite>();
 
-    sprite[starship]->sprite.setTexture(texture[0]->starship);
+    sprite[starship]->sprite.setTexture(_system.get_map()["starship"]);
 
     auto &speed = _registry.get_components<Speed>();
     speed[starship]->speedx = 0.0f;
@@ -83,14 +84,69 @@ entity_t gameEngine::init_starship()
     return starship;
 }
 
+
+entity_t gameEngine::init_enemy()
+
+{
+    entity_t enemy = _registry.spawn_entity();
+
+    _registry.add_component<Position>(enemy, Position());
+    _registry.add_component<Speed>(enemy, Speed());
+    _registry.add_component<Sprite>(enemy, Sprite());
+    _registry.add_component<Drawable>(enemy, Drawable());
+    _registry.add_component<Enemy>(enemy, Enemy());
+    _registry.add_component<Tag>(enemy, {"enemy"});
+    _registry.add_component<Pattern>(enemy, Pattern());
+    _registry.add_component<Health>(enemy, Health());
+    _registry.add_component<Hitbox>(enemy, Hitbox());
+
+    auto &speed = _registry.get_components<Speed>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &health = _registry.get_components<Health>();
+    auto &hitbox = _registry.get_components<Hitbox>();
+
+    hitbox[enemy]->width = 33;
+    hitbox[enemy]->height = 100;
+    health[enemy]->health = 5;
+    sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
+    speed[enemy]->speedx -= 0.0f;
+    speed[enemy]->speedy = 0.0f;
+
+    auto &pattern = _registry.get_components<Pattern>();
+    pattern[enemy]->pattern_index = 0;
+    pattern[enemy]->pattern_type = 0;
+    pattern[enemy]->pattern_length = 2;
+    pattern[enemy]->switch_index = 100;
+    std::vector<Speed> pattern1 = {{0.2f, -0.2f}, {-0.2f, -0.2f}};
+    pattern[enemy]->pattern = pattern1;
+
+    auto &position = _registry.get_components<Position>();
+    position[enemy]->x = 1930;
+    position[enemy]->y = 800;
+
+    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
+    sprite[enemy]->sprite.setScale(3, 3);
+
+    return enemy;
+}
+
 void gameEngine::launch_game() {
     _window.create(sf::VideoMode(1920, 1080), "R-Type");
     _window.setFramerateLimit(60);
 
     register_component_to_game();
 
-    init_texture();
+    _system.load_texture(_registry);
+
     entity_t starship = init_starship();
+    for (int i = 0; i < 10; i++) {
+        entity_t enemy = init_enemy();
+        auto &position = _registry.get_components<Position>();
+        position[enemy]->x = 1930 + i * 100;
+        position[enemy]->y = 600 + i * 30;
+    }
+
+
     while (_window.isOpen())
     {
         elapsed = clock.getElapsedTime();
@@ -101,17 +157,22 @@ void gameEngine::launch_game() {
             if (event.type == sf::Event::Closed)
                 _window.close();
         }
+
         auto &position = _registry.get_components<Position>();
         auto &control = _registry.get_components<Control>();
         auto &speed = _registry.get_components<Speed>();
 
+        modify_pattern(_registry);
+
         _system.control_system(_registry);
         _system.shoot_system(_registry, clockShoot, elapsedShoot);
         _system.velocity_system(_registry, elapsed);
+        _system.hitbox_system(_registry);
 
         clock.restart();
 
-        _window.clear();
+        _window.clear(sf::Color::Black);
+        _system.set_textures(_registry);
         _system.draw_system(_registry, _window);
         _window.display();
     }

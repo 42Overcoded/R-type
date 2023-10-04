@@ -25,14 +25,6 @@ struct Speed {
     float speedx;
 };
 
-struct Texture {
-    sf::Texture starship;
-    sf::Texture enemy;
-    sf::Texture bullet;
-    sf::IntRect rectBullet;
-    sf::IntRect rectStarship;
-};
-
 struct Position {
     int x;
     int y;
@@ -92,6 +84,20 @@ struct Control {
     bool left = false;
     bool right = false;
     bool shoot;
+};
+
+struct Pattern {
+    std::vector<Speed> pattern;
+    int pattern_length;
+    int pattern_type;
+
+    int switch_index;
+    int pattern_index;
+};
+
+struct Hitbox {
+    int width;
+    int height;
 };
 
 #endif /* !COMPONENTS_HPP_ */

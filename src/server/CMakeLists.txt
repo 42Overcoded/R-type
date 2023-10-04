@@ -33,26 +33,25 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(INCLUDES
     Server.hpp
     game/Game.hpp
-    network/Network.hpp
-    network/TestClassPlayer.hpp
-    jsonfile/include/Comportment.hpp
-    jsonfile/include/JsonParser.hpp
-    jsonfile/include/MapLevel.hpp
-    jsonfile/include/Mob.hpp
+    ../network_s/Network.hpp
+    ../network_s/TestClassPlayer.hpp
+    ../jsonfile/include/Comportment.hpp
+    ../jsonfile/include/JsonParser.hpp
+    ../jsonfile/include/MapLevel.hpp
+    ../jsonfile/include/Mob.hpp
 )
 
 set(EXEC_SRC
     Server.cpp
     game/Game.cpp
-    network/Network.cpp
-    network/TestClassPlayer.cpp
-    network/TestStructPlayer.cpp
-    jsonfile/src/ComportmentParser.cpp
-    jsonfile/src/GenerateMap.cpp
-    jsonfile/src/JsonParser.cpp
-    jsonfile/src/MapParser.cpp
-    jsonfile/src/MobParser.cpp
-    jsonfile/src/HandlingEcs.cpp
+    ../network_s/Network.cpp
+    ../network_s/TestClassPlayer.cpp
+    ../jsonfile/src/ComportmentParser.cpp
+    ../jsonfile/src/GenerateMap.cpp
+    ../jsonfile/src/JsonParser.cpp
+    ../jsonfile/src/MapParser.cpp
+    ../jsonfile/src/MobParser.cpp
+    ../jsonfile/src/HandlingEcs.cpp
 )
 
 include_directories(${Boost_INCLUDE_DIRS})
@@ -63,3 +62,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+SET(CPACK_GENERATOR "DEB")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "R-Type Team")
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+include(CPack)
