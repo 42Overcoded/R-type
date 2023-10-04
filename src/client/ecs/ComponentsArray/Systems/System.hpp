@@ -14,7 +14,7 @@
 class System {
     public:
         System() = default;
-        void shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedShoot, sf::Time &elapsed);
+        void shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedShoot, sf::Time &elapsed, sf::Clock &clockShootLoad, sf::Time &elapsedShootLoad);
         void draw_system(registry &r, sf::RenderWindow &window);
         void set_texture(registry &r);
         void control_system(registry &r);

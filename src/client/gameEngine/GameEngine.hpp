@@ -25,12 +25,15 @@ class gameEngine {
         void init_beambar();
         void launch_game();
         void modify_pattern(registry &r);
+        void init_load_shoot();
     protected:
     private:
         sf::Time elapsed;
         sf::Clock clock;
         sf::Time elapsedShoot;
         sf::Clock clockShoot;
+        sf::Time elapsedShootLoad;
+        sf::Clock clockShootLoad;
         sf::RenderWindow _window;
         System _system;
         registry _registry;

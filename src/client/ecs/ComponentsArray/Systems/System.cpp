@@ -11,6 +11,7 @@
 #include "Registry.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/Graphics/Texture.hpp"
+#include "SFML/System/Clock.hpp"
 #include <SFML/Window/Keyboard.hpp>
 #include <unordered_map>
 
@@ -23,24 +24,24 @@ void System::draw_system(registry &r, sf::RenderWindow &window)
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (drawable[i] != std::nullopt && position[i] != std::nullopt) {
-            if (sprite[i] != std::nullopt) {
+            if (sprite[i] != std::nullopt && drawable[i]->drawable == true) {
                 sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
                 window.draw(sprite[i]->sprite);
             }
-            if (text[i] != std::nullopt)
+            if (text[i] != std::nullopt && drawable[i]->drawable == true)
                 window.draw(text[i]->text);
         }
     }
 }
 
-void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedShoot, sf::Time &elapsed)
+void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedShoot, sf::Time &elapsed, sf::Clock &clockShootLoad, sf::Time &elapsedShootLoad)
 {
-
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
     auto &health = r.get_components<Health>();
     auto &sprite = r.get_components<Sprite>();
     auto &control = r.get_components<Control>();
+    auto &drawable = r.get_components<Drawable>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -48,7 +49,6 @@ void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedS
         }
         if (tag[i]->tag == "bullet") {
             if (position[i]->x > 1920) {
-                std::cout << "entity " << i << " killed\n";
                 r.kill_entity(entity_t(i));
             }
         }
@@ -60,6 +60,25 @@ void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedS
             }
             if (tag[i]->tag == "starship") {
                 control[i]->shoot = true;
+                if (_rect["loadbulletRect"].left >= 256) {
+                    _rect["loadbulletRect"].left = 0;
+                }
+                if (elapsedShootLoad.asMilliseconds() > 50) {
+                    _rect["loadbulletRect"].left += 32;
+                    clockShootLoad.restart();
+                }
+                for (size_t j = 0; j < r._entity_number; j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->tag == "load_shoot") {
+                        position[j]->x = position[i]->x + 80;
+                        position[j]->y = position[i]->y;
+                    }
+                }
+            }
+            if (tag[i]->tag == "load_shoot") {
+                drawable[i]->drawable = true;
+                sprite[i]->sprite.setTextureRect(_rect["loadbulletRect"]);
             }
             if (tag[i]->tag == "fullbeambar") {
                 if (health[i]->health <= 100) {
@@ -70,18 +89,24 @@ void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedS
         }
     } else {
         auto &control = r.get_components<Control>();
+        bool is_return = false;
         for (size_t i = 0; i < r._entity_number; i++) {
             if (tag[i] == std::nullopt) {
                 continue;
             }
+            if (tag[i]->tag == "load_shoot") {
+                drawable[i]->drawable = false;
+            }
             if (tag[i]->tag == "starship") {
                 if (control[i]->shoot == false) {
-                    return;
+                    is_return = true;
                 } else {
                     control[i]->shoot = false;
                 }
             }
         }
+        if (is_return == true)
+            return;
         if (elapsedShoot.asMilliseconds() < 150)
             return;
 
@@ -239,6 +264,9 @@ void System::set_textures(registry &r)
         if (tag[i]->tag == "fullbeambar") {
             sprite[i]->sprite.setTexture(_textures["beambar"]);
         }
+        if (tag[i]->tag == "load_shoot") {
+            sprite[i]->sprite.setTexture(_textures["bullet"]);
+        }
     }
 }
 
@@ -248,6 +276,7 @@ void System::load_texture(registry &r)
     sf::Texture starship;
     sf::Texture enemy;
     sf::Texture beambar;
+    sf::IntRect LoadBulletRect = sf::IntRect(0, 50, 32, 32);
     sf::IntRect BulletRect = sf::IntRect(200, 115, 32, 20);
     sf::IntRect StarshipRect = sf::IntRect(0, 70, 33, 100);
     sf::IntRect EnemyRect = sf::IntRect(0, 70, 33, 16);
@@ -271,6 +300,7 @@ void System::load_texture(registry &r)
     _rect.insert(std::make_pair("enemyRect", EnemyRect));
     _rect.insert(std::make_pair("beambarRect", BeambarRect));
     _rect.insert(std::make_pair("fullbeambarRect", FullBeambarRect));
+    _rect.insert(std::make_pair("loadbulletRect", LoadBulletRect));
 }
 
 std::unordered_map<std::string, sf::Texture> System::get_map()

@@ -65,8 +65,8 @@ entity_t gameEngine::init_starship()
 
     auto &tag = _registry.get_components<Tag>();
     tag[starship]->tag = "starship";
-    auto &sprite = _registry.get_components<Sprite>();
 
+    auto &sprite = _registry.get_components<Sprite>();
     sprite[starship]->sprite.setTexture(_system.get_map()["starship"]);
 
     auto &speed = _registry.get_components<Speed>();
@@ -170,6 +170,30 @@ entity_t gameEngine::init_enemy()
     return enemy;
 }
 
+void gameEngine::init_load_shoot()
+{
+    entity_t load_shoot = _registry.spawn_entity();
+
+    _registry.add_component<Position>(load_shoot, Position());
+    _registry.add_component<Sprite>(load_shoot, Sprite());
+    _registry.add_component<Drawable>(load_shoot, Drawable());
+    _registry.add_component<Tag>(load_shoot, Tag());
+
+    auto &tag = _registry.get_components<Tag>();
+    tag[load_shoot]->tag = "load_shoot";
+
+    auto &sprite = _registry.get_components<Sprite>();
+    sprite[load_shoot]->sprite.setTexture(_system.get_map()["bullet"]);
+    sprite[load_shoot]->sprite.setTextureRect(_system.get_rect()["loadbulletRect"]);
+
+    auto &position = _registry.get_components<Position>();
+    position[load_shoot]->x = 100;
+    position[load_shoot]->y = 500;
+    sprite[load_shoot]->sprite.setPosition(position[load_shoot]->x, position[load_shoot]->y);
+
+    sprite[load_shoot]->sprite.setScale(2, 2);
+}
+
 void gameEngine::launch_game() {
     _window.create(sf::VideoMode(1920, 1080), "R-Type");
     _window.setFramerateLimit(60);
@@ -179,6 +203,7 @@ void gameEngine::launch_game() {
     _system.load_texture(_registry);
 
     init_beambar();
+    init_load_shoot();
     entity_t starship = init_starship();
     for (int i = 0; i < 10; i++) {
         entity_t enemy = init_enemy();
@@ -191,6 +216,7 @@ void gameEngine::launch_game() {
     {
         elapsed = clock.getElapsedTime();
         elapsedShoot = clockShoot.getElapsedTime();
+        elapsedShootLoad = clockShootLoad.getElapsedTime();
         sf::Event event;
         while (_window.pollEvent(event))
         {
@@ -201,7 +227,7 @@ void gameEngine::launch_game() {
         modify_pattern(_registry);
 
         _system.control_system(_registry);
-        _system.shoot_system(_registry, clockShoot, elapsedShoot, elapsed);
+        _system.shoot_system(_registry, clockShoot, elapsedShoot, elapsed, clockShootLoad, elapsedShootLoad);
         _system.velocity_system(_registry, elapsed);
         _system.hitbox_system(_registry);
 

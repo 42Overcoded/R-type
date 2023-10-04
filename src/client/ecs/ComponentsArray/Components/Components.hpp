@@ -19,7 +19,6 @@
  * @brief Components of the ecs can add more if needed
  * 
  */
-
 struct Speed {
     float speedy;
     float speedx;
@@ -67,7 +66,7 @@ struct Text {
 };
 
 struct Drawable {
-    bool drawable;
+    bool drawable = true;
 };
 
 struct Control {
