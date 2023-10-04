@@ -60,5 +60,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization Boost::filesystem Boost::system Boost::property_tree)
+target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
