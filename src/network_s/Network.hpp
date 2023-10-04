@@ -5,6 +5,8 @@
 ** Network
 */
 
+#ifndef NETWORK_HPP
+#define NETWORK_HPP
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
@@ -22,7 +24,7 @@ public:
 private:
     std::string make_daytime_string();
     void start_receive();
-    void handle_receive(const boost::system::error_code &error, std::size_t /*bytes_transferred*/);
+    void handle_receive(const boost::system::error_code &error, std::size_t bytes_transferred);
     void handle_send(
         boost::shared_ptr<std::string> message,
         const boost::system::error_code &error,
@@ -33,3 +35,14 @@ private:
     boost::asio::ip::udp::endpoint remote_endpoint_;
     boost::array<char, 1> recv_buffer_;
 };
+
+struct ITransmission
+{
+    int header;
+};
+
+struct Transmission : ITransmission
+{
+};
+
+#endif

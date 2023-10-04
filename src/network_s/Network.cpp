@@ -11,7 +11,8 @@
 #include <sstream>
 
 UdpServer::UdpServer(int portNumber)
-    : io_context_(), socket_(io_context_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
+    : io_context_()
+    , socket_(io_context_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
 {
     start_receive();
 }
@@ -25,8 +26,7 @@ void UdpServer::start_receive()
             boost::asio::placeholders::bytes_transferred));
 }
 
-void UdpServer::handle_receive(
-    const boost::system::error_code &error, std::size_t /*bytes_transferred*/)
+void UdpServer::handle_receive(const boost::system::error_code &error, std::size_t bytes_transferred)
 {
     if (!error)
     {
@@ -44,7 +44,7 @@ void UdpServer::handle_receive(
 
 void UdpServer::handle_send(
     boost::shared_ptr<std::string> message,
-    const boost::system::error_code & error,
+    const boost::system::error_code &error,
     std::size_t bytes_transferred)
 {
 }
@@ -55,6 +55,7 @@ std::string UdpServer::make_daytime_string()
     return ctime(&now);
 }
 
-void UdpServer::run() {
+void UdpServer::run()
+{
     io_context_.run();
 }
