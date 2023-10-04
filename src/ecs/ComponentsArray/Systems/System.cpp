@@ -207,11 +207,11 @@ void System::load_texture(registry &r)
     sf::Texture starship;
     sf::Texture enemy;
 
-    if (!bullet.loadFromFile("../../assets/playerBullet.png"))
+    if (!bullet.loadFromFile("assets/playerBullet.png"))
         exit(84);
-    if (!starship.loadFromFile("../../assets/starship.png"))
+    if (!starship.loadFromFile("assets/starship.png"))
         exit(84);
-    if (!enemy.loadFromFile("../../assets/starship.png"))
+    if (!enemy.loadFromFile("assets/starship.png"))
         exit(84);
     _textures.insert(std::make_pair("bullet", bullet));
     _textures.insert(std::make_pair("starship", starship));
