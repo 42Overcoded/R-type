@@ -76,6 +76,8 @@ struct ComponentIN {
 
 struct ComponentOUT {
     char buffer[1024];
+};
+
 struct Text {
     sf::Text text;
 };

@@ -15,10 +15,8 @@
 #include "network/SystemOUT.hpp"
 
 int main() {
-    registry registry;
-    gameEngine gameEngine(registry);
-
     registry reg;
+    gameEngine gameEngine(reg);
     reg.register_component<Speed>();
     reg.register_component<Position>();
     //reg.register_component<ComponentOUT>();
