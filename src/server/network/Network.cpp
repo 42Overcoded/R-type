@@ -7,88 +7,65 @@
 #include "Network.hpp"
 #include "TestClassPlayer.hpp"
 
-#include "boost/archive/text_oarchive.hpp"
 #include "boost/archive/text_iarchive.hpp"
+#include "boost/archive/text_oarchive.hpp"
 
+#include <ctime>
 #include <iostream>
 #include <sstream>
 
 
-Network::Network()
+Network::Network(int portNumber)
+    : servSocket(ioContext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
+    , cliEndpoint()
+    , error()
 {
-    std::cout << "Message perso" << std::endl;
-
-    totalReceived = 0;
-    cliMessage[500] = 0;
 }
 
 Network::~Network()
 {
-    if (ptrIOcontext != NULL) {
-        ptrIOcontext->stop();
-        delete ptrIOcontext;
-    }
-
-    if (ptrServSocket != NULL) {
-        ptrServSocket->close();
-        delete ptrServSocket;
-    }
-    if (ptrCliEndpoint != NULL)
-        delete ptrCliEndpoint;
-    if (ptrError != NULL)
-        delete ptrError;
-}
-
-int Network::create_server(int portServer)
-{
-    ptrIOcontext = new boost::asio::io_context;
-    ptrServSocket = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
-
-    ptrCliEndpoint = new boost::asio::ip::udp::endpoint;
-    ptrError = new boost::system::error_code;
-
-    return 0;
+    ioContext.stop();
+    servSocket.close();
 }
 
 int Network::listen_info_from_clients(void)
 {
-    testPlayer *TestPlayer = new testPlayer();
+    testPlayer TestPlayer;
+    try
+    {
+        while (true)
+        {
+            totalReceived = servSocket.receive_from(boost::asio::buffer(cliMessage), cliEndpoint, 0, error);
+            if (error.failed() == true && error != boost::asio::error::message_size)
+            {
+                std::cout << "Erreur de connexion: " << error.message() << std::endl;
+                break;
+            }
 
-    while (true) {
-        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(cliMessage), *ptrCliEndpoint, 0, *ptrError);
-        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrCliEndpoint, 0, *ptrError);
+            std::stringstream strstr;
+            strstr << cliMessage;
+            boost::archive::text_iarchive ia(strstr);
+            ia >> TestPlayer;
 
-        if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
-            std::cout << "Erreur de connexion: " << ptrError->message() << std::endl;
-            break;
+            boost::array<char, 1> recv_buf;
+            boost::asio::ip::udp::endpoint remote_endpoint;
+            servSocket.receive_from(boost::asio::buffer(recv_buf), remote_endpoint);
+
+            std::string message = make_daytime_string();
+
+            boost::system::error_code ignored_error;
+            servSocket.send_to(boost::asio::buffer(message), remote_endpoint, 0, ignored_error);
         }
-
-        std::stringstream strstr;
-        strstr << cliMessage;
-        boost::archive::text_iarchive ia(strstr);
-        ia >> *TestPlayer;
-
-        if (TestPlayer != NULL) {
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->name << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->level << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->hp << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->armor << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->drip << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->c << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->array << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-        } else {
-            std::cout << "NULL" << std::endl;
-        }
-        break;
     }
-    delete TestPlayer;
+    catch (std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
     return 0;
+}
+
+std::string Network::make_daytime_string()
+{
+    std::time_t now = time(0);
+    return ctime(&now);
 }
