@@ -84,9 +84,48 @@ entity_t gameEngine::init_starship()
     return starship;
 }
 
+void gameEngine::init_beambar()
+{
+    entity_t beambar = _registry.spawn_entity();
+    entity_t fullbeambar = _registry.spawn_entity();
+
+    _registry.add_component<Position>(beambar, Position());
+    _registry.add_component<Position>(fullbeambar, Position());
+    _registry.add_component<Sprite>(beambar, Sprite());
+    _registry.add_component<Sprite>(fullbeambar, Sprite());
+    _registry.add_component<Drawable>(beambar, Drawable());
+    _registry.add_component<Drawable>(fullbeambar, Drawable());
+    _registry.add_component<Tag>(beambar, Tag());
+    _registry.add_component<Tag>(fullbeambar, Tag());
+    _registry.add_component<Health>(beambar, Health());
+    _registry.add_component<Health>(fullbeambar, Health());
+
+    auto &tag = _registry.get_components<Tag>();
+    tag[beambar]->tag = "beambar";
+    tag[fullbeambar]->tag = "fullbeambar";
+
+    auto &sprite = _registry.get_components<Sprite>();
+    sprite[beambar]->sprite.setTexture(_system.get_map()["beambar"]);
+    sprite[fullbeambar]->sprite.setTexture(_system.get_map()["beambar"]);
+    sprite[beambar]->sprite.setTextureRect(_system.get_rect()["beambarRect"]);
+    sprite[fullbeambar]->sprite.setTextureRect(_system.get_rect()["fullbeambarRect"]);
+
+    auto &position = _registry.get_components<Position>();
+    position[beambar]->x = 730;
+    position[beambar]->y = 950;
+    position[fullbeambar]->x = 730;
+    position[fullbeambar]->y = 950;
+    sprite[beambar]->sprite.setPosition(position[beambar]->x, position[beambar]->y);
+    sprite[fullbeambar]->sprite.setPosition(position[fullbeambar]->x, position[fullbeambar]->y);
+
+    auto &health = _registry.get_components<Health>();
+    health[fullbeambar]->health = 0;
+
+    sprite[beambar]->sprite.setScale(2, 2);
+    sprite[fullbeambar]->sprite.setScale(2, 2);
+}
 
 entity_t gameEngine::init_enemy()
-
 {
     entity_t enemy = _registry.spawn_entity();
 
@@ -109,6 +148,7 @@ entity_t gameEngine::init_enemy()
     hitbox[enemy]->height = 100;
     health[enemy]->health = 5;
     sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
+    sprite[enemy]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 16));
     speed[enemy]->speedx -= 0.0f;
     speed[enemy]->speedy = 0.0f;
 
@@ -138,6 +178,7 @@ void gameEngine::launch_game() {
 
     _system.load_texture(_registry);
 
+    init_beambar();
     entity_t starship = init_starship();
     for (int i = 0; i < 10; i++) {
         entity_t enemy = init_enemy();
@@ -145,7 +186,6 @@ void gameEngine::launch_game() {
         position[enemy]->x = 1930 + i * 100;
         position[enemy]->y = 600 + i * 30;
     }
-
 
     while (_window.isOpen())
     {
@@ -158,14 +198,10 @@ void gameEngine::launch_game() {
                 _window.close();
         }
 
-        auto &position = _registry.get_components<Position>();
-        auto &control = _registry.get_components<Control>();
-        auto &speed = _registry.get_components<Speed>();
-
         modify_pattern(_registry);
 
         _system.control_system(_registry);
-        _system.shoot_system(_registry, clockShoot, elapsedShoot);
+        _system.shoot_system(_registry, clockShoot, elapsedShoot, elapsed);
         _system.velocity_system(_registry, elapsed);
         _system.hitbox_system(_registry);
 

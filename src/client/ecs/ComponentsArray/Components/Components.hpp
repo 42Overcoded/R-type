@@ -51,7 +51,7 @@ struct Tag {
 };
 
 struct Health {
-    int health;
+    float health;
 };
 
 struct Damage {
@@ -75,7 +75,7 @@ struct Control {
     bool down = false;
     bool left = false;
     bool right = false;
-    bool shoot;
+    bool shoot = false;
 };
 
 struct Pattern {

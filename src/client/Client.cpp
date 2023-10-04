@@ -12,8 +12,8 @@
 #include "network/Network.hpp"
 
 int main() {
-    registry registry;
-    gameEngine game(registry);
+    registry r;
+    gameEngine game(r);
 
     game.launch_game();
 }

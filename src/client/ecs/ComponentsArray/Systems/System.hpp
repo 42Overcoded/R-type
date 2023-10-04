@@ -9,11 +9,12 @@
 #define SYSTEM_HPP_
 
 #include "../../Registry.hpp"
+#include "SFML/Graphics/Rect.hpp"
 
 class System {
     public:
         System() = default;
-        void shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedShoot);
+        void shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedShoot, sf::Time &elapsed);
         void draw_system(registry &r, sf::RenderWindow &window);
         void set_texture(registry &r);
         void control_system(registry &r);
@@ -22,10 +23,12 @@ class System {
         void load_texture(registry &r);
         void set_textures(registry &r);
         std::unordered_map<std::string, sf::Texture> get_map();
+        std::unordered_map<std::string, sf::IntRect> get_rect();
         ~System() = default;
     protected:
     private:
         std::unordered_map<std::string, sf::Texture> _textures;
+        std::unordered_map<std::string, sf::IntRect> _rect;
 };
 
 #endif /* !SYSTEM_HPP_ */
