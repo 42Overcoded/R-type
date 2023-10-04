@@ -15,7 +15,7 @@
 class NetworkSystem : System
 {
 public:
-    NetworkSystem(int serverPort);
+    NetworkSystem(unsigned int serverPort);
     ~NetworkSystem();
 
     void update(registry &reg);

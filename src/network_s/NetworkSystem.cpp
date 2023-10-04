@@ -13,7 +13,7 @@
 #include "Network.hpp"
 #include "NetworkComponent.hpp"
 
-NetworkSystem::NetworkSystem(int serverPort)
+NetworkSystem::NetworkSystem(unsigned int serverPort)
 {
     try
     {
@@ -29,9 +29,10 @@ NetworkSystem::~NetworkSystem()
 
 void NetworkSystem::update(registry &reg)
 {
-    SparseArray<NetworkIn> networkInArr   = reg.get_components<NetworkIn>();
-    SparseArray<NetworkOut> networkOutArr = reg.get_components<NetworkOut>();
+    SparseArray<NetworkIn> &networkInArr   = reg.get_components<NetworkIn>();
+    SparseArray<NetworkOut> &networkOutArr = reg.get_components<NetworkOut>();
 
+    server_->run();
     for (int i = 0; i < networkInArr.size(); i++)
     {
         if (networkInArr[i] != std::nullopt)

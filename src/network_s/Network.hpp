@@ -18,7 +18,7 @@
 class UdpServer
 {
 public:
-    UdpServer(int portNumber);
+    UdpServer(unsigned int portNumber);
     void run();
 
 private:

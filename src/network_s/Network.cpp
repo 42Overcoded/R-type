@@ -10,7 +10,7 @@
 #include <iostream>
 #include <sstream>
 
-UdpServer::UdpServer(int portNumber)
+UdpServer::UdpServer(unsigned int portNumber)
     : io_context_()
     , socket_(io_context_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
 {

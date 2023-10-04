@@ -8,6 +8,7 @@
 #ifndef NETWORKCOMPONENT_HPP_
 #define NETWORKCOMPONENT_HPP_
 #include "Network.hpp"
+#include <memory>
 
 struct NetworkIn
 {
