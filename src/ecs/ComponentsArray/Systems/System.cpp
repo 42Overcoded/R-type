@@ -7,8 +7,7 @@
 
 #include "System.hpp"
 #include <optional>
-#include "Components.hpp"
-#include "Registry.hpp"
+#include "../ecs/Registry.hpp"
 #include "SFML/Graphics.hpp"
 #include "SFML/System.hpp"
 #include <SFML/Window.hpp>
