@@ -31,14 +31,6 @@ class gameEngine {
     private:
         sf::Time elapsed;
         sf::Clock clock;
-        sf::Time elapsedHitbox;
-        sf::Clock clockHitbox;
-        sf::Time elapsedShoot;
-        sf::Clock clockShoot;
-        sf::Time elapsedShootLoad;
-        sf::Clock clockShootLoad;
-        sf::Time elapsedDeath;
-        sf::Clock clockDeath;
         sf::RenderWindow _window;
         System _system;
         registry _registry;

@@ -30,6 +30,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Pattern>();
     _registry.register_component<Hitbox>();
     _registry.register_component<State>();
+    _registry.register_component<Clock>();
 };
 
 void gameEngine::modify_pattern(registry &r)
@@ -66,31 +67,27 @@ entity_t gameEngine::init_starship()
     _registry.add_component<Health>(starship, Health());
     _registry.add_component<Hitbox>(starship, Hitbox());
     _registry.add_component<State>(starship, State());
+    _registry.add_component<Clock>(starship, Clock());
 
+    auto &clock = _registry.get_components<Clock>();
     auto &health = _registry.get_components<Health>();
-    health[starship]->health = 3;
-
     auto &state = _registry.get_components<State>();
-    state[starship]->state = 0;
-
     auto &hitbox = _registry.get_components<Hitbox>();
+    auto &tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &speed = _registry.get_components<Speed>();
+    auto &position = _registry.get_components<Position>();
+
+    health[starship]->health = 3;
+    state[starship]->state = 0;
     hitbox[starship]->width = 33;
     hitbox[starship]->height = 18;
-
-    auto &tag = _registry.get_components<Tag>();
     tag[starship]->tag = "starship";
-
-    auto &sprite = _registry.get_components<Sprite>();
     sprite[starship]->sprite.setTexture(_system.get_map()["starship"]);
-
-    auto &speed = _registry.get_components<Speed>();
     speed[starship]->speedx = 0.0f;
     speed[starship]->speedy = 0.0f;
-
-    auto &position = _registry.get_components<Position>();
     position[starship]->x = 100;
     position[starship]->y = 500;
-
     sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
     sprite[starship]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
     sprite[starship]->sprite.setScale(3, 3);
@@ -152,18 +149,22 @@ entity_t gameEngine::init_enemy()
     _registry.add_component<Health>(enemy, Health());
     _registry.add_component<Hitbox>(enemy, Hitbox());
     _registry.add_component<Tag>(enemy, {"enemy 1"});
+    _registry.add_component<Clock>(enemy, Clock());
+    _registry.add_component<State>(enemy, State());
 
     auto &tag = _registry.get_components<Tag>();
     auto &speed = _registry.get_components<Speed>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &health = _registry.get_components<Health>();
     auto &hitbox = _registry.get_components<Hitbox>();
+    auto &state = _registry.get_components<State>();
 
+    state[enemy]->state = 0;
     hitbox[enemy]->width = 33;
     hitbox[enemy]->height = 100;
     health[enemy]->health = 5;
     sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
-    sprite[enemy]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 16));
+    sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyRect"]);
     speed[enemy]->speedx -= 0.0f;
     speed[enemy]->speedy = 0.0f;
 
@@ -229,11 +230,8 @@ void gameEngine::launch_game() {
 
     while (_window.isOpen())
     {
+        _system.clock_time(_registry);
         elapsed = clock.getElapsedTime();
-        elapsedShoot = clockShoot.getElapsedTime();
-        elapsedShootLoad = clockShootLoad.getElapsedTime();
-        elapsedDeath = clockDeath.getElapsedTime();
-        elapsedHitbox = clockHitbox.getElapsedTime();
 
         sf::Event event;
         while (_window.pollEvent(event))
@@ -244,11 +242,12 @@ void gameEngine::launch_game() {
 
         modify_pattern(_registry);
 
+        _system.animate_enemy(_registry);
         _system.control_system(_registry);
-        _system.shoot_system(_registry, clockShoot, elapsedShoot, elapsed, clockShootLoad, elapsedShootLoad);
+        _system.shoot_system(_registry, elapsed);
         _system.velocity_system(_registry, elapsed);
-        _system.hitbox_system(_registry, clockDeath, elapsedDeath);
-        _system.death_animation(_registry, clockDeath, elapsedDeath);
+        _system.hitbox_system(_registry);
+        _system.death_animation(_registry);
 
         clock.restart();
 

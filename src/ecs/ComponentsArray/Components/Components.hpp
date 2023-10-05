@@ -8,6 +8,8 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
+#include "SFML/System/Clock.hpp"
+#include "SFML/System/Time.hpp"
 #include "boost/thread/futures/future_status.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -27,6 +29,15 @@ struct Speed {
 
 struct State {
     int state = 0;
+};
+
+struct Clock {
+    sf::Time time;
+    sf::Clock clock;
+    sf::Time _time;
+    sf::Clock _clock;
+    sf::Time __time;
+    sf::Clock __clock;
 };
 
 struct Position {
