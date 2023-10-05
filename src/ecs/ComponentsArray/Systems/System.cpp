@@ -6,6 +6,7 @@
 */
 
 #include "System.hpp"
+#include <cstddef>
 #include <optional>
 #include "../ecs/Registry.hpp"
 #include "SFML/Graphics.hpp"
@@ -27,13 +28,14 @@ void System::draw_system(registry &r, sf::RenderWindow &window)
                 sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
                 window.draw(sprite[i]->sprite);
             }
-            if (text[i] != std::nullopt && drawable[i]->drawable == true)
+            if (text[i] != std::nullopt && drawable[i]->drawable == true) {
                 window.draw(text[i]->text);
+            }
         }
     }
 }
 
-void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedShoot, sf::Time &elapsed, sf::Clock &clockShootLoad, sf::Time &elapsedShootLoad)
+void System::shoot_system(registry &r, sf::Time &elapsed)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -41,6 +43,7 @@ void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedS
     auto &sprite = r.get_components<Sprite>();
     auto &control = r.get_components<Control>();
     auto &drawable = r.get_components<Drawable>();
+    auto &clock = r.get_components<Clock>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -62,9 +65,9 @@ void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedS
                 if (_rect["loadbulletRect"].left >= 256) {
                     _rect["loadbulletRect"].left = 0;
                 }
-                if (elapsedShootLoad.asMilliseconds() > 50) {
+                if (clock[i]->time.asMilliseconds() > 50) {
                     _rect["loadbulletRect"].left += 32;
-                    clockShootLoad.restart();
+                    clock[i]->clock.restart();
                 }
                 for (size_t j = 0; j < r._entity_number; j++) {
                     if (tag[j] == std::nullopt)
@@ -106,10 +109,16 @@ void System::shoot_system(registry &r, sf::Clock &clockShoot, sf::Time &elapsedS
         }
         if (is_return == true)
             return;
-        if (elapsedShoot.asMilliseconds() < 150)
-            return;
-
-        clockShoot.restart();
+        for (size_t i = 0; i < r._entity_number; i++) {
+            if (tag[i] == std::nullopt) {
+                continue;
+            }
+            if (tag[i]->tag == "starship") {
+                if (clock[i]->_time.asMilliseconds() < 150)
+                    return;
+                clock[i]->_clock.restart();
+            }
+        }
         entity_t bullet = r.spawn_entity();
         r.add_component<Speed>(bullet, Speed());
         r.add_component<Tag>(bullet, Tag());
@@ -219,7 +228,7 @@ void System::control_system(registry &r)
     }
 }
 
-void System::hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsedDeath)
+void System::hitbox_system(registry &r)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -228,28 +237,27 @@ void System::hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsed
     auto &hitbox = r.get_components<Hitbox>();
     auto &state = r.get_components<State>();
     auto &enemy = r.get_components<Enemy>();
-
+    auto &clock = r.get_components<Clock>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
             continue;
         }
         if (tag[i]->tag == "starship" && state[i]->state == 1) {
-            if (elapsedDeath.asSeconds() > 0 && elapsedDeath.asSeconds() < 0.5)
+            if (clock[i]->__time.asSeconds() > 0 && clock[i]->__time.asSeconds() < 0.5)
                 sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
-            if (elapsedDeath.asSeconds() > 0.5 && elapsedDeath.asSeconds() < 1)
+            if (clock[i]->__time.asSeconds() > 0.5 && clock[i]->__time.asSeconds() < 1)
                 sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
-            if (elapsedDeath.asSeconds() > 1 && elapsedDeath.asSeconds() < 1.5)
+            if (clock[i]->__time.asSeconds() > 1 && clock[i]->__time.asSeconds() < 1.5)
                 sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
-            if (elapsedDeath.asSeconds() > 1.5 && elapsedDeath.asSeconds() < 2)
+            if (clock[i]->__time.asSeconds() > 1.5 && clock[i]->__time.asSeconds() < 2)
                 sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
-            if (elapsedDeath.asSeconds() > 2 && elapsedDeath.asSeconds() < 2.5)
+            if (clock[i]->__time.asSeconds() > 2 && clock[i]->__time.asSeconds() < 2.5)
                 sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
-            if (elapsedDeath.asSeconds() > 2.5) {
+            if (clock[i]->__time.asSeconds() > 2.5) {
                 state[i]->state = 0;
                 sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
             }
-            return;
         }
     }
     for (size_t i = 0; i < r._entity_number; i++) {
@@ -261,15 +269,15 @@ void System::hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsed
                 if (tag[j] == std::nullopt || tag[i] == std::nullopt)
                     continue;
                 if (tag[j]->tag == "starship") {
-                    if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
-                        if (health[j]->health <= 0) {
+                    if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height && state[j]->state == 0) {
+                        health[j]->health -= 1;
+                        health[i]->health -= 5;
+                        position[j]->x = 100;
+                        position[j]->y = 500;
+                        state[j]->state = 1;
+                        clock[j]->__clock.restart();
+                        if (health[j]->health < 0) {
                             r.kill_entity(entity_t(j));
-                        } else {
-                            health[j]->health -= 1;
-                            position[j]->x = 100;
-                            position[j]->y = 500;
-                            state[j]->state = 1;
-                            clockDeath.restart();
                         }
                         if (tag[i]->tag == "enemyBullet") {
                             r.kill_entity(entity_t(i));
@@ -308,10 +316,38 @@ void System::hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsed
     }
 }
 
+void System::life_handler(registry &r, sf::RenderWindow &window)
+{
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
+    auto &health = r.get_components<Health>();
+    auto &sprite = r.get_components<Sprite>();
+
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "life") {
+            for (size_t j = 0; j < r._entity_number; j++) {
+                if (tag[j] == std::nullopt)
+                    continue;
+                if (tag[j]->tag == "starship") {
+                    for (size_t k = 0; k < health[j]->health; k++) {
+                        position[i]->x = 200 + (k * 100);
+                        sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
+                        position[i]->x = 200;
+                        window.draw(sprite[i]->sprite);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void System::set_textures(registry &r)
 {
     auto &sprite = r.get_components<Sprite>();
     auto &tag = r.get_components<Tag>();
+    auto &text = r.get_components<Text>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -338,10 +374,16 @@ void System::set_textures(registry &r)
         if (tag[i]->tag == "explosion") {
             sprite[i]->sprite.setTexture(_textures["explosion"]);
         }
+        if (tag[i]->tag == "score") {
+            text[i]->text.setFont(text[i]->font);
+        }
+        if (tag[i]->tag == "life") {
+            sprite[i]->sprite.setTexture(_textures["starship"]);
+        }
     }
 }
 
-void System::death_animation(registry &r, sf::Clock &clockDeath, sf::Time &elapsedDeath)
+void System::death_animation(registry &r)
 {
     auto &drawable = r.get_components<Drawable>();
     auto &sprite = r.get_components<Sprite>();
@@ -350,30 +392,40 @@ void System::death_animation(registry &r, sf::Clock &clockDeath, sf::Time &elaps
     auto &health = r.get_components<Health>();
     auto &state = r.get_components<State>();
     auto &enemy = r.get_components<Enemy>();
-
+    auto &clock = r.get_components<Clock>();
+    auto &text = r.get_components<Text>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+        if (tag[i] == std::nullopt)
             continue;
-        }
         if (tag[i]->tag == "explosion") {
-            if (elapsedDeath.asMilliseconds() > 50) {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            if (clock[i]->time.asMilliseconds() > 50) {
                 if (state[i]->state >= 6) {
                     r.kill_entity(entity_t(i));
                 }
                 sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["explosionRect"].left + (32*state[i]->state), _rect["explosionRect"].top, _rect["explosionRect"].width, _rect["explosionRect"].height));
                 state[i]->state += 1;
-                clockDeath.restart();
+                clock[i]->clock.restart();
             }
         }
         if (enemy[i] != std::nullopt) {
             if (health[i]->health <= 0) {
+                for (size_t j = 0; j < r._entity_number; j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->tag == "score") {
+                        state[j]->state += enemy[i]->score;
+                        text[j]->text.setString(text[j]->str + std::to_string(state[j]->state));
+                    }
+                }
                 entity_t explosion = r.spawn_entity();
                 r.add_component<Position>(explosion, Position());
                 r.add_component<Sprite>(explosion, Sprite());
                 r.add_component<Drawable>(explosion, Drawable());
                 r.add_component<Tag>(explosion, Tag());
                 r.add_component<State>(explosion, State());
+                r.add_component<Clock>(explosion, Clock());
 
                 auto &state = r.get_components<State>();
                 auto &drawable = r.get_components<Drawable>();
@@ -390,6 +442,7 @@ void System::death_animation(registry &r, sf::Clock &clockDeath, sf::Time &elaps
                 sprite[explosion]->sprite.setTextureRect(sf::IntRect(0, 0, 0, 0));
                 sprite[explosion]->sprite.setScale(3, 3);
                 r.kill_entity(entity_t(i));
+
             }
         }
     }
@@ -405,7 +458,7 @@ void System::load_texture(registry &r)
     sf::IntRect LoadBulletRect = sf::IntRect(0, 50, 32, 32);
     sf::IntRect BulletRect = sf::IntRect(200, 115, 32, 20);
     sf::IntRect StarshipRect = sf::IntRect(0, 0, 33, 18);
-    sf::IntRect EnemyRect = sf::IntRect(0, 70, 33, 16);
+    sf::IntRect EnemyRect = sf::IntRect(0, 0, 32, 32);
     sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
     sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);
     sf::IntRect ExplosionRect = sf::IntRect(130, 0, 32, 32);
@@ -414,7 +467,7 @@ void System::load_texture(registry &r)
         exit(84);
     if (!starship.loadFromFile("./assets/starship.png"))
         exit(84);
-    if (!enemy.loadFromFile("./assets/starship.png"))
+    if (!enemy.loadFromFile("./assets/enemyStarship.png"))
         exit(84);
     if (!beambar.loadFromFile("./assets/beam.png"))
         exit(84);
@@ -432,6 +485,46 @@ void System::load_texture(registry &r)
     _rect.insert(std::make_pair("fullbeambarRect", FullBeambarRect));
     _rect.insert(std::make_pair("loadbulletRect", LoadBulletRect));
     _rect.insert(std::make_pair("explosionRect", ExplosionRect));
+}
+
+void System::clock_time(registry &r)
+{
+    auto &_clock = r.get_components<Clock>();
+    auto &_tag = r.get_components<Tag>();
+
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (_tag[i] == std::nullopt)
+            continue;
+        if (_tag[i]->tag == "starship") {
+            _clock[i]->time = _clock[i]->clock.getElapsedTime();
+            _clock[i]->_time = _clock[i]->_clock.getElapsedTime();
+            _clock[i]->__time = _clock[i]->__clock.getElapsedTime();
+        }
+    }
+}
+
+void System::animate_enemy(registry &r)
+{
+    auto &sprite = r.get_components<Sprite>();
+    auto &tag = r.get_components<Tag>();
+    auto &clock = r.get_components<Clock>();
+    auto &state = r.get_components<State>();
+
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "enemy 1") {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            if (clock[i]->time.asMilliseconds() > 100) {
+                state[i]->state += 1;
+                if (state[i]->state == 7) {
+                    state[i]->state = 0;
+                }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["enemyRect"].left + (32*state[i]->state), _rect["enemyRect"].top, _rect["enemyRect"].width, _rect["enemyRect"].height));
+                clock[i]->clock.restart();
+            }
+        }
+    }
 }
 
 std::unordered_map<std::string, sf::Texture> System::get_map()

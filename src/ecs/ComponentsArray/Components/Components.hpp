@@ -8,6 +8,8 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
+#include "SFML/System/Clock.hpp"
+#include "SFML/System/Time.hpp"
 #include "boost/thread/futures/future_status.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -29,6 +31,15 @@ struct State {
     int state = 0;
 };
 
+struct Clock {
+    sf::Time time;
+    sf::Clock clock;
+    sf::Time _time;
+    sf::Clock _clock;
+    sf::Time __time;
+    sf::Clock __clock;
+};
+
 struct Position {
     int x = 0;
     int y = 0;
@@ -43,7 +54,7 @@ struct Player {
 };
 
 struct Enemy {
-    int id;
+    int score;
 };
 
 struct Bullet {
@@ -68,6 +79,8 @@ struct Score {
 
 struct Text {
     sf::Text text;
+    sf::Font font;
+    std::string str;
 };
 
 struct Drawable {
