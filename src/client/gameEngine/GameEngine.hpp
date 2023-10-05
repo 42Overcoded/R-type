@@ -25,6 +25,8 @@ class gameEngine {
         void init_texture();
         void init_beambar();
         void launch_game();
+        void init_life();
+        void init_score();
         void modify_pattern(registry &r);
         void init_load_shoot();
     protected:

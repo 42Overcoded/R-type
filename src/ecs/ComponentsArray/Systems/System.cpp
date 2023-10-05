@@ -28,8 +28,9 @@ void System::draw_system(registry &r, sf::RenderWindow &window)
                 sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
                 window.draw(sprite[i]->sprite);
             }
-            if (text[i] != std::nullopt && drawable[i]->drawable == true)
+            if (text[i] != std::nullopt && drawable[i]->drawable == true) {
                 window.draw(text[i]->text);
+            }
         }
     }
 }
@@ -315,10 +316,38 @@ void System::hitbox_system(registry &r)
     }
 }
 
+void System::life_handler(registry &r, sf::RenderWindow &window)
+{
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
+    auto &health = r.get_components<Health>();
+    auto &sprite = r.get_components<Sprite>();
+
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "life") {
+            for (size_t j = 0; j < r._entity_number; j++) {
+                if (tag[j] == std::nullopt)
+                    continue;
+                if (tag[j]->tag == "starship") {
+                    for (size_t k = 0; k < health[j]->health; k++) {
+                        position[i]->x = 200 + (k * 100);
+                        sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
+                        position[i]->x = 200;
+                        window.draw(sprite[i]->sprite);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void System::set_textures(registry &r)
 {
     auto &sprite = r.get_components<Sprite>();
     auto &tag = r.get_components<Tag>();
+    auto &text = r.get_components<Text>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -345,6 +374,12 @@ void System::set_textures(registry &r)
         if (tag[i]->tag == "explosion") {
             sprite[i]->sprite.setTexture(_textures["explosion"]);
         }
+        if (tag[i]->tag == "score") {
+            text[i]->text.setFont(text[i]->font);
+        }
+        if (tag[i]->tag == "life") {
+            sprite[i]->sprite.setTexture(_textures["starship"]);
+        }
     }
 }
 
@@ -358,6 +393,7 @@ void System::death_animation(registry &r)
     auto &state = r.get_components<State>();
     auto &enemy = r.get_components<Enemy>();
     auto &clock = r.get_components<Clock>();
+    auto &text = r.get_components<Text>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt)
@@ -375,6 +411,14 @@ void System::death_animation(registry &r)
         }
         if (enemy[i] != std::nullopt) {
             if (health[i]->health <= 0) {
+                for (size_t j = 0; j < r._entity_number; j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->tag == "score") {
+                        state[j]->state += enemy[i]->score;
+                        text[j]->text.setString(text[j]->str + std::to_string(state[j]->state));
+                    }
+                }
                 entity_t explosion = r.spawn_entity();
                 r.add_component<Position>(explosion, Position());
                 r.add_component<Sprite>(explosion, Sprite());

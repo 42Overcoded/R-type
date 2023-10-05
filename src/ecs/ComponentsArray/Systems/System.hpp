@@ -27,6 +27,7 @@ class System {
         void death_animation(registry &r);
         void clock_time(registry &r);
         void animate_enemy(registry &r);
+        void life_handler(registry &r, sf::RenderWindow &window);
         std::unordered_map<std::string, sf::Texture> get_map();
         std::unordered_map<std::string, sf::IntRect> get_rect();
         ~System() = default;

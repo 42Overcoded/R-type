@@ -54,7 +54,7 @@ struct Player {
 };
 
 struct Enemy {
-    int id;
+    int score;
 };
 
 struct Bullet {
@@ -79,6 +79,8 @@ struct Score {
 
 struct Text {
     sf::Text text;
+    sf::Font font;
+    std::string str;
 };
 
 struct Drawable {

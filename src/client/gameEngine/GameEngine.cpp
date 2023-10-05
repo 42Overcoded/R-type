@@ -6,7 +6,9 @@
 */
 
 #include "GameEngine.hpp"
+#include <iostream>
 #include <optional>
+#include "SFML/Graphics/Font.hpp"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Text.hpp>
@@ -158,7 +160,10 @@ entity_t gameEngine::init_enemy()
     auto &health = _registry.get_components<Health>();
     auto &hitbox = _registry.get_components<Hitbox>();
     auto &state = _registry.get_components<State>();
+    auto &enemy_ = _registry.get_components<Enemy>();
+    auto &pattern = _registry.get_components<Pattern>();
 
+    enemy_[enemy]->score = 100;
     state[enemy]->state = 0;
     hitbox[enemy]->width = 33;
     hitbox[enemy]->height = 100;
@@ -167,8 +172,6 @@ entity_t gameEngine::init_enemy()
     sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyRect"]);
     speed[enemy]->speedx -= 0.0f;
     speed[enemy]->speedy = 0.0f;
-
-    auto &pattern = _registry.get_components<Pattern>();
     pattern[enemy]->pattern_index = 0;
     pattern[enemy]->pattern_type = 0;
     pattern[enemy]->pattern_length = 2;
@@ -210,14 +213,60 @@ void gameEngine::init_load_shoot()
     sprite[load_shoot]->sprite.setScale(2, 2);
 }
 
+void gameEngine::init_score() {
+    entity_t score = _registry.spawn_entity();
+
+    _registry.add_component<Position>(score, Position());
+    _registry.add_component<Text>(score, Text());
+    _registry.add_component<Drawable>(score, Drawable());
+    _registry.add_component<Tag>(score, Tag());
+    _registry.add_component<State>(score, State());
+
+    auto &tag = _registry.get_components<Tag>();
+    auto &text = _registry.get_components<Text>();
+    auto &position = _registry.get_components<Position>();
+    auto &state = _registry.get_components<State>();
+
+    if(!text[score]->font.loadFromFile("./assets/GothamMedium.ttf"))
+        exit(84);
+    text[score]->text.setFont(text[score]->font);
+    text[score]->str = "Score: ";
+    state[score]->state = 0;
+    text[score]->text.setString(text[score]->str + std::to_string(state[score]->state));
+    position[score]->x = 1300;
+    position[score]->y = 960;
+    tag[score]->tag = "score";
+    text[score]->text.setPosition(position[score]->x, position[score]->y);
+}
+
+void gameEngine::init_life() {
+    entity_t life = _registry.spawn_entity();
+
+    _registry.add_component<Position>(life, Position());
+    _registry.add_component<Sprite>(life, Sprite());
+    _registry.add_component<Tag>(life, Tag());
+    
+    auto &tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &position = _registry.get_components<Position>();
+
+    tag[life]->tag = "life";
+    sprite[life]->sprite.setTexture(_system.get_map()["starship"]);
+    sprite[life]->sprite.setTextureRect(_system.get_rect()["starshipRect"]);
+    position[life]->x = 100;
+    position[life]->y = 950;
+    sprite[life]->sprite.setPosition(position[life]->x, position[life]->y);
+    sprite[life]->sprite.setScale(2, 2);
+}
+
 void gameEngine::launch_game() {
     _window.create(sf::VideoMode(1920, 1080), "R-Type");
     _window.setFramerateLimit(60);
-
     register_component_to_game();
-
     _system.load_texture(_registry);
 
+    init_score();
+    init_life();
     init_beambar();
     init_load_shoot();
     entity_t starship = init_starship();
@@ -253,6 +302,7 @@ void gameEngine::launch_game() {
 
         _window.clear(sf::Color::Black);
         _system.set_textures(_registry);
+        _system.life_handler(_registry, _window);
         _system.draw_system(_registry, _window);
         _window.display();
     }
