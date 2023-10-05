@@ -63,6 +63,19 @@ entity_t gameEngine::init_starship()
     _registry.add_component<Control>(starship, Control());
     _registry.add_component<Player>(starship, Player());
     _registry.add_component<Tag>(starship, Tag());
+    _registry.add_component<Health>(starship, Health());
+    _registry.add_component<Hitbox>(starship, Hitbox());
+    _registry.add_component<State>(starship, State());
+
+    auto &health = _registry.get_components<Health>();
+    health[starship]->health = 3;
+
+    auto &state = _registry.get_components<State>();
+    state[starship]->state = 0;
+
+    auto &hitbox = _registry.get_components<Hitbox>();
+    hitbox[starship]->width = 33;
+    hitbox[starship]->height = 18;
 
     auto &tag = _registry.get_components<Tag>();
     tag[starship]->tag = "starship";
@@ -219,6 +232,7 @@ void gameEngine::launch_game() {
         elapsedShoot = clockShoot.getElapsedTime();
         elapsedShootLoad = clockShootLoad.getElapsedTime();
         elapsedDeath = clockDeath.getElapsedTime();
+        elapsedHitbox = clockHitbox.getElapsedTime();
 
         sf::Event event;
         while (_window.pollEvent(event))
@@ -232,7 +246,7 @@ void gameEngine::launch_game() {
         _system.control_system(_registry);
         _system.shoot_system(_registry, clockShoot, elapsedShoot, elapsed, clockShootLoad, elapsedShootLoad);
         _system.velocity_system(_registry, elapsed);
-        _system.hitbox_system(_registry);
+        _system.hitbox_system(_registry, clockDeath, elapsedDeath);
         _system.death_animation(_registry, clockDeath, elapsedDeath);
 
         clock.restart();

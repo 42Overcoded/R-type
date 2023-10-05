@@ -9,6 +9,7 @@
 #define GAMEENGINE_HPP_
 
 #include "../ecs/Registry.hpp"
+#include "SFML/System/Time.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/System.hpp"
@@ -30,6 +31,8 @@ class gameEngine {
     private:
         sf::Time elapsed;
         sf::Clock clock;
+        sf::Time elapsedHitbox;
+        sf::Clock clockHitbox;
         sf::Time elapsedShoot;
         sf::Clock clockShoot;
         sf::Time elapsedShootLoad;

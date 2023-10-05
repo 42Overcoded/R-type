@@ -10,6 +10,7 @@
 #include "../ecs/Registry.hpp"
 #include "SFML/Graphics.hpp"
 #include "SFML/System.hpp"
+#include "SFML/System/Clock.hpp"
 #include <SFML/Window.hpp>
 #include <unordered_map>
 
@@ -198,27 +199,27 @@ void System::control_system(registry &r)
             speed[i]->speedy = 0.0f;
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 speed[i]->speedy = -0.5f;
-                sprite[i]->sprite.setTextureRect(sf::IntRect(130, 0, 33, 16));
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 132, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 speed[i]->speedy = 0.5f;
-                sprite[i]->sprite.setTextureRect(sf::IntRect(0, 0, 33, 16));
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 speed[i]->speedx = -0.5f;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 speed[i]->speedx = 0.5f;
-                sprite[i]->sprite.setTextureRect(sf::IntRect(66, 0, 33, 16));
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 66, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                sprite[i]->sprite.setTextureRect(sf::IntRect(33, 0, 33, 16));
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 33, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
         }
     }
 }
 
-void System::hitbox_system(registry &r)
+void System::hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsedDeath)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -230,6 +231,51 @@ void System::hitbox_system(registry &r)
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
             continue;
+        }
+        if (tag[i]->tag == "starship" && state[i]->state == 1) {
+            if (elapsedDeath.asSeconds() > 0 && elapsedDeath.asSeconds() < 0.5)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+            if (elapsedDeath.asSeconds() > 0.5 && elapsedDeath.asSeconds() < 1)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+            if (elapsedDeath.asSeconds() > 1 && elapsedDeath.asSeconds() < 1.5)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+            if (elapsedDeath.asSeconds() > 1.5 && elapsedDeath.asSeconds() < 2)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+            if (elapsedDeath.asSeconds() > 2 && elapsedDeath.asSeconds() < 2.5)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+            if (elapsedDeath.asSeconds() > 2.5) {
+                state[i]->state = 0;
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+            }
+            return;
+        }
+    }
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt) {
+            continue;
+        }
+        if (tag[i]->tag == "enemy" || tag[i]->tag == "enemyBullet") {
+            for (size_t j = 0; j < r._entity_number; j++) {
+                if (tag[j] == std::nullopt || tag[i] == std::nullopt)
+                    continue;
+                if (tag[j]->tag == "starship") {
+                    if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
+                        if (health[j]->health <= 0) {
+                            r.kill_entity(entity_t(j));
+                        } else {
+                            health[j]->health -= 1;
+                            position[j]->x = 100;
+                            position[j]->y = 500;
+                            state[j]->state = 1;
+                            clockDeath.restart();
+                        }
+                        if (tag[i]->tag == "enemyBullet") {
+                            r.kill_entity(entity_t(i));
+                        }
+                        break;
+                    }
+                }
+            }
         }
         if (tag[i]->tag == "bullet") {
             for (size_t j = 0; j < r._entity_number; j++) {
@@ -355,7 +401,7 @@ void System::load_texture(registry &r)
     sf::Texture explosion;
     sf::IntRect LoadBulletRect = sf::IntRect(0, 50, 32, 32);
     sf::IntRect BulletRect = sf::IntRect(200, 115, 32, 20);
-    sf::IntRect StarshipRect = sf::IntRect(0, 70, 33, 100);
+    sf::IntRect StarshipRect = sf::IntRect(0, 0, 33, 18);
     sf::IntRect EnemyRect = sf::IntRect(0, 70, 33, 16);
     sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
     sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);

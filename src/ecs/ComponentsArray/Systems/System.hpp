@@ -11,6 +11,7 @@
 #include <cstddef>
 #include "../../Registry.hpp"
 #include "SFML/Graphics/Rect.hpp"
+#include "SFML/System/Clock.hpp"
 
 class System {
     public:
@@ -20,7 +21,7 @@ class System {
         void set_texture(registry &r);
         void control_system(registry &r);
         void velocity_system(registry &r, sf::Time &elapsed);
-        void hitbox_system(registry &r);
+        void hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsedDeath);
         void load_texture(registry &r);
         void set_textures(registry &r);
         void death_animation(registry &r, sf::Clock &clockDeath, sf::Time &elapsedDeath);
