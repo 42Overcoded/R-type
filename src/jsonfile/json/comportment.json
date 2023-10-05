@@ -31,12 +31,12 @@
             "comportment_description": "Comportment for mob walk from right to left of the screen in a slow zigzag , switch movement after 10ticks",
             "movement_vector": [
                 {
-                    "x": -1,
-                    "y": 1
+                    "x": -0.2,
+                    "y": 0
                 },
                 {
-                    "x": -1,
-                    "y": 1
+                    "x": -0.2,
+                    "y": 0
                 }
             ],
             "movement_switch": true,

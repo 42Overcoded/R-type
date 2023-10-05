@@ -58,6 +58,12 @@ set(EXEC_SRC
     gameEngine/graphics/Graphic.cpp
     ../network_c/Network.cpp
     ../network_c/TestClassPlayer.cpp
+    ../jsonfile/src/JsonParser.cpp
+    ../jsonfile/src/ComportmentParser.cpp
+    ../jsonfile/src/GenerateMap.cpp
+    ../jsonfile/src/HandlingEcs.cpp
+    ../jsonfile/src/MapParser.cpp
+    ../jsonfile/src/MobParser.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
