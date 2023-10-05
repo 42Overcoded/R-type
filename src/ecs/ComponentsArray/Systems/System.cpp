@@ -227,6 +227,8 @@ void System::hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsed
     auto &sprite = r.get_components<Sprite>();
     auto &hitbox = r.get_components<Hitbox>();
     auto &state = r.get_components<State>();
+    auto &enemy = r.get_components<Enemy>();
+
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -254,7 +256,7 @@ void System::hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsed
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (tag[i]->tag == "enemy" || tag[i]->tag == "enemyBullet") {
+        if (enemy[i] != std::nullopt || tag[i]->tag == "enemyBullet") {
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (tag[j] == std::nullopt || tag[i] == std::nullopt)
                     continue;
@@ -281,7 +283,7 @@ void System::hitbox_system(registry &r, sf::Clock &clockDeath, sf::Time &elapsed
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (tag[j] == std::nullopt || tag[i] == std::nullopt)
                     continue;
-                if (tag[j]->tag == "enemy") {
+                if (enemy[j] != std::nullopt) {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
                         if (state[i]->state == 0) {
                             health[j]->health -= 1;
@@ -321,7 +323,7 @@ void System::set_textures(registry &r)
         if (tag[i]->tag == "bullet") {
             sprite[i]->sprite.setTexture(_textures["bullet"]);
         }
-        if (tag[i]->tag == "enemy") {
+        if (tag[i]->tag == "enemy 1") {
             sprite[i]->sprite.setTexture(_textures["enemy"]);
         }
         if (tag[i]->tag == "beambar") {
@@ -347,6 +349,7 @@ void System::death_animation(registry &r, sf::Clock &clockDeath, sf::Time &elaps
     auto &position = r.get_components<Position>();
     auto &health = r.get_components<Health>();
     auto &state = r.get_components<State>();
+    auto &enemy = r.get_components<Enemy>();
 
 
     for (size_t i = 0; i < r._entity_number; i++) {
@@ -363,7 +366,7 @@ void System::death_animation(registry &r, sf::Clock &clockDeath, sf::Time &elaps
                 clockDeath.restart();
             }
         }
-        if (tag[i]->tag == "enemy") {
+        if (enemy[i] != std::nullopt) {
             if (health[i]->health <= 0) {
                 entity_t explosion = r.spawn_entity();
                 r.add_component<Position>(explosion, Position());

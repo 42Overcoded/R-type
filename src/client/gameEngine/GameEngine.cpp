@@ -148,11 +148,12 @@ entity_t gameEngine::init_enemy()
     _registry.add_component<Sprite>(enemy, Sprite());
     _registry.add_component<Drawable>(enemy, Drawable());
     _registry.add_component<Enemy>(enemy, Enemy());
-    _registry.add_component<Tag>(enemy, {"enemy"});
     _registry.add_component<Pattern>(enemy, Pattern());
     _registry.add_component<Health>(enemy, Health());
     _registry.add_component<Hitbox>(enemy, Hitbox());
+    _registry.add_component<Tag>(enemy, {"enemy 1"});
 
+    auto &tag = _registry.get_components<Tag>();
     auto &speed = _registry.get_components<Speed>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &health = _registry.get_components<Health>();
