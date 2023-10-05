@@ -8,6 +8,7 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
+#include "boost/thread/futures/future_status.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -19,15 +20,18 @@
  * @brief Components of the ecs can add more if needed
  * 
  */
-
 struct Speed {
-    float speedy;
-    float speedx;
+    float speedy = 0;
+    float speedx = 0;
+};
+
+struct State {
+    int state = 0;
 };
 
 struct Position {
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
 };
 
 struct Sprite {
@@ -51,7 +55,7 @@ struct Tag {
 };
 
 struct Health {
-    int health;
+    float health;
 };
 
 struct Damage {
@@ -67,7 +71,7 @@ struct Text {
 };
 
 struct Drawable {
-    bool drawable;
+    bool drawable = true;
 };
 
 struct Control {
@@ -75,7 +79,7 @@ struct Control {
     bool down = false;
     bool left = false;
     bool right = false;
-    bool shoot;
+    bool shoot = false;
 };
 
 struct Pattern {
