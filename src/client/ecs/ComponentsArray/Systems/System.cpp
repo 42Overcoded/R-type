@@ -248,7 +248,6 @@ void System::hitbox_system(registry &r)
                             r.kill_entity(entity_t(i));
                         }
                         if (state[i]->state == 2) {
-                            std::cout << "full beam" << std::endl;
                             health[j]->health -= 10;
                             if (health[j]->health >= 10) {
                                 r.kill_entity(entity_t(i));
