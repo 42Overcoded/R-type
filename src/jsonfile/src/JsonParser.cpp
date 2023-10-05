@@ -5,7 +5,7 @@
 ** jsonparser
 */
 
-#include "../include/jsonparser.hpp"
+#include "../include/JsonParser.hpp"
 #include <vector>
 
 JsonParser::JsonParser()
@@ -13,12 +13,36 @@ JsonParser::JsonParser()
     this->Loaded_MapName = NO_MAP_LOADED;
     this->is_a_generated_map = false;
 
-    loadComportment();
-    loadMob();
+    if (debugmode) {
+        std::cout << "JsonParser constructor" << std::endl;
+        std::cout << "Loading comportment" << std::endl;
+    }
+    try {
+        loadComportment();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    if (debugmode) {
+        std::cout << "Loaded comportment" << std::endl;
+        std::cout << "Loading mob" << std::endl;
+    }
+    try {
+        loadMob();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    if (debugmode) {
+        std::cout << "Loaded mob" << std::endl;
+        std::cout << "Loading map name" << std::endl;
+    }
     loadMap_Name();
-    Load_Map("Test Map"); //Only here temporarly for the purpose of the debug
-    if (debugmode)
+
+    if (debugmode) {
+        std::cout << "Loaded map name" << std::endl;
         debug();
+    }
 }
 
 JsonParser::~JsonParser()

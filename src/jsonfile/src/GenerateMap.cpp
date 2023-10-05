@@ -5,7 +5,7 @@
 ** generate_map
 */
 
-#include "../include/jsonparser.hpp"
+#include "../include/JsonParser.hpp"
 
 void JsonParser::Generate_Map_init(std::string name, std::string difficulty, int lenght)
 {

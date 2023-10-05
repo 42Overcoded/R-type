@@ -9,10 +9,9 @@
 #include <optional>
 #include "Components.hpp"
 #include "Registry.hpp"
-#include "SFML/Graphics/Rect.hpp"
-#include "SFML/Graphics/Texture.hpp"
-#include "SFML/System/Clock.hpp"
-#include <SFML/Window/Keyboard.hpp>
+#include "SFML/Graphics.hpp"
+#include "SFML/System.hpp"
+#include <SFML/Window.hpp>
 #include <unordered_map>
 
 void System::draw_system(registry &r, sf::RenderWindow &window)

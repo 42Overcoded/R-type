@@ -7,9 +7,9 @@
 
 #include <cstddef>
 #include <iostream>
-#include "Registry.hpp"
+#include "../ecs/Registry.hpp"
 #include "GameEngine.hpp"
-#include "network/Network.hpp"
+#include "../network_c/Network.hpp"
 
 int main() {
     registry r;
