@@ -13,7 +13,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
-set(BOOST_INCLUDE_LIBRARIES asio serialization)
+set(BOOST_INCLUDE_LIBRARIES asio serialization filesystem)
 set(BOOST_ENABLE_CMAKE ON)
 
 # Fetch and include Boost.Asio
