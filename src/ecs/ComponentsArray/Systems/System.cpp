@@ -10,6 +10,8 @@
 #include <optional>
 #include "../ecs/Registry.hpp"
 #include "SFML/Graphics.hpp"
+#include "SFML/Graphics/Rect.hpp"
+#include "SFML/Graphics/Texture.hpp"
 #include "SFML/System.hpp"
 #include "SFML/System/Clock.hpp"
 #include <SFML/Window.hpp>
@@ -21,6 +23,7 @@ void System::draw_system(registry &r, sf::RenderWindow &window)
     auto &text = r.get_components<Text>();
     auto &sprite = r.get_components<Sprite>();
     auto &position = r.get_components<Position>();
+    auto &tag = r.get_components<Tag>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (drawable[i] != std::nullopt && position[i] != std::nullopt) {
@@ -137,8 +140,6 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
         tag[bullet]->tag = "bullet";
         speed[bullet]->speedy = 0;
         speed[bullet]->speedx = 2;
-        hitbox[bullet]->width = 32;
-        hitbox[bullet]->height = 20;
         sprite[bullet]->sprite.setTexture(_textures["bullet"]);
         sprite[bullet]->sprite.setTextureRect(sf::IntRect(249, 80, 16, 16));
         sprite[bullet]->sprite.setScale(3, 3);
@@ -152,13 +153,19 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
             }
             if (tag[i]->tag == "fullbeambar") {
                 state[bullet]->state = 0;
+                hitbox[bullet]->width = _rect["bulletRect"].width;
+                hitbox[bullet]->height = _rect["bulletRect"].height;
                 if (health[i]->health > 30 && health[i]->health < 85) {
+                    hitbox[bullet]->width = _rect["mediumbulletRect"].width;
+                    hitbox[bullet]->height = _rect["mediumbulletRect"].height;
                     state[bullet]->state = 1;
-                    sprite[bullet]->sprite.setTextureRect(sf::IntRect(200, 115, 32, 20));
+                    sprite[bullet]->sprite.setTextureRect(_rect["mediumbulletRect"]);
                 }
                 if (health[i]->health >= 85) {
+                    hitbox[bullet]->width = _rect["bigbulletRect"].width;
+                    hitbox[bullet]->height = _rect["bigbulletRect"].height;
                     state[bullet]->state = 2;
-                    sprite[bullet]->sprite.setTextureRect(sf::IntRect(185, 170, 80, 16));
+                    sprite[bullet]->sprite.setTextureRect(_rect["bigbulletRect"]);
                 }
                 health[i]->health = 0;
                 sprite[i]->sprite.setTextureRect(sf::IntRect(0, 26, (health[i]->health / 100) * 220, 25));
@@ -188,8 +195,12 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
                     position[i]->x = 1820;
                 if (position[i]->y < 0)
                     position[i]->y = 0;
-                if (position[i]->y > 970)
-                    position[i]->y = 970;
+                if (position[i]->y > 870)
+                    position[i]->y = 870;
+            }
+            if (tag[i]->tag == "parallax") {
+                if  (position[i]->x < -1920)
+                    position[i]->x = 1920;
             }
         }
     }
@@ -380,6 +391,9 @@ void System::set_textures(registry &r)
         if (tag[i]->tag == "life") {
             sprite[i]->sprite.setTexture(_textures["starship"]);
         }
+        if (tag[i]->tag == "parallax") {
+            sprite[i]->sprite.setTexture(_textures["parallax"]);
+        }
     }
 }
 
@@ -455,8 +469,11 @@ void System::load_texture(registry &r)
     sf::Texture enemy;
     sf::Texture beambar;
     sf::Texture explosion;
+    sf::Texture parallax;
     sf::IntRect LoadBulletRect = sf::IntRect(0, 50, 32, 32);
     sf::IntRect BulletRect = sf::IntRect(200, 115, 32, 20);
+    sf::IntRect MediumBulletRect = sf::IntRect(200, 115, 32, 20);
+    sf::IntRect BigBulletRect = sf::IntRect(185, 170, 80, 16);
     sf::IntRect StarshipRect = sf::IntRect(0, 0, 33, 18);
     sf::IntRect EnemyRect = sf::IntRect(0, 0, 32, 32);
     sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
@@ -473,12 +490,17 @@ void System::load_texture(registry &r)
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
+    if (!parallax.loadFromFile("./assets/level1Back.png"))
+        exit(84);
     _textures.insert(std::make_pair("bullet", bullet));
     _textures.insert(std::make_pair("starship", starship));
     _textures.insert(std::make_pair("enemy", enemy));
     _textures.insert(std::make_pair("beambar", beambar));
     _textures.insert(std::make_pair("explosion", explosion));
+    _textures.insert(std::make_pair("parallax", parallax));
     _rect.insert(std::make_pair("bulletRect", BulletRect));
+    _rect.insert(std::make_pair("mediumbulletRect", MediumBulletRect));
+    _rect.insert(std::make_pair("bigbulletRect", BigBulletRect));
     _rect.insert(std::make_pair("starshipRect", StarshipRect));
     _rect.insert(std::make_pair("enemyRect", EnemyRect));
     _rect.insert(std::make_pair("beambarRect", BeambarRect));

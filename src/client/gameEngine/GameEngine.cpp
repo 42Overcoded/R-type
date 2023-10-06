@@ -259,6 +259,31 @@ void gameEngine::init_life() {
     sprite[life]->sprite.setScale(2, 2);
 }
 
+void gameEngine::init_parallax(int i)
+{
+    entity_t parallax = _registry.spawn_entity();
+
+    _registry.add_component<Position>(parallax, Position());
+    _registry.add_component<Sprite>(parallax, Sprite());
+    _registry.add_component<Drawable>(parallax, Drawable());
+    _registry.add_component<Tag>(parallax, Tag());
+    _registry.add_component<Speed>(parallax, Speed());
+
+    auto &position = _registry.get_components<Position>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &drawable = _registry.get_components<Drawable>();
+    auto &tag = _registry.get_components<Tag>();
+    auto &speed = _registry.get_components<Speed>();
+
+    speed[parallax]->speedx = -0.1;
+    position[parallax]->x = i * 1920;
+    position[parallax]->y = 0;
+    sprite[parallax]->sprite.setTexture(_system.get_map()["parallax"]);
+    sprite[parallax]->sprite.setPosition(position[parallax]->x, position[parallax]->y);
+    tag[parallax]->tag = "parallax";
+}
+
+
 void gameEngine::launch_game() {
     _window.create(sf::VideoMode(1920, 1080), "R-Type");
     _window.setFramerateLimit(60);
@@ -269,6 +294,8 @@ void gameEngine::launch_game() {
     init_life();
     init_beambar();
     init_load_shoot();
+    // for (int i = 0; i < 2; i++)
+    //     init_parallax(i);
     entity_t starship = init_starship();
     for (int i = 0; i < 10; i++) {
         entity_t enemy = init_enemy();
