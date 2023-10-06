@@ -138,7 +138,20 @@ void gameEngine::init_beambar()
     sprite[fullbeambar]->sprite.setScale(2, 2);
 }
 
-entity_t gameEngine::init_enemy()
+std::vector<Speed> Mv_to_speed(std::vector<MovementVector> movementVector)
+{
+    std::vector<Speed> speed;
+
+    for (size_t i = 0; i < movementVector.size(); i++) {
+        Speed tmp;
+        tmp.speedx = static_cast<float>(movementVector[i].x);
+        tmp.speedy = static_cast<float>(movementVector[i].y);
+        speed.push_back(tmp);
+    }
+    return speed;
+}
+
+entity_t gameEngine::init_enemy(Mob mob, JsonComportment comportment, coordinate_spawn spawn)
 {
     entity_t enemy = _registry.spawn_entity();
 
@@ -147,7 +160,6 @@ entity_t gameEngine::init_enemy()
     _registry.add_component<Sprite>(enemy, Sprite());
     _registry.add_component<Drawable>(enemy, Drawable());
     _registry.add_component<Enemy>(enemy, Enemy());
-    _registry.add_component<Pattern>(enemy, Pattern());
     _registry.add_component<Health>(enemy, Health());
     _registry.add_component<Hitbox>(enemy, Hitbox());
     _registry.add_component<Tag>(enemy, {"enemy 1"});
@@ -162,31 +174,51 @@ entity_t gameEngine::init_enemy()
     auto &state = _registry.get_components<State>();
     auto &enemy_ = _registry.get_components<Enemy>();
     auto &pattern = _registry.get_components<Pattern>();
+    auto &position = _registry.get_components<Position>();
+
+    if (comportment.MovementVectorLoop) {
+        _registry.add_component<Pattern>(enemy, Pattern());
+        pattern[enemy]->pattern_index = 0;
+        pattern[enemy]->pattern_type = 0;
+        pattern[enemy]->pattern_length = comportment.movementVectorlenght;
+        pattern[enemy]->switch_index = comportment.movementVectorTick;
+        pattern[enemy]->pattern = Mv_to_speed(comportment.movementVector);
+    }
+
+    hitbox[enemy]->width = 33; //Hardcoded temporary
+    hitbox[enemy]->height = 100; //Hardcoded temporary
+    health[enemy]->health = mob.stats.hp;
+    sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]); //Replace with file loaded from mob.sprite_path
+    sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyRect"]);
+    speed[enemy]->speedx = (comportment.movementVector[0].x);
+    speed[enemy]->speedy = (comportment.movementVector[0].y);
+    speed[enemy]->speedx = comportment.movementVector[0].x;
+    speed[enemy]->speedy = comportment.movementVector[0].y;
 
     enemy_[enemy]->score = 100;
     state[enemy]->state = 0;
-    hitbox[enemy]->width = 33;
-    hitbox[enemy]->height = 100;
-    health[enemy]->health = 5;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
-    sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyRect"]);
-    speed[enemy]->speedx -= 0.0f;
-    speed[enemy]->speedy = 0.0f;
-    pattern[enemy]->pattern_index = 0;
-    pattern[enemy]->pattern_type = 0;
-    pattern[enemy]->pattern_length = 2;
-    pattern[enemy]->switch_index = 100;
-    std::vector<Speed> pattern1 = {{0.2f, -0.2f}, {-0.2f, -0.2f}};
-    pattern[enemy]->pattern = pattern1;
 
-    auto &position = _registry.get_components<Position>();
-    position[enemy]->x = 1930;
-    position[enemy]->y = 800;
+    position[enemy]->x = spawn.x;
+    position[enemy]->y = spawn.y;
 
     sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
+    sprite[enemy]->sprite.setScale(3, 3); //Hardcoded temporary
 
     return enemy;
+}
+
+void gameEngine::spawn_enemy(JsonParser *parsed) {
+    std::vector<mobspawn> MobSpawn = parsed->getMobSpawn();
+    Mob mob;
+    JsonComportment comportment;
+
+    for (size_t i = 0; i < MobSpawn.size(); i++) {
+        mob = parsed->getMob(MobSpawn[i].mob_name);
+        comportment = parsed->getComportment(MobSpawn[i].comportment_id);
+        for (size_t j = 0; j < MobSpawn[i].spawn.size(); j++) {
+            entity_t enemy = init_enemy(mob, comportment, MobSpawn[i].spawn[j]);
+        }
+    }
 }
 
 void gameEngine::init_load_shoot()
@@ -289,7 +321,9 @@ void gameEngine::launch_game() {
     _window.setFramerateLimit(60);
     register_component_to_game();
     _system.load_texture(_registry);
-
+    JsonParser parsed;
+    parsed.Load_Map("Test map");
+    this->spawn_enemy(&parsed);
     init_score();
     init_life();
     init_beambar();
@@ -297,12 +331,6 @@ void gameEngine::launch_game() {
     // for (int i = 0; i < 2; i++)
     //     init_parallax(i);
     entity_t starship = init_starship();
-    for (int i = 0; i < 10; i++) {
-        entity_t enemy = init_enemy();
-        auto &position = _registry.get_components<Position>();
-        position[enemy]->x = 1930 + i * 100;
-        position[enemy]->y = 600 + i * 30;
-    }
 
     while (_window.isOpen())
     {

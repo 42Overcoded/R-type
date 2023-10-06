@@ -60,6 +60,7 @@ void JsonParser::debug()
         std::cout << "comportment[" << i << "].description: " << this->comportments.comportments[i].description << std::endl;
         std::cout << "comportment[" << i << "].MovementVectorLoop: " << this->comportments.comportments[i].MovementVectorLoop << std::endl;
         std::cout << "comportment[" << i << "].movementVectorTick: " << this->comportments.comportments[i].movementVectorTick << std::endl;
+        std::cout << "comportment[" << i << "].movementVectorlenght: " << this->comportments.comportments[i].movementVectorlenght << std::endl;
         for (int j = 0; j < this->comportments.comportments[i].movementVector.size(); j++) {
             std::cout << "comportment[" << i << "].movementVector[" << j << "].x: " << this->comportments.comportments[i].movementVector[j].x << std::endl;
             std::cout << "comportment[" << i << "].movementVector[" << j << "].y: " << this->comportments.comportments[i].movementVector[j].y << std::endl;
