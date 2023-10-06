@@ -28,6 +28,7 @@ class gameEngine {
         void init_beambar();
         void launch_game();
         void init_life();
+        void init_parallax(int i);
         void init_score();
         void modify_pattern(registry &r);
         void init_load_shoot();
