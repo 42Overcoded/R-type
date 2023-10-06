@@ -5,9 +5,8 @@
 
 int game() {
 
-    JsonParser jsondata;
-    registry reg;
-    std::cout << "Hello, i'm the game function" << std::endl;
-    jsondata.Load_Map_in_ECS(reg, "map1");
+    // JsonParser jsondata;
+    // registry reg;
+    // std::cout << "Hello, i'm the game function" << std::endl;
     return 0;
 }

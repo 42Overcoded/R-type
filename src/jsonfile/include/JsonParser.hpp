@@ -63,12 +63,33 @@ public:
   std::vector<std::string> getMapNames();
 
   /**
-   * @brief Load the specified map data in the registry ECS
-   * @param address of the registry
+   * @brief Open the specified map json and fill the JsonLevel struct
+   *
    * @param mapName name of the map to load
    */
-  void Load_Map_in_ECS(registry &reg, std::string mapName);
+  void Load_Map(std::string name);
 
+  //getters
+  /**
+   * @brief Get the Comportment with the specified id
+   *
+   * @return JsonComportment
+   */
+  JsonComportment getComportment(int id);
+
+  /**
+   * @brief Get the Mob with the specified name
+   * 
+   * @return Mob
+   */
+  Mob getMob(std::string name);
+
+  /**
+   * @brief Get the mobspawn vector from level
+   * 
+   * @return std::vector<mobspawn> 
+   */
+  std::vector<mobspawn> getMobSpawn();
 
 protected:
 private:
@@ -102,12 +123,6 @@ private:
     to each game level
    */
   void loadMap_Name();
-  /**
-   * @brief Open the specified map json and fill the JsonLevel struct
-   *
-   * @param mapName name of the map to load
-   */
-  void Load_Map(std::string name);
   /**
    * @brief Open the Comportment json and fill the JsonComportments struct
    *
