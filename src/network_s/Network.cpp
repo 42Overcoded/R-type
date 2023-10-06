@@ -7,9 +7,7 @@
 #include "Network.hpp"
 #include "TestClassPlayer.hpp"
 #include "TestStructPlayer.hpp"
-
-#include "boost/archive/text_oarchive.hpp"
-#include "boost/archive/text_iarchive.hpp"
+#include "../ecs/ComponentsArray/Components/Components.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -53,57 +51,48 @@ int Network::create_server(int portServer)
 
 int Network::listen_info_from_clients(void)
 {
-    testPlayer *TestPlayer = new testPlayer();
-
-    struct testPlayer2 tPlay;
+    void *ptrStruct = NULL;
 
     while (true) {
-        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(cliMessage), *ptrCliEndpoint, 0, *ptrError);
-        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrCliEndpoint, 0, *ptrError);
-
-        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(&tPlay, sizeof(tPlay)), *ptrCliEndpoint, 0, *ptrError);
-
-        //totalReceived = ptrServSocket->receive_from(&tPlay, *ptrCliEndpoint, 0, *ptrError);
+        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(ptrStruct, sizeof(ptrStruct)), *ptrCliEndpoint, 0, *ptrError);
 
         if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
             std::cout << "Erreur de connexion: " << ptrError->message() << std::endl;
             break;
         }
 
-        // std::stringstream strstr;
-        // strstr << cliMessage;
-        // boost::archive::text_iarchive ia(strstr);
-        // ia >> *TestPlayer;
+        if (static_cast<Speed*>(ptrStruct) != NULL)
+            struct Speed speed = *static_cast<Speed*>(ptrStruct);
+        if (static_cast<Position*>(ptrStruct) != NULL)
+            struct Position position = *static_cast<Position*>(ptrStruct);
+        if (static_cast<Sprite*>(ptrStruct) != NULL)
+            struct Sprite sprite = *static_cast<Sprite*>(ptrStruct);
+        if (static_cast<Player*>(ptrStruct) != NULL)
+            struct Player player = *static_cast<Player*>(ptrStruct);
+        if (static_cast<Enemy*>(ptrStruct) != NULL)
+            struct Enemy enemy = *static_cast<Enemy*>(ptrStruct);
+        if (static_cast<Bullet*>(ptrStruct) != NULL)
+            struct Bullet bullet = *static_cast<Bullet*>(ptrStruct);
+        if (static_cast<Tag*>(ptrStruct) != NULL)
+            struct Tag tag = *static_cast<Tag*>(ptrStruct);
+        if (static_cast<Health*>(ptrStruct) != NULL)
+            struct Health health = *static_cast<Health*>(ptrStruct);
+        if (static_cast<Damage*>(ptrStruct) != NULL)
+            struct Damage damage = *static_cast<Damage*>(ptrStruct);
+        if (static_cast<Score*>(ptrStruct) != NULL)
+            struct Score score = *static_cast<Score*>(ptrStruct);
+        if (static_cast<Text*>(ptrStruct) != NULL)
+            struct Text text = *static_cast<Text*>(ptrStruct);
+        if (static_cast<Drawable*>(ptrStruct) != NULL)
+            struct Drawable drawable = *static_cast<Drawable*>(ptrStruct);
+        if (static_cast<Control*>(ptrStruct) != NULL)
+            struct Control control = *static_cast<Control*>(ptrStruct);
+        if (static_cast<Pattern*>(ptrStruct) != NULL)
+            struct Pattern pattern = *static_cast<Pattern*>(ptrStruct);
+        if (static_cast<Hitbox*>(ptrStruct) != NULL)
+            struct Hitbox hitbox = *static_cast<Hitbox*>(ptrStruct);
 
-        // if (TestPlayer != NULL) {
-        //     std::cout << "-----------------------------------------------" << std::endl;
-        //     std::cout << TestPlayer->name << std::endl;
-        //     std::cout << "-----------------------------------------------" << std::endl;
-        //     std::cout << TestPlayer->level << std::endl;
-        //     std::cout << "-----------------------------------------------" << std::endl;
-        //     std::cout << TestPlayer->hp << std::endl;
-        //     std::cout << "-----------------------------------------------" << std::endl;
-        //     std::cout << TestPlayer->armor << std::endl;
-        //     std::cout << "-----------------------------------------------" << std::endl;
-        //     std::cout << TestPlayer->drip << std::endl;
-        //     std::cout << "-----------------------------------------------" << std::endl;
-        //     std::cout << TestPlayer->c << std::endl;
-        //     std::cout << "-----------------------------------------------" << std::endl;
-        //     std::cout << TestPlayer->array << std::endl;
-        //     std::cout << "-----------------------------------------------" << std::endl;
-        // } else {
-        //     std::cout << "NULL" << std::endl;
-        // }
-        //break;
-
-        //std::cout << tPlay.name << std::endl;
-        //std::cout << tPlay.level << std::endl;
-        std::cout << tPlay.hp << std::endl;
-        std::cout << tPlay.armor << std::endl;
-        std::cout << tPlay.drip << std::endl;
-        std::cout << tPlay.c << std::endl;
-        std::cout << tPlay.array << std::endl;
+        std::cout << static_cast<Damage*>(ptrStruct)->damage << std::endl;
     }
-    //delete TestPlayer;
     return 0;
 }

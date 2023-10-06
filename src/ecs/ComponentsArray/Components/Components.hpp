@@ -63,11 +63,11 @@ struct Score {
 };
 
 struct ComponentIN {
-    char buffer[1024];
+    void *ptrToStructToReceive;
 };
 
 struct ComponentOUT {
-    char buffer[1024];
+    void *ptrToStructToSend;
 };
 
 struct Text {

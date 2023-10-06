@@ -12,24 +12,30 @@
 #include "../network_c/Network.hpp"
 
 #include "../ecs/ComponentsArray/Components/Components.hpp"
-#include "../network_c/SystemOUT.hpp"
+#include "../ecs/ComponentsArray/Systems/System.hpp"
 
 int main() {
-    registry registry;
-    gameEngine game(registry);
+    registry reg;
+    gameEngine game(reg);
 
-    struct ComponentOUT EcsToServer = {"ECS c'est dur"};
 
-    //reg.add_component(entity, EcsToServer);
+    struct Damage damage = {135};
+    struct ComponentOUT EcsToServer = {&damage};
 
-    Network network;
 
-    network.create_client("10.15.191.37", 4242);
-    network.send_info_to_server();
+    entity_t entity = reg.spawn_entity();
 
-    //SystemOUT systemOUT;
+    reg.register_component<ComponentOUT>();
+    reg.add_component(entity, EcsToServer);
 
-    //systemOUT.update(reg);
+    Network network("192.168.1.16", 4242);
 
-    game.launch_game();
+    //network.send_info_to_server();
+
+    System system;
+
+    system.setNetwork(&network);
+    system.send_system(reg);
+
+    //game.launch_game();
 }

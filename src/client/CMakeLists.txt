@@ -59,7 +59,6 @@ set(EXEC_SRC
     ../network_c/Network.cpp
     ../network_c/TestClassPlayer.cpp
     ../network_c/TestStructPlayer.cpp
-    ../network_c/SystemOUT.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

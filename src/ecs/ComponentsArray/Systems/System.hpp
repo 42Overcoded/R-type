@@ -9,6 +9,7 @@
 #define SYSTEM_HPP_
 
 #include "../../Registry.hpp"
+#include "../../../network_c/Network.hpp"
 
 class System {
     public:
@@ -19,6 +20,8 @@ class System {
         void control_system(registry &r);
         void velocity_system(registry &r, sf::Time &elapsed);
         void hitbox_system(registry &r);
+        void send_system(registry &r);
+        void setNetwork(Network *ptrNetwork);
         void load_texture(registry &r);
         void set_textures(registry &r);
         std::unordered_map<std::string, sf::Texture> get_map();
@@ -26,6 +29,7 @@ class System {
     protected:
     private:
         std::unordered_map<std::string, sf::Texture> _textures;
+        Network *_ptrNetwork;
 };
 
 #endif /* !SYSTEM_HPP_ */
