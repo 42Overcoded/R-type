@@ -68,7 +68,7 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
                 if (_rect["loadbulletRect"].left >= 256) {
                     _rect["loadbulletRect"].left = 0;
                 }
-                if (clock[i]->time.asSeconds() > 50) {
+                if (clock[i]->time.asSeconds() > 0.05) {
                     _rect["loadbulletRect"].left += 32;
                     clock[i]->clock.restart();
                 }
@@ -87,7 +87,7 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
             }
             if (tag[i]->tag == "fullbeambar") {
                 if (health[i]->health <= 100) {
-                    health[i]->health += 0.05f * elapsed.asSeconds();
+                    health[i]->health += 50 * elapsed.asSeconds();
                 }
                 sprite[i]->sprite.setTextureRect(sf::IntRect(0, 26, (health[i]->health / 100) * 220, 25));
             }
@@ -117,7 +117,7 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
                 continue;
             }
             if (tag[i]->tag == "starship") {
-                if (clock[i]->_time.asSeconds() < 150)
+                if (clock[i]->_time.asSeconds() < 0.15)
                     return;
                 clock[i]->_clock.restart();
             }
@@ -410,7 +410,7 @@ void System::death_animation(registry &r)
             continue;
         if (tag[i]->tag == "explosion") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 50) {
+            if (clock[i]->time.asSeconds() > 0.05) {
                 if (state[i]->state >= 6) {
                     r.kill_entity(entity_t(i));
                 }
@@ -533,7 +533,7 @@ void System::animate_enemy(registry &r)
             continue;
         if (tag[i]->tag == "enemy 1") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 100) {
+            if (clock[i]->time.asSeconds() > 0.05) {
                 state[i]->state += 1;
                 if (state[i]->state == 7) {
                     state[i]->state = 0;
