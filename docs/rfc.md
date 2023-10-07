@@ -75,10 +75,45 @@ arcade title Nintendo distributed.
 
 ### Terminology
 
+GTP
+
+```txt
+    Game Transmission Protocol
+```
+
+UDP
+
+```txt
+    User Datagram Protocol
+```
+
 ## The GTP Model
 
 With the above definitions in mind, the following model (shown in Figure 1)
 may be diagrammed for an GTP service.
+
+```txt
+/------------------------------------\
+|        |        |                  |
+| Header |  Size  |     Payload      |
+|        |        |                  |
+|------------------------------------|
+|                                    |
+|                UDP                 |
+|                                    |
+\------------------------------------/
+```
+
+As you can see, the GTP is just on top of the UDP.
+That allow it to be lightweight and highly efficient.
+
+``Header`` is a 4 bytes long (unsigned int) number.
+  It define the following message.
+``Size`` is a 4 bytes long (unsigned int) number.
+  It describe the size in bit of the payload.
+  Value of 0 in case of no payload.
+``Payload`` is a structure containing different information.
+  It will change depending of the value of the header.
 
 ## Communication Functions
 

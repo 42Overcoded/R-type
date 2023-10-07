@@ -38,7 +38,8 @@ private:
 
 struct ITransmission
 {
-    int header;
+    unsigned int header;
+    unsigned int size;
 };
 
 struct Transmission : ITransmission
