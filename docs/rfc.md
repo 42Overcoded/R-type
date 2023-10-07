@@ -40,8 +40,8 @@ Distribution of this memo is unlimited.
 The Game Transmission Protocol (GTP) is defined to make available a
 fast packet transmission of packet-switched computer communication in the
 environment of an interconnected set of computer networks. This
-protocol assumes that the User Datagram Protocol (UDP) [1] is used as the
-underlying protocol.
+protocol assumes that the User Datagram Protocol (UDP) [RFC 768](https://www.ietf.org/rfc/rfc768.txt)
+is used as the underlying protocol.
 
 This protocol provide a procedure for games to communicate with a server.
 It uses UDP as a fast packet-switched computer communication protocol.
