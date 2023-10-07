@@ -192,8 +192,6 @@ entity_t gameEngine::init_enemy(Mob mob, JsonComportment comportment, coordinate
     sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyRect"]);
     speed[enemy]->speedx = (comportment.movementVector[0].x);
     speed[enemy]->speedy = (comportment.movementVector[0].y);
-    speed[enemy]->speedx = comportment.movementVector[0].x;
-    speed[enemy]->speedy = comportment.movementVector[0].y;
 
     enemy_[enemy]->score = 100;
     state[enemy]->state = 0;
@@ -211,7 +209,6 @@ void gameEngine::spawn_enemy(JsonParser *parsed) {
     std::vector<mobspawn> MobSpawn = parsed->getMobSpawn();
     Mob mob;
     JsonComportment comportment;
-
     for (size_t i = 0; i < MobSpawn.size(); i++) {
         mob = parsed->getMob(MobSpawn[i].mob_name);
         comportment = parsed->getComportment(MobSpawn[i].comportment_id);
@@ -321,9 +318,8 @@ void gameEngine::launch_game() {
     _window.setFramerateLimit(60);
     register_component_to_game();
     _system.load_texture(_registry);
-    JsonParser parsed;
-    parsed.Load_Map("Test map");
-    this->spawn_enemy(&parsed);
+    parsed->Load_Map("Test map");
+    spawn_enemy();
     init_score();
     init_life();
     init_beambar();

@@ -23,7 +23,7 @@ class gameEngine {
         sf::RenderWindow &get_window();
         entity_t init_starship();
         entity_t init_enemy(Mob, JsonComportment, coordinate_spawn);
-        void spawn_enemy(JsonParser *parsed);      
+        void spawn_enemy();      
         void init_texture();
         void init_beambar();
         void launch_game();
@@ -34,6 +34,7 @@ class gameEngine {
         void init_load_shoot();
     protected:
     private:
+        JsonParser *parsed;
         sf::Time elapsed;
         sf::Clock clock;
         sf::RenderWindow _window;
