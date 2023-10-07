@@ -12,12 +12,12 @@
 
 struct NetworkIn
 {
-    std::unique_ptr<ITransmission> transmission;
+    std::shared_ptr<ITransmission> transmission;
 };
 
 struct NetworkOut
 {
-    std::unique_ptr<ITransmission> transmission;
+    std::shared_ptr<ITransmission> transmission;
 };
 
 #endif /* !NETWORKCOMPONENT_HPP_ */
