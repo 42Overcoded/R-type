@@ -94,9 +94,9 @@ entity_t gameEngine::init_starship()
     speed[starship]->speedy = pt.get<float>("starship.speed");
     position[starship]->x = pt.get<int>("starship.position.x");
     position[starship]->y = pt.get<int>("starship.position.y");
-    sprite[starship]->sprite.setScale(pt.get<float>("starship.scale.0", 0), pt.get<float>("starship.scale.1", 0));
+    sprite[starship]->sprite.setScale(pt.get<int>("starship.sprite.scale"), pt.get<int>("starship.sprite.scale"));
     sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
-    sprite[starship]->sprite.setTextureRect(_system.get_rect()[pt.get<std::string>("starship.tag_rect")]);
+    sprite[starship]->sprite.setTextureRect(_system.get_rect()["starshipRect"]);
 
     return starship;
 }

@@ -214,18 +214,18 @@ void System::control_system(registry &r)
             speed[i]->speedx = 0.0f;
             speed[i]->speedy = 0.0f;
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                speed[i]->speedy = -0.5f;
+                speed[i]->speedy = -50;
                 sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 132, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                speed[i]->speedy = 0.5f;
+                speed[i]->speedy = 50;
                 sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                speed[i]->speedx = -0.5f;
+                speed[i]->speedx = -50;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                speed[i]->speedx = 0.5f;
+                speed[i]->speedx = 50;
                 sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 66, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
