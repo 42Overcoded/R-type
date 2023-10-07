@@ -33,6 +33,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Hitbox>();
     _registry.register_component<State>();
     _registry.register_component<Clock>();
+    parsed = new JsonParser();
 };
 
 void gameEngine::modify_pattern(registry &r)
@@ -93,7 +94,7 @@ entity_t gameEngine::init_starship()
     speed[starship]->speedy = pt.get<float>("starship.speed");
     position[starship]->x = pt.get<int>("starship.position.x");
     position[starship]->y = pt.get<int>("starship.position.y");
-    sprite[starship]->sprite.setScale(pt.get<float>("starship.scale.x"), pt.get<float>("starship.scale.y"));
+    sprite[starship]->sprite.setScale(pt.get<float>("starship.scale.0", 0), pt.get<float>("starship.scale.1", 0));
     sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
     sprite[starship]->sprite.setTextureRect(_system.get_rect()[pt.get<std::string>("starship.tag_rect")]);
 
@@ -325,8 +326,10 @@ void gameEngine::launch_game() {
     _window.setFramerateLimit(60);
     register_component_to_game();
     _system.load_texture(_registry);
-    parsed->Load_Map("Test map");
-    spawn_enemy();
+    std::cout << "Loading map..." << std::endl;
+    parsed->Load_Map("Test Map");
+    std::cout << "Map loaded" << std::endl;
+    // spawn_enemy();
     init_score();
     init_life();
     init_beambar();
