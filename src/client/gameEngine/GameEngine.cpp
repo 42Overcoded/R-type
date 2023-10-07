@@ -57,6 +57,9 @@ void gameEngine::modify_pattern(registry &r)
 
 entity_t gameEngine::init_starship()
 {
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_json(PATH_TO_MISC, pt);
+
     entity_t starship = _registry.spawn_entity();
 
     _registry.add_component<Position>(starship, Position());
@@ -80,26 +83,28 @@ entity_t gameEngine::init_starship()
     auto &speed = _registry.get_components<Speed>();
     auto &position = _registry.get_components<Position>();
 
-    // to mod depending on the json file
-    health[starship]->health = 3;
-    state[starship]->state = 0;
-    hitbox[starship]->width = 33;
-    hitbox[starship]->height = 18;
-    tag[starship]->tag = "starship";
-    sprite[starship]->sprite.setTexture(_system.get_map()["starship"]);
-    speed[starship]->speedx = 0.0f;
-    speed[starship]->speedy = 0.0f;
-    position[starship]->x = 100;
-    position[starship]->y = 500;
+    health[starship]->health = pt.get<int>("starship.health");
+    state[starship]->state = pt.get<int>("starship.state");
+    hitbox[starship]->width = pt.get<int>("starship.hitbox.width");
+    hitbox[starship]->height = pt.get<int>("starship.hitbox.height");
+    tag[starship]->tag = pt.get<std::string>("starship.tag");
+    sprite[starship]->sprite.setTexture(_system.get_map()[tag[starship]->tag]);
+    speed[starship]->speedx = pt.get<float>("starship.speed");
+    speed[starship]->speedy = pt.get<float>("starship.speed");
+    position[starship]->x = pt.get<int>("starship.position.x");
+    position[starship]->y = pt.get<int>("starship.position.y");
+    sprite[starship]->sprite.setScale(pt.get<float>("starship.scale.x"), pt.get<float>("starship.scale.y"));
     sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
-    sprite[starship]->sprite.setTextureRect(_system.get_rect()["starshipRect"]);
-    sprite[starship]->sprite.setScale(3, 3);
+    sprite[starship]->sprite.setTextureRect(_system.get_rect()[pt.get<std::string>("starship.tag_rect")]);
 
     return starship;
 }
 
 void gameEngine::init_beambar()
 {
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_json(PATH_TO_MISC, pt);
+
     entity_t beambar = _registry.spawn_entity();
     entity_t fullbeambar = _registry.spawn_entity();
 
