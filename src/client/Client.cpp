@@ -19,8 +19,34 @@ int main() {
     gameEngine game(reg);
 
 
-    struct Damage damage = {135};
-    struct ComponentOUT EcsToServer = {&damage};
+    Damage damage = {135};
+    //struct ComponentOUT EcsToServer = {&EcsToServer, &damage};
+    char name[20] = "damage";
+    //ComponentOUT EcsToServer = {&EcsToServer, "damage"};
+    ComponentOUT EcsToServer = {};
+
+    // EcsToServer.ptrToThisStruct = NULL;
+
+    // EcsToServer.nameStructToSend[20];
+    // EcsToServer.speed;
+    // EcsToServer.position;
+    // EcsToServer.sprite;
+    // EcsToServer.player;
+    // EcsToServer.ennemy;
+    // EcsToServer.bullet;
+    // EcsToServer.tag;
+    // EcsToServer.health;
+    // EcsToServer.damage;
+    // EcsToServer.score;
+    // EcsToServer.text;
+    // EcsToServer.drawable;
+    // EcsToServer.control;
+    // EcsToServer.pattern;
+    // EcsToServer.hitbox;
+
+    EcsToServer.ptrToThisStruct = &EcsToServer;
+    strcpy(EcsToServer.nameStructToSend, "damage");
+    EcsToServer.damage = damage;
 
 
     entity_t entity = reg.spawn_entity();

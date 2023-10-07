@@ -63,11 +63,24 @@ struct Score {
 };
 
 struct ComponentIN {
-    void *ptrToStructToReceive;
-};
+    //void *ptrToStructToReceive;
+    void *ptrToThisStruct;
 
-struct ComponentOUT {
-    void *ptrToStructToSend;
+    struct Speed;
+    struct Position;
+    struct Sprite;
+    struct Player;
+    struct Enemy;
+    struct Bullet;
+    struct Tag;
+    struct Health;
+    struct Damage;
+    struct Score;
+    struct Text;
+    struct Drawable;
+    struct Control;
+    struct Pattern;
+    struct Hitbox;
 };
 
 struct Text {
@@ -98,6 +111,44 @@ struct Pattern {
 struct Hitbox {
     int width;
     int height;
+};
+
+struct ComponentOUT {
+    //void *ptrToStructToSend;
+    void *ptrToThisStruct;
+
+    char nameStructToSend[20];
+    // struct Speed speed;
+    // struct Position position;
+    // struct Sprite sprite;
+    // struct Player player;
+    // struct Enemy ennemy;
+    // struct Bullet bullet;
+    // struct Tag tag;
+    // struct Health health;
+    // struct Damage damage;
+    // struct Score score;
+    // struct Text text;
+    // struct Drawable drawable;
+    // struct Control control;
+    // struct Pattern pattern;
+    // struct Hitbox hitbox;
+
+    Speed speed;
+    Position position;
+    Sprite sprite;
+    Player player;
+    Enemy ennemy;
+    Bullet bullet;
+    Tag tag;
+    Health health;
+    Damage damage;
+    Score score;
+    Text text;
+    Drawable drawable;
+    Control control;
+    Pattern pattern;
+    Hitbox hitbox;
 };
 
 #endif /* !COMPONENTS_HPP_ */
