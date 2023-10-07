@@ -8,6 +8,7 @@
     },
     "starship": {
         "tag": "starship",
+        "tag_rect": "starshipRect",
         "health": 3,
         "state": 0,
         "hitbox": {
