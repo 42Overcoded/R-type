@@ -186,8 +186,8 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
             continue;
         }
         if (position[i] != std::nullopt && speed[i] != std::nullopt && sprite[i] != std::nullopt) {
-            position[i]->x += speed[i]->speedx * elapsed.asSeconds();
-            position[i]->y += speed[i]->speedy * elapsed.asSeconds();
+            position[i]->x += speed[i]->speedx * elapsed.asMilliseconds();
+            position[i]->y += speed[i]->speedy * elapsed.asMilliseconds();
             if (tag[i]->tag == "starship") {
                 if (position[i]->x < 0)
                     position[i]->x = 0;
@@ -214,18 +214,18 @@ void System::control_system(registry &r)
             speed[i]->speedx = 0.0f;
             speed[i]->speedy = 0.0f;
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                speed[i]->speedy = -50;
+                speed[i]->speedy = -0.5f;
                 sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 132, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                speed[i]->speedy = 50;
+                speed[i]->speedy = 0.5f;
                 sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                speed[i]->speedx = -50;
+                speed[i]->speedx = -0.5f;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                speed[i]->speedx = 50;
+                speed[i]->speedx = 0.5f;
                 sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 66, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
@@ -234,6 +234,7 @@ void System::control_system(registry &r)
         }
     }
 }
+
 
 void System::hitbox_system(registry &r)
 {
