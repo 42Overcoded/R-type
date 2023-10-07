@@ -478,7 +478,7 @@ void System::load_texture(registry &r)
     sf::IntRect EnemyRect = sf::IntRect(0, 0, 32, 32);
     sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
     sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);
-    sf::IntRect ExplosionRect = sf::IntRect(130, 0, 32, 32);
+    sf::IntRect ExplosionRect = sf::IntRect(130,                                                                                                                0, 32, 32);
 
     if (!bullet.loadFromFile("./assets/playerBullet.png"))
         exit(84);
@@ -489,8 +489,6 @@ void System::load_texture(registry &r)
     if (!beambar.loadFromFile("./assets/beam.png"))
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
-        exit(84);
-    if (!parallax.loadFromFile("./assets/level1Back.png"))
         exit(84);
     _textures.insert(std::make_pair("bullet", bullet));
     _textures.insert(std::make_pair("starship", starship));
