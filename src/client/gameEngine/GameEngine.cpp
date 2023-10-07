@@ -326,10 +326,12 @@ void gameEngine::launch_game() {
     _window.setFramerateLimit(60);
     register_component_to_game();
     _system.load_texture(_registry);
-    std::cout << "Loading map..." << std::endl;
     parsed->Load_Map("Test Map");
-    std::cout << "Map loaded" << std::endl;
-    // spawn_enemy();
+    if (parsed->getLoaded_MapName() == NO_MAP_LOADED) {
+        std::cout << "No map loaded" << std::endl;
+        exit(84);
+    }
+    spawn_enemy();
     init_score();
     init_life();
     init_beambar();

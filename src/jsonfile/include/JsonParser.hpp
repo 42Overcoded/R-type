@@ -92,6 +92,12 @@ public:
    */
   std::vector<mobspawn> getMobSpawn();
 
+  /**
+   * @brief get Loaded_MapName
+   * 
+   */
+  std::string getLoaded_MapName();
+
 protected:
 private:
   // Variables
