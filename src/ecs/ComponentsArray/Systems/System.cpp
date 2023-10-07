@@ -198,10 +198,6 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
                 if (position[i]->y > 870)
                     position[i]->y = 870;
             }
-            if (tag[i]->tag == "parallax") {
-                if  (position[i]->x < -1920)
-                    position[i]->x = 1920;
-            }
         }
     }
 }

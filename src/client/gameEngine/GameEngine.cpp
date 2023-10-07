@@ -80,6 +80,7 @@ entity_t gameEngine::init_starship()
     auto &speed = _registry.get_components<Speed>();
     auto &position = _registry.get_components<Position>();
 
+    // to mod depending on the json file
     health[starship]->health = 3;
     state[starship]->state = 0;
     hitbox[starship]->width = 33;
@@ -91,7 +92,7 @@ entity_t gameEngine::init_starship()
     position[starship]->x = 100;
     position[starship]->y = 500;
     sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
-    sprite[starship]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
+    sprite[starship]->sprite.setTextureRect(_system.get_rect()["starshipRect"]);
     sprite[starship]->sprite.setScale(3, 3);
 
     return starship;
@@ -102,6 +103,7 @@ void gameEngine::init_beambar()
     entity_t beambar = _registry.spawn_entity();
     entity_t fullbeambar = _registry.spawn_entity();
 
+    // to mod depending on the json file
     _registry.add_component<Position>(beambar, Position());
     _registry.add_component<Position>(fullbeambar, Position());
     _registry.add_component<Sprite>(beambar, Sprite());

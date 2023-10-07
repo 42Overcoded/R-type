@@ -1,0 +1,49 @@
+{
+    "window": {
+        "title": "R-Type",
+        "frame_limit": 60,
+        "width": 1920,
+        "height": 1080,
+        "fullscreen": true
+    },
+    "starship": {
+        "tag": "starship",
+        "health": 3,
+        "state": 0,
+        "hitbox": {
+            "width": 33,
+            "height": 18
+        },
+        "sprite": {
+            "path": "./assets/sprites/starship.png",
+            "rect": [0, 0, 33, 18],
+            "scale": [3, 3]
+        },
+        "speed": 50,
+        "position": {
+            "x": 100,
+            "y": 500
+        }
+    },
+    "beambar": {
+        "tag": "beambar",
+        "health": 0,
+        "hitbox": {
+            "width": 0,
+            "height": 0
+        },
+        "sprite": {
+            "texture": "beambar",
+            "rect": [0, 0, 0, 0],
+            "scale": [1, 1]
+        },
+        "speed": {
+            "speedx": 0.0,
+            "speedy": 0.0
+        },
+        "position": {
+            "x": 0,
+            "y": 0
+        }
+    }
+}
