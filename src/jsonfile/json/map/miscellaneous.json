@@ -1,0 +1,9 @@
+{
+    "window": {
+        "title": "R-Type",
+        "frame_limit": 60,
+        "width": 1920,
+        "height": 1080,
+        "fullscreen": true
+    }
+}

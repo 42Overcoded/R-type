@@ -205,7 +205,7 @@ entity_t gameEngine::init_enemy(Mob mob, JsonComportment comportment, coordinate
     return enemy;
 }
 
-void gameEngine::spawn_enemy(JsonParser *parsed) {
+void gameEngine::spawn_enemy() {
     std::vector<mobspawn> MobSpawn = parsed->getMobSpawn();
     Mob mob;
     JsonComportment comportment;

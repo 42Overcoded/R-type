@@ -68,7 +68,7 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
                 if (_rect["loadbulletRect"].left >= 256) {
                     _rect["loadbulletRect"].left = 0;
                 }
-                if (clock[i]->time.asMilliseconds() > 50) {
+                if (clock[i]->time.asSeconds() > 50) {
                     _rect["loadbulletRect"].left += 32;
                     clock[i]->clock.restart();
                 }
@@ -87,7 +87,7 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
             }
             if (tag[i]->tag == "fullbeambar") {
                 if (health[i]->health <= 100) {
-                    health[i]->health += 0.05f * elapsed.asMilliseconds();
+                    health[i]->health += 0.05f * elapsed.asSeconds();
                 }
                 sprite[i]->sprite.setTextureRect(sf::IntRect(0, 26, (health[i]->health / 100) * 220, 25));
             }
@@ -117,7 +117,7 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
                 continue;
             }
             if (tag[i]->tag == "starship") {
-                if (clock[i]->_time.asMilliseconds() < 150)
+                if (clock[i]->_time.asSeconds() < 150)
                     return;
                 clock[i]->_clock.restart();
             }
@@ -186,8 +186,8 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
             continue;
         }
         if (position[i] != std::nullopt && speed[i] != std::nullopt && sprite[i] != std::nullopt) {
-            position[i]->x += speed[i]->speedx * elapsed.asMilliseconds();
-            position[i]->y += speed[i]->speedy * elapsed.asMilliseconds();
+            position[i]->x += speed[i]->speedx * elapsed.asSeconds();
+            position[i]->y += speed[i]->speedy * elapsed.asSeconds();
             if (tag[i]->tag == "starship") {
                 if (position[i]->x < 0)
                     position[i]->x = 0;
@@ -414,7 +414,7 @@ void System::death_animation(registry &r)
             continue;
         if (tag[i]->tag == "explosion") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asMilliseconds() > 50) {
+            if (clock[i]->time.asSeconds() > 50) {
                 if (state[i]->state >= 6) {
                     r.kill_entity(entity_t(i));
                 }
@@ -537,7 +537,7 @@ void System::animate_enemy(registry &r)
             continue;
         if (tag[i]->tag == "enemy 1") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asMilliseconds() > 100) {
+            if (clock[i]->time.asSeconds() > 100) {
                 state[i]->state += 1;
                 if (state[i]->state == 7) {
                     state[i]->state = 0;
