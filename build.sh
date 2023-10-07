@@ -35,11 +35,13 @@ do
   esac
 done
 
+original_dir=${PWD}
+
 mkdir build > /dev/null 2>&1
 cd build > /dev/null 2>&1
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . -j
 if [ $PACK = True ]; then
-    cpack -C CPackConfig.cmake
+  cpack -C CPackConfig.cmake
 fi
-cd - > /dev/null 2>&1
+cd $original_dir > /dev/null 2>&1
