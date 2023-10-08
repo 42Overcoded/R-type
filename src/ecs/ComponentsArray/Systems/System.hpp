@@ -28,6 +28,7 @@ class System {
         void clock_time(registry &r);
         void animate_enemy(registry &r);
         void life_handler(registry &r, sf::RenderWindow &window);
+        void shoot_enemy(registry &r);
         std::unordered_map<std::string, sf::Texture> get_map();
         std::unordered_map<std::string, sf::IntRect> get_rect();
         ~System() = default;
