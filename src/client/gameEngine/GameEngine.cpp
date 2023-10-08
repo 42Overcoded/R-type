@@ -602,11 +602,13 @@ void gameEngine::init_parallax(int i)
 
 void gameEngine::load_texture_rect(void)
 {
-    // _system.load_mob_texture(_registry, ;
-    // Iterate through mob and call the system to load the texture and the rect
+    std::cout << "Loading texture ???" << std::endl;
     JsonMobs mobs = parsed->getMobs();
+    std::cout << mobs.mobs.size() << std::endl;
     for (size_t i = 0; i < mobs.mobs.size(); i++) {
+        std::cout << "Loading texture for " << mobs.mobs[i].stats.tag << std::endl;
         _system.load_mob_texture(_registry, mobs.mobs[i].stats.tag, mobs.mobs[i].sprite_path);
+        std::cout << "Loading rect for " << mobs.mobs[i].stats.tag << std::endl;
         _system.load_mob_rect(_registry, mobs.mobs[i].stats.tag_rect, mobs.mobs[i].stats.rect);
     }   
 }

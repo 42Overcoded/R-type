@@ -1,11 +1,11 @@
 {
     "mob_list": [
         {
-            "name": "mob1",
-            "sprite": "mob1.png",
+            "name": "Starship",
+            "sprite": "./assets/enemyStarship.png",
             "stat": {
-                "tag": "mob",
-                "tag_rect": "mob_rect", 
+                "tag": "enemy",
+                "tag_rect": "EnemyRect", 
                 "health": 2,
                 "score": "10",
                 "state": 0,
@@ -14,48 +14,77 @@
                     "width": "33",
                     "height": "100"
                 },
-                "rect": [0, 0, 0, 0]
-            }
-        },
-        {
-            "name": "mob2",
-            "sprite": "mob2.png",
-            "stat": {
-                "health": 2,
-                "score": "10",
-                "state": 0,
-                "scale": 3,
-                "hitbox": {
-                    "width": "33",
-                    "height": "100"
+                "rect": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 32,
+                    "3": 32
                 }
             }
         },
         {
-            "name": "mob3",
-            "sprite": "mob3.png",
+            "name": "Scuttle",
+            "sprite": "./assets/enemyScuttle.png",
             "stat": {
-                "health": 2,
-                "score": "10",
+                "tag": "enemyTwo",
+                "tag_rect": "enemyTwoRect",
+                "health": 5,
+                "score": "100",
                 "state": 0,
                 "scale": 3,
                 "hitbox": {
-                    "width": "33",
-                    "height": "100"
+                    "width": "96",
+                    "height": "96"
+                },
+                "rect": {
+                    "0": 2,
+                    "1": 0,
+                    "2": 33,
+                    "3": 33
                 }
             }
         },
         {
-            "name": "mob4",
-            "sprite": "mob4.png",
+            "name": "Robot",
+            "sprite": "./assets/enemyRobot.png",
             "stat": {
-                "health": 100,
-                "score": "10",
+                "tag": "enemyThree",
+                "tag_rect": "enemyThreeRect",
+                "health": 8,
+                "score": "200",
                 "state": 0,
                 "scale": 3,
                 "hitbox": {
-                    "width": "33",
-                    "height": "100"
+                    "width": "96",
+                    "height": "96"
+                },
+                "rect": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 33,
+                    "3": 33
+                }
+            }
+        },
+        {
+            "name": "Alien",
+            "sprite": "./assets/enemyAlien.png",
+            "stat": {
+                "tag": "enemyFour",
+                "tag_rect": "enemyFourRect",
+                "health": 20,
+                "score": "500",
+                "state": 0,
+                "scale": 3,
+                "hitbox": {
+                    "width": "200",
+                    "height": "170"
+                },
+                "rect": {
+                    "0": 0,
+                    "1": 0,
+                    "2": 100,
+                    "3": 58
                 }
             }
         },
