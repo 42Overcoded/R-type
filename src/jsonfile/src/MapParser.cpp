@@ -31,7 +31,8 @@ void JsonParser::Load_Map(std::string mapName)
         return;
     std::string path = NO_MAP_LOADED;
     path = this->maplist[mapName]; //Get the path of the specified map
-    if (path == NO_MAP_LOADED) {
+    if (path == NO_MAP_LOADED || path == "") {
+        std::cout << "Loaded_MapName: " << this->Loaded_MapName << std::endl;
         std::cerr << "Error: " << mapName << " is not a valid map name" << std::endl;
         return;
     }

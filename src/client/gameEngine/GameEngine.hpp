@@ -22,18 +22,26 @@ class gameEngine {
         void register_component_to_game();
         sf::RenderWindow &get_window();
         entity_t init_starship();
-        entity_t init_enemy(Mob, JsonComportment, coordinate_spawn);
-        void spawn_enemy(JsonParser *parsed);      
+        entity_t init_enemy();
+        entity_t init_enemy_2();
+        entity_t init_enemy_3();
+        entity_t init_enemy_4();
+        entity_t init_boss();
+        void spawn_enemy();
+        void init_background(int i);
         void init_texture();
         void init_beambar();
         void launch_game();
         void init_life();
         void init_parallax(int i);
         void init_score();
+        void spawn_wave(sf::Time &elapsed, int &wave);
         void modify_pattern(registry &r);
         void init_load_shoot();
+        void spawn_mobs(int n1, int n2, int n3, int n4);
     protected:
     private:
+        JsonParser *parsed;
         sf::Time elapsed;
         sf::Clock clock;
         sf::RenderWindow _window;

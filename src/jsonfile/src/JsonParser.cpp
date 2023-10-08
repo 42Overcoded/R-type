@@ -49,6 +49,11 @@ JsonParser::~JsonParser()
 {
 }
 
+std::string JsonParser::getLoaded_MapName()
+{
+    return this->Loaded_MapName;
+}
+
 void JsonParser::debug()
 {
     //Comportment debug

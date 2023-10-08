@@ -21,6 +21,7 @@
 const std::string PATH_TO_COMPORTEMENT = "src/jsonfile/json/comportment.json";
 const std::string PATH_TO_MOB = "src/jsonfile/json/mob.json";
 const std::string PATH_TO_MAP_FOLDER = "src/jsonfile/json/map/";
+const std::string PATH_TO_MISC = "src/jsonfile/json/miscellaneous.json";
 const std::string NO_MAP_LOADED = "No map loaded";
 const int min_level_lenght = 100;  // Temporarily set to 100 [random value]
 const int max_level_lenght = 1000; // Temporarily set to 1000 [random value]
@@ -90,6 +91,12 @@ public:
    * @return std::vector<mobspawn> 
    */
   std::vector<mobspawn> getMobSpawn();
+
+  /**
+   * @brief get Loaded_MapName
+   * 
+   */
+  std::string getLoaded_MapName();
 
 protected:
 private:
