@@ -619,6 +619,7 @@ void gameEngine::launch_game() {
     _window.setFramerateLimit(pt.get<int>("window.framerate", 10));
     register_component_to_game();
     _system.load_texture(_registry);
+    load_texture_rect();
     parsed->Load_Map("Test Map"); //Should be changed to the map sellected by the user
     if (parsed->getLoaded_MapName() == NO_MAP_LOADED) {
         std::cout << "No map loaded" << std::endl;
