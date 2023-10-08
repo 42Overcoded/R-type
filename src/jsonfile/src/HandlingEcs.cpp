@@ -15,7 +15,7 @@ Mob JsonParser::getMob(std::string name)
         if (this->mobs.mobs[i].name == name)
             return (this->mobs.mobs[i]);
     }
-    std::cout << "Error: Mob not found" << std::endl;
+    std::cout << name <<":  Error: Mob not found" << std::endl;
     try {
         return (this->mobs.mobs[0]);
     } catch (std::exception &e) {

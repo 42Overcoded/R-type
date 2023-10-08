@@ -4,36 +4,70 @@
             "name": "mob1",
             "sprite": "mob1.png",
             "stat": {
-                "health": 30
+                "health": 2,
+                "score": "10",
+                "state": 0,
+                "scale": 3,
+                "hitbox": {
+                    "width": "33",
+                    "height": "100"
+                }
             }
-            
         },
         {
             "name": "mob2",
             "sprite": "mob2.png",
             "stat": {
-                "health": 20
+                "health": 2,
+                "score": "10",
+                "state": 0,
+                "scale": 3,
+                "hitbox": {
+                    "width": "33",
+                    "height": "100"
+                }
             }
         },
         {
             "name": "mob3",
             "sprite": "mob3.png",
             "stat": {
-                "health": 10
+                "health": 2,
+                "score": "10",
+                "state": 0,
+                "scale": 3,
+                "hitbox": {
+                    "width": "33",
+                    "height": "100"
+                }
             }
         },
         {
             "name": "mob4",
             "sprite": "mob4.png",
             "stat": {
-                "health": 100
+                "health": 100,
+                "score": "10",
+                "state": 0,
+                "scale": 3,
+                "hitbox": {
+                    "width": "33",
+                    "height": "100"
+                }
             }
         },
         {
             "name": "wall",
             "sprite": "wall.png",
             "stat": {
-                "health": 100
+                "health": 100,
+                "score": "10",
+                "state": 0,
+                "scale": 3,
+                "hitbox": {
+                    "width": "33",
+                    "height": "100"
+                }
             }
         }
     ]

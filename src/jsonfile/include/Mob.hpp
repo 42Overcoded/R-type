@@ -13,6 +13,11 @@
 
 struct MobStats {
     int hp; //HP of the mob
+    int score; //Score given by the mob
+    int hitbox_width; //Width of the hitbox
+    int hitbox_height; //Height of the hitbox
+    int state; //State of the mob
+    int scale; //Scale of the mob sprite
 };
 
 struct Mob {

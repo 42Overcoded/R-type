@@ -37,7 +37,7 @@
         },
         {
             "type": "mob2",
-            "comportment": 2,
+            "comportment": 1,
             "coordinates": [
                 {
                     "x": 2000,
