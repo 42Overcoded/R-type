@@ -277,6 +277,8 @@ void gameEngine::init_score() {
 }
 
 void gameEngine::init_life() {
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_json(PATH_TO_MISC, pt);
     entity_t life = _registry.spawn_entity();
 
     _registry.add_component<Position>(life, Position());
@@ -287,17 +289,19 @@ void gameEngine::init_life() {
     auto &sprite = _registry.get_components<Sprite>();
     auto &position = _registry.get_components<Position>();
 
-    tag[life]->tag = "life";
+    tag[life]->tag = pt.get<std::string>("life.tag");
+    position[life]->x = pt.get<int>("life.position.x", 0);
+    position[life]->y = pt.get<int>("life.position.y", 0);
+    sprite[life]->sprite.setScale(pt.get<int>("life.scale", 0), pt.get<int>("life.scale", 0));
     sprite[life]->sprite.setTexture(_system.get_map()["starship"]);
     sprite[life]->sprite.setTextureRect(_system.get_rect()["starshipRect"]);
-    position[life]->x = 100;
-    position[life]->y = 950;
     sprite[life]->sprite.setPosition(position[life]->x, position[life]->y);
-    sprite[life]->sprite.setScale(2, 2);
 }
 
 void gameEngine::init_parallax(int i)
 {
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_json(PATH_TO_MISC, pt);
     entity_t parallax = _registry.spawn_entity();
 
     _registry.add_component<Position>(parallax, Position());
@@ -312,21 +316,24 @@ void gameEngine::init_parallax(int i)
     auto &tag = _registry.get_components<Tag>();
     auto &speed = _registry.get_components<Speed>();
 
-    speed[parallax]->speedx = -0.1;
-    position[parallax]->x = i * 1920;
-    position[parallax]->y = 0;
-    sprite[parallax]->sprite.setTexture(_system.get_map()["parallax"]);
+    speed[parallax]->speedx = pt.get<float>("parallax.speedx", 0);
+    position[parallax]->x = i * pt.get<int>("parallax.position.x", 0);
+    position[parallax]->y = pt.get<int>("parallax.position.y", 0);
+    tag[parallax]->tag = pt.get<std::string>("parallax.tag", "");
+    sprite[parallax]->sprite.setTexture(_system.get_map()[tag[parallax]->tag]);
     sprite[parallax]->sprite.setPosition(position[parallax]->x, position[parallax]->y);
-    tag[parallax]->tag = "parallax";
 }
 
 
 void gameEngine::launch_game() {
-    _window.create(sf::VideoMode(1920, 1080), "R-Type");
-    _window.setFramerateLimit(60);
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_json(PATH_TO_MISC, pt);
+
+    _window.create(sf::VideoMode(pt.get<int>("window.width", 100), pt.get<int>("window.height", 100)), pt.get<std::string>("window.title", "Error loading title"));
+    _window.setFramerateLimit(pt.get<int>("window.framerate", 10));
     register_component_to_game();
     _system.load_texture(_registry);
-    parsed->Load_Map("Test Map");
+    parsed->Load_Map("Test Map"); //Should be changed to the map sellected by the user
     if (parsed->getLoaded_MapName() == NO_MAP_LOADED) {
         std::cout << "No map loaded" << std::endl;
         exit(84);
