@@ -15,6 +15,13 @@
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/System.hpp"
 
+enum Scene {
+    MENU,
+    LOBBY,
+    GAME,
+    END
+};
+
 class gameEngine {
     public:
         gameEngine(registry &registry) : _registry(registry) {}
@@ -27,11 +34,13 @@ class gameEngine {
         entity_t init_enemy_3();
         entity_t init_enemy_4();
         entity_t init_boss();
+        void menu();
         void spawn_enemy();
         void init_background(int i);
         void init_texture();
         void init_beambar();
         void launch_game();
+        void init_menu();
         void init_life();
         void init_parallax(int i);
         void init_score();
@@ -41,6 +50,7 @@ class gameEngine {
         void spawn_mobs(int n1, int n2, int n3, int n4);
     protected:
     private:
+        Scene scene;
         JsonParser *parsed;
         sf::Time elapsed;
         sf::Clock clock;

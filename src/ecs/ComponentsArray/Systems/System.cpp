@@ -335,9 +335,6 @@ void System::hitbox_system(registry &r)
                         position[j]->y = 500;
                         state[j]->state = 1;
                         clock[j]->__clock.restart();
-                        if (health[j]->health < 0) {
-                            r.kill_entity(entity_t(j));
-                        }
                         if (enemyBall[i] != std::nullopt) {
                             r.kill_entity(entity_t(i));
                         }
@@ -467,6 +464,12 @@ void System::set_textures(registry &r)
         if (tag[i]->tag == "background") {
             sprite[i]->sprite.setTexture(_textures["background"]);
         }
+        if (tag[i]->tag == "menu") {
+            sprite[i]->sprite.setTexture(_textures["menuButton"]);
+        }
+        if (tag[i]->tag == "play") {
+            sprite[i]->sprite.setTexture(_textures["playButton"]);
+        }
     }
 }
 
@@ -564,6 +567,8 @@ void System::load_texture(registry &r)
     sf::Texture enemyBlueBullet;
     sf::Texture enemyBoss;
     sf::Texture background;
+    sf::Texture menuButton;
+    sf::Texture playButton;
     sf::IntRect enemyBossBulletRect = sf::IntRect(0, 400, 22 ,20);
     sf::IntRect enemyBossRect = sf::IntRect(0, 0, 200, 250);
     sf::IntRect enemyTwoRect = sf::IntRect(2, 0, 33, 33);
@@ -579,6 +584,10 @@ void System::load_texture(registry &r)
     sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);
     sf::IntRect ExplosionRect = sf::IntRect(130, 0, 32, 32);
 
+    if (!menuButton.loadFromFile("./assets/lobby.png"))
+        exit(84);
+    if (!playButton.loadFromFile("./assets/start.png"))
+        exit(84);
     if (!background.loadFromFile("./assets/background.png"))
         exit(84);
     if (!enemyBoss.loadFromFile("./assets/enemyBoss.png"))
@@ -605,6 +614,8 @@ void System::load_texture(registry &r)
         exit(84);
     if (!parallax.loadFromFile("./assets/level1Back.png"))
         exit(84);
+    _textures.insert(std::make_pair("menuButton", menuButton));
+    _textures.insert(std::make_pair("playButton", playButton));
     _textures.insert(std::make_pair("background", background));
     _textures.insert(std::make_pair("enemyBoss", enemyBoss));
     _textures.insert(std::make_pair("enemyThree", enemyThree));
