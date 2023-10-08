@@ -29,6 +29,7 @@ struct Speed {
 
 struct State {
     int state = 0;
+    int index = 0;
 };
 
 struct Clock {
@@ -41,8 +42,16 @@ struct Clock {
 };
 
 struct Position {
-    int x = 0;
-    int y = 0;
+    float x = 0.0f;
+    float y = 0.0f;
+};
+
+struct EnemyBall {
+    bool enemyball = true;
+};
+
+struct SearchingHead {
+    bool searching = true;
 };
 
 struct Sprite {
