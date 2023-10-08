@@ -12,6 +12,7 @@
 #include "SFML/Graphics/Texture.hpp"
 #include <SFML/Window/Keyboard.hpp>
 #include <unordered_map>
+#include "../../../Path.hpp"
 
 void System::draw_system(registry &r, sf::RenderWindow &window)
 {
@@ -207,11 +208,12 @@ void System::load_texture(registry &r)
     sf::Texture starship;
     sf::Texture enemy;
 
-    if (!bullet.loadFromFile("../../assets/playerBullet.png"))
+    std::string execPath = GetExecutableParentDirectory();
+    if (!bullet.loadFromFile(execPath + PATH_ASSETS + "playerBullet.png"))
         exit(84);
-    if (!starship.loadFromFile("../../assets/starship.png"))
+    if (!starship.loadFromFile(execPath + PATH_ASSETS + "starship.png"))
         exit(84);
-    if (!enemy.loadFromFile("../../assets/starship.png"))
+    if (!enemy.loadFromFile(execPath + PATH_ASSETS + "starship.png"))
         exit(84);
     _textures.insert(std::make_pair("bullet", bullet));
     _textures.insert(std::make_pair("starship", starship));

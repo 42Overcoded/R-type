@@ -17,10 +17,11 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include "../ecs/Registry.hpp"
+#include "../../Path.hpp"
 
-const std::string PATH_TO_COMPORTEMENT = "src/jsonfile/json/comportment.json";
-const std::string PATH_TO_MOB = "src/jsonfile/json/mob.json";
-const std::string PATH_TO_MAP_FOLDER = "src/jsonfile/json/map/";
+const std::string PATH_TO_COMPORTEMENT = GetExecutableParentDirectory() + PATH_JSON + "comportment.json";
+const std::string PATH_TO_MOB = GetExecutableParentDirectory() + PATH_JSON + "mob.json";
+const std::string PATH_TO_MAP_FOLDER = GetExecutableParentDirectory() + PATH_JSON + "map/";
 const std::string NO_MAP_LOADED = "No map loaded";
 const int min_level_lenght = 100;  // Temporarily set to 100 [random value]
 const int max_level_lenght = 1000; // Temporarily set to 1000 [random value]
