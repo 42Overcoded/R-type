@@ -232,8 +232,7 @@ void System::send_system(registry &r)
     SparseArray<ComponentOUT> &SpAr = r.get_components<ComponentOUT>();
 
     for (int i = 0; i < SpAr.size(); i++) {
-        if (SpAr[i] != std::nullopt) {
-            //_ptrNetwork->send_info_to_server(SpAr[i]->ptrToStructToSend);
+        if (SpAr[i] != std::nullopt && _ptrNetwork != NULL) {
             _ptrNetwork->send_info_to_server(SpAr[i]->ptrToThisStruct);
         }
     }

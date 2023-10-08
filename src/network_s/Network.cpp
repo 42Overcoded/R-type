@@ -51,26 +51,9 @@ int Network::create_server(int portServer)
 
 int Network::listen_info_from_clients(void)
 {
-    //void *ptrStruct = NULL;
-    //struct Damage damage;
-    //struct ComponentOUT componentOUT;
     ComponentOUT componentOUT;
 
-    struct Test2 {
-        int x;
-    };
-    struct Test {
-        void *ptrTest;
-        char arr[10];
-        int number;
-        Test2 test2;
-    };
-    Test test;
-
     while (true) {
-        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(ptrStruct, sizeof(ptrStruct)), *ptrCliEndpoint, 0, *ptrError);
-        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(&test, sizeof(test)), *ptrCliEndpoint, 0, *ptrError);
-
         totalReceived = ptrServSocket->receive_from(boost::asio::buffer(&componentOUT, sizeof(componentOUT)), *ptrCliEndpoint, 0, *ptrError);
 
         if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
@@ -78,48 +61,36 @@ int Network::listen_info_from_clients(void)
             break;
         }
 
-        // if (static_cast<Speed*>(ptrStruct) != NULL)
-        //     struct Speed speed = *static_cast<Speed*>(ptrStruct);
-        // if (static_cast<Position*>(ptrStruct) != NULL)
-        //     struct Position position = *static_cast<Position*>(ptrStruct);
-        // if (static_cast<Sprite*>(ptrStruct) != NULL)
-        //     struct Sprite sprite = *static_cast<Sprite*>(ptrStruct);
-        // if (static_cast<Player*>(ptrStruct) != NULL)
-        //     struct Player player = *static_cast<Player*>(ptrStruct);
-        // if (static_cast<Enemy*>(ptrStruct) != NULL)
-        //     struct Enemy enemy = *static_cast<Enemy*>(ptrStruct);
-        // if (static_cast<Bullet*>(ptrStruct) != NULL)
-        //     struct Bullet bullet = *static_cast<Bullet*>(ptrStruct);
-        // if (static_cast<Tag*>(ptrStruct) != NULL)
-        //     struct Tag tag = *static_cast<Tag*>(ptrStruct);
-        // if (static_cast<Health*>(ptrStruct) != NULL)
-        //     struct Health health = *static_cast<Health*>(ptrStruct);
-        // if (static_cast<Damage*>(ptrStruct) != NULL)
-        //     struct Damage damage = *static_cast<Damage*>(ptrStruct);
-        // if (static_cast<Score*>(ptrStruct) != NULL)
-        //     struct Score score = *static_cast<Score*>(ptrStruct);
-        // if (static_cast<Text*>(ptrStruct) != NULL)
-        //     struct Text text = *static_cast<Text*>(ptrStruct);
-        // if (static_cast<Drawable*>(ptrStruct) != NULL)
-        //     struct Drawable drawable = *static_cast<Drawable*>(ptrStruct);
-        // if (static_cast<Control*>(ptrStruct) != NULL)
-        //     struct Control control = *static_cast<Control*>(ptrStruct);
-        // if (static_cast<Pattern*>(ptrStruct) != NULL)
-        //     struct Pattern pattern = *static_cast<Pattern*>(ptrStruct);
-        // if (static_cast<Hitbox*>(ptrStruct) != NULL)
-        //     struct Hitbox hitbox = *static_cast<Hitbox*>(ptrStruct);
-
-
-        //std::cout << componentOUT.nameStructToSend[0] << std::endl;
-        //std::cout << componentOUT.nameStructToSend << std::endl;
-        std::cout << test.arr << std::endl;
-        std::cout << test.test2.x << std::endl;
-
-        std::cout << componentOUT.nameStructToSend << std::endl;
-        //if (componentOUT.nameStructToSend == "damage")
+        if (strcmp(componentOUT.nameStructToSend, "speed") == 0)
+            std::cout << "speed: " << componentOUT.speed.speedx << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "position") == 0)
+            std::cout << "position: " << componentOUT.position.x << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "sprite") == 0)
+            std::cout << "sprite: " << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "player") == 0)
+            std::cout << "player: " << componentOUT.player.id << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "ennemy") == 0)
+            std::cout << "ennemy: " <<componentOUT.enemy.id << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "bullet") == 0)
+            std::cout << "bullet: " << componentOUT.bullet.id << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "tag") == 0)
+            std::cout << "tag: " << componentOUT.tag.tag << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "health") == 0)
+            std::cout << "health: " <<componentOUT.health.health << std::endl;
         if (strcmp(componentOUT.nameStructToSend, "damage") == 0)
-            std::cout << componentOUT.damage.damage << std::endl;
-        // std::cout << static_cast<Damage*>(componentOUT.ptrToStructToSend)->damage << std::endl;
+            std::cout << "damage: " << componentOUT.damage.damage << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "score") == 0)
+            std::cout << "score: " << componentOUT.score.score << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "text") == 0)
+            std::cout << "text: " << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "drawable") == 0)
+            std::cout << "damage: " << componentOUT.drawable.drawable << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "control") == 0)
+            std::cout << "control: " << componentOUT.control.up << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "pattern") == 0)
+            std::cout << "pattern: " << componentOUT.pattern.pattern_index << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "hitbox") == 0)
+            std::cout << "hitbox: " << componentOUT.hitbox.height << std::endl;
     }
     return 0;
 }

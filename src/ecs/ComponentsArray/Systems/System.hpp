@@ -29,7 +29,7 @@ class System {
     protected:
     private:
         std::unordered_map<std::string, sf::Texture> _textures;
-        Network *_ptrNetwork;
+        Network *_ptrNetwork = NULL;
 };
 
 #endif /* !SYSTEM_HPP_ */
