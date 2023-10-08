@@ -25,7 +25,7 @@ const std::string PATH_TO_MISC = "src/jsonfile/json/miscellaneous.json";
 const std::string NO_MAP_LOADED = "No map loaded";
 const int min_level_lenght = 100;  // Temporarily set to 100 [random value]
 const int max_level_lenght = 1000; // Temporarily set to 1000 [random value]
-const bool debugmode = false; // Set to true to enable debug mode, false to disable it
+const bool debugmode = true; // Set to true to enable debug mode, false to disable it
 
 class JsonParser {
 public:

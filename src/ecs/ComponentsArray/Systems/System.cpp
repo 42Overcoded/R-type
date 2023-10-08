@@ -557,7 +557,7 @@ void System::load_texture(registry &r)
     // sf::Texture enemy;
     // sf::Texture enemyTwo;
     // sf::Texture enemyThree;
-    // sf::Texture enemyFour;
+    sf::Texture enemyFour;
     sf::Texture beambar;
     sf::Texture explosion;
     sf::Texture parallax;
@@ -586,8 +586,8 @@ void System::load_texture(registry &r)
         exit(84);
     if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
         exit(84);
-    // if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
-    //     exit(84);
+    if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
+        exit(84);
     if (!enemyBullet.loadFromFile("./assets/enemyBullet.png"))
         exit(84);
     // if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))

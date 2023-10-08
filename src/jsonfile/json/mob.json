@@ -5,7 +5,7 @@
             "sprite": "./assets/enemyStarship.png",
             "stat": {
                 "tag": "enemy",
-                "tag_rect": "EnemyRect", 
+                "tag_rect": "enemyRect", 
                 "health": 2,
                 "score": "10",
                 "state": 0,
@@ -85,20 +85,6 @@
                     "1": 0,
                     "2": 100,
                     "3": 58
-                }
-            }
-        },
-        {
-            "name": "wall",
-            "sprite": "wall.png",
-            "stat": {
-                "health": 100,
-                "score": "10",
-                "state": 0,
-                "scale": 3,
-                "hitbox": {
-                    "width": "33",
-                    "height": "100"
                 }
             }
         }

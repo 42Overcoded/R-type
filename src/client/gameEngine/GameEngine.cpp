@@ -179,9 +179,6 @@ entity_t gameEngine::init_enemies(Mob mob, JsonComportment Comportment, coordina
     _registry.add_component<Clock>(enemy, Clock());
     _registry.add_component<State>(enemy, State());
 
-    _registry.add_component<Pattern>(enemy, Pattern());
-    _registry.add_component<Tag>(enemy, {"enemy 1"});
-
     auto &tag = _registry.get_components<Tag>();
     auto &speed = _registry.get_components<Speed>();
     auto &sprite = _registry.get_components<Sprite>();
@@ -189,7 +186,6 @@ entity_t gameEngine::init_enemies(Mob mob, JsonComportment Comportment, coordina
     auto &hitbox = _registry.get_components<Hitbox>();
     auto &state = _registry.get_components<State>();
     auto &enemy_ = _registry.get_components<Enemy>();
-    auto &pattern = _registry.get_components<Pattern>();
     auto &position = _registry.get_components<Position>();
 
     enemy_[enemy]->score = mob.stats.score;
@@ -200,6 +196,8 @@ entity_t gameEngine::init_enemies(Mob mob, JsonComportment Comportment, coordina
     sprite[enemy]->sprite.setTexture(_system.get_map()[mob.stats.tag]);
     sprite[enemy]->sprite.setTextureRect(_system.get_rect()[mob.stats.tag_rect]);
     if (Comportment.MovementVectorLoop) {
+        _registry.add_component<Pattern>(enemy, Pattern());
+        auto &pattern = _registry.get_components<Pattern>();
         pattern[enemy]->pattern_index = 0; //Always 0 at the initialization
         pattern[enemy]->pattern_type = 0; //Always 0 at the initialization
         pattern[enemy]->pattern = Mv_to_speed(Comportment.movementVector); 
@@ -267,19 +265,19 @@ entity_t gameEngine::init_enemy()
     return enemy;
 }
 
-// void gameEngine::spawn_enemy() {
-//     std::vector<mobspawn> MobSpawn = parsed->getMobSpawn();
-//     Mob mob;
+void gameEngine::spawn_enemy() {
+    std::vector<mobspawn> MobSpawn = parsed->getMobSpawn();
+    Mob mob;
 
-//     JsonComportment comportment;
-//     for (size_t i = 0; i < MobSpawn.size(); i++) {
-//         mob = parsed->getMob(MobSpawn[0].mob_name);
-//         comportment = parsed->getComportment(MobSpawn[i].comportment_id);
-//         for (size_t j = 0; j < MobSpawn[i].spawn.size(); j++) {
-//             entity_t enemy = init_enemy(mob, comportment, MobSpawn[i].spawn[j]);
-//         }
-//     }
-// }
+    JsonComportment comportment;
+    for (size_t i = 0; i < MobSpawn.size(); i++) {
+        mob = parsed->getMob(MobSpawn[0].mob_name);
+        comportment = parsed->getComportment(MobSpawn[i].comportment_id);
+        for (size_t j = 0; j < MobSpawn[i].spawn.size(); j++) {
+            entity_t enemy = init_enemies(mob, comportment, MobSpawn[i].spawn[j]);
+        }
+    }
+}
 
 void gameEngine::init_background(int i)
 {
@@ -642,7 +640,7 @@ void gameEngine::launch_game() {
     for (int i = 0; i < 2; i++)
         init_background(i);
     entity_t starship = init_starship();
-
+    // spawn_enemy(); Does not work ?
     while (_window.isOpen())
     {
         _system.clock_time(_registry);
@@ -656,7 +654,6 @@ void gameEngine::launch_game() {
             if (event.type == sf::Event::Closed)
                 _window.close();
         }
-
         modify_pattern(_registry);
         spawn_wave(_elapsed, wave);
         _system.animate_enemy(_registry);
