@@ -86,6 +86,13 @@ public:
   Mob getMob(std::string name);
 
   /**
+   * @brief Get all the mobs
+   *
+   * @return JsonMobs
+   */
+  JsonMobs getMobs();
+
+  /**
    * @brief Get the mobspawn vector from level
    * 
    * @return std::vector<mobspawn> 

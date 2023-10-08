@@ -12,6 +12,7 @@
 #include "GameEngine.hpp"
 #include "SFML/Graphics.hpp"
 #include "SFML/Graphics/Rect.hpp"
+#include "SFML/Graphics/Text.hpp"
 #include "SFML/Graphics/Texture.hpp"
 #include "SFML/System.hpp"
 #include "SFML/System/Clock.hpp"
@@ -553,10 +554,10 @@ void System::load_texture(registry &r)
 {
     sf::Texture bullet;
     sf::Texture starship;
-    sf::Texture enemy;
-    sf::Texture enemyTwo;
-    sf::Texture enemyThree;
-    sf::Texture enemyFour;
+    // sf::Texture enemy;
+    // sf::Texture enemyTwo;
+    // sf::Texture enemyThree;
+    // sf::Texture enemyFour;
     sf::Texture beambar;
     sf::Texture explosion;
     sf::Texture parallax;
@@ -566,15 +567,15 @@ void System::load_texture(registry &r)
     sf::Texture background;
     sf::IntRect enemyBossBulletRect = sf::IntRect(0, 400, 22 ,20);
     sf::IntRect enemyBossRect = sf::IntRect(0, 0, 200, 250);
-    sf::IntRect enemyTwoRect = sf::IntRect(2, 0, 33, 33);
-    sf::IntRect enemyThreeRect = sf::IntRect(0, 0, 33, 33);
-    sf::IntRect enemyFourRect = sf::IntRect(0, 0, 100, 58);
+    // sf::IntRect enemyTwoRect = sf::IntRect(2, 0, 33, 33);
+    // sf::IntRect enemyThreeRect = sf::IntRect(0, 0, 33, 33);
+    // sf::IntRect enemyFourRect = sf::IntRect(0, 0, 100, 58);
     sf::IntRect LoadBulletRect = sf::IntRect(0, 50, 32, 32);
     sf::IntRect BulletRect = sf::IntRect(249, 80, 16, 16);
     sf::IntRect MediumBulletRect = sf::IntRect(200, 115, 32, 20);
     sf::IntRect BigBulletRect = sf::IntRect(185, 170, 80, 16);
     sf::IntRect StarshipRect = sf::IntRect(0, 0, 33, 18);
-    sf::IntRect EnemyRect = sf::IntRect(0, 0, 32, 32);
+    // sf::IntRect EnemyRect = sf::IntRect(0, 0, 32, 32);
     sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
     sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);
     sf::IntRect ExplosionRect = sf::IntRect(130, 0, 32, 32);
@@ -585,20 +586,20 @@ void System::load_texture(registry &r)
         exit(84);
     if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
         exit(84);
-    if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
-        exit(84);
+    // if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
+    //     exit(84);
     if (!enemyBullet.loadFromFile("./assets/enemyBullet.png"))
         exit(84);
-    if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))
-        exit(84);
-    if  (!enemyTwo.loadFromFile("./assets/enemyScuttle.png"))
-        exit(84);
+    // if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))
+    //     exit(84);
+    // if  (!enemyTwo.loadFromFile("./assets/enemyScuttle.png"))
+    //     exit(84);
     if (!bullet.loadFromFile("./assets/playerBullet.png"))
         exit(84);
     if (!starship.loadFromFile("./assets/starship.png"))
         exit(84);
-    if (!enemy.loadFromFile("./assets/enemyStarship.png"))
-        exit(84);
+    // if (!enemy.loadFromFile("./assets/enemyStarship.png"))
+    //     exit(84);
     if (!beambar.loadFromFile("./assets/beam.png"))
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
@@ -607,32 +608,52 @@ void System::load_texture(registry &r)
         exit(84);
     _textures.insert(std::make_pair("background", background));
     _textures.insert(std::make_pair("enemyBoss", enemyBoss));
-    _textures.insert(std::make_pair("enemyThree", enemyThree));
-    _textures.insert(std::make_pair("enemyTwo", enemyTwo));
+    // _textures.insert(std::make_pair("enemyThree", enemyThree));
+    // _textures.insert(std::make_pair("enemyTwo", enemyTwo));
     _textures.insert(std::make_pair("bullet", bullet));
     _textures.insert(std::make_pair("starship", starship));
-    _textures.insert(std::make_pair("enemy", enemy));
+    // _textures.insert(std::make_pair("enemy", enemy));
     _textures.insert(std::make_pair("beambar", beambar));
     _textures.insert(std::make_pair("explosion", explosion));
     _textures.insert(std::make_pair("parallax", parallax));
     _textures.insert(std::make_pair("enemyBullet", enemyBullet));
-    _textures.insert(std::make_pair("enemyFour", enemyFour));
+    // _textures.insert(std::make_pair("enemyFour", enemyFour));
     _textures.insert(std::make_pair("enemyBossBullet", enemyBoss));
     _textures.insert(std::make_pair("enemyBlueBullet", enemyBlueBullet));
     _rect.insert(std::make_pair("enemyBossBulletRect", enemyBossBulletRect));
-    _rect.insert(std::make_pair("enemyBossRect", enemyBossRect));
-    _rect.insert(std::make_pair("enemyThreeRect", enemyThreeRect));
+    // _rect.insert(std::make_pair("enemyBossRect", enemyBossRect));
+    // _rect.insert(std::make_pair("enemyThreeRect", enemyThreeRect));
     _rect.insert(std::make_pair("bulletRect", BulletRect));
     _rect.insert(std::make_pair("mediumbulletRect", MediumBulletRect));
     _rect.insert(std::make_pair("bigbulletRect", BigBulletRect));
     _rect.insert(std::make_pair("starshipRect", StarshipRect));
-    _rect.insert(std::make_pair("enemyRect", EnemyRect));
+    // _rect.insert(std::make_pair("enemyRect", EnemyRect));
     _rect.insert(std::make_pair("beambarRect", BeambarRect));
     _rect.insert(std::make_pair("fullbeambarRect", FullBeambarRect));
     _rect.insert(std::make_pair("loadbulletRect", LoadBulletRect));
     _rect.insert(std::make_pair("explosionRect", ExplosionRect));
-    _rect.insert(std::make_pair("enemyTwoRect", enemyTwoRect));
-    _rect.insert(std::make_pair("enemyFourRect", enemyFourRect));
+    // _rect.insert(std::make_pair("enemyTwoRect", enemyTwoRect));
+    // _rect.insert(std::make_pair("enemyFourRect", enemyFourRect));
+}
+
+void System::load_mob_texture(registry &r, std::string tag, std::string path)
+{
+    sf::Texture texture;
+
+    if (!texture.loadFromFile(path))
+        exit(84);
+    _textures.insert(std::make_pair(tag, texture));
+}
+void System::load_mob_rect(registry &r, std::string tag, int rect[])
+{
+    sf::IntRect rectangle;
+
+    rectangle.left = rect[0]; //Copiloted need to be tested
+    rectangle.top = rect[1]; //Copiloted need to be tested
+    rectangle.width = rect[2]; //Copiloted need to be tested
+    rectangle.height = rect[3]; //Copiloted need to be tested
+    _rect.insert(std::make_pair(tag, rectangle));
+
 }
 
 void System::clock_time(registry &r)

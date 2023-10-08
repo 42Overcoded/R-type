@@ -15,6 +15,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <random>
 #include <SFML/Window/Keyboard.hpp>
+#include <sched.h>
 #include <ctime>
 
 void gameEngine::register_component_to_game()
@@ -162,6 +163,57 @@ std::vector<Speed> Mv_to_speed(std::vector<MovementVector> movementVector)
         speed.push_back(tmp);
     }
     return speed;
+}
+
+entity_t gameEngine::init_enemies(Mob mob, JsonComportment Comportment, coordinate_spawn coord)
+{
+    entity_t enemy = _registry.spawn_entity();
+
+    _registry.add_component<Position>(enemy, Position());
+    _registry.add_component<Speed>(enemy, Speed());
+    _registry.add_component<Sprite>(enemy, Sprite());
+    _registry.add_component<Drawable>(enemy, Drawable());
+    _registry.add_component<Enemy>(enemy, Enemy());
+    _registry.add_component<Health>(enemy, Health());
+    _registry.add_component<Hitbox>(enemy, Hitbox());
+    _registry.add_component<Clock>(enemy, Clock());
+    _registry.add_component<State>(enemy, State());
+
+    _registry.add_component<Pattern>(enemy, Pattern());
+    _registry.add_component<Tag>(enemy, {"enemy 1"});
+
+    auto &tag = _registry.get_components<Tag>();
+    auto &speed = _registry.get_components<Speed>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &health = _registry.get_components<Health>();
+    auto &hitbox = _registry.get_components<Hitbox>();
+    auto &state = _registry.get_components<State>();
+    auto &enemy_ = _registry.get_components<Enemy>();
+    auto &pattern = _registry.get_components<Pattern>();
+    auto &position = _registry.get_components<Position>();
+
+    enemy_[enemy]->score = mob.stats.score;
+    state[enemy]->state = mob.stats.state;
+    hitbox[enemy]->width = mob.stats.hitbox_width;
+    hitbox[enemy]->height = mob.stats.hitbox_height;
+    health[enemy]->health = mob.stats.hp;
+    sprite[enemy]->sprite.setTexture(_system.get_map()[mob.stats.tag]);
+    sprite[enemy]->sprite.setTextureRect(_system.get_rect()[mob.stats.tag_rect]);
+    if (Comportment.MovementVectorLoop) {
+        pattern[enemy]->pattern_index = 0; //Always 0 at the initialization
+        pattern[enemy]->pattern_type = 0; //Always 0 at the initialization
+        pattern[enemy]->pattern = Mv_to_speed(Comportment.movementVector); 
+        pattern[enemy]->switch_index = Comportment.movementVectorTick;
+        pattern[enemy]->pattern_length = Comportment.movementVectorlenght;
+    }
+    speed[enemy]->speedx = Comportment.movementVector[0].x;
+    speed[enemy]->speedy = Comportment.movementVector[0].y;
+    position[enemy]->x = coord.x;
+    position[enemy]->y = coord.y;
+    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
+    sprite[enemy]->sprite.setScale(mob.stats.scale, mob.stats.scale);
+
+    return enemy;
 }
 
 entity_t gameEngine::init_enemy()
@@ -548,6 +600,16 @@ void gameEngine::init_parallax(int i)
     sprite[parallax]->sprite.setPosition(position[parallax]->x, position[parallax]->y);
 }
 
+void gameEngine::load_texture_rect(void)
+{
+    // _system.load_mob_texture(_registry, ;
+    // Iterate through mob and call the system to load the texture and the rect
+    JsonMobs mobs = parsed->getMobs();
+    for (size_t i = 0; i < mobs.mobs.size(); i++) {
+        _system.load_mob_texture(_registry, mobs.mobs[i].stats.tag, mobs.mobs[i].sprite_path);
+        _system.load_mob_rect(_registry, mobs.mobs[i].stats.tag_rect, mobs.mobs[i].stats.rect);
+    }   
+}
 
 void gameEngine::launch_game() {
     boost::property_tree::ptree pt;

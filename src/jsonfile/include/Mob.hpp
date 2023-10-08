@@ -17,7 +17,10 @@ struct MobStats {
     int hitbox_width; //Width of the hitbox
     int hitbox_height; //Height of the hitbox
     int state; //State of the mob
-    int scale; //Scale of the mob sprite
+    int scale; //Scale of the mob sprite*
+    std::string tag; //Tag of the mob
+    std::string tag_rect; //Tag of the mob rectangle
+    int rect[4]; //Rectangle of the mob
 };
 
 struct Mob {

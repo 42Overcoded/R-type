@@ -4,6 +4,8 @@
             "name": "mob1",
             "sprite": "mob1.png",
             "stat": {
+                "tag": "mob",
+                "tag_rect": "mob_rect", 
                 "health": 2,
                 "score": "10",
                 "state": 0,
@@ -11,7 +13,8 @@
                 "hitbox": {
                     "width": "33",
                     "height": "100"
-                }
+                },
+                "rect": [0, 0, 0, 0]
             }
         },
         {

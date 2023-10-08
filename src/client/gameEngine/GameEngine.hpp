@@ -22,6 +22,7 @@ class gameEngine {
         void register_component_to_game();
         sf::RenderWindow &get_window();
         entity_t init_starship();
+        entity_t init_enemies(Mob, JsonComportment, coordinate_spawn);
         entity_t init_enemy();
         entity_t init_enemy_2();
         entity_t init_enemy_3();
@@ -39,6 +40,7 @@ class gameEngine {
         void modify_pattern(registry &r);
         void init_load_shoot();
         void spawn_mobs(int n1, int n2, int n3, int n4);
+        void load_texture_rect(void);
     protected:
     private:
         JsonParser *parsed;

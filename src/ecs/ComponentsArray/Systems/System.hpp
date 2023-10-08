@@ -23,6 +23,8 @@ class System {
         void velocity_system(registry &r, sf::Time &elapsed);
         void hitbox_system(registry &r);
         void load_texture(registry &r);
+        void load_mob_texture(registry &r, std::string tag, std::string path);
+        void load_mob_rect(registry &r, std::string tag, int rect[]);
         void set_textures(registry &r);
         void death_animation(registry &r);
         void clock_time(registry &r);

@@ -23,6 +23,12 @@ void JsonParser::loadMob()
         newMob.stats.hitbox_height = mob.second.get<int>("stat.hitbox.height");
         newMob.stats.state = mob.second.get<int>("stat.state");
         newMob.stats.scale = mob.second.get<int>("stat.scale");
+        newMob.stats.tag = mob.second.get<std::string>("stat.tag");
+        newMob.stats.tag_rect = mob.second.get<std::string>("stat.tag_rect");
+        newMob.stats.rect[0] = mob.second.get<int>("stat.rect.0");
+        newMob.stats.rect[1] = mob.second.get<int>("stat.rect.1");
+        newMob.stats.rect[2] = mob.second.get<int>("stat.rect.2");
+        newMob.stats.rect[3] = mob.second.get<int>("stat.rect.3");
         mobs.mobs.push_back(newMob);
     }
 }
