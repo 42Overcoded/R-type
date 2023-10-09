@@ -899,6 +899,11 @@ std::unordered_map<std::string, sf::Texture> System::get_map()
     return this->_textures;
 }
 
+std::unordered_map<std::string, sf::IntRect> System::get_rect()
+{
+    return this->_rect;
+}
+
 void System::send_system(registry &r)
 {
     SparseArray<ComponentOUT> &SpAr = r.get_components<ComponentOUT>();

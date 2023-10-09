@@ -69,8 +69,8 @@ int Network::listen_info_from_clients(void)
             std::cout << "sprite: " << std::endl;
         if (strcmp(componentOUT.nameStructToSend, "player") == 0)
             std::cout << "player: " << componentOUT.player.id << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "ennemy") == 0)
-            std::cout << "ennemy: " <<componentOUT.enemy.id << std::endl;
+        // if (strcmp(componentOUT.nameStructToSend, "ennemy") == 0)
+        //     std::cout << "ennemy: " <<componentOUT.enemy.id << std::endl;
         if (strcmp(componentOUT.nameStructToSend, "bullet") == 0)
             std::cout << "bullet: " << componentOUT.bullet.id << std::endl;
         if (strcmp(componentOUT.nameStructToSend, "tag") == 0)
