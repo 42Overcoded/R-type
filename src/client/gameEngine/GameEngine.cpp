@@ -229,8 +229,7 @@ entity_t gameEngine::init_enemy()
 //     }
 // }
 
-void gameEngine::init_background(int i)
-{
+void gameEngine::init_background(int i) {
     entity_t background = _registry.spawn_entity();
 
     _registry.add_component<Position>(background, Position());
@@ -522,32 +521,115 @@ entity_t gameEngine::init_boss()
     return enemy;
 }
 
-void gameEngine::init_parallax(int i)
+void gameEngine::init_menu()
 {
-    boost::property_tree::ptree pt;
-    boost::property_tree::read_json(PATH_TO_MISC, pt);
-    entity_t parallax = _registry.spawn_entity();
+    entity_t menu = _registry.spawn_entity();
+    entity_t play = _registry.spawn_entity();
 
-    _registry.add_component<Position>(parallax, Position());
-    _registry.add_component<Sprite>(parallax, Sprite());
-    _registry.add_component<Drawable>(parallax, Drawable());
-    _registry.add_component<Tag>(parallax, Tag());
-    _registry.add_component<Speed>(parallax, Speed());
+    _registry.add_component<Clock>(menu, Clock());
+    _registry.add_component<Position>(menu, Position());
+    _registry.add_component<Sprite>(menu, Sprite());
+    _registry.add_component<Drawable>(menu, Drawable());
+    _registry.add_component<Tag>(menu, Tag());
 
-    auto &position = _registry.get_components<Position>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &drawable = _registry.get_components<Drawable>();
+    _registry.add_component<Position>(play, Position());
+    _registry.add_component<Sprite>(play, Sprite());
+    _registry.add_component<Drawable>(play, Drawable());
+    _registry.add_component<Tag>(play, Tag());
+
     auto &tag = _registry.get_components<Tag>();
-    auto &speed = _registry.get_components<Speed>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &position = _registry.get_components<Position>();
 
-    speed[parallax]->speedx = pt.get<float>("parallax.speedx", 0);
-    position[parallax]->x = i * pt.get<int>("parallax.position.x", 0);
-    position[parallax]->y = pt.get<int>("parallax.position.y", 0);
-    tag[parallax]->tag = pt.get<std::string>("parallax.tag", "");
-    sprite[parallax]->sprite.setTexture(_system.get_map()[tag[parallax]->tag]);
-    sprite[parallax]->sprite.setPosition(position[parallax]->x, position[parallax]->y);
+    tag[menu]->tag = "menu";
+    sprite[menu]->sprite.setTexture(_system.get_map()["menuButton"]);
+    position[menu]->x = 660;
+    position[menu]->y = 440;
+    sprite[menu]->sprite.setPosition(position[menu]->x, position[menu]->y);
+
+    tag[play]->tag = "play";
+    sprite[play]->sprite.setTexture(_system.get_map()["playButton"]);
+    position[play]->x = 660;
+    position[play]->y = 440;
+    sprite[play]->sprite.setPosition(position[play]->x, position[play]->y);
 }
 
+void gameEngine::menu()
+{
+    auto &tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &position = _registry.get_components<Position>();
+    auto &clock = _registry.get_components<Clock>();
+    auto &text = _registry.get_components<Text>();
+
+    for (size_t i = 0; i < tag.size(); i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "play") {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+        }
+        sf::Event event;
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            if (position[i]->x <= sf::Mouse::getPosition(_window).x && sf::Mouse::getPosition(_window).x <= position[i]->x + 600 && position[i]->y <= sf::Mouse::getPosition(_window).y && sf::Mouse::getPosition(_window).y <= position[i]->y + 200) {
+                if (tag[i]->tag == "menu" && scene == MENU) {
+                    scene = LOBBY;
+                    for (size_t i = 0; i < tag.size(); i++) {
+                        if (tag[i] == std::nullopt)
+                            continue;
+                        if (tag[i]->tag == "play")
+                            clock[i]->clock.restart();
+                    }
+                    _registry.kill_entity(entity_t(i));
+                }
+                if (tag[i]->tag == "play" && scene == LOBBY && clock[i]->time.asSeconds() > 0.5) {
+                    scene = GAME;
+                    _registry.kill_entity(entity_t(i));
+                }
+            }
+        }
+        while (_window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                _window.close();
+        }
+    }
+    if (scene == MENU) {
+        _window.clear(sf::Color::Black);
+        _system.set_textures(_registry);
+        for (size_t i = 0; i < tag.size(); i++) {
+            if (tag[i] == std::nullopt)
+                continue;
+            if (tag[i]->tag == "menu")
+                _window.draw(sprite[i]->sprite);
+        }
+        _window.display();
+    }
+    if (scene == LOBBY)  {
+        _window.clear(sf::Color::Black);
+        _system.set_textures(_registry);
+        for (size_t i = 0; i < tag.size(); i++) {
+            if (tag[i] == std::nullopt)
+                continue;
+            if (tag[i]->tag == "play")
+                _window.draw(sprite[i]->sprite);
+        }
+        _window.display();
+    }
+    if (scene == END) {
+        _window.clear(sf::Color::Black);
+        _system.set_textures(_registry);
+        for (size_t i = 0; i < tag.size(); i++) {
+            if (tag[i] == std::nullopt)
+                continue;
+            if (tag[i]->tag == "score") {
+                text[i]->text.setScale(2, 2);
+                text[i]->text.setPosition(800, 400);
+                _window.draw(text[i]->text);
+            }
+        }
+        _window.display();
+    }
+}
 
 void gameEngine::launch_game() {
     boost::property_tree::ptree pt;
@@ -557,6 +639,7 @@ void gameEngine::launch_game() {
     _window.setFramerateLimit(pt.get<int>("window.framerate", 10));
     register_component_to_game();
     _system.load_texture(_registry);
+    scene = MENU;
     parsed->Load_Map("Test Map"); //Should be changed to the map sellected by the user
     if (parsed->getLoaded_MapName() == NO_MAP_LOADED) {
         std::cout << "No map loaded" << std::endl;
@@ -573,6 +656,7 @@ void gameEngine::launch_game() {
     init_life();
     init_beambar();
     init_load_shoot();
+    init_menu();
     int wave = 0;
     for (int i = 0; i < 2; i++)
         init_background(i);
@@ -580,6 +664,15 @@ void gameEngine::launch_game() {
 
     while (_window.isOpen())
     {
+        auto &health = _registry.get_components<Health>();
+        if (health[starship]->health < 0) {
+            _registry.kill_entity(starship);
+            scene = END;
+        }
+        if (scene == MENU || scene == LOBBY || scene == END) {
+            menu();
+            continue;
+        }
         _system.clock_time(_registry);
         elapsed = clock.getElapsedTime();
         _elapsed = _clock.getElapsedTime();
@@ -673,6 +766,14 @@ void gameEngine::spawn_wave(sf::Time &elapsed, int &wave)
     if (is_enemy == 0 && wave == 4) {
         wave = 5;
         init_boss();
+    }
+    for (size_t i = 0; i < _registry._entity_number; i++) {
+        if (enemy[i] != std::nullopt && wave == 5) {
+            is_enemy++;
+        }
+    }
+    if (wave == 5 && is_enemy == 0) {
+        scene = END;
     }
 }
 
