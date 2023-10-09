@@ -54,11 +54,6 @@ void System::draw_system(registry &r, sf::RenderWindow &window)
     }
 }
 
-void System::setNetwork(Network *ptrNetwork)
-{
-    _ptrNetwork = ptrNetwork;
-}
-
 void System::shoot_system(registry &r, sf::Time &elapsed)
 {
     auto &tag = r.get_components<Tag>();
@@ -902,15 +897,4 @@ std::unordered_map<std::string, sf::Texture> System::get_map()
 std::unordered_map<std::string, sf::IntRect> System::get_rect()
 {
     return this->_rect;
-}
-
-void System::send_system(registry &r)
-{
-    SparseArray<ComponentOUT> &SpAr = r.get_components<ComponentOUT>();
-
-    for (int i = 0; i < SpAr.size(); i++) {
-        if (SpAr[i] != std::nullopt && _ptrNetwork != NULL) {
-            _ptrNetwork->send_info_to_server(SpAr[i]->ptrToThisStruct);
-        }
-    }
 }

@@ -4,13 +4,11 @@
 ** File description:
 ** CLIENT
 */
-#include "Network.hpp"
-#include "TestClassPlayer.hpp"
-#include "TestStructPlayer.hpp"
 
 #include <iostream>
 #include <sstream>
-
+#include "Network.hpp"
+#include "NetworkComponents.hpp"
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 
 Network::Network(std::string ipServer, int portServer)

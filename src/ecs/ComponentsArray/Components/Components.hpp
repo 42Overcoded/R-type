@@ -86,27 +86,6 @@ struct Score {
     int score;
 };
 
-struct ComponentIN {
-    //void *ptrToStructToReceive;
-    void *ptrToThisStruct;
-
-    struct Speed;
-    struct Position;
-    struct Sprite;
-    struct Player;
-    struct Enemy;
-    struct Bullet;
-    struct Tag;
-    struct Health;
-    struct Damage;
-    struct Score;
-    struct Text;
-    struct Drawable;
-    struct Control;
-    struct Pattern;
-    struct Hitbox;
-};
-
 struct Text {
     sf::Text text;
     sf::Font font;
@@ -137,27 +116,6 @@ struct Pattern {
 struct Hitbox {
     int width;
     int height;
-};
-
-struct ComponentOUT {
-    void *ptrToThisStruct;
-    char nameStructToSend[20];
-
-    Speed speed;
-    Position position;
-    Sprite sprite;
-    Player player;
-    Enemy enemy;
-    Bullet bullet;
-    Tag tag;
-    Health health;
-    Damage damage;
-    Score score;
-    Text text;
-    Drawable drawable;
-    Control control;
-    Pattern pattern;
-    Hitbox hitbox;
 };
 
 #endif /* !COMPONENTS_HPP_ */

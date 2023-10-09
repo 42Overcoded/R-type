@@ -4,14 +4,13 @@
 ** File description:
 ** SERVER
 */
+
 #include "Network.hpp"
-#include "TestClassPlayer.hpp"
-#include "TestStructPlayer.hpp"
+#include "NetworkComponents.hpp"
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 
 #include <iostream>
 #include <sstream>
-
 
 Network::Network()
 {
@@ -69,8 +68,6 @@ int Network::listen_info_from_clients(void)
             std::cout << "sprite: " << std::endl;
         if (strcmp(componentOUT.nameStructToSend, "player") == 0)
             std::cout << "player: " << componentOUT.player.id << std::endl;
-        // if (strcmp(componentOUT.nameStructToSend, "ennemy") == 0)
-        //     std::cout << "ennemy: " <<componentOUT.enemy.id << std::endl;
         if (strcmp(componentOUT.nameStructToSend, "bullet") == 0)
             std::cout << "bullet: " << componentOUT.bullet.id << std::endl;
         if (strcmp(componentOUT.nameStructToSend, "tag") == 0)
@@ -92,5 +89,11 @@ int Network::listen_info_from_clients(void)
         if (strcmp(componentOUT.nameStructToSend, "hitbox") == 0)
             std::cout << "hitbox: " << componentOUT.hitbox.height << std::endl;
     }
+    return 0;
+}
+
+int Network::send_info_to_server(void *strucToServer)
+{
+    ptrServSocket->send_to(boost::asio::buffer(strucToServer, sizeof(ComponentOUT)), *ptrCliEndpoint, 0, *ptrError);
     return 0;
 }
