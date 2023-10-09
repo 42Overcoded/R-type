@@ -2,10 +2,10 @@
 ** EPITECH PROJECT, 2023
 ** R-type
 ** File description:
-** ServerSystem
+** SfmlSfmlSystem
 */
 
-#include "System.hpp"
+#include "SfmlSystem.hpp"
 #include <cstddef>
 #include <optional>
 #include "../ecs/Registry.hpp"
@@ -21,7 +21,41 @@
 #include <cmath>
 #include <vector>
 
-void System::load_shoot(registry &r, sf::Time &elapsed)
+void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
+{
+    auto &drawable = r.get_components<Drawable>();
+    auto &text = r.get_components<Text>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &tag = r.get_components<Tag>();
+
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "background") {
+            sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
+            window.draw(sprite[i]->sprite);
+        }
+    }
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (drawable[i] != std::nullopt && position[i] != std::nullopt) {
+            if (tag[i] == std::nullopt)
+                continue;
+            if (tag[i]->tag == "background")
+                continue;
+            if (sprite[i] != std::nullopt && drawable[i]->drawable == true) {
+                sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
+                window.draw(sprite[i]->sprite);
+            }
+            if (text[i] != std::nullopt && drawable[i]->drawable == true) {
+                window.draw(text[i]->text);
+            }
+        }
+    }
+}
+
+
+void SfmlSystem::load_shoot(registry &r, sf::Time &elapsed)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -55,15 +89,18 @@ void System::load_shoot(registry &r, sf::Time &elapsed)
         }
         if (tag[i]->tag == "load_shoot") {
             drawable[i]->drawable = true;
+            sprite[i]->sprite.setTextureRect(_rect["loadbulletRect"]);
         }
         if (tag[i]->tag == "fullbeambar") {
             if (health[i]->health <= 100) {
                 health[i]->health += 50 * elapsed.asSeconds();
             }
+            sprite[i]->sprite.setTextureRect(sf::IntRect(0, 26, (health[i]->health / 100) * 220, 25));
         }
     }
 }
-void System::decharge_shoot(registry &r, sf::Time &elapsed)
+
+void SfmlSystem::decharge_shoot(registry &r, sf::Time &elapsed)
 {
     auto &_tag = r.get_components<Tag>();
     auto &control = r.get_components<Control>();
@@ -117,33 +154,40 @@ void System::decharge_shoot(registry &r, sf::Time &elapsed)
     tag[bullet]->tag = "bullet";
     speed[bullet]->speedy = 0;
     speed[bullet]->speedx = 2;
+    sprite[bullet]->sprite.setTexture(_textures["bullet"]);
+    sprite[bullet]->sprite.setScale(3, 3);
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
             continue;
         }
         if (tag[i]->tag == "starship") {
             r.add_component<Position>(bullet, {position[i]->x + 100, position[i]->y});
+            sprite[bullet]->sprite.setPosition(position[i]->x + 100, position[i]->y);
         }
         if (tag[i]->tag == "fullbeambar") {
             state[bullet]->state = 0;
             hitbox[bullet]->width = _rect["bulletRect"].width * 3;
             hitbox[bullet]->height = _rect["bulletRect"].height * 3;
+            sprite[bullet]->sprite.setTextureRect(_rect["bulletRect"]);
             if (_health[i]->health > 30 && _health[i]->health < 85) {
                 hitbox[bullet]->width = _rect["mediumbulletRect"].width * 3;
                 hitbox[bullet]->height = _rect["mediumbulletRect"].height * 3;
-                state[bullet]->state = 1;;
+                state[bullet]->state = 1;
+                sprite[bullet]->sprite.setTextureRect(_rect["mediumbulletRect"]);
             }
             if (_health[i]->health >= 85) {
                 hitbox[bullet]->width = _rect["bigbulletRect"].width * 3;
                 hitbox[bullet]->height = _rect["bigbulletRect"].height * 3;
                 state[bullet]->state = 2;
+                sprite[bullet]->sprite.setTextureRect(_rect["bigbulletRect"]);
             }
             _health[i]->health = 0;
+            sprite[i]->sprite.setTextureRect(sf::IntRect(0, 26, (health[i]->health / 100) * 220, 25));
         } 
     }
 }
 
-void System::shoot_system(registry &r, sf::Time &elapsed)
+void SfmlSystem::shoot_system(registry &r, sf::Time &elapsed)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -172,7 +216,7 @@ void System::shoot_system(registry &r, sf::Time &elapsed)
     }
 }
 
-void System::velocity_system(registry &r, sf::Time &elapsed)
+void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
 {
     auto &position = r.get_components<Position>();
     auto &speed = r.get_components<Speed>();
@@ -234,7 +278,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
     }
 }
 
-void System::control_system(registry &r)
+void SfmlSystem::control_system(registry &r)
 {
     auto &control = r.get_components<Control>();
     auto &position = r.get_components<Position>();
@@ -245,23 +289,39 @@ void System::control_system(registry &r)
         if (control[i] != std::nullopt && speed[i] != std::nullopt) {
             speed[i]->speedx = 0.0f;
             speed[i]->speedy = 0.0f;
-            if (control[i]->up == true) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                control[i]->up = true;
                 speed[i]->speedy = -0.5f;
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 132, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
-            if (control[i]->down == true) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                control[i]->down = true;
                 speed[i]->speedy = 0.5f;
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
-            if (control[i]->left == true) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                control[i]->left = true;
                 speed[i]->speedx = -0.5f;
             }
-            if (control[i]->right == true) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                control[i]->right = true;
                 speed[i]->speedx = 0.5f;
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 66, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
+            }
+            if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 33, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+                control[i]->shoot = true;
+            } else {
+                control[i]->shoot = false;
             }
         }
     }
 }
 
-void System::hitbox_system(registry &r)
+
+void SfmlSystem::hitbox_system(registry &r)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -273,6 +333,27 @@ void System::hitbox_system(registry &r)
     auto &clock = r.get_components<Clock>();
     auto &enemyBall = r.get_components<EnemyBall>();
 
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt) {
+            continue;
+        }
+        if (tag[i]->tag == "starship" && state[i]->state == 1) {
+            if (clock[i]->__time.asSeconds() > 0 && clock[i]->__time.asSeconds() < 0.5)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+            if (clock[i]->__time.asSeconds() > 0.5 && clock[i]->__time.asSeconds() < 1)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+            if (clock[i]->__time.asSeconds() > 1 && clock[i]->__time.asSeconds() < 1.5)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+            if (clock[i]->__time.asSeconds() > 1.5 && clock[i]->__time.asSeconds() < 2)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+            if (clock[i]->__time.asSeconds() > 2 && clock[i]->__time.asSeconds() < 2.5)
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+            if (clock[i]->__time.asSeconds() > 2.5) {
+                state[i]->state = 0;
+                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+            }
+        }
+    }
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
             continue;
@@ -326,7 +407,108 @@ void System::hitbox_system(registry &r)
     }
 }
 
-void System::death_animation(registry &r)
+void SfmlSystem::life_handler(registry &r, sf::RenderWindow &window)
+{
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
+    auto &health = r.get_components<Health>();
+    auto &sprite = r.get_components<Sprite>();
+
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "life") {
+            for (size_t j = 0; j < r._entity_number; j++) {
+                if (tag[j] == std::nullopt)
+                    continue;
+                if (tag[j]->tag == "starship") {
+                    for (size_t k = 0; k < health[j]->health; k++) {
+                        position[i]->x = 200 + (k * 100);
+                        sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
+                        position[i]->x = 200;
+                        window.draw(sprite[i]->sprite);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void SfmlSystem::set_textures(registry &r)
+{
+    auto &sprite = r.get_components<Sprite>();
+    auto &tag = r.get_components<Tag>();
+    auto &text = r.get_components<Text>();
+    auto &searching = r.get_components<SearchingHead>();
+
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt) {
+            continue;
+        }
+        if (tag[i]->tag == "starship") {
+            sprite[i]->sprite.setTexture(_textures["starship"]);
+        }
+        if (tag[i]->tag == "bullet") {
+            sprite[i]->sprite.setTexture(_textures["bullet"]);
+        }
+        if (tag[i]->tag == "enemy 1") {
+            sprite[i]->sprite.setTexture(_textures["enemy"]);
+        }
+        if (tag[i]->tag == "beambar") {
+            sprite[i]->sprite.setTexture(_textures["beambar"]);
+        }
+        if (tag[i]->tag == "fullbeambar") {
+            sprite[i]->sprite.setTexture(_textures["beambar"]);
+        }
+        if (tag[i]->tag == "load_shoot") {
+            sprite[i]->sprite.setTexture(_textures["bullet"]);
+        }
+        if (tag[i]->tag == "explosion") {
+            sprite[i]->sprite.setTexture(_textures["explosion"]);
+        }
+        if (tag[i]->tag == "score") {
+            text[i]->text.setFont(text[i]->font);
+        }
+        if (tag[i]->tag == "life") {
+            sprite[i]->sprite.setTexture(_textures["starship"]);
+        }
+        if (tag[i]->tag == "parallax") {
+            sprite[i]->sprite.setTexture(_textures["parallax"]);
+        }
+        if (tag[i]->tag == "enemy 2") {
+            sprite[i]->sprite.setTexture(_textures["enemyTwo"]);
+        }
+        if (tag[i]->tag == "enemy 3") {
+            sprite[i]->sprite.setTexture(_textures["enemyThree"]);
+        }
+        if (tag[i]->tag == "enemy 4") {
+            sprite[i]->sprite.setTexture(_textures["enemyFour"]);
+        }
+        if (tag[i]->tag == "enemyBullet") {
+            sprite[i]->sprite.setTexture(_textures["enemyBullet"]);
+        }
+        if (tag[i]->tag == "enemyBlueBullet") {
+            sprite[i]->sprite.setTexture(_textures["enemyBlueBullet"]);
+        }
+        if (tag[i]->tag == "enemyBoss") {
+            sprite[i]->sprite.setTexture(_textures["enemyBoss"]);
+        }
+        if (tag[i]->tag == "enemyBossBullet") {
+            sprite[i]->sprite.setTexture(_textures["enemyBossBullet"]);
+        }
+        if (tag[i]->tag == "background") {
+            sprite[i]->sprite.setTexture(_textures["background"]);
+        }
+        if (tag[i]->tag == "menu") {
+            sprite[i]->sprite.setTexture(_textures["menuButton"]);
+        }
+        if (tag[i]->tag == "play") {
+            sprite[i]->sprite.setTexture(_textures["playButton"]);
+        }
+    }
+}
+
+void SfmlSystem::death_animation(registry &r)
 {
     auto &drawable = r.get_components<Drawable>();
     auto &sprite = r.get_components<Sprite>();
@@ -357,6 +539,7 @@ void System::death_animation(registry &r)
                 if (state[i]->state >= 6) {
                     r.kill_entity(entity_t(i));
                 }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["explosionRect"].left + (32*state[i]->state), _rect["explosionRect"].top, _rect["explosionRect"].width, _rect["explosionRect"].height));
                 state[i]->state += 1;
                 clock[i]->clock.restart();
             }
@@ -368,6 +551,7 @@ void System::death_animation(registry &r)
                         continue;
                     if (tag[j]->tag == "score") {
                         state[j]->state += enemy[i]->score;
+                        text[j]->text.setString(text[j]->str + std::to_string(state[j]->state));
                     }
                 }
                 entity_t explosion = r.spawn_entity();
@@ -389,6 +573,13 @@ void System::death_animation(registry &r)
                 position[explosion]->y = position[i]->y;
                 tag[explosion]->tag = "explosion";
                 drawable[explosion]->drawable = true;
+                sprite[explosion]->sprite.setTexture(_textures["explosion"]);
+                sprite[explosion]->sprite.setTextureRect(sf::IntRect(0, 0, 0, 0));
+                sprite[explosion]->sprite.setScale(3, 3);
+                if (tag[i]->tag == "enemy 4")
+                    sprite[explosion]->sprite.setScale(5, 5);
+                if (tag[i]->tag == "enemyBoss")
+                    sprite[explosion]->sprite.setScale(10, 10);
                 r.kill_entity(entity_t(i));
 
             }
@@ -396,7 +587,101 @@ void System::death_animation(registry &r)
     }
 }
 
-void System::clock_time(registry &r)
+void SfmlSystem::load_texture(registry &r)
+{
+    sf::Texture bullet;
+    sf::Texture starship;
+    sf::Texture enemy;
+    sf::Texture enemyTwo;
+    sf::Texture enemyThree;
+    sf::Texture enemyFour;
+    sf::Texture beambar;
+    sf::Texture explosion;
+    sf::Texture parallax;
+    sf::Texture enemyBullet;
+    sf::Texture enemyBlueBullet;
+    sf::Texture enemyBoss;
+    sf::Texture background;
+    sf::Texture menuButton;
+    sf::Texture playButton;
+    sf::IntRect enemyBossBulletRect = sf::IntRect(0, 400, 23 ,20);
+    sf::IntRect enemyBossRect = sf::IntRect(0, 0, 200, 250);
+    sf::IntRect enemyTwoRect = sf::IntRect(2, 0, 33, 33);
+    sf::IntRect enemyThreeRect = sf::IntRect(0, 0, 33, 33);
+    sf::IntRect enemyFourRect = sf::IntRect(0, 0, 100, 58);
+    sf::IntRect LoadBulletRect = sf::IntRect(0, 50, 32, 32);
+    sf::IntRect BulletRect = sf::IntRect(249, 80, 16, 16);
+    sf::IntRect MediumBulletRect = sf::IntRect(200, 115, 32, 20);
+    sf::IntRect BigBulletRect = sf::IntRect(185, 170, 80, 16);
+    sf::IntRect StarshipRect = sf::IntRect(0, 0, 33, 18);
+    sf::IntRect EnemyRect = sf::IntRect(0, 0, 32, 32);
+    sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
+    sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);
+    sf::IntRect ExplosionRect = sf::IntRect(130, 0, 32, 32);
+
+    if (!menuButton.loadFromFile("./assets/lobby.png"))
+        exit(84);
+    if (!playButton.loadFromFile("./assets/start.png"))
+        exit(84);
+    if (!background.loadFromFile("./assets/background.png"))
+        exit(84);
+    if (!enemyBoss.loadFromFile("./assets/enemyBoss.png"))
+        exit(84);
+    if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
+        exit(84);
+    if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
+        exit(84);
+    if (!enemyBullet.loadFromFile("./assets/enemyBullet.png"))
+        exit(84);
+    if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))
+        exit(84);
+    if  (!enemyTwo.loadFromFile("./assets/enemyScuttle.png"))
+        exit(84);
+    if (!bullet.loadFromFile("./assets/playerBullet.png"))
+        exit(84);
+    if (!starship.loadFromFile("./assets/starship.png"))
+        exit(84);
+    if (!enemy.loadFromFile("./assets/enemyStarship.png"))
+        exit(84);
+    if (!beambar.loadFromFile("./assets/beam.png"))
+        exit(84);
+    if (!explosion.loadFromFile("./assets/explosion.png"))
+        exit(84);
+    if (!parallax.loadFromFile("./assets/level1Back.png"))
+        exit(84);
+    _textures.insert(std::make_pair("menuButton", menuButton));
+    _textures.insert(std::make_pair("playButton", playButton));
+    _textures.insert(std::make_pair("background", background));
+    _textures.insert(std::make_pair("enemyBoss", enemyBoss));
+    _textures.insert(std::make_pair("enemyThree", enemyThree));
+    _textures.insert(std::make_pair("enemyTwo", enemyTwo));
+    _textures.insert(std::make_pair("bullet", bullet));
+    _textures.insert(std::make_pair("starship", starship));
+    _textures.insert(std::make_pair("enemy", enemy));
+    _textures.insert(std::make_pair("beambar", beambar));
+    _textures.insert(std::make_pair("explosion", explosion));
+    _textures.insert(std::make_pair("parallax", parallax));
+    _textures.insert(std::make_pair("enemyBullet", enemyBullet));
+    _textures.insert(std::make_pair("enemyFour", enemyFour));
+    _textures.insert(std::make_pair("enemyBossBullet", enemyBoss));
+    _textures.insert(std::make_pair("enemyBlueBullet", enemyBlueBullet));
+    _rect.insert(std::make_pair("enemyBossBulletRect", enemyBossBulletRect));
+    _rect.insert(std::make_pair("enemyBossRect", enemyBossRect));
+    _rect.insert(std::make_pair("enemyThreeRect", enemyThreeRect));
+    _rect.insert(std::make_pair("bulletRect", BulletRect));
+    _rect.insert(std::make_pair("mediumbulletRect", MediumBulletRect));
+    _rect.insert(std::make_pair("bigbulletRect", BigBulletRect));
+    _rect.insert(std::make_pair("starshipRect", StarshipRect));
+    _rect.insert(std::make_pair("enemyRect", EnemyRect));
+    _rect.insert(std::make_pair("beambarRect", BeambarRect));
+    _rect.insert(std::make_pair("fullbeambarRect", FullBeambarRect));
+    _rect.insert(std::make_pair("loadbulletRect", LoadBulletRect));
+    _rect.insert(std::make_pair("explosionRect", ExplosionRect));
+    _rect.insert(std::make_pair("enemyTwoRect", enemyTwoRect));
+    _rect.insert(std::make_pair("enemyFourRect", enemyFourRect));
+}
+
+void SfmlSystem::clock_time(registry &r)
 {
     auto &_clock = r.get_components<Clock>();
     auto &_tag = r.get_components<Tag>();
@@ -412,7 +697,7 @@ void System::clock_time(registry &r)
     }
 }
 
-void System::animate_enemy(registry &r)
+void SfmlSystem::animate_enemy(registry &r)
 {
     auto &sprite = r.get_components<Sprite>();
     auto &tag = r.get_components<Tag>();
@@ -429,6 +714,7 @@ void System::animate_enemy(registry &r)
                 if (state[i]->state == 7) {
                     state[i]->state = 0;
                 }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["enemyRect"].left + (32*state[i]->state), _rect["enemyRect"].top, _rect["enemyRect"].width, _rect["enemyRect"].height));
                 clock[i]->clock.restart();
             }
         }
@@ -439,6 +725,7 @@ void System::animate_enemy(registry &r)
                 if (state[i]->state == 7) {
                     state[i]->state = 0;
                 }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["enemyTwoRect"].left + (33*state[i]->state), _rect["enemyTwoRect"].top, _rect["enemyTwoRect"].width, _rect["enemyTwoRect"].height));
                 clock[i]->clock.restart();
             }
         }
@@ -449,6 +736,7 @@ void System::animate_enemy(registry &r)
                 if (state[i]->state == 3) {
                     state[i]->state = 0;
                 }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["enemyThreeRect"].left + (33*state[i]->state), _rect["enemyThreeRect"].top, _rect["enemyThreeRect"].width, _rect["enemyThreeRect"].height));
                 clock[i]->clock.restart();
             }
         }
@@ -459,6 +747,7 @@ void System::animate_enemy(registry &r)
                 if (state[i]->state == 3) {
                     state[i]->state = 0;
                 }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["enemyFourRect"].left + (100*state[i]->state), _rect["enemyFourRect"].top, _rect["enemyFourRect"].width, _rect["enemyFourRect"].height));
                 clock[i]->clock.restart();
             }
         }
@@ -469,6 +758,7 @@ void System::animate_enemy(registry &r)
                 if (state[i]->state == 8) {
                     state[i]->state = 0;
                 }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["enemyBossRect"].left + (200*state[i]->state), _rect["enemyBossRect"].top, _rect["enemyBossRect"].width, _rect["enemyBossRect"].height));
                 clock[i]->clock.restart();
             }
         }
@@ -479,13 +769,14 @@ void System::animate_enemy(registry &r)
                 if (state[i]->state == 4) {
                     state[i]->state = 0;
                 }
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["enemyBossBulletRect"].left + (23*state[i]->state), _rect["enemyBossBulletRect"].top, _rect["enemyBossBulletRect"].width, _rect["enemyBossBulletRect"].height));
                 clock[i]->clock.restart();
             }
         }
     }
 }
 
-void System::shoot_enemy(registry &r) {
+void SfmlSystem::shoot_enemy(registry &r) {
     auto &tag = r.get_components<Tag>();
     auto &clock = r.get_components<Clock>();
     auto &enemy = r.get_components<Enemy>();
@@ -527,6 +818,8 @@ void System::shoot_enemy(registry &r) {
                     tag[bullet]->tag = "enemyBullet";
                     hitbox[bullet]->width = 24;
                     hitbox[bullet]->height = 24;
+                    sprite[bullet]->sprite.setTexture(_textures["enemyBullet"]);
+                    sprite[bullet]->sprite.setScale(2, 2);
 
                     for (size_t j = 0; j < r._entity_number; j++) {
                         if (tag[j] == std::nullopt)
@@ -569,6 +862,8 @@ void System::shoot_enemy(registry &r) {
                 tag[bullet]->tag = "enemyBlueBullet";
                 hitbox[bullet]->width = 32;
                 hitbox[bullet]->height = 32;
+                sprite[bullet]->sprite.setTexture(_textures["enemyBlueBullet"]);
+                sprite[bullet]->sprite.setScale(2, 2);
                 for (size_t j = 0; j < r._entity_number; j++) {
                     if (tag[j] == std::nullopt)
                         continue;
@@ -611,6 +906,9 @@ void System::shoot_enemy(registry &r) {
                 tag[bullet]->tag = "enemyBossBullet";
                 hitbox[bullet]->width = 66;
                 hitbox[bullet]->height = 66;
+                sprite[bullet]->sprite.setTexture(_textures["enemyBossBullet"]);
+                sprite[bullet]->sprite.setTextureRect(_rect["enemyBossBulletRect"]);
+                sprite[bullet]->sprite.setScale(3, 3);
                 for (size_t j = 0; j < r._entity_number; j++) {
                     if (tag[j] == std::nullopt)
                         continue;
@@ -637,41 +935,12 @@ void System::shoot_enemy(registry &r) {
     }
 }
 
-
-void System::load_rect(registry &r)
+std::unordered_map<std::string, sf::Texture> SfmlSystem::get_map()
 {
-    RectSimulate enemyBossBulletRect = {0, 400, 23 ,20};
-    RectSimulate enemyBossRect = {0, 0, 200, 250};
-    RectSimulate enemyTwoRect = {2, 0, 33, 33};
-    RectSimulate enemyThreeRect = {0, 0, 33, 33};
-    RectSimulate enemyFourRect = {0, 0, 100, 58};
-    RectSimulate LoadBulletRect = {0, 50, 32, 32};
-    RectSimulate BulletRect = {249, 80, 16, 16};
-    RectSimulate MediumBulletRect = {200, 115, 32, 20};
-    RectSimulate BigBulletRect = {185, 170, 80, 16};
-    RectSimulate StarshipRect = {0, 0, 33, 18};
-    RectSimulate EnemyRect = {0, 0, 32, 32};
-    RectSimulate BeambarRect = {0, 0, 250, 25};
-    RectSimulate FullBeambarRect = {0, 26, 0, 25};
-    RectSimulate ExplosionRect = {130, 0, 32, 32};
-
-    _rect.insert(std::make_pair("enemyBossBulletRect", enemyBossBulletRect));
-    _rect.insert(std::make_pair("enemyBossRect", enemyBossRect));
-    _rect.insert(std::make_pair("enemyThreeRect", enemyThreeRect));
-    _rect.insert(std::make_pair("bulletRect", BulletRect));
-    _rect.insert(std::make_pair("mediumbulletRect", MediumBulletRect));
-    _rect.insert(std::make_pair("bigbulletRect", BigBulletRect));
-    _rect.insert(std::make_pair("starshipRect", StarshipRect));
-    _rect.insert(std::make_pair("enemyRect", EnemyRect));
-    _rect.insert(std::make_pair("beambarRect", BeambarRect));
-    _rect.insert(std::make_pair("fullbeambarRect", FullBeambarRect));
-    _rect.insert(std::make_pair("loadbulletRect", LoadBulletRect));
-    _rect.insert(std::make_pair("explosionRect", ExplosionRect));
-    _rect.insert(std::make_pair("enemyTwoRect", enemyTwoRect));
-    _rect.insert(std::make_pair("enemyFourRect", enemyFourRect));
+    return this->_textures;
 }
 
-std::unordered_map<std::string, RectSimulate> System::get_rect()
+std::unordered_map<std::string, sf::IntRect> SfmlSystem::get_rect()
 {
     return this->_rect;
 }
