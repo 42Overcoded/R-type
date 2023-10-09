@@ -9,8 +9,8 @@
 
 void JsonParser::parseMovementVector(const boost::property_tree::ptree& mvptree, std::vector<MovementVector>& movementVector) {
     MovementVector mv;
-    mv.x = mvptree.get<int>("x");
-    mv.y = mvptree.get<int>("y");
+    mv.x = mvptree.get<float>("x");
+    mv.y = mvptree.get<float>("y");
     movementVector.push_back(mv);
 }
 
@@ -24,6 +24,7 @@ void JsonParser::parseComportment(const boost::property_tree::ptree& cptree, Jso
     for (const auto& item : mvTree) {
         parseMovementVector(item.second, comportment.movementVector);
     }
+    comportment.movementVectorlenght = comportment.movementVector.size();
 }
 
 void JsonParser::loadComportment()

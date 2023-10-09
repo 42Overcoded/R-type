@@ -8,6 +8,9 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
+#include "SFML/System/Clock.hpp"
+#include "SFML/System/Time.hpp"
+#include "boost/thread/futures/future_status.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -19,15 +22,36 @@
  * @brief Components of the ecs can add more if needed
  * 
  */
-
 struct Speed {
-    float speedy;
-    float speedx;
+    float speedy = 0;
+    float speedx = 0;
+};
+
+struct State {
+    int state = 0;
+    int index = 0;
+};
+
+struct Clock {
+    sf::Time time;
+    sf::Clock clock;
+    sf::Time _time;
+    sf::Clock _clock;
+    sf::Time __time;
+    sf::Clock __clock;
 };
 
 struct Position {
-    int x;
-    int y;
+    float x = 0.0f;
+    float y = 0.0f;
+};
+
+struct EnemyBall {
+    bool enemyball = true;
+};
+
+struct SearchingHead {
+    bool searching = true;
 };
 
 struct Sprite {
@@ -39,7 +63,7 @@ struct Player {
 };
 
 struct Enemy {
-    int id;
+    int score;
 };
 
 struct Bullet {
@@ -51,7 +75,7 @@ struct Tag {
 };
 
 struct Health {
-    int health;
+    float health;
 };
 
 struct Damage {
@@ -85,10 +109,12 @@ struct ComponentIN {
 
 struct Text {
     sf::Text text;
+    sf::Font font;
+    std::string str;
 };
 
 struct Drawable {
-    bool drawable;
+    bool drawable = true;
 };
 
 struct Control {
@@ -96,7 +122,7 @@ struct Control {
     bool down = false;
     bool left = false;
     bool right = false;
-    bool shoot;
+    bool shoot = false;
 };
 
 struct Pattern {

@@ -21,6 +21,7 @@
 const std::string PATH_TO_COMPORTEMENT = "src/jsonfile/json/comportment.json";
 const std::string PATH_TO_MOB = "src/jsonfile/json/mob.json";
 const std::string PATH_TO_MAP_FOLDER = "src/jsonfile/json/map/";
+const std::string PATH_TO_MISC = "src/jsonfile/json/miscellaneous.json";
 const std::string NO_MAP_LOADED = "No map loaded";
 const int min_level_lenght = 100;  // Temporarily set to 100 [random value]
 const int max_level_lenght = 1000; // Temporarily set to 1000 [random value]
@@ -63,12 +64,39 @@ public:
   std::vector<std::string> getMapNames();
 
   /**
-   * @brief Load the specified map data in the registry ECS
-   * @param address of the registry
+   * @brief Open the specified map json and fill the JsonLevel struct
+   *
    * @param mapName name of the map to load
    */
-  void Load_Map_in_ECS(registry &reg, std::string mapName);
+  void Load_Map(std::string name);
 
+  //getters
+  /**
+   * @brief Get the Comportment with the specified id
+   *
+   * @return JsonComportment
+   */
+  JsonComportment getComportment(int id);
+
+  /**
+   * @brief Get the Mob with the specified name
+   * 
+   * @return Mob
+   */
+  Mob getMob(std::string name);
+
+  /**
+   * @brief Get the mobspawn vector from level
+   * 
+   * @return std::vector<mobspawn> 
+   */
+  std::vector<mobspawn> getMobSpawn();
+
+  /**
+   * @brief get Loaded_MapName
+   * 
+   */
+  std::string getLoaded_MapName();
 
 protected:
 private:
@@ -102,12 +130,6 @@ private:
     to each game level
    */
   void loadMap_Name();
-  /**
-   * @brief Open the specified map json and fill the JsonLevel struct
-   *
-   * @param mapName name of the map to load
-   */
-  void Load_Map(std::string name);
   /**
    * @brief Open the Comportment json and fill the JsonComportments struct
    *
