@@ -23,7 +23,6 @@ class System {
     public:
         System() = default;
         void shoot_system(registry &r, sf::Time &elapsed);
-        void draw_system(registry &r, sf::RenderWindow &window);
         void set_texture(registry &r);
         void control_system(registry &r);
         void velocity_system(registry &r, sf::Time &elapsed);
@@ -32,7 +31,6 @@ class System {
         void death_animation(registry &r);
         void clock_time(registry &r);
         void animate_enemy(registry &r);
-        void life_handler(registry &r, sf::RenderWindow &window);
         void shoot_enemy(registry &r);
         void decharge_shoot(registry &r, sf::Time &elapsed);
         void load_shoot(registry &r, sf::Time &elapsed);

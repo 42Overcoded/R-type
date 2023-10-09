@@ -33,6 +33,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(INCLUDES
     Server.hpp
     game/Game.hpp
+    game/GameEngineServer.hpp
+    ../ecs/Registry.hpp
+    ../ecs/ComponentsArray/SparseArray.hpp
+    ../ecs/ComponentsArray/Components/Components.hpp
+    ../ecs/ComponentsArray/Systems/ServerSystem.hpp
     ../network_s/Network.hpp
     ../network_s/TestClassPlayer.hpp
     ../jsonfile/include/Comportment.hpp
@@ -44,6 +49,10 @@ set(INCLUDES
 set(EXEC_SRC
     Server.cpp
     game/Game.cpp
+    game/GameEngineServer.cpp
+    ../ecs/Registry.cpp
+    ../ecs/ComponentsArray/Components/Components.cpp
+    ../ecs/ComponentsArray/Systems/ServerSystem.cpp
     ../network_s/Network.cpp
     ../network_s/TestClassPlayer.cpp
     ../jsonfile/src/ComportmentParser.cpp
