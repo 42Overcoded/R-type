@@ -13,7 +13,7 @@
 #include "SFML/System/Time.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "../ecs/ComponentsArray/Systems/System.hpp"
+#include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 
 enum Scene {
     MENU,
@@ -55,7 +55,7 @@ class gameEngine {
         sf::Time elapsed;
         sf::Clock clock;
         sf::RenderWindow _window;
-        System _system;
+        SfmlSystem _system;
         registry _registry;
 };
 

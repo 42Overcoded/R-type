@@ -43,6 +43,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/System.hpp
+    ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     gameEngine/GameEngine.hpp
     ../network_c/Network.hpp
     ../network_c/TestClassPlayer.hpp
@@ -53,6 +54,7 @@ set(EXEC_SRC
     ../ecs/Registry.cpp
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/System.cpp
+    ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     gameEngine/GameEngine.cpp
     gameEngine/game/Game.cpp
     gameEngine/graphics/Graphic.cpp
