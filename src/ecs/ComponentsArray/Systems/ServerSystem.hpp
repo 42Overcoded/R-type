@@ -10,6 +10,7 @@
 
 #include <cstddef>
 #include "../../Registry.hpp"
+#include "../../../network_c/Network.hpp"
 #include "SFML/System/Clock.hpp"
 
 struct RectSimulate {

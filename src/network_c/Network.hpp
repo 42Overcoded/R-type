@@ -15,11 +15,12 @@ class Network {
         boost::asio::ip::udp::endpoint *ptrServEndpoint;
         boost::asio::ip::udp::socket *ptrCliSocket;
         boost::system::error_code *ptrError;
+        std::string _ipServer;
+        int _portServer;
     public:
-        Network();
+        Network(std::string ipServer, int portServer = 4242);
         ~Network();
-        int create_client(std::string ipServer, int portServer = 4242);
-        int send_info_to_server(void *object_player = NULL, void *object_command = NULL);
+        int send_info_to_server(void *strucToServer);
 };
 
 #endif
