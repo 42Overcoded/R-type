@@ -296,7 +296,7 @@ void gameEngine::init_life() {
     _registry.add_component<Position>(life, Position());
     _registry.add_component<Sprite>(life, Sprite());
     _registry.add_component<Tag>(life, Tag());
-    
+
     auto &tag = _registry.get_components<Tag>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &position = _registry.get_components<Position>();

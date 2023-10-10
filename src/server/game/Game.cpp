@@ -4,10 +4,10 @@
 #include "../jsonfile/include/JsonParser.hpp"
 #include "GameEngineServer.hpp"
 
-int game()
+int game(unsigned int portNumber)
 {
     registry r;
-    gameEngine game(r);
+    gameEngine game(r, portNumber);
     game.launch_game();
     return 0;
 }

@@ -44,15 +44,10 @@ private:
     boost::array<char, 1> recv_buffer_;
 };
 
+const unsigned int DefaultPort = 4242;
 const std::size_t packetHeaderSize = sizeof(std::uint8_t) +   // Packet flags
                                      sizeof(std::uint64_t) +  // Packet ID
                                      sizeof(std::uint64_t);   // Packet data size
 const unsigned int PacketElemNbr = 4;
-
-struct Transmission
-{
-    std::uint8_t flag;
-    std::uint64_t size;
-};
 
 #endif
