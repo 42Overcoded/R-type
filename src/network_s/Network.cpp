@@ -4,15 +4,13 @@
 ** File description:
 ** SERVER
 */
-#include "Network.hpp"
-#include "TestClassPlayer.hpp"
 
-#include "boost/archive/text_oarchive.hpp"
-#include "boost/archive/text_iarchive.hpp"
+#include "Network.hpp"
+#include "NetworkComponents.hpp"
+#include "../ecs/ComponentsArray/Components/Components.hpp"
 
 #include <iostream>
 #include <sstream>
-
 
 Network::Network()
 {
@@ -52,43 +50,50 @@ int Network::create_server(int portServer)
 
 int Network::listen_info_from_clients(void)
 {
-    testPlayer *TestPlayer = new testPlayer();
+    ComponentOUT componentOUT;
 
     while (true) {
-        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(cliMessage), *ptrCliEndpoint, 0, *ptrError);
-        //totalReceived = ptrServSocket->receive_from(boost::asio::buffer(TestPlayer, sizeof(*TestPlayer)), *ptrCliEndpoint, 0, *ptrError);
+        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(&componentOUT, sizeof(componentOUT)), *ptrCliEndpoint, 0, *ptrError);
 
         if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
             std::cout << "Erreur de connexion: " << ptrError->message() << std::endl;
             break;
         }
 
-        std::stringstream strstr;
-        strstr << cliMessage;
-        boost::archive::text_iarchive ia(strstr);
-        ia >> *TestPlayer;
-
-        if (TestPlayer != NULL) {
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->name << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->level << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->hp << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->armor << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->drip << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->c << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << TestPlayer->array << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
-        } else {
-            std::cout << "NULL" << std::endl;
-        }
-        break;
+        if (strcmp(componentOUT.nameStructToSend, "speed") == 0)
+            std::cout << "speed: " << componentOUT.speed.speedx << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "position") == 0)
+            std::cout << "position: " << componentOUT.position.x << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "sprite") == 0)
+            std::cout << "sprite: " << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "player") == 0)
+            std::cout << "player: " << componentOUT.player.id << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "bullet") == 0)
+            std::cout << "bullet: " << componentOUT.bullet.id << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "tag") == 0)
+            std::cout << "tag: " << componentOUT.tag.tag << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "health") == 0)
+            std::cout << "health: " <<componentOUT.health.health << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "damage") == 0)
+            std::cout << "damage: " << componentOUT.damage.damage << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "score") == 0)
+            std::cout << "score: " << componentOUT.score.score << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "text") == 0)
+            std::cout << "text: " << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "drawable") == 0)
+            std::cout << "damage: " << componentOUT.drawable.drawable << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "control") == 0)
+            std::cout << "control: " << componentOUT.control.up << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "pattern") == 0)
+            std::cout << "pattern: " << componentOUT.pattern.pattern_index << std::endl;
+        if (strcmp(componentOUT.nameStructToSend, "hitbox") == 0)
+            std::cout << "hitbox: " << componentOUT.hitbox.height << std::endl;
     }
-    delete TestPlayer;
+    return 0;
+}
+
+int Network::send_info_to_server(void *strucToServer)
+{
+    ptrServSocket->send_to(boost::asio::buffer(strucToServer, sizeof(ComponentOUT)), *ptrCliEndpoint, 0, *ptrError);
     return 0;
 }

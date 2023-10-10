@@ -39,7 +39,8 @@ set(INCLUDES
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/ServerSystem.hpp
     ../network_s/Network.hpp
-    ../network_s/TestClassPlayer.hpp
+    ../network_s/NetworkComponents.hpp
+    ../network_s/NetworkSystems.hpp
     ../jsonfile/include/Comportment.hpp
     ../jsonfile/include/JsonParser.hpp
     ../jsonfile/include/MapLevel.hpp
@@ -54,7 +55,7 @@ set(EXEC_SRC
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/ServerSystem.cpp
     ../network_s/Network.cpp
-    ../network_s/TestClassPlayer.cpp
+    ../network_s/NetworkSystems.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
     ../jsonfile/src/JsonParser.cpp
@@ -66,7 +67,7 @@ set(EXEC_SRC
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network_s)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)

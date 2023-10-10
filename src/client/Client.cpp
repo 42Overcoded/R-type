@@ -14,6 +14,5 @@
 int main() {
     registry r;
     gameEngine game(r);
-
     game.launch_game();
 }
