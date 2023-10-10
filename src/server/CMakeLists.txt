@@ -5,7 +5,15 @@ set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(FetchContent)
 
-set(BOOST_INCLUDE_LIBRARIES asio serialization filesystem system property_tree)
+# Fetch and include SFML
+FetchContent_Declare(
+    SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.0
+)
+FetchContent_MakeAvailable(SFML)
+
+set(BOOST_INCLUDE_LIBRARIES asio filesystem system property_tree)
 set(BOOST_ENABLE_CMAKE ON)
 
 # Fetch and include Boost.Asio
@@ -33,9 +41,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(INCLUDES
     Server.hpp
     game/Game.hpp
+    game/GameEngineServer.hpp
+    ../ecs/Registry.hpp
+    ../ecs/ComponentsArray/SparseArray.hpp
+    ../ecs/ComponentsArray/Components/Components.hpp
+    ../ecs/ComponentsArray/Systems/ServerSystem.hpp
     ../network_s/Network.hpp
+    ../network_s/NetworkComponents.hpp
     ../network_s/NetworkComponent.hpp
-    ../network_s/NetworkSystem.hpp
+    ../network_s/NetworkSystems.hpp
     ../jsonfile/include/Comportment.hpp
     ../jsonfile/include/JsonParser.hpp
     ../jsonfile/include/MapLevel.hpp
@@ -45,7 +59,12 @@ set(INCLUDES
 set(EXEC_SRC
     Server.cpp
     game/Game.cpp
+    game/GameEngineServer.cpp
+    ../ecs/Registry.cpp
+    ../ecs/ComponentsArray/Components/Components.cpp
+    ../ecs/ComponentsArray/Systems/ServerSystem.cpp
     ../network_s/Network.cpp
+    ../network_s/NetworkSystems.cpp
     ../network_s/NetworkSystem.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
@@ -61,7 +80,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network_s)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
+target_link_libraries(${PROJECT_NAME} sfml-system Boost::asio Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

@@ -12,13 +12,7 @@
 #include "../network_c/Network.hpp"
 
 int main() {
-    registry registry;
-    gameEngine gameEngine(registry);
-
-    gameEngine.launch_game();
-
-    Network network;
-
-    network.create_client("10.15.191.37", 4242);
-    network.send_info_to_server();
+    registry r;
+    gameEngine game(r);
+    game.launch_game();
 }

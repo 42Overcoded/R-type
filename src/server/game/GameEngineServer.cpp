@@ -5,16 +5,11 @@
 ** gameEngine
 */
 
-#include "GameEngine.hpp"
+#include "GameEngineServer.hpp"
 #include <iostream>
 #include <optional>
-#include "SFML/Graphics/Font.hpp"
 #include "SFML/System/Clock.hpp"
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Text.hpp>
 #include <random>
-#include <SFML/Window/Keyboard.hpp>
 #include <ctime>
 
 void gameEngine::register_component_to_game()
@@ -94,14 +89,10 @@ entity_t gameEngine::init_starship()
     hitbox[starship]->width = pt.get<int>("starship.hitbox.width");
     hitbox[starship]->height = pt.get<int>("starship.hitbox.height");
     tag[starship]->tag = pt.get<std::string>("starship.tag");
-    sprite[starship]->sprite.setTexture(_system.get_map()[tag[starship]->tag]);
     speed[starship]->speedx = pt.get<float>("starship.speed");
     speed[starship]->speedy = pt.get<float>("starship.speed");
     position[starship]->x = pt.get<int>("starship.position.x");
     position[starship]->y = pt.get<int>("starship.position.y");
-    sprite[starship]->sprite.setScale(pt.get<int>("starship.sprite.scale"), pt.get<int>("starship.sprite.scale"));
-    sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
-    sprite[starship]->sprite.setTextureRect(_system.get_rect()["starshipRect"]);
 
     return starship;
 }
@@ -131,24 +122,15 @@ void gameEngine::init_beambar()
     tag[fullbeambar]->tag = "fullbeambar";
 
     auto &sprite = _registry.get_components<Sprite>();
-    sprite[beambar]->sprite.setTexture(_system.get_map()["beambar"]);
-    sprite[fullbeambar]->sprite.setTexture(_system.get_map()["beambar"]);
-    sprite[beambar]->sprite.setTextureRect(_system.get_rect()["beambarRect"]);
-    sprite[fullbeambar]->sprite.setTextureRect(_system.get_rect()["fullbeambarRect"]);
 
     auto &position = _registry.get_components<Position>();
     position[beambar]->x = 730;
     position[beambar]->y = 950;
     position[fullbeambar]->x = 730;
     position[fullbeambar]->y = 950;
-    sprite[beambar]->sprite.setPosition(position[beambar]->x, position[beambar]->y);
-    sprite[fullbeambar]->sprite.setPosition(position[fullbeambar]->x, position[fullbeambar]->y);
 
     auto &health = _registry.get_components<Health>();
     health[fullbeambar]->health = 0;
-
-    sprite[beambar]->sprite.setScale(2, 2);
-    sprite[fullbeambar]->sprite.setScale(2, 2);
 }
 
 std::vector<Speed> Mv_to_speed(std::vector<MovementVector> movementVector)
@@ -194,8 +176,6 @@ entity_t gameEngine::init_enemy()
     hitbox[enemy]->width = 96;
     hitbox[enemy]->height = 96;
     health[enemy]->health = 5;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
-    sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyRect"]);
     speed[enemy]->speedx -= 0.0f;
     speed[enemy]->speedy = 0.0f;
     pattern[enemy]->pattern_index = 0;
@@ -209,11 +189,22 @@ entity_t gameEngine::init_enemy()
     position[enemy]->x = 1930;
     position[enemy]->y = 800;
 
-    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
-
     return enemy;
 }
+
+// void gameEngine::spawn_enemy() {
+//     std::vector<mobspawn> MobSpawn = parsed->getMobSpawn();
+//     Mob mob;
+
+//     JsonComportment comportment;
+//     for (size_t i = 0; i < MobSpawn.size(); i++) {
+//         mob = parsed->getMob(MobSpawn[0].mob_name);
+//         comportment = parsed->getComportment(MobSpawn[i].comportment_id);
+//         for (size_t j = 0; j < MobSpawn[i].spawn.size(); j++) {
+//             entity_t enemy = init_enemy(mob, comportment, MobSpawn[i].spawn[j]);
+//         }
+//     }
+// }
 
 void gameEngine::init_background(int i) {
     entity_t background = _registry.spawn_entity();
@@ -231,11 +222,8 @@ void gameEngine::init_background(int i) {
 
     speed[background]->speedx = -0.1f;
     tag[background]->tag = "background";
-    sprite[background]->sprite.setTexture(_system.get_map()["background"]);
     position[background]->x = i * 1920;
     position[background]->y = 0;
-
-    sprite[background]->sprite.setPosition(position[background]->x, position[background]->y);
 }
 
 void gameEngine::init_load_shoot()
@@ -251,15 +239,10 @@ void gameEngine::init_load_shoot()
     tag[load_shoot]->tag = "load_shoot";
 
     auto &sprite = _registry.get_components<Sprite>();
-    sprite[load_shoot]->sprite.setTexture(_system.get_map()["bullet"]);
-    sprite[load_shoot]->sprite.setTextureRect(_system.get_rect()["loadbulletRect"]);
 
     auto &position = _registry.get_components<Position>();
     position[load_shoot]->x = 100;
     position[load_shoot]->y = 500;
-    sprite[load_shoot]->sprite.setPosition(position[load_shoot]->x, position[load_shoot]->y);
-
-    sprite[load_shoot]->sprite.setScale(2, 2);
 }
 
 void gameEngine::init_score() {
@@ -275,17 +258,11 @@ void gameEngine::init_score() {
     auto &text = _registry.get_components<Text>();
     auto &position = _registry.get_components<Position>();
     auto &state = _registry.get_components<State>();
-
-    if(!text[score]->font.loadFromFile("./assets/GothamMedium.ttf"))
-        exit(84);
-    text[score]->text.setFont(text[score]->font);
     text[score]->str = "Score: ";
     state[score]->state = 0;
-    text[score]->text.setString(text[score]->str + std::to_string(state[score]->state));
     position[score]->x = 1300;
     position[score]->y = 960;
     tag[score]->tag = "score";
-    text[score]->text.setPosition(position[score]->x, position[score]->y);
 }
 
 void gameEngine::init_life() {
@@ -304,10 +281,6 @@ void gameEngine::init_life() {
     tag[life]->tag = pt.get<std::string>("life.tag");
     position[life]->x = pt.get<int>("life.position.x", 0);
     position[life]->y = pt.get<int>("life.position.y", 0);
-    sprite[life]->sprite.setScale(pt.get<int>("life.scale", 0), pt.get<int>("life.scale", 0));
-    sprite[life]->sprite.setTexture(_system.get_map()["starship"]);
-    sprite[life]->sprite.setTextureRect(_system.get_rect()["starshipRect"]);
-    sprite[life]->sprite.setPosition(position[life]->x, position[life]->y);
 }
 
 entity_t gameEngine::init_enemy_2()
@@ -340,8 +313,6 @@ entity_t gameEngine::init_enemy_2()
     hitbox[enemy]->width = 96;
     hitbox[enemy]->height = 96;
     health[enemy]->health = 5;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemyTwo"]);
-    sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyTwoRect"]);
     speed[enemy]->speedx -= 0.0f;
     speed[enemy]->speedy = 0.0f;
     std::vector<Speed> pattern3 = {
@@ -360,9 +331,6 @@ entity_t gameEngine::init_enemy_2()
     auto &position = _registry.get_components<Position>();
     position[enemy]->x = 1920;
     position[enemy]->y = 500;
-
-    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
     return enemy;
 }
 
@@ -397,8 +365,6 @@ entity_t gameEngine::init_enemy_3()
     hitbox[enemy]->width = 96;
     hitbox[enemy]->height = 96;
     health[enemy]->health = 8;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemyThree"]);
-    sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyThreeRect"]);
     speed[enemy]->speedx -= 0.0f;
     speed[enemy]->speedy = 0.0f;
     std::vector<Speed> pattern3 = {
@@ -417,9 +383,6 @@ entity_t gameEngine::init_enemy_3()
     auto &position = _registry.get_components<Position>();
     position[enemy]->x = 1920;
     position[enemy]->y = 500;
-
-    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
     return enemy;
 }
 
@@ -451,8 +414,6 @@ entity_t gameEngine::init_enemy_4()
     hitbox[enemy]->width = 200;
     hitbox[enemy]->height = 170;
     health[enemy]->health = 20;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemyFour"]);
-    sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyFourRect"]);
     speed[enemy]->speedx -= 0.3f;
     speed[enemy]->speedy = 0.3f;
 
@@ -460,8 +421,6 @@ entity_t gameEngine::init_enemy_4()
     position[enemy]->x = 2000;
     position[enemy]->y = 500;
 
-    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
     return enemy;
 }
 
@@ -493,8 +452,6 @@ entity_t gameEngine::init_boss()
     hitbox[enemy]->width = 450;
     hitbox[enemy]->height = 660;
     health[enemy]->health = 200;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemyBoss"]);
-    sprite[enemy]->sprite.setTextureRect(_system.get_rect()["enemyBossRect"]);
     speed[enemy]->speedx -= 0.3f;
     speed[enemy]->speedy = 0;
 
@@ -502,8 +459,6 @@ entity_t gameEngine::init_boss()
     position[enemy]->x = 2000;
     position[enemy]->y = 200;
 
-    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
     return enemy;
 }
 
@@ -528,150 +483,20 @@ void gameEngine::init_menu()
     auto &position = _registry.get_components<Position>();
 
     tag[menu]->tag = "menu";
-    sprite[menu]->sprite.setTexture(_system.get_map()["menuButton"]);
     position[menu]->x = 660;
     position[menu]->y = 440;
-    sprite[menu]->sprite.setPosition(position[menu]->x, position[menu]->y);
 
     tag[play]->tag = "play";
-    sprite[play]->sprite.setTexture(_system.get_map()["playButton"]);
     position[play]->x = 660;
     position[play]->y = 440;
-    sprite[play]->sprite.setPosition(position[play]->x, position[play]->y);
 }
 
-void gameEngine::menu()
-{
-    auto &tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &clock = _registry.get_components<Clock>();
-    auto &text = _registry.get_components<Text>();
-
-    for (size_t i = 0; i < tag.size(); i++) {
-        if (tag[i] == std::nullopt)
-            continue;
-        if (tag[i]->tag == "play") {
-            clock[i]->time = clock[i]->clock.getElapsedTime();
-        }
-        sf::Event event;
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            if (position[i]->x <= sf::Mouse::getPosition(_window).x && sf::Mouse::getPosition(_window).x <= position[i]->x + 600 && position[i]->y <= sf::Mouse::getPosition(_window).y && sf::Mouse::getPosition(_window).y <= position[i]->y + 200) {
-                if (tag[i]->tag == "menu" && scene == MENU) {
-                    scene = LOBBY;
-                    for (size_t i = 0; i < tag.size(); i++) {
-                        if (tag[i] == std::nullopt)
-                            continue;
-                        if (tag[i]->tag == "play")
-                            clock[i]->clock.restart();
-                    }
-                    _registry.kill_entity(entity_t(i));
-                }
-                if (tag[i]->tag == "play" && scene == LOBBY && clock[i]->time.asSeconds() > 0.5) {
-                    scene = GAME;
-                    _registry.kill_entity(entity_t(i));
-                }
-            }
-        }
-        while (_window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                _window.close();
-        }
-    }
-    if (scene == MENU) {
-        _window.clear(sf::Color::Black);
-        _system.set_textures(_registry);
-        for (size_t i = 0; i < tag.size(); i++) {
-            if (tag[i] == std::nullopt)
-                continue;
-            if (tag[i]->tag == "menu")
-                _window.draw(sprite[i]->sprite);
-        }
-        _window.display();
-    }
-    if (scene == LOBBY)  {
-        _window.clear(sf::Color::Black);
-        _system.set_textures(_registry);
-        for (size_t i = 0; i < tag.size(); i++) {
-            if (tag[i] == std::nullopt)
-                continue;
-            if (tag[i]->tag == "play")
-                _window.draw(sprite[i]->sprite);
-        }
-        _window.display();
-    }
-    if (scene == END) {
-        _window.clear(sf::Color::Black);
-        _system.set_textures(_registry);
-        for (size_t i = 0; i < tag.size(); i++) {
-            if (tag[i] == std::nullopt)
-                continue;
-            if (tag[i]->tag == "score") {
-                text[i]->text.setScale(2, 2);
-                text[i]->text.setPosition(800, 400);
-                _window.draw(text[i]->text);
-            }
-        }
-        _window.display();
-    }
-}
-
-
-entity_t gameEngine::init_enemy()
-
-{
-    entity_t enemy = _registry.spawn_entity();
-
-    _registry.add_component<Position>(enemy, Position());
-    _registry.add_component<Speed>(enemy, Speed());
-    _registry.add_component<Sprite>(enemy, Sprite());
-    _registry.add_component<Drawable>(enemy, Drawable());
-    _registry.add_component<Enemy>(enemy, Enemy());
-    _registry.add_component<Tag>(enemy, {"enemy"});
-    _registry.add_component<Pattern>(enemy, Pattern());
-    _registry.add_component<Health>(enemy, Health());
-    _registry.add_component<Hitbox>(enemy, Hitbox());
-
-    auto &speed = _registry.get_components<Speed>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &health = _registry.get_components<Health>();
-    auto &hitbox = _registry.get_components<Hitbox>();
-
-    hitbox[enemy]->width = 33;
-    hitbox[enemy]->height = 100;
-    health[enemy]->health = 5;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
-    speed[enemy]->speedx -= 0.0f;
-    speed[enemy]->speedy = 0.0f;
-
-    auto &pattern = _registry.get_components<Pattern>();
-    pattern[enemy]->pattern_index = 0;
-    pattern[enemy]->pattern_type = 0;
-    pattern[enemy]->pattern_length = 2;
-    pattern[enemy]->switch_index = 100;
-    std::vector<Speed> pattern1 = {{0.2f, -0.2f}, {-0.2f, -0.2f}};
-    pattern[enemy]->pattern = pattern1;
-
-    auto &position = _registry.get_components<Position>();
-    position[enemy]->x = 1930;
-    position[enemy]->y = 800;
-
-    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
-
-    return enemy;
-}
-
-void gameEngine::launch_game() {
+void gameEngine::launch_game()  {
     boost::property_tree::ptree pt;
     boost::property_tree::read_json(PATH_TO_MISC, pt);
 
-    _window.create(sf::VideoMode(pt.get<int>("window.width", 100), pt.get<int>("window.height", 100)), pt.get<std::string>("window.title", "Error loading title"));
-    _window.setFramerateLimit(pt.get<int>("window.framerate", 10));
     register_component_to_game();
-    _system.load_texture(_registry);
-    scene = MENU;
+    _system.load_rect(_registry);
     parsed->Load_Map("Test Map"); //Should be changed to the map sellected by the user
     if (parsed->getLoaded_MapName() == NO_MAP_LOADED) {
         std::cout << "No map loaded" << std::endl;
@@ -693,29 +518,19 @@ void gameEngine::launch_game() {
     for (int i = 0; i < 2; i++)
         init_background(i);
     entity_t starship = init_starship();
+    scene = LOBBY;
 
-    while (_window.isOpen())
+    while (true)
     {
         auto &health = _registry.get_components<Health>();
         if (health[starship]->health < 0) {
             _registry.kill_entity(starship);
             scene = END;
         }
-        if (scene == MENU || scene == LOBBY || scene == END) {
-            menu();
-            continue;
-        }
         _system.clock_time(_registry);
         elapsed = clock.getElapsedTime();
         _elapsed = _clock.getElapsedTime();
         clock.restart();
-
-        sf::Event event;
-        while (_window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                _window.close();
-        }
 
         modify_pattern(_registry);
         spawn_wave(_elapsed, wave);
@@ -727,9 +542,6 @@ void gameEngine::launch_game() {
         _system.death_animation(_registry);
         _system.shoot_enemy(_registry);
         _window.clear(sf::Color::Black);
-        _system.set_textures(_registry);
-        _system.draw_system(_registry, _window);
-        _system.life_handler(_registry, _window);
         _window.display();
     }
 }
@@ -807,8 +619,4 @@ void gameEngine::spawn_wave(sf::Time &elapsed, int &wave)
     if (wave == 5 && is_enemy == 0) {
         scene = END;
     }
-}
-
-sf::RenderWindow &gameEngine::get_window() {
-    return _window;
 }
