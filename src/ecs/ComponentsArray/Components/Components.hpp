@@ -8,9 +8,6 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
-#include "SFML/System/Clock.hpp"
-#include "SFML/System/Time.hpp"
-#include "boost/thread/futures/future_status.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Rect.hpp>

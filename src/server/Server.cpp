@@ -9,12 +9,9 @@
 #include "../network_s/Network.hpp"
 
 int main() {
-    std::cout << "Hello, i'm the server function" << std::endl;
     game();
-    Network network;
+    UdpServer network(4242);
 
-    network.create_server(4242);
-    network.listen_info_from_clients();
-    
+    network.run();
     return 0;
 }

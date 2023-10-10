@@ -215,20 +215,6 @@ entity_t gameEngine::init_enemy()
     return enemy;
 }
 
-// void gameEngine::spawn_enemy() {
-//     std::vector<mobspawn> MobSpawn = parsed->getMobSpawn();
-//     Mob mob;
-
-//     JsonComportment comportment;
-//     for (size_t i = 0; i < MobSpawn.size(); i++) {
-//         mob = parsed->getMob(MobSpawn[0].mob_name);
-//         comportment = parsed->getComportment(MobSpawn[i].comportment_id);
-//         for (size_t j = 0; j < MobSpawn[i].spawn.size(); j++) {
-//             entity_t enemy = init_enemy(mob, comportment, MobSpawn[i].spawn[j]);
-//         }
-//     }
-// }
-
 void gameEngine::init_background(int i) {
     entity_t background = _registry.spawn_entity();
 

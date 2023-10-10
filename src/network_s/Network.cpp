@@ -6,94 +6,56 @@
 */
 
 #include "Network.hpp"
-#include "NetworkComponents.hpp"
-#include "../ecs/ComponentsArray/Components/Components.hpp"
-
+#include <ctime>
 #include <iostream>
 #include <sstream>
 
-Network::Network()
+UdpServer::UdpServer(unsigned int portNumber)
+    : io_context_()
+    , socket_(io_context_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
 {
-    std::cout << "Message perso" << std::endl;
-
-    totalReceived = 0;
-    cliMessage[500] = 0;
+    start_receive();
 }
 
-Network::~Network()
+void UdpServer::start_receive()
 {
-    if (ptrIOcontext != NULL) {
-        ptrIOcontext->stop();
-        delete ptrIOcontext;
+    socket_.async_receive_from(
+        boost::asio::buffer(recv_buffer_), remote_endpoint_,
+        boost::bind(
+            &UdpServer::handle_receive, this, boost::asio::placeholders::error,
+            boost::asio::placeholders::bytes_transferred));
+}
+
+void UdpServer::handle_receive(const boost::system::error_code &error, std::size_t bytes_transferred)
+{
+    if (!error)
+    {
+        boost::shared_ptr<std::string> message(new std::string(make_daytime_string()));
+
+        socket_.async_send_to(
+            boost::asio::buffer(*message), remote_endpoint_,
+            boost::bind(
+                &UdpServer::handle_send, this, message, boost::asio::placeholders::error,
+                boost::asio::placeholders::bytes_transferred));
+
+        start_receive();
     }
-
-    if (ptrServSocket != NULL) {
-        ptrServSocket->close();
-        delete ptrServSocket;
-    }
-    if (ptrCliEndpoint != NULL)
-        delete ptrCliEndpoint;
-    if (ptrError != NULL)
-        delete ptrError;
 }
 
-int Network::create_server(int portServer)
+void UdpServer::handle_send(
+    boost::shared_ptr<std::string> message,
+    const boost::system::error_code &error,
+    std::size_t bytes_transferred)
 {
-    ptrIOcontext = new boost::asio::io_context;
-    ptrServSocket = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
-
-    ptrCliEndpoint = new boost::asio::ip::udp::endpoint;
-    ptrError = new boost::system::error_code;
-
-    return 0;
 }
 
-int Network::listen_info_from_clients(void)
+std::string UdpServer::make_daytime_string()
 {
-    ComponentOUT componentOUT;
-
-    while (true) {
-        totalReceived = ptrServSocket->receive_from(boost::asio::buffer(&componentOUT, sizeof(componentOUT)), *ptrCliEndpoint, 0, *ptrError);
-
-        if (ptrError->failed() == true && *ptrError != boost::asio::error::message_size) {
-            std::cout << "Erreur de connexion: " << ptrError->message() << std::endl;
-            break;
-        }
-
-        if (strcmp(componentOUT.nameStructToSend, "speed") == 0)
-            std::cout << "speed: " << componentOUT.speed.speedx << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "position") == 0)
-            std::cout << "position: " << componentOUT.position.x << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "sprite") == 0)
-            std::cout << "sprite: " << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "player") == 0)
-            std::cout << "player: " << componentOUT.player.id << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "bullet") == 0)
-            std::cout << "bullet: " << componentOUT.bullet.id << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "tag") == 0)
-            std::cout << "tag: " << componentOUT.tag.tag << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "health") == 0)
-            std::cout << "health: " <<componentOUT.health.health << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "damage") == 0)
-            std::cout << "damage: " << componentOUT.damage.damage << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "score") == 0)
-            std::cout << "score: " << componentOUT.score.score << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "text") == 0)
-            std::cout << "text: " << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "drawable") == 0)
-            std::cout << "damage: " << componentOUT.drawable.drawable << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "control") == 0)
-            std::cout << "control: " << componentOUT.control.up << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "pattern") == 0)
-            std::cout << "pattern: " << componentOUT.pattern.pattern_index << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "hitbox") == 0)
-            std::cout << "hitbox: " << componentOUT.hitbox.height << std::endl;
-    }
-    return 0;
+    std::time_t now = time(0);
+    return ctime(&now);
 }
 
-int Network::send_info_to_server(void *strucToServer)
+void UdpServer::run()
 {
-    ptrServSocket->send_to(boost::asio::buffer(strucToServer, sizeof(ComponentOUT)), *ptrCliEndpoint, 0, *ptrError);
-    return 0;
+    io_context_.run();
 }

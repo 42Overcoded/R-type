@@ -1,32 +1,49 @@
 /*
 ** EPITECH PROJECT, 2023
-** undefined
+** R-type
 ** File description:
-** network
+** Network
 */
-#ifndef NETWORK_HPP_
-#define NETWORK_HPP_
 
+#ifndef NETWORK_HPP
+#define NETWORK_HPP
+#include <boost/array.hpp>
 #include <boost/asio.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/shared_ptr.hpp>
+#include <ctime>
+#include <iostream>
+#include <string>
 
-class Network {
-    private:
-        boost::asio::io_context *ptrIOcontext;
-        boost::asio::ip::udp::socket *ptrServSocket;
-        boost::asio::ip::udp::endpoint *ptrCliEndpoint;
-        boost::system::error_code *ptrError;
+class UdpServer
+{
+public:
+    UdpServer(unsigned int portNumber);
+    void run();
 
-        std::string _ipServer;
-        int _portServer;
-        char cliMessage[1000];
-        size_t totalReceived;
-    public:
-        Network();
-        ~Network();
-        Network(std::string ipServer, int portServer = 4242);
-        int create_server(int portServer = 4242);
-        int listen_info_from_clients(void);
-        int send_info_to_server(void *strucToServer);
+private:
+    std::string make_daytime_string();
+    void start_receive();
+    void handle_receive(const boost::system::error_code &error, std::size_t bytes_transferred);
+    void handle_send(
+        boost::shared_ptr<std::string> message,
+        const boost::system::error_code &error,
+        std::size_t bytes_transferred);
+
+    boost::asio::io_context io_context_;
+    boost::asio::ip::udp::socket socket_;
+    boost::asio::ip::udp::endpoint remote_endpoint_;
+    boost::array<char, 1> recv_buffer_;
 };
 
-#endif /* !NETWORK_HPP_ */
+struct ITransmission
+{
+    unsigned int header;
+    unsigned int size;
+};
+
+struct Transmission : ITransmission
+{
+};
+
+#endif
