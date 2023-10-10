@@ -462,6 +462,38 @@ entity_t gameEngine::init_boss()
     return enemy;
 }
 
+
+void gameEngine::menu()
+{
+    auto &tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &position = _registry.get_components<Position>();
+    auto &clock = _registry.get_components<Clock>();
+    auto &text = _registry.get_components<Text>();
+
+    for (size_t i = 0; i < tag.size(); i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "play") {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+        }
+        if (tag[i]->tag == "menu" && scene == MENU) {
+            scene = LOBBY;
+            for (size_t i = 0; i < tag.size(); i++) {
+                if (tag[i] == std::nullopt)
+                    continue;
+                if (tag[i]->tag == "play")
+                    clock[i]->clock.restart();
+            }
+            _registry.kill_entity(entity_t(i));
+        }
+        if (tag[i]->tag == "play" && scene == LOBBY && clock[i]->time.asSeconds() > 0.2) {
+            scene = GAME;
+            _registry.kill_entity(entity_t(i));
+        }
+    }
+}
+
 void gameEngine::init_menu()
 {
     entity_t menu = _registry.spawn_entity();
@@ -522,6 +554,10 @@ void gameEngine::launch_game()  {
 
     while (true)
     {
+        if (scene == MENU || scene == LOBBY || scene == END) {
+            menu();
+            continue;
+        }
         auto &health = _registry.get_components<Health>();
         if (health[starship]->health < 0) {
             _registry.kill_entity(starship);
