@@ -617,52 +617,6 @@ void gameEngine::menu()
     }
 }
 
-
-entity_t gameEngine::init_enemy()
-
-{
-    entity_t enemy = _registry.spawn_entity();
-
-    _registry.add_component<Position>(enemy, Position());
-    _registry.add_component<Speed>(enemy, Speed());
-    _registry.add_component<Sprite>(enemy, Sprite());
-    _registry.add_component<Drawable>(enemy, Drawable());
-    _registry.add_component<Enemy>(enemy, Enemy());
-    _registry.add_component<Tag>(enemy, {"enemy"});
-    _registry.add_component<Pattern>(enemy, Pattern());
-    _registry.add_component<Health>(enemy, Health());
-    _registry.add_component<Hitbox>(enemy, Hitbox());
-
-    auto &speed = _registry.get_components<Speed>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &health = _registry.get_components<Health>();
-    auto &hitbox = _registry.get_components<Hitbox>();
-
-    hitbox[enemy]->width = 33;
-    hitbox[enemy]->height = 100;
-    health[enemy]->health = 5;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
-    speed[enemy]->speedx -= 0.0f;
-    speed[enemy]->speedy = 0.0f;
-
-    auto &pattern = _registry.get_components<Pattern>();
-    pattern[enemy]->pattern_index = 0;
-    pattern[enemy]->pattern_type = 0;
-    pattern[enemy]->pattern_length = 2;
-    pattern[enemy]->switch_index = 100;
-    std::vector<Speed> pattern1 = {{0.2f, -0.2f}, {-0.2f, -0.2f}};
-    pattern[enemy]->pattern = pattern1;
-
-    auto &position = _registry.get_components<Position>();
-    position[enemy]->x = 1930;
-    position[enemy]->y = 800;
-
-    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
-
-    return enemy;
-}
-
 void gameEngine::launch_game() {
     boost::property_tree::ptree pt;
     boost::property_tree::read_json(PATH_TO_MISC, pt);

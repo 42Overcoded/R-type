@@ -47,9 +47,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/ServerSystem.hpp
     ../network_s/Network.hpp
-    ../network_s/NetworkComponents.hpp
     ../network_s/NetworkComponent.hpp
-    ../network_s/NetworkSystems.hpp
     ../jsonfile/include/Comportment.hpp
     ../jsonfile/include/JsonParser.hpp
     ../jsonfile/include/MapLevel.hpp
@@ -64,7 +62,6 @@ set(EXEC_SRC
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/ServerSystem.cpp
     ../network_s/Network.cpp
-    ../network_s/NetworkSystems.cpp
     ../network_s/NetworkSystem.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
