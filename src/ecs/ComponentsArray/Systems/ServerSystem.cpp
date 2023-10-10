@@ -5,11 +5,11 @@
 ** ServerSystem
 */
 
-#include "System.hpp"
+#include "ServerSystem.hpp"
 #include <cstddef>
 #include <optional>
 #include "../ecs/Registry.hpp"
-#include "GameEngine.hpp"
+#include "GameEngineServer.hpp"
 #include "SFML/Graphics.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/Graphics/Texture.hpp"
@@ -636,7 +636,6 @@ void System::shoot_enemy(registry &r) {
         }
     }
 }
-
 
 void System::load_rect(registry &r)
 {

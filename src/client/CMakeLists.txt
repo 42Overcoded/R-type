@@ -42,7 +42,6 @@ set(INCLUDES
     ../ecs/Registry.hpp
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
-    ../ecs/ComponentsArray/Systems/System.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     gameEngine/GameEngine.hpp
     ../network_c/Network.hpp
@@ -54,7 +53,6 @@ set(EXEC_SRC
     Client.cpp
     ../ecs/Registry.cpp
     ../ecs/ComponentsArray/Components/Components.cpp
-    ../ecs/ComponentsArray/Systems/System.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     gameEngine/GameEngine.cpp
     gameEngine/game/Game.cpp
