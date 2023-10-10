@@ -13,7 +13,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
-set(BOOST_INCLUDE_LIBRARIES asio serialization filesystem system property_tree)
+set(BOOST_INCLUDE_LIBRARIES asio filesystem system property_tree)
 set(BOOST_ENABLE_CMAKE ON)
 
 # Fetch and include Boost.Asio
@@ -68,7 +68,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/network)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} sfml-system Boost::asio Boost::serialization Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
+target_link_libraries(${PROJECT_NAME} sfml-system Boost::asio Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
