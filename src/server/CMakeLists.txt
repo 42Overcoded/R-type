@@ -5,7 +5,15 @@ set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(FetchContent)
 
-set(BOOST_INCLUDE_LIBRARIES asio serialization filesystem system property_tree)
+# Fetch and include SFML
+FetchContent_Declare(
+    SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.0
+)
+FetchContent_MakeAvailable(SFML)
+
+set(BOOST_INCLUDE_LIBRARIES asio filesystem system property_tree)
 set(BOOST_ENABLE_CMAKE ON)
 
 # Fetch and include Boost.Asio
@@ -70,7 +78,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network_s)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} Boost::asio Boost::serialization Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
+target_link_libraries(${PROJECT_NAME} sfml-system Boost::asio Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
