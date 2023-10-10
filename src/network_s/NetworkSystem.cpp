@@ -12,6 +12,7 @@
 #include "NetworkSystem.hpp"
 #include "Network.hpp"
 #include "NetworkComponent.hpp"
+#include "../ecs/ComponentsArray/Components/Components.hpp"
 
 NetworkSystem::NetworkSystem(unsigned int serverPort)
 {
@@ -31,15 +32,23 @@ void NetworkSystem::update(registry &reg)
 {
     SparseArray<NetworkIn> &networkInArr   = reg.get_components<NetworkIn>();
     SparseArray<NetworkOut> &networkOutArr = reg.get_components<NetworkOut>();
+    SparseArray<Control> &controlArr       = reg.get_components<Control>();
 
     server_->run();
     for (int i = 0; i < networkInArr.size(); i++)
     {
-        if (networkInArr[i] != std::nullopt)
+        if (networkInArr[i] != std::nullopt && controlArr[i] != std::nullopt)
         {
+            setControl(controlArr[i].value(), networkInArr[i].value());
         }
         if (networkOutArr[i] != std::nullopt)
         {
         }
+    }
+}
+
+void NetworkSystem::setControl(Control &control, NetworkIn &network) {
+    if (!network.buffer.empty()) {
+        
     }
 }

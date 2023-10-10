@@ -11,6 +11,7 @@
 #include "SFML/System/Clock.hpp"
 #include <random>
 #include <ctime>
+#include <../../network_s/NetworkComponent.hpp>
 
 void gameEngine::register_component_to_game()
 {
@@ -33,6 +34,8 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Clock>();
     _registry.register_component<SearchingHead>();
     _registry.register_component<EnemyBall>();
+    _registry.register_component<NetworkIn>();
+    _registry.register_component<NetworkOut>();
     parsed = new JsonParser();
 };
 
@@ -74,6 +77,8 @@ entity_t gameEngine::init_starship()
     _registry.add_component<Hitbox>(starship, Hitbox());
     _registry.add_component<State>(starship, State());
     _registry.add_component<Clock>(starship, Clock());
+    _registry.add_component<NetworkIn>(starship, NetworkIn());
+    _registry.add_component<NetworkOut>(starship, NetworkOut());
 
     auto &clock = _registry.get_components<Clock>();
     auto &health = _registry.get_components<Health>();
@@ -192,20 +197,6 @@ entity_t gameEngine::init_enemy()
     return enemy;
 }
 
-// void gameEngine::spawn_enemy() {
-//     std::vector<mobspawn> MobSpawn = parsed->getMobSpawn();
-//     Mob mob;
-
-//     JsonComportment comportment;
-//     for (size_t i = 0; i < MobSpawn.size(); i++) {
-//         mob = parsed->getMob(MobSpawn[0].mob_name);
-//         comportment = parsed->getComportment(MobSpawn[i].comportment_id);
-//         for (size_t j = 0; j < MobSpawn[i].spawn.size(); j++) {
-//             entity_t enemy = init_enemy(mob, comportment, MobSpawn[i].spawn[j]);
-//         }
-//     }
-// }
-
 void gameEngine::init_background(int i) {
     entity_t background = _registry.spawn_entity();
 
@@ -273,7 +264,7 @@ void gameEngine::init_life() {
     _registry.add_component<Position>(life, Position());
     _registry.add_component<Sprite>(life, Sprite());
     _registry.add_component<Tag>(life, Tag());
-    
+
     auto &tag = _registry.get_components<Tag>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &position = _registry.get_components<Position>();
@@ -371,7 +362,7 @@ entity_t gameEngine::init_enemy_3()
         {0.2f, 0.0f},
         {0.0f, -0.2f},
         {-0.2f, 0.0f},
-        {0.0f, -0.2f} 
+        {0.0f, -0.2f}
     };
 
     pattern[enemy]->pattern_index = 0;

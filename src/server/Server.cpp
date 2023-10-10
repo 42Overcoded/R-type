@@ -10,8 +10,5 @@
 
 int main() {
     game();
-    UdpServer network(4242);
-
-    network.run();
     return 0;
 }

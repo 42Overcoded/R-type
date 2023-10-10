@@ -1,12 +1,13 @@
-#include <iostream>
-#include "../jsonfile/include/JsonParser.hpp"
-#include "../ecs/Registry.hpp"
 #include "Game.hpp"
+#include <iostream>
+#include "../ecs/Registry.hpp"
+#include "../jsonfile/include/JsonParser.hpp"
+#include "GameEngineServer.hpp"
 
-int game() {
-
-    // JsonParser jsondata;
-    // registry reg;
-    // std::cout << "Hello, i'm the game function" << std::endl;
+int game()
+{
+    registry r;
+    gameEngine game(r);
+    game.launch_game();
     return 0;
 }

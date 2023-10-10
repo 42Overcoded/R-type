@@ -94,9 +94,9 @@ may be diagrammed for an GTP service.
 
 ```txt
 /------------------------------------\
-|        |        |                  |
-| Header |  Size  |     Payload      |
-|        |        |                  |
+|      |              |              |
+| Flag | Payload Size |     Payload  |
+|      |              |              |
 |------------------------------------|
 |                                    |
 |                UDP                 |
@@ -107,9 +107,9 @@ may be diagrammed for an GTP service.
 As you can see, the GTP is just on top of the UDP.
 That allow it to be lightweight and highly efficient.
 
-``Header`` is a 4 bytes long (unsigned int) number.
+``Flag`` is a 4 bytes long (uint8_t) number.
   It define the following message.
-``Size`` is a 4 bytes long (unsigned int) number.
+``Size`` is a 4 bytes long (uint64_t) number.
   It describe the size in bit of the payload.
   Value of 0 in case of no payload.
 ``Payload`` is a structure containing different information.

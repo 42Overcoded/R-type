@@ -12,12 +12,12 @@
 
 struct NetworkIn
 {
-    std::shared_ptr<ITransmission> transmission;
+    std::array<boost::asio::mutable_buffer, 3> buffer;
 };
 
 struct NetworkOut
 {
-    std::shared_ptr<ITransmission> transmission;
+    std::array<boost::asio::mutable_buffer, 3> buffer;
 };
 
 #endif /* !NETWORKCOMPONENT_HPP_ */
