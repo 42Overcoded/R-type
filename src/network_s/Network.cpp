@@ -57,7 +57,7 @@ bool UdpServer::rawReceivePacket()
     std::uint8_t receivedFlags;
     std::uint64_t receivedPacketId;
     std::uint64_t receivedDataSize;
-    std::array<boost::asio::mutable_buffer, 3> buffersToFill = {
+    std::array<boost::asio::mutable_buffer, PacketElemNbr - 1> buffersToFill = {
         {{&receivedFlags, sizeof(receivedFlags)},
          {&receivedPacketId, sizeof(receivedPacketId)},
          {&receivedDataSize, sizeof(receivedDataSize)}}};
@@ -80,7 +80,7 @@ bool UdpServer::rawSendPacket(
     boost::asio::const_buffer data, std::uint64_t packetId, std::uint8_t flag)
 {
     std::uint64_t dataSize = static_cast<std::uint64_t>(data.size());
-    std::array<boost::asio::const_buffer, 8> buffersToSend = {
+    std::array<boost::asio::const_buffer, PacketElemNbr> buffersToSend = {
         {{&flag, sizeof(flag)}, {&packetId, sizeof(packetId)}, {&dataSize, sizeof(dataSize)}, data}};
     boost::system::error_code send_error;
     this->socket_.send_to(buffersToSend, remote_endpoint_, {}, send_error);
