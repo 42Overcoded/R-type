@@ -16,10 +16,33 @@
 #include <deque>
 #include <iostream>
 #include <string>
+#include <vector>
 #include "../ecs/Registry.hpp"
+#include <unordered_map>
+
+const unsigned int DefaultPort     = 4242;
+const std::size_t packetHeaderSize = sizeof(std::uint8_t) +   // Packet flags
+                                     sizeof(std::uint64_t) +  // Packet ID
+                                     sizeof(std::uint64_t);   // Packet data size
+const unsigned int PacketElemNbr = 4;
 
 class UdpServer
 {
+public:
+    class Client
+    {
+    public:
+        Client() = default;
+        Client(boost::asio::ip::udp::endpoint endpoint, std::uint64_t id)
+            : endpoint(endpoint){};
+        ~Client() = default;
+
+        std::uint64_t id;
+        boost::asio::ip::udp::endpoint endpoint;
+        std::vector<unsigned char> availablePacket;
+        std::deque<unsigned char> bufferedBytes;
+    };
+
 public:
     UdpServer(unsigned int portNumber);
     void run();
@@ -29,25 +52,20 @@ private:
     void start_receive();
     void handle_receive(const boost::system::error_code &error, std::size_t bytes_transferred);
     void handle_send(
-        boost::shared_ptr<std::string> message,
-        const boost::system::error_code &error,
-        std::size_t bytes_transferred);
-    bool rawSendPacket(boost::asio::const_buffer data, std::uint64_t packetId, std::uint8_t flag);
-    bool rawReceivePacket();
+    const std::array<boost::asio::const_buffer, PacketElemNbr>& buffersToSend,
+    const boost::system::error_code& send_error,
+    std::size_t bytes_transferred);
+    bool rawSendPacket(boost::asio::const_buffer data, std::uint64_t packetId, std::uint8_t flag, std::string destClient);
+    void rawReceivePacket(std::string curr_client);
+    std::string endpointToString(boost::asio::ip::udp::endpoint endpoint);
 
 private:
-    std::vector<unsigned char> availablePacket;
-    std::deque<unsigned char> bufferedBytes;
+    std::unordered_map<std::string, Client> clients;
     boost::asio::io_context io_context_;
     boost::asio::ip::udp::socket socket_;
     boost::asio::ip::udp::endpoint remote_endpoint_;
     boost::array<char, 1> recv_buffer_;
+    unsigned int clienId;
 };
-
-const unsigned int DefaultPort = 4242;
-const std::size_t packetHeaderSize = sizeof(std::uint8_t) +   // Packet flags
-                                     sizeof(std::uint64_t) +  // Packet ID
-                                     sizeof(std::uint64_t);   // Packet data size
-const unsigned int PacketElemNbr = 4;
 
 #endif

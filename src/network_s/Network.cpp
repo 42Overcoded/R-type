@@ -11,6 +11,7 @@
 #include <iostream>
 #include <set>
 #include <sstream>
+#include <string>
 #include "../ecs/Registry.hpp"
 
 UdpServer::UdpServer(unsigned int portNumber)
@@ -31,28 +32,27 @@ void UdpServer::start_receive()
 
 void UdpServer::handle_receive(const boost::system::error_code &error, std::size_t bytes_transferred)
 {
-    if (!error)
+    if (!error || error == boost::asio::error::message_size)
     {
-        boost::shared_ptr<std::string> message(new std::string(make_daytime_string()));
-
-        socket_.async_send_to(
-            boost::asio::buffer(*message), remote_endpoint_,
-            boost::bind(
-                &UdpServer::handle_send, this, message, boost::asio::placeholders::error,
-                boost::asio::placeholders::bytes_transferred));
-
+        std::string curr_client = endpointToString(remote_endpoint_);
+        if (clients.find(curr_client) == clients.end())
+        {
+            clients.insert(std::make_pair(curr_client, Client(remote_endpoint_, clienId++)));
+        }
+        rawReceivePacket(curr_client);
         start_receive();
     }
 }
 
 void UdpServer::handle_send(
-    boost::shared_ptr<std::string> message,
-    const boost::system::error_code &error,
-    std::size_t bytes_transferred)
+    const std::array<boost::asio::const_buffer, PacketElemNbr>& buffersToSend,
+    const boost::system::error_code& send_error,
+    std::size_t bytes_transferred
+)
 {
 }
 
-bool UdpServer::rawReceivePacket()
+void UdpServer::rawReceivePacket(std::string curr_client)
 {
     std::uint8_t receivedFlags;
     std::uint64_t receivedPacketId;
@@ -61,29 +61,31 @@ bool UdpServer::rawReceivePacket()
         {{&receivedFlags, sizeof(receivedFlags)},
          {&receivedPacketId, sizeof(receivedPacketId)},
          {&receivedDataSize, sizeof(receivedDataSize)}}};
-
     std::array<unsigned char, packetHeaderSize> packetHeaderBytes;
+
     std::copy(
-        bufferedBytes.begin(), bufferedBytes.begin() + packetHeaderSize, packetHeaderBytes.begin());
+        recv_buffer_.begin(), recv_buffer_.begin() + packetHeaderSize, packetHeaderBytes.begin());
     auto asioBufferCopiedByteCount = boost::asio::buffer_copy(
         buffersToFill,
         boost::asio::const_buffer(&packetHeaderBytes.at(0), packetHeaderBytes.size()));
     if (receivedDataSize != 0)
     {
-        availablePacket.insert(
-            availablePacket.begin(), bufferedBytes.begin() + (packetHeaderSize),
-            bufferedBytes.begin() + (packetHeaderSize + receivedDataSize));
+        clients[curr_client].availablePacket.insert(
+            clients[curr_client].availablePacket.begin(), recv_buffer_.begin() + (packetHeaderSize),
+            recv_buffer_.begin() + (packetHeaderSize + receivedDataSize));
     }
 }
 
 bool UdpServer::rawSendPacket(
-    boost::asio::const_buffer data, std::uint64_t packetId, std::uint8_t flag)
+    boost::asio::const_buffer data, std::uint64_t packetId, std::uint8_t flag, std::string destClient)
 {
     std::uint64_t dataSize = static_cast<std::uint64_t>(data.size());
     std::array<boost::asio::const_buffer, PacketElemNbr> buffersToSend = {
         {{&flag, sizeof(flag)}, {&packetId, sizeof(packetId)}, {&dataSize, sizeof(dataSize)}, data}};
     boost::system::error_code send_error;
-    this->socket_.send_to(buffersToSend, remote_endpoint_, {}, send_error);
+    this->socket_.async_send_to(buffersToSend, clients[destClient].endpoint, {}, boost::bind(
+                &UdpServer::handle_send, this, buffersToSend, send_error,
+                boost::asio::placeholders::bytes_transferred));
     return !send_error.failed();
 }
 
@@ -96,4 +98,12 @@ std::string UdpServer::make_daytime_string()
 void UdpServer::run()
 {
     io_context_.run();
+}
+
+std::string UdpServer::endpointToString(boost::asio::ip::udp::endpoint endpoint)
+{
+    std::string ipAddress = endpoint.address().to_string();
+    std::string portNumber = std::to_string(endpoint.port());
+
+    return ipAddress + ":" + portNumber;
 }

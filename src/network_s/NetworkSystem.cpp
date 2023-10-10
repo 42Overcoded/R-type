@@ -39,16 +39,10 @@ void NetworkSystem::update(registry &reg)
     {
         if (networkInArr[i] != std::nullopt && controlArr[i] != std::nullopt)
         {
-            setControl(controlArr[i].value(), networkInArr[i].value());
+            
         }
         if (networkOutArr[i] != std::nullopt)
         {
         }
-    }
-}
-
-void NetworkSystem::setControl(Control &control, NetworkIn &network) {
-    if (!network.buffer.empty()) {
-        
     }
 }
