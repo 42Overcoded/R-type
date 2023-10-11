@@ -1,7 +1,12 @@
 #include <iostream>
+#include "../jsonfile/include/JsonParser.hpp"
+#include "../ecs/Registry.hpp"
 #include "Game.hpp"
 
 int game() {
-    std::cout << "Hello, i'm the game function" << std::endl;
+
+    // JsonParser jsondata;
+    // registry reg;
+    // std::cout << "Hello, i'm the game function" << std::endl;
     return 0;
 }

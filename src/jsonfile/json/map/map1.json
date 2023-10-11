@@ -1,0 +1,92 @@
+{
+    "map_name": "Test Map",
+    "map_description": "This is a test map, made manually",
+    "map_difficulty": "Easy",
+    "seed": "Made manually",
+    "map_size": {
+        "x": 12,
+        "y": 12,
+        "desc": "Only for dev: REMOVE: y is the height of the map, x is the width of the map can also represent progression in the level"
+    },
+    "mob_spawn": [
+        {
+            "type": "mob1",
+            "comportment": 2,
+            "coordinates": [
+                {
+                    "x": 2000,
+                    "y": 100
+                },
+                {
+                    "x": 2000,
+                    "y": 150
+                },
+                {
+                    "x": 2000,
+                    "y": 200
+                },
+                {
+                    "x": 2000,
+                    "y": 250
+                },
+                {
+                    "x": 2000,
+                    "y": 300
+                }
+            ]
+        },
+        {
+            "type": "mob2",
+            "comportment": 2,
+            "coordinates": [
+                {
+                    "x": 2000,
+                    "y": 350
+                },
+                {
+                    "x": 2000,
+                    "y": 400
+                },
+                {
+                    "x": 2000,
+                    "y": 450
+                },
+                {
+                    "x": 2000,
+                    "y": 500
+                },
+                {
+                    "x": 2000,
+                    "y": 550
+                }
+            ]
+        },
+        {
+            "type": "mob3",
+            "comportment": 2,
+            "coordinates": [
+                {
+                    "x": 2000,
+                    "y": 600
+                },
+                {
+                    "x": 2000,
+                    "y": 650
+                },
+                {
+                    "x": 2000,
+                    "y": 700
+                },
+                {
+                    "x": 2000,
+                    "y": 750
+                },
+                {
+                    "x": 2000,
+                    "y": 800
+                }
+            ]
+        }
+
+    ]
+}
