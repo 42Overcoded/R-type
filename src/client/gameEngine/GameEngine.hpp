@@ -28,7 +28,7 @@ class gameEngine {
         ~gameEngine() = default;
         void register_component_to_game();
         sf::RenderWindow &get_window();
-        entity_t init_starship();
+        entity_t init_starship(int id, int i);
         entity_t init_enemy();
         entity_t init_enemy_2();
         entity_t init_enemy_3();
