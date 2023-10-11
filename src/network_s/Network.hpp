@@ -34,6 +34,7 @@ enum flag {
     START_GAME = 5,
     END_GAME = 6,
 };
+const unsigned int NETWORK_REFRESH_RATE = 1000 / 60;
 
 class Packet {
 public:

@@ -552,7 +552,6 @@ void gameEngine::launch_game()  {
             menu();
             continue;
         }
-        _networkSystem->update(_registry);
         auto &health = _registry.get_components<Health>();
         if (health[starship]->health < 0) {
             _registry.kill_entity(starship);
@@ -574,8 +573,8 @@ void gameEngine::launch_game()  {
         _system.death_animation(_registry);
         _system.shoot_enemy(_registry);
         _window.clear(sf::Color::Black);
-        if (sendPackageT.asMilliseconds() > 1000 / 60) {
-            // sendPackage();
+        if (sendPackageT.asMilliseconds() > NETWORK_REFRESH_RATE) {
+            _networkSystem->update(_registry);
             sendPackageC.restart();
         }
         _window.display();
