@@ -1,48 +1,110 @@
 /*
 ** EPITECH PROJECT, 2023
-** CLIENT
+** SERVER
 ** File description:
-** CLIENT
+** SERVER
 */
 
-#include <iostream>
-#include <sstream>
 #include "Network.hpp"
-#include "NetworkComponents.hpp"
-#include "../ecs/ComponentsArray/Components/Components.hpp"
+#include <cinttypes>
+#include <ctime>
+#include <iostream>
+#include <set>
+#include <sstream>
+#include <string>
+#include <vector>
+#include "../ecs/Registry.hpp"
 
-Network::Network(std::string ipServer, int portServer)
+UdpServer::UdpServer(unsigned int portNumber)
+    : io_context_()
+    , socket_(io_context_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
 {
-    _ipServer = ipServer;
-    _portServer = portServer;
-
-    ptrIOcontext = new boost::asio::io_context;
-
-    ptrCliSocket = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::v4());
-    ptrServEndpoint = new boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(_ipServer), _portServer);
-
-    ptrError = new boost::system::error_code;
+    start_receive();
 }
 
-Network::~Network()
+void UdpServer::start_receive()
 {
-    if (ptrIOcontext != NULL) {
-        ptrIOcontext->stop();
-        delete ptrIOcontext;
-    }
-
-    if (ptrCliSocket != NULL) {
-        ptrCliSocket->close();
-        delete ptrCliSocket;
-    }
-    if (ptrServEndpoint != NULL)
-        delete ptrServEndpoint;
-    if (ptrError != NULL)
-        delete ptrError;
+    socket_.async_receive_from(
+        boost::asio::buffer(recv_buffer_), remote_endpoint_,
+        boost::bind(
+            &UdpServer::handle_receive, this, boost::asio::placeholders::error,
+            boost::asio::placeholders::bytes_transferred));
 }
 
-int Network::send_info_to_server(void *strucToServer)
+void UdpServer::handle_receive(const boost::system::error_code &error, std::size_t bytes_transferred)
 {
-    ptrCliSocket->send_to(boost::asio::buffer(strucToServer, sizeof(ComponentOUT)), *ptrServEndpoint, 0, *ptrError);
-    return 0;
+    if (!error || error == boost::asio::error::message_size)
+    {
+        server.endpoint = remote_endpoint_;
+        rawReceivePacket();
+        start_receive();
+    }
+}
+
+void UdpServer::handle_send(
+    const std::array<boost::asio::const_buffer, PacketElemNbr> &buffersToSend,
+    const boost::system::error_code &send_error,
+    std::size_t bytes_transferred)
+{
+}
+
+void UdpServer::rawReceivePacket()
+{
+    std::uint8_t receivedFlags;
+    std::uint64_t receivedPacketId;
+    std::uint64_t receivedDataSize;
+    std::array<boost::asio::mutable_buffer, PacketElemNbr - 1> buffersToFill = {
+        {{&receivedFlags, sizeof(receivedFlags)},
+         {&receivedPacketId, sizeof(receivedPacketId)},
+         {&receivedDataSize, sizeof(receivedDataSize)}}};
+    std::array<unsigned char, packetHeaderSize> packetHeaderBytes;
+
+    std::copy(
+        recv_buffer_.begin(), recv_buffer_.begin() + packetHeaderSize, packetHeaderBytes.begin());
+    auto asioBufferCopiedByteCount = boost::asio::buffer_copy(
+        buffersToFill,
+        boost::asio::const_buffer(&packetHeaderBytes.at(0), packetHeaderBytes.size()));
+    if (receivedDataSize != 0)
+    {
+        server.availablePacket.push_back(Packet(
+            receivedFlags, receivedPacketId, receivedDataSize,
+            std::vector<unsigned char>(
+                recv_buffer_.begin() + (packetHeaderSize),
+                recv_buffer_.begin() + (packetHeaderSize + receivedDataSize))));
+    }
+}
+
+bool UdpServer::rawSendPacket(
+    boost::asio::const_buffer data,
+    std::uint64_t packetId,
+    std::uint8_t flag)
+{
+    std::uint64_t dataSize = static_cast<std::uint64_t>(data.size());
+    std::array<boost::asio::const_buffer, PacketElemNbr> buffersToSend = {
+        {{&flag, sizeof(flag)}, {&packetId, sizeof(packetId)}, {&dataSize, sizeof(dataSize)}, data}};
+    boost::system::error_code send_error;
+    this->socket_.async_send_to(
+        buffersToSend, server.endpoint, {},
+        boost::bind(
+            &UdpServer::handle_send, this, buffersToSend, send_error,
+            boost::asio::placeholders::bytes_transferred));
+    return !send_error.failed();
+}
+
+std::string UdpServer::make_daytime_string()
+{
+    std::time_t now = time(0);
+    return ctime(&now);
+}
+
+void UdpServer::run()
+{
+    io_context_.run();
+}
+
+void UdpServer::sendPacket(flag flag, std::vector<unsigned char> data)
+{
+    std::uint64_t packetId = 0;
+
+    rawSendPacket(boost::asio::const_buffer(&data.at(0), data.size()), packetId, flag);
 }

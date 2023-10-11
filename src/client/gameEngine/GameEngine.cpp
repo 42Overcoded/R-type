@@ -18,6 +18,7 @@
 #include <random>
 #include <SFML/Window/Keyboard.hpp>
 #include <ctime>
+#include "../../network_c/NetworkComponent.hpp"
 
 void gameEngine::register_component_to_game()
 {
@@ -40,6 +41,8 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Clock>();
     _registry.register_component<SearchingHead>();
     _registry.register_component<EnemyBall>();
+    _registry.register_component<NetworkIn>();
+    _registry.register_component<NetworkOut>();
     parsed = new JsonParser();
 };
 
@@ -80,9 +83,11 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<Hitbox>(starship, Hitbox());
     _registry.add_component<State>(starship, State());
     _registry.add_component<Clock>(starship, Clock());
+    _registry.add_component<NetworkIn>(starship, NetworkIn());
 
     if (id == i) {
         _registry.add_component<Control>(starship, Control());
+        _registry.add_component<NetworkOut>(starship, NetworkOut());
     }
 
     auto &clock = _registry.get_components<Clock>();
