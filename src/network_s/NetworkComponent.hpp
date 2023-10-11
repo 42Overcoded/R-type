@@ -12,12 +12,11 @@
 
 struct NetworkIn
 {
-    std::array<boost::asio::mutable_buffer, 3> buffer;
+    unsigned int id;
 };
 
 struct NetworkOut
 {
-    std::array<boost::asio::mutable_buffer, 3> buffer;
 };
 
 #endif /* !NETWORKCOMPONENT_HPP_ */

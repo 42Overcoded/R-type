@@ -25,6 +25,29 @@ const std::size_t packetHeaderSize = sizeof(std::uint8_t) +   // Packet flags
                                      sizeof(std::uint64_t) +  // Packet ID
                                      sizeof(std::uint64_t);   // Packet data size
 const unsigned int PacketElemNbr = 4;
+enum flag {
+    NONE = 0,
+    CONNECT = 1,
+    DISCONNECT = 2,
+    CONTROLLER = 3,
+    POSITION = 4,
+};
+
+class Packet {
+public:
+    Packet() = default;
+    Packet(std::uint8_t flags, std::uint64_t id, std::uint64_t dataSize, std::vector<unsigned char> data)
+        : flags(flags)
+        , id(id)
+        , dataSize(dataSize)
+        , data(data){};
+    ~Packet() = default;
+
+    std::uint8_t flags;
+    std::uint64_t id;
+    std::uint64_t dataSize;
+    std::vector<unsigned char> data;
+};
 
 class UdpServer
 {
@@ -39,13 +62,17 @@ public:
 
         std::uint64_t id;
         boost::asio::ip::udp::endpoint endpoint;
-        std::vector<unsigned char> availablePacket;
+        std::vector<Packet> availablePacket;
         std::deque<unsigned char> bufferedBytes;
     };
 
 public:
     UdpServer(unsigned int portNumber);
     void run();
+    void sendPacket(std::string client, flag flag, std::vector<unsigned char> data);
+    void sendToAll(flag flag, std::vector<unsigned char> data);
+
+    std::unordered_map<std::string, Client> clients;
 
 private:
     std::string make_daytime_string();
@@ -60,7 +87,6 @@ private:
     std::string endpointToString(boost::asio::ip::udp::endpoint endpoint);
 
 private:
-    std::unordered_map<std::string, Client> clients;
     boost::asio::io_context io_context_;
     boost::asio::ip::udp::socket socket_;
     boost::asio::ip::udp::endpoint remote_endpoint_;

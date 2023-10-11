@@ -19,7 +19,15 @@ public:
     ~NetworkSystem();
 
     void update(registry &reg);
-protected:
+private:
+    void manageConnectIn(registry &reg, Packet &packet, std::string client);
+    void manageDisconnectIn(registry &reg, Packet &packet, std::string client);
+    void manageControllerIn(registry &reg, Packet &packet, std::string client);
+    void managePositionIn(registry &reg, Packet &packet, std::string client);
+    void manageControllerOut(registry &reg);
+    void managePositionOut(registry &reg);
+    void manageInputs(registry &reg);
+    void manageOutputs(registry &reg);
 private:
     std::unique_ptr<UdpServer> server_;
 };
