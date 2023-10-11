@@ -6,9 +6,11 @@
 */
 
 #include "GameEngine.hpp"
+#include <csignal>
 #include <iostream>
 #include <optional>
 #include "SFML/Graphics/Font.hpp"
+#include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Clock.hpp"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
@@ -61,7 +63,7 @@ void gameEngine::modify_pattern(registry &r)
     }
 }
 
-entity_t gameEngine::init_starship()
+entity_t gameEngine::init_starship(int id, int i)
 {
     boost::property_tree::ptree pt;
     boost::property_tree::read_json(PATH_TO_MISC, pt);
@@ -72,13 +74,16 @@ entity_t gameEngine::init_starship()
     _registry.add_component<Speed>(starship, Speed());
     _registry.add_component<Sprite>(starship, Sprite());
     _registry.add_component<Drawable>(starship, Drawable());
-    _registry.add_component<Control>(starship, Control());
     _registry.add_component<Player>(starship, Player());
     _registry.add_component<Tag>(starship, Tag());
     _registry.add_component<Health>(starship, Health());
     _registry.add_component<Hitbox>(starship, Hitbox());
     _registry.add_component<State>(starship, State());
     _registry.add_component<Clock>(starship, Clock());
+
+    if (id == i) {
+        _registry.add_component<Control>(starship, Control());
+    }
 
     auto &clock = _registry.get_components<Clock>();
     auto &health = _registry.get_components<Health>();
@@ -91,18 +96,18 @@ entity_t gameEngine::init_starship()
 
     health[starship]->health = pt.get<int>("starship.health");
     state[starship]->state = pt.get<int>("starship.state");
+    state[starship]->_state = i;
     hitbox[starship]->width = pt.get<int>("starship.hitbox.width");
     hitbox[starship]->height = pt.get<int>("starship.hitbox.height");
     tag[starship]->tag = pt.get<std::string>("starship.tag");
     sprite[starship]->sprite.setTexture(_system.get_map()[tag[starship]->tag]);
-    speed[starship]->speedx = pt.get<float>("starship.speed");
-    speed[starship]->speedy = pt.get<float>("starship.speed");
-    position[starship]->x = pt.get<int>("starship.position.x");
-    position[starship]->y = pt.get<int>("starship.position.y");
+    speed[starship]->speedx = 0;
+    speed[starship]->speedy = 0;
+    position[starship]->x = (100);
+    position[starship]->y = (300) + (i * 100);
     sprite[starship]->sprite.setScale(pt.get<int>("starship.sprite.scale"), pt.get<int>("starship.sprite.scale"));
     sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
-    sprite[starship]->sprite.setTextureRect(_system.get_rect()["starshipRect"]);
-
+    sprite[starship]->sprite.setTextureRect(sf::IntRect(_system.get_rect()["starshipRect"].left, _system.get_rect()["starshipRect"].top + _system.get_rect()["starshipRect"].height * state[starship]->_state, _system.get_rect()["starshipRect"].width, _system.get_rect()["starshipRect"].height));
     return starship;
 }
 
@@ -646,13 +651,25 @@ void gameEngine::launch_game() {
     int wave = 0;
     for (int i = 0; i < 2; i++)
         init_background(i);
-    entity_t starship = init_starship();
+    for (int i = 0; i != 4; i++)
+        entity_t starship = init_starship(1, i);
 
     while (_window.isOpen())
     {
         auto &health = _registry.get_components<Health>();
-        if (health[starship]->health < 0) {
-            _registry.kill_entity(starship);
+        auto &tag = _registry.get_components<Tag>();
+        int alive = 0;
+        for (size_t i = 0; i < _registry._entity_number; i++) {
+            if (tag[i] == std::nullopt)
+                continue;
+            if (tag[i]->tag == "starship") {
+                alive += 1;
+            }
+            if (health[i] != std::nullopt && health[i]->health <= 0 && tag[i]->tag == "starship") {
+                _registry.kill_entity(entity_t(i));
+            }
+        }
+        if (alive == 0) {
             scene = END;
         }
         if (scene == MENU || scene == LOBBY || scene == END) {

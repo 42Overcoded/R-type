@@ -532,6 +532,9 @@ void gameEngine::launch_game()  {
     sf::Time _elapsed;
     sf::Clock _clock;
 
+    sf::Time sendPackageT;
+    sf::Clock sendPackageC;
+
     init_score();
     init_life();
     init_beambar();
@@ -558,6 +561,7 @@ void gameEngine::launch_game()  {
         _system.clock_time(_registry);
         elapsed = clock.getElapsedTime();
         _elapsed = _clock.getElapsedTime();
+        sendPackageT = sendPackageC.getElapsedTime();
         clock.restart();
 
         modify_pattern(_registry);
@@ -570,6 +574,10 @@ void gameEngine::launch_game()  {
         _system.death_animation(_registry);
         _system.shoot_enemy(_registry);
         _window.clear(sf::Color::Black);
+        if (sendPackageT.asMilliseconds() > 1000 / 60) {
+            // sendPackage();
+            sendPackageC.restart();
+        }
         _window.display();
     }
 }

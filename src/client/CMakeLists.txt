@@ -53,7 +53,6 @@ set(EXEC_SRC
     Client.cpp
     ../ecs/Registry.cpp
     ../ecs/ComponentsArray/Components/Components.cpp
-    ../ecs/ComponentsArray/Systems/System.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     gameEngine/GameEngine.cpp
     gameEngine/game/Game.cpp

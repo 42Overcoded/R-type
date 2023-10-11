@@ -69,7 +69,7 @@ void SfmlSystem::load_shoot(registry &r, sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (tag[i]->tag == "starship") {
+        if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
             control[i]->shoot = true;
             if (_rect["loadbulletRect"].left >= 256) {
                 _rect["loadbulletRect"].left = 0;
@@ -129,7 +129,7 @@ void SfmlSystem::decharge_shoot(registry &r, sf::Time &elapsed)
         if (_tag[i] == std::nullopt) {
             continue;
         }
-        if (_tag[i]->tag == "starship") {
+        if (_tag[i]->tag == "starship" && control[i] != std::nullopt) {
             if (clock[i]->_time.asSeconds() < 0.15)
                 return;
             clock[i]->_clock.restart();
@@ -160,7 +160,7 @@ void SfmlSystem::decharge_shoot(registry &r, sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (tag[i]->tag == "starship") {
+        if (tag[i]->tag == "starship" && player[i] != std::nullopt && control[i] != std::nullopt) {
             r.add_component<Position>(bullet, {position[i]->x + 100, position[i]->y});
             sprite[bullet]->sprite.setPosition(position[i]->x + 100, position[i]->y);
         }
@@ -206,7 +206,7 @@ void SfmlSystem::shoot_system(registry &r, sf::Time &elapsed)
                 r.kill_entity(entity_t(i));
             }
         }
-        if (tag[i]->tag == "starship") {
+        if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
             if (control[i]->shoot == true) {
                 load_shoot(r, elapsed);
             } else {
@@ -284,6 +284,7 @@ void SfmlSystem::control_system(registry &r)
     auto &position = r.get_components<Position>();
     auto &sprite = r.get_components<Sprite>();
     auto &speed = r.get_components<Speed>();
+    auto &state = r.get_components<State>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (control[i] != std::nullopt && speed[i] != std::nullopt) {
@@ -292,12 +293,12 @@ void SfmlSystem::control_system(registry &r)
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 control[i]->up = true;
                 speed[i]->speedy = -0.5f;
-                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 132, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 132, _rect["starshipRect"].top + _rect["starshipRect"].height * state[i]->_state, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 control[i]->down = true;
                 speed[i]->speedy = 0.5f;
-                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left, _rect["starshipRect"].top + _rect["starshipRect"].height * state[i]->_state, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 control[i]->left = true;
@@ -306,10 +307,10 @@ void SfmlSystem::control_system(registry &r)
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 control[i]->right = true;
                 speed[i]->speedx = 0.5f;
-                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 66, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 66, _rect["starshipRect"].top + _rect["starshipRect"].height * state[i]->_state, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 33, _rect["starshipRect"].top, _rect["starshipRect"].width, _rect["starshipRect"].height));
+                sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 33, _rect["starshipRect"].top + _rect["starshipRect"].height * state[i]->_state, _rect["starshipRect"].width, _rect["starshipRect"].height));
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
                 control[i]->shoot = true;
@@ -413,6 +414,8 @@ void SfmlSystem::life_handler(registry &r, sf::RenderWindow &window)
     auto &position = r.get_components<Position>();
     auto &health = r.get_components<Health>();
     auto &sprite = r.get_components<Sprite>();
+    auto &control = r.get_components<Control>();
+    auto &state = r.get_components<State>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt)
@@ -421,8 +424,9 @@ void SfmlSystem::life_handler(registry &r, sf::RenderWindow &window)
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (tag[j] == std::nullopt)
                     continue;
-                if (tag[j]->tag == "starship") {
+                if (tag[j]->tag == "starship" && control[j] != std::nullopt) {
                     for (size_t k = 0; k < health[j]->health; k++) {
+                        sprite[i]->sprite.setTextureRect(sf::IntRect(_rect["starshipRect"].left + 66, _rect["starshipRect"].top + _rect["starshipRect"].height * state[j]->_state, _rect["starshipRect"].width, _rect["starshipRect"].height));
                         position[i]->x = 200 + (k * 100);
                         sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
                         position[i]->x = 200;
@@ -613,7 +617,7 @@ void SfmlSystem::load_texture(registry &r)
     sf::IntRect BulletRect = sf::IntRect(249, 80, 16, 16);
     sf::IntRect MediumBulletRect = sf::IntRect(200, 115, 32, 20);
     sf::IntRect BigBulletRect = sf::IntRect(185, 170, 80, 16);
-    sf::IntRect StarshipRect = sf::IntRect(0, 0, 33, 18);
+    sf::IntRect StarshipRect = sf::IntRect(0, 0, 32, 17);
     sf::IntRect EnemyRect = sf::IntRect(0, 0, 32, 32);
     sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
     sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);
