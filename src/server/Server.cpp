@@ -21,6 +21,8 @@ int main(int ac, char **av) {
             std::cerr << "Error: port must be a number" << std::endl;
             return 84;
         }
+    } else {
+        std::cout << "No port specified, using default port: " << DefaultPort << std::endl;
     }
     game(portNumber);
     return 0;

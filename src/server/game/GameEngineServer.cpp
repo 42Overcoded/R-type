@@ -44,7 +44,7 @@ void gameEngine::modify_pattern(registry &r)
     auto &speed = r.get_components<Speed>();
     auto &pattern = r.get_components<Pattern>();
 
-    for (size_t i = 0; i < r._entity_number; i++) { 
+    for (size_t i = 0; i < r._entity_number; i++) {
         if (speed[i] && pattern[i]) {
             if (pattern[i]->pattern_index < pattern[i]->switch_index) {
                 pattern[i]->pattern_index++;
@@ -549,6 +549,7 @@ void gameEngine::launch_game()  {
             menu();
             continue;
         }
+        _networkSystem->update(_registry);
         auto &health = _registry.get_components<Health>();
         if (health[starship]->health < 0) {
             _registry.kill_entity(starship);
