@@ -58,7 +58,7 @@ set(EXEC_SRC
     gameEngine/game/Game.cpp
     gameEngine/graphics/Graphic.cpp
     ../network_c/Network.cpp
-    ../network_c/NetworkSystems.hpp
+    ../network_c/NetworkSystems.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp

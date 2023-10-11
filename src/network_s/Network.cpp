@@ -12,12 +12,22 @@
 #include <iostream>
 #include <sstream>
 
-Network::Network()
+Network::Network(std::string ipServer, int portServer)
 {
-    std::cout << "Message perso" << std::endl;
-
     totalReceived = 0;
     cliMessage[500] = 0;
+    _ipServer = ipServer;
+    _portServer = portServer;
+
+    ptrIOcontext = new boost::asio::io_context;
+    ptrServSocket = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
+    ptrCliEndpoint = new boost::asio::ip::udp::endpoint;
+
+    ptrIOcontextSend = new boost::asio::io_context;
+    ptrServSocketSend = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::v4());
+    ptrCliEndpointSend = new boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(_ipServer), _portServer + 1);
+
+    ptrError = new boost::system::error_code;
 }
 
 Network::~Network()
@@ -26,26 +36,27 @@ Network::~Network()
         ptrIOcontext->stop();
         delete ptrIOcontext;
     }
+    if (ptrIOcontextSend != NULL) {
+        ptrIOcontextSend->stop();
+        delete ptrIOcontextSend;
+    }
 
     if (ptrServSocket != NULL) {
         ptrServSocket->close();
         delete ptrServSocket;
     }
+    if (ptrServSocketSend != NULL) {
+        ptrServSocketSend->close();
+        delete ptrServSocketSend;
+    }
+
     if (ptrCliEndpoint != NULL)
         delete ptrCliEndpoint;
+    if (ptrCliEndpointSend != NULL)
+        delete ptrCliEndpointSend;
+
     if (ptrError != NULL)
         delete ptrError;
-}
-
-int Network::create_server(int portServer)
-{
-    ptrIOcontext = new boost::asio::io_context;
-    ptrServSocket = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
-
-    ptrCliEndpoint = new boost::asio::ip::udp::endpoint;
-    ptrError = new boost::system::error_code;
-
-    return 0;
 }
 
 int Network::listen_info_from_clients(void)
@@ -92,8 +103,8 @@ int Network::listen_info_from_clients(void)
     return 0;
 }
 
-int Network::send_info_to_server(void *strucToServer)
+int Network::send_info_to_client(void *strucToServer)
 {
-    ptrServSocket->send_to(boost::asio::buffer(strucToServer, sizeof(ComponentOUT)), *ptrCliEndpoint, 0, *ptrError);
+    ptrServSocketSend->send_to(boost::asio::buffer(strucToServer, sizeof(ComponentOUT)), *ptrCliEndpointSend, 0, *ptrError);
     return 0;
 }

@@ -14,6 +14,10 @@ class Network {
         boost::asio::io_context *ptrIOcontext;
         boost::asio::ip::udp::socket *ptrServSocket;
         boost::asio::ip::udp::endpoint *ptrCliEndpoint;
+
+        boost::asio::io_context *ptrIOcontextSend;
+        boost::asio::ip::udp::socket *ptrServSocketSend;
+        boost::asio::ip::udp::endpoint *ptrCliEndpointSend;
         boost::system::error_code *ptrError;
 
         std::string _ipServer;
@@ -21,12 +25,10 @@ class Network {
         char cliMessage[1000];
         size_t totalReceived;
     public:
-        Network();
-        ~Network();
         Network(std::string ipServer, int portServer = 4242);
-        int create_server(int portServer = 4242);
+        ~Network();
         int listen_info_from_clients(void);
-        int send_info_to_server(void *strucToServer);
+        int send_info_to_client(void *strucToServer);
 };
 
 #endif /* !NETWORK_HPP_ */

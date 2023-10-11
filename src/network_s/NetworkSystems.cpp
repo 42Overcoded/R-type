@@ -19,7 +19,7 @@ void NetworkSystem::send_system(registry &r)
 
     for (int i = 0; i < SpAr.size(); i++) {
         if (SpAr[i] != std::nullopt && _ptrNetwork != NULL) {
-            _ptrNetwork->send_info_to_server(SpAr[i]->ptrToThisStruct);
+            _ptrNetwork->send_info_to_client(SpAr[i]->ptrToThisStruct);
         }
     }
 }
