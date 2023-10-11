@@ -31,10 +31,7 @@ NetworkSystem::~NetworkSystem()
 
 void NetworkSystem::update(registry &reg)
 {
-    SparseArray<NetworkIn> &networkInArr   = reg.get_components<NetworkIn>();
-    SparseArray<NetworkOut> &networkOutArr = reg.get_components<NetworkOut>();
-    SparseArray<Control> &controlArr       = reg.get_components<Control>();
-
+    server_->run();
     manageInputs(reg);
     manageOutputs(reg);
 }

@@ -31,6 +31,8 @@ enum flag {
     DISCONNECT = 2,
     CONTROLLER = 3,
     POSITION = 4,
+    START = 5,
+    END = 6,
 };
 
 class Packet {
