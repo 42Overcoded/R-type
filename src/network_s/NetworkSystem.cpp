@@ -9,10 +9,11 @@
 #include <optional>
 #include <iostream>
 #include <string>
-#include "NetworkSystem.hpp"
 #include "Network.hpp"
+#include "NetworkSystem.hpp"
 #include "NetworkComponent.hpp"
 #include "../ecs/ComponentsArray/Components/Components.hpp"
+#include "../ecs/Registry.hpp"
 #include "Containers.hpp"
 
 NetworkSystem::NetworkSystem(unsigned int serverPort)

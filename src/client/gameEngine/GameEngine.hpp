@@ -14,6 +14,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
+#include "../network_c/NetworkSystem.hpp"
 
 enum Scene {
     MENU,
@@ -24,7 +25,7 @@ enum Scene {
 
 class gameEngine {
     public:
-        gameEngine(registry &registry) : _registry(registry) {}
+        gameEngine(registry &registry, unsigned int serverPort, std::string serverIp) : _registry(registry), _networkSystem(serverPort, serverIp) {}
         ~gameEngine() = default;
         void register_component_to_game();
         sf::RenderWindow &get_window();
@@ -56,6 +57,7 @@ class gameEngine {
         sf::Clock clock;
         sf::RenderWindow _window;
         SfmlSystem _system;
+        NetworkSystem _networkSystem;
         registry _registry;
 };
 

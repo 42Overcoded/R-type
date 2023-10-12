@@ -7,12 +7,14 @@
 
 #ifndef NETWORKSYSTEM_HPP_
 #define NETWORKSYSTEM_HPP_
-#include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
-#include "Network.hpp"
 #include <string>
 #include <memory>
 
-class NetworkSystem : SfmlSystem
+class UdpServer;
+class Packet;
+class registry;
+
+class NetworkSystem
 {
 public:
     NetworkSystem(unsigned int serverPort);

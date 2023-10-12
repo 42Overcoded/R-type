@@ -13,13 +13,17 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "../ecs/Registry.hpp"
 
 UdpServer::UdpServer(unsigned int portNumber)
     : io_context_()
     , socket_(io_context_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portNumber))
 {
     start_receive();
+}
+
+UdpServer::~UdpServer()
+{
+    socket_.close();
 }
 
 void UdpServer::start_receive()

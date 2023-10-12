@@ -21,6 +21,7 @@
 #include <unordered_map>
 
 const unsigned int DefaultPort     = 4242;
+const std::string DefaultIp        = "localhost";
 const std::size_t packetHeaderSize = sizeof(std::uint8_t) +   // Packet flags
                                      sizeof(std::uint64_t) +  // Packet ID
                                      sizeof(std::uint64_t);   // Packet data size
@@ -52,7 +53,7 @@ public:
     std::vector<unsigned char> data;
 };
 
-class UdpServer
+class UdpClient
 {
 public:
     class Server
@@ -70,7 +71,8 @@ public:
     };
 
 public:
-    UdpServer(unsigned int portNumber);
+    UdpClient(unsigned int serverPort, std::string serverIp);
+    ~UdpClient();
     void run();
     void sendPacket(flag flag, std::vector<unsigned char> data);
 

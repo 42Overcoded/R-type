@@ -9,6 +9,7 @@
 #include <csignal>
 #include <iostream>
 #include <optional>
+#include "Registry.hpp"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Clock.hpp"
@@ -706,6 +707,7 @@ void gameEngine::launch_game() {
         _system.set_textures(_registry);
         _system.draw_system(_registry, _window);
         _system.life_handler(_registry, _window);
+        _networkSystem.update(_registry);
         _window.display();
     }
 }

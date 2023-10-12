@@ -15,11 +15,11 @@
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "Containers.hpp"
 
-NetworkSystem::NetworkSystem(unsigned int serverPort)
+NetworkSystem::NetworkSystem(unsigned int serverPort, std::string serverIp)
 {
     try
     {
-        server_ = std::make_unique<UdpServer>(serverPort);
+        server_ = std::make_unique<UdpClient>(serverPort, serverIp);
     } catch (std::exception &e) {
         std::cout << "Can't user server Port : " << serverPort << std::endl;
     }
@@ -39,60 +39,55 @@ void NetworkSystem::update(registry &reg)
 
 void NetworkSystem::manageInputs(registry &reg)
 {
-    for (auto &client : server_->clients) {
-        for (auto packet : client.second.availablePacket) {
-            switch (packet.flags) {
-                case flag::CONNECT:
-                    manageConnectIn(reg, packet, client.first);
-                    break;
-                case flag::DISCONNECT:
-                    manageDisconnectIn(reg, packet, client.first);
-                    break;
-                case flag::CONTROLLER:
-                    manageControllerIn(reg, packet, client.first);
-                    break;
-                case flag::POSITION:
-                    managePositionIn(reg, packet, client.first);
-                    break;
-                default:
-                    break;
-            }
+    for (auto packet : server_->server.availablePacket) {
+        switch (packet.flags) {
+            case flag::CONNECT:
+                manageConnectIn(reg, packet);
+                break;
+            case flag::DISCONNECT:
+                manageDisconnectIn(reg, packet);
+                break;
+            case flag::CONTROLLER:
+                manageControllerIn(reg, packet);
+                break;
+            case flag::POSITION:
+                managePositionIn(reg, packet);
+                break;
+            default:
+                break;
         }
     }
 }
 
-void NetworkSystem::manageConnectIn(registry &reg, Packet &packet, std::string client)
+void NetworkSystem::manageConnectIn(registry &reg, Packet &packet)
 {
     SparseArray<NetworkIn> &networkInArr   = reg.get_components<NetworkIn>();
-    unsigned int clientId = server_->clients[client].id;
 
     for (unsigned int i; i < networkInArr.size(); i++) {
-        if (networkInArr[i] != std::nullopt && networkInArr[i]->id == clientId) {
+        if (networkInArr[i] != std::nullopt) {
             
         }
     }
 }
 
-void NetworkSystem::manageDisconnectIn(registry &reg, Packet &packet, std::string client)
+void NetworkSystem::manageDisconnectIn(registry &reg, Packet &packet)
 {
     SparseArray<NetworkIn> &networkInArr   = reg.get_components<NetworkIn>();
-    unsigned int clientId = server_->clients[client].id;
 
     for (unsigned int i; i < networkInArr.size(); i++) {
-        if (networkInArr[i] != std::nullopt && networkInArr[i]->id == clientId) {
+        if (networkInArr[i] != std::nullopt) {
             
         }
     }
 }
 
-void NetworkSystem::manageControllerIn(registry &reg, Packet &packet, std::string client)
+void NetworkSystem::manageControllerIn(registry &reg, Packet &packet)
 {
     SparseArray<NetworkIn> &networkInArr   = reg.get_components<NetworkIn>();
     SparseArray<Control> &controlArr       = reg.get_components<Control>();
-    unsigned int clientId = server_->clients[client].id;
 
     for (unsigned int i; i < networkInArr.size(); i++) {
-        if (networkInArr[i] != std::nullopt && controlArr[i] != std::nullopt && networkInArr[i]->id == clientId) {
+        if (networkInArr[i] != std::nullopt && controlArr[i] != std::nullopt) {
             ControllerContainer controllerContainer;
             controllerContainer.Unpack(packet.data);
             controlArr[i]->up = controllerContainer.up;
@@ -104,14 +99,13 @@ void NetworkSystem::manageControllerIn(registry &reg, Packet &packet, std::strin
     }
 }
 
-void NetworkSystem::managePositionIn(registry &reg, Packet &packet, std::string client)
+void NetworkSystem::managePositionIn(registry &reg, Packet &packet)
 {
     SparseArray<NetworkIn> &networkInArr   = reg.get_components<NetworkIn>();
     SparseArray<Position> &positionArr       = reg.get_components<Position>();
-    unsigned int clientId = server_->clients[client].id;
 
     for (unsigned int i; i < networkInArr.size(); i++) {
-        if (networkInArr[i] != std::nullopt && positionArr[i] != std::nullopt && networkInArr[i]->id == clientId) {
+        if (networkInArr[i] != std::nullopt && positionArr[i] != std::nullopt) {
             PositionContainer positionContainer;
             positionContainer.Unpack(packet.data);
             positionArr[i]->x = positionContainer.x;
@@ -139,7 +133,7 @@ void NetworkSystem::manageControllerOut(registry &reg)
             data.left = controlArr[i]->left;
             data.right = controlArr[i]->right;
             data.shoot = controlArr[i]->shoot;
-            server_->sendToAll(flag::CONTROLLER, data.Pack());
+            server_->sendPacket(flag::CONTROLLER, data.Pack());
         }
     }
 }
@@ -154,7 +148,7 @@ void NetworkSystem::managePositionOut(registry &reg)
             PositionContainer data;
             data.x = positionArr[i]->x;
             data.y = positionArr[i]->y;
-            server_->sendToAll(flag::POSITION, data.Pack());
+            server_->sendPacket(flag::POSITION, data.Pack());
         }
     }
 }

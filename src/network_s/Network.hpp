@@ -17,7 +17,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "../ecs/Registry.hpp"
 #include <unordered_map>
 
 const unsigned int DefaultPort     = 4242;
@@ -71,6 +70,7 @@ public:
 
 public:
     UdpServer(unsigned int portNumber);
+    ~UdpServer();
     void run();
     void sendPacket(std::string client, flag flag, std::vector<unsigned char> data);
     void sendToAll(flag flag, std::vector<unsigned char> data);

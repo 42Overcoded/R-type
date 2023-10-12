@@ -45,8 +45,8 @@ set(INCLUDES
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     gameEngine/GameEngine.hpp
     ../network_c/Network.hpp
-    ../network_c/NetworkComponents.hpp
-    ../network_c/NetworkSystems.hpp
+    ../network_c/NetworkComponent.hpp
+    ../network_c/NetworkSystem.hpp
 )
 
 set(EXEC_SRC
@@ -58,7 +58,7 @@ set(EXEC_SRC
     gameEngine/game/Game.cpp
     gameEngine/graphics/Graphic.cpp
     ../network_c/Network.cpp
-    ../network_c/NetworkSystems.hpp
+    ../network_c/NetworkSystem.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
