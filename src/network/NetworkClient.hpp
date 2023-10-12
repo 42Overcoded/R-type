@@ -36,11 +36,9 @@ public:
         try
         {
             boost::asio::ip::udp::resolver resolver(ioContext_);
-            boost::asio::ip::udp::resolver::query query(
-                boost::asio::ip::udp::v4(), serverIp, std::to_string(serverPort));
-            boost::asio::ip::udp::resolver::iterator iterator = resolver.resolve(query);
-            boost::asio::connect(socket_, iterator);
-            connection_    = std::make_unique<Connection<T>>(std::move(socket_), packetsInQueue_);
+            boost::asio::ip::udp::resolver::results_type endpoints = resolver.resolve(serverIp, std::to_string(serverPort));
+            connection_ = std::make_unique<Connection<T>>(Connection<T>::Owner::Client, ioContext_, boost::asio::ip::udp::socket(ioContext_), packetsInQueue_);
+            connection_->ConnectToServer(endpoints);
             threadContext_ = std::thread([this]() { ioContext_.run(); });
         }
         catch (const std::exception &e)
@@ -48,6 +46,7 @@ public:
             std::cerr << "[CLIENT] Exception: " << e.what() << std::endl;
             return false;
         }
+        std::cout << "[CLIENT] Started" << std::endl;
         return true;
     }
 
