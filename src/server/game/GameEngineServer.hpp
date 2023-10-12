@@ -8,9 +8,11 @@
 #ifndef SERVERGAMEENGINE_HPP_
 #define SERVERGAMEENGINE_HPP_
 
+#include <memory>
 #include "../../jsonfile/include/JsonParser.hpp"
 #include "../ecs/Registry.hpp"
 #include "../../ecs/ComponentsArray/Systems/ServerSystem.hpp"
+#include "../../network_s/NetworkSystem.hpp"
 
 enum Scene {
     MENU,
@@ -21,7 +23,14 @@ enum Scene {
 
 class gameEngine {
     public:
-        gameEngine(registry &registry) : _registry(registry) {}
+        gameEngine(registry &registry, unsigned int portNumber) : _registry(registry) {
+            try {
+                _networkSystem = std::make_unique<NetworkSystem>(portNumber);
+            } catch (std::exception &e) {
+                std::cerr << e.what() << std::endl;
+                exit(84);
+            }
+        }
         ~gameEngine() = default;
         void register_component_to_game();
         sf::RenderWindow &get_window();
@@ -51,6 +60,7 @@ class gameEngine {
         sf::Clock clock;
         sf::RenderWindow _window;
         System _system;
+        std::unique_ptr<NetworkSystem> _networkSystem;
         registry _registry;
 };
 
