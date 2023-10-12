@@ -73,6 +73,7 @@ void UdpClient::rawReceivePacket()
     auto asioBufferCopiedByteCount = boost::asio::buffer_copy(
         buffersToFill,
         boost::asio::const_buffer(&packetHeaderBytes.at(0), packetHeaderBytes.size()));
+    std::cout << "[PACKET_IN]Flags: " << static_cast<int>(receivedFlags) << std::endl;
     if (receivedDataSize != 0)
     {
         server.availablePacket.push_back(Packet(
@@ -88,6 +89,7 @@ bool UdpClient::rawSendPacket(
     std::uint64_t packetId,
     std::uint8_t flag)
 {
+    std::cout << "Sending packet with flag: " << static_cast<int>(flag) << std::endl;
     std::uint64_t dataSize = static_cast<std::uint64_t>(data.size());
     std::array<boost::asio::const_buffer, PacketElemNbr> buffersToSend = {
         {{&flag, sizeof(flag)}, {&packetId, sizeof(packetId)}, {&dataSize, sizeof(dataSize)}, data}};

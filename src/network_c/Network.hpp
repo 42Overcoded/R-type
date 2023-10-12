@@ -83,7 +83,7 @@ private:
     void start_receive();
     void handle_receive(const boost::system::error_code &error, std::size_t bytes_transferred);
     void handle_send(
-    const std::array<boost::asio::const_buffer, PacketElemNbr>& buffersToSend,
+    const std::array<boost::asio::const_buffer, PacketElemNbr> &buffersToSend,
     const boost::system::error_code& send_error,
     std::size_t bytes_transferred);
     bool rawSendPacket(boost::asio::const_buffer data, std::uint64_t packetId, std::uint8_t flag);

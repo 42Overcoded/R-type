@@ -52,7 +52,7 @@ void gameEngine::modify_pattern(registry &r)
     auto &speed = r.get_components<Speed>();
     auto &pattern = r.get_components<Pattern>();
 
-    for (size_t i = 0; i < r._entity_number; i++) { 
+    for (size_t i = 0; i < r._entity_number; i++) {
         if (speed[i] && pattern[i]) {
             if (pattern[i]->pattern_index < pattern[i]->switch_index) {
                 pattern[i]->pattern_index++;
@@ -707,7 +707,9 @@ void gameEngine::launch_game() {
         _system.set_textures(_registry);
         _system.draw_system(_registry, _window);
         _system.life_handler(_registry, _window);
+        std::cout << "updating network system" << std::endl;
         _networkSystem.update(_registry);
+        std::cout << "network system updated" << std::endl;
         _window.display();
     }
 }

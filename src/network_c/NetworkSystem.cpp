@@ -31,9 +31,13 @@ NetworkSystem::~NetworkSystem()
 
 void NetworkSystem::update(registry &reg)
 {
+    std::cout << "running server" << std::endl;
     server_->run();
+    std::cout << "managing inputs" << std::endl;
     manageInputs(reg);
+    std::cout << "managing outputs" << std::endl;
     manageOutputs(reg);
+    std::cout << "end of update" << std::endl;
 }
 
 
