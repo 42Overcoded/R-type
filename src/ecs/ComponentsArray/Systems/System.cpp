@@ -554,9 +554,6 @@ void System::load_texture(registry &r)
 {
     sf::Texture bullet;
     sf::Texture starship;
-    // sf::Texture enemy;
-    // sf::Texture enemyTwo;
-    // sf::Texture enemyThree;
     sf::Texture enemyFour;
     sf::Texture beambar;
     sf::Texture explosion;
@@ -567,14 +564,14 @@ void System::load_texture(registry &r)
     sf::Texture background;
     sf::IntRect enemyBossBulletRect = sf::IntRect(0, 400, 22 ,20);
     sf::IntRect enemyBossRect = sf::IntRect(0, 0, 200, 250);
-    sf::IntRect LoadBulletRect = sf::IntRect(0, 50, 32, 32);
-    sf::IntRect BulletRect = sf::IntRect(249, 80, 16, 16);
-    sf::IntRect MediumBulletRect = sf::IntRect(200, 115, 32, 20);
-    sf::IntRect BigBulletRect = sf::IntRect(185, 170, 80, 16);
-    sf::IntRect StarshipRect = sf::IntRect(0, 0, 33, 18);
-    sf::IntRect BeambarRect = sf::IntRect(0, 0, 250, 25);
-    sf::IntRect FullBeambarRect = sf::IntRect(0, 26, 0, 25);
-    sf::IntRect ExplosionRect = sf::IntRect(130, 0, 32, 32);
+    sf::IntRect loadbulletRect = sf::IntRect(0, 50, 32, 32);
+    sf::IntRect bulletRect = sf::IntRect(249, 80, 16, 16);
+    sf::IntRect mediumbulletRect = sf::IntRect(200, 115, 32, 20);
+    sf::IntRect bigbulletRect = sf::IntRect(185, 170, 80, 16);
+    sf::IntRect starshipRect = sf::IntRect(0, 0, 33, 18);
+    sf::IntRect beambarRect = sf::IntRect(0, 0, 250, 25);
+    sf::IntRect fullbeambarRect = sf::IntRect(0, 26, 0, 25);
+    sf::IntRect explosionRect = sf::IntRect(130, 0, 32, 32);
 
     if (!background.loadFromFile("./assets/background.png"))
         exit(84);
@@ -604,18 +601,18 @@ void System::load_texture(registry &r)
     _textures.insert(std::make_pair("explosion", explosion));
     _textures.insert(std::make_pair("parallax", parallax));
     _textures.insert(std::make_pair("enemyBullet", enemyBullet));
-    _textures.insert(std::make_pair("enemyBossBullet", enemyBoss));
+    _textures.insert(std::make_pair("enemyBossBullet", enemyBoss)); //Enemy boss too
     _textures.insert(std::make_pair("enemyBlueBullet", enemyBlueBullet));
     _rect.insert(std::make_pair("enemyBossBulletRect", enemyBossBulletRect));
     _rect.insert(std::make_pair("enemyBossRect", enemyBossRect));
-    _rect.insert(std::make_pair("bulletRect", BulletRect));
-    _rect.insert(std::make_pair("mediumbulletRect", MediumBulletRect));
-    _rect.insert(std::make_pair("bigbulletRect", BigBulletRect));
-    _rect.insert(std::make_pair("starshipRect", StarshipRect));
-    _rect.insert(std::make_pair("beambarRect", BeambarRect));
-    _rect.insert(std::make_pair("fullbeambarRect", FullBeambarRect));
-    _rect.insert(std::make_pair("loadbulletRect", LoadBulletRect));
-    _rect.insert(std::make_pair("explosionRect", ExplosionRect));
+    _rect.insert(std::make_pair("bulletRect", bulletRect));
+    _rect.insert(std::make_pair("mediumbulletRect", mediumbulletRect));
+    _rect.insert(std::make_pair("bigbulletRect", bigbulletRect));
+    _rect.insert(std::make_pair("starshipRect", starshipRect));
+    _rect.insert(std::make_pair("beambarRect", beambarRect));
+    _rect.insert(std::make_pair("fullbeambarRect", fullbeambarRect));
+    _rect.insert(std::make_pair("loadbulletRect", loadbulletRect));
+    _rect.insert(std::make_pair("explosionRect", explosionRect));
 }
 
 void System::load_mob_texture(registry &r, std::string tag, std::string path)
@@ -630,10 +627,10 @@ void System::load_mob_rect(registry &r, std::string tag, int rect[])
 {
     sf::IntRect rectangle;
 
-    rectangle.left = rect[0]; //Copiloted need to be tested
-    rectangle.top = rect[1]; //Copiloted need to be tested
-    rectangle.width = rect[2]; //Copiloted need to be tested
-    rectangle.height = rect[3]; //Copiloted need to be tested
+    rectangle.left = rect[0];
+    rectangle.top = rect[1];
+    rectangle.width = rect[2];
+    rectangle.height = rect[3];
     _rect.insert(std::make_pair(tag, rectangle));
 
 }

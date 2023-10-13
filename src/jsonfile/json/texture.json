@@ -1,0 +1,44 @@
+{
+    "texture": [
+        {
+            "tag": "background",
+            "path": "./assets/background.png"
+        },
+        {
+            "tag": "enemyBoss",
+            "path": "./assets/enemyBoss.png"
+        },
+        {
+            "tag": "enemyBlueBullet",
+            "path": "./assets/enemyBlueBullet.png"
+        },
+        {
+            "tag": "enemyFour",
+            "path": "./assets/enemyAlien.png"
+        },
+        {
+            "tag": "enemyBullet",
+            "path": "./assets/enemyBullet.png"
+        },
+        {
+            "tag": "bullet",
+            "path": "./assets/playerBullet.png"
+        },
+        {
+            "tag": "starship",
+            "path": "./assets/starship.png"
+        },
+        {
+            "tag": "beambar",
+            "path": "./assets/beam.png"
+        },
+        {
+            "tag": "explosion",
+            "path": "./assets/explosion.png"
+        },
+        {
+            "tag": "parallax",
+            "path": "./assets/level1Back.png"
+        }
+    ]
+}
