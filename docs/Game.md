@@ -59,3 +59,7 @@ Your starship has two primary weapons:
 - A canon that shoot very slowly but inflict a lot of damages
 
 <br/>
+
+<img src="./assets/rtype_gameplay.png" width="600" height="300px">
+
+<br/>
