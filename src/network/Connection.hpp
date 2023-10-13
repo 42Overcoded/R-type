@@ -62,6 +62,7 @@ public:
             if (socket_.is_open())
             {
                 id_ = uid;
+                
             }
         }
     }
@@ -82,7 +83,7 @@ public:
                     {
                         std::cout << "[CLIENT] Connect Fail.\n";
                         socket_.close();
-                    } 
+                    }
                 });
         }
     }
@@ -104,7 +105,7 @@ public:
         {
             boost::asio::post(ioContext_, [this, packet]() {
                 bool isWritingPacket = !packetsOutQueue_.empty();
-                packetsOutQueue_.push_back(packet);
+                packetsOutQueue_.PushBack(packet);
                 if (!isWritingPacket)
                 {
                     SendHeader();
@@ -120,18 +121,18 @@ private:
     {
         boost::asio::async_write(
             socket_,
-            boost::asio::buffer(&packetsOutQueue_.front().header, sizeof(PacketHeader<T>)),
+            boost::asio::buffer(&packetsOutQueue_.Front().header, sizeof(PacketHeader<T>)),
             [this](std::error_code ec, std::size_t length)
             {
                 if (!ec)
                 {
-                    if (packetsOutQueue_.front().body.size() > 0)
+                    if (packetsOutQueue_.Front().body.size() > 0)
                     {
                         SendBody();
                     }
                     else
                     {
-                        packetsOutQueue_.pop_front();
+                        packetsOutQueue_.PopFront();
                         if (!packetsOutQueue_.empty())
                         {
                             SendHeader();
@@ -149,12 +150,12 @@ private:
     {
         boost::asio::async_write(
             socket_,
-            boost::asio::buffer(packetsOutQueue_.front().body.data(), packetsOutQueue_.front().body.size()),
+            boost::asio::buffer(packetsOutQueue_.Front().body.data(), packetsOutQueue_.Front().body.size()),
             [this](std::error_code ec, std::size_t length)
             {
                 if (!ec)
                 {
-                    packetsOutQueue_.pop_front();
+                    packetsOutQueue_.PopFront();
                     if (!packetsOutQueue_.empty())
                     {
                         SendHeader();
@@ -216,11 +217,11 @@ private:
     {
         if (ownerType_ == Owner::Server)
         {
-            packetsInQueue_.push_back({this->shared_from_this(), recvBuffer_});
+            packetsInQueue_.PushBack({this->shared_from_this(), recvBuffer_});
         }
         else
         {
-            packetsInQueue_.push_back({nullptr, recvBuffer_});
+            packetsInQueue_.PushBack({nullptr, recvBuffer_});
         }
         GetHeader();
     }

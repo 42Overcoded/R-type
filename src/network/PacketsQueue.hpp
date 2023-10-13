@@ -7,8 +7,10 @@
 
 #ifndef PACKETSQUEUE_HPP_
 #define PACKETSQUEUE_HPP_
+#include <cstddef>
 #include <deque>
 #include <mutex>
+#include <condition_variable>
 
 
 namespace Network {
@@ -25,19 +27,19 @@ public:
     PacketsQueue()                        = default;
     PacketsQueue(const PacketsQueue<T> &) = delete;
 
-    const T &front()
+    const T &Front()
     {
         std::scoped_lock lock(muxQueue);
         return deqQueue.front();
     }
 
-    const T &back()
+    const T &Back()
     {
         std::scoped_lock lock(muxQueue);
         return deqQueue.back();
     }
 
-    T pop_front()
+    T PopFront()
     {
         std::scoped_lock lock(muxQueue);
         auto t = std::move(deqQueue.front());
@@ -45,7 +47,7 @@ public:
         return t;
     }
 
-    T pop_back()
+    T PopBack()
     {
         std::scoped_lock lock(muxQueue);
         auto t = std::move(deqQueue.back());
@@ -53,21 +55,50 @@ public:
         return t;
     }
 
-    void push_front(const T &item)
+    void PushFront(const T &item)
     {
         std::scoped_lock lock(muxQueue);
         deqQueue.emplace_front(std::move(item));
     }
 
-    void push_back(const T &item)
+    void PushBack(const T &item)
     {
         std::scoped_lock lock(muxQueue);
         deqQueue.emplace_back(std::move(item));
     }
 
+    bool IsEmpty()
+    {
+        std::scoped_lock lock(muxQueue);
+        return deqQueue.empty();
+    }
+
+    size_t GetSize()
+    {
+        std::scoped_lock lock(muxQueue);
+        return deqQueue.size();
+    }
+
+    void Wait()
+    {
+        while(IsEmpty())
+        {
+            std::unique_lock<std::mutex> ul(muxBlocking);
+            cvBlocking.wait(ul);
+        }
+    }
+
+    void Clear()
+    {
+        std::scoped_lock lock(muxQueue);
+        deqQueue.clear();
+    }
+
 protected:
     std::mutex muxQueue;
     std::deque<T> deqQueue;
+    std::condition_variable cvBlocking;
+    std::mutex muxBlocking;
 };
 };  // namespace Network
 

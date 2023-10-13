@@ -10,9 +10,9 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <memory>
 #include <ostream>
 #include <vector>
-#include <memory>
 
 namespace Network {
 
@@ -21,20 +21,20 @@ class Connection;
 
 /**
  * @brief Packet header send at the beginning of each packet
- * 
- * @tparam T 
+ *
+ * @tparam T
  */
 template <typename T>
 struct PacketHeader
 {
-    T id{};
+    T flag{};
     uint32_t size = 0;
 };
 
 /**
  * @brief Packet send through the network
- * 
- * @tparam T 
+ *
+ * @tparam T
  */
 template <typename T>
 struct Packet
@@ -44,8 +44,8 @@ struct Packet
 
     /**
      * @brief Get the size of the entire packet in bytes
-     * 
-     * @return size_t 
+     *
+     * @return size_t
      */
     size_t size() const
     {
@@ -54,23 +54,23 @@ struct Packet
 
     /**
      * @brief Display the packet in a human readable format
-     * 
-     * @param os 
-     * @param packet 
-     * @return std::ostream& 
+     *
+     * @param os
+     * @param packet
+     * @return std::ostream&
      */
     friend std::ostream &operator<<(std::ostream &os, const Packet<T> &packet)
     {
-        os << "PACKET ID: " << packet.header.id << " SIZE: " << packet.header.size << " BODY: ";
+        os << "PACKET ID: " << packet.header.flag << " SIZE: " << packet.header.size << " BODY: ";
         return os;
     }
 
     /**
      * @brief Push data into the packet
-     * 
-     * @tparam DataType 
-     * @param data 
-     * @return Packet<T>& 
+     *
+     * @tparam DataType
+     * @param data
+     * @return Packet<T>&
      */
     template <typename DataType>
     friend Packet<T> &operator<<(Packet<T> &packet, const DataType &data)
@@ -88,10 +88,10 @@ struct Packet
 
     /**
      * @brief Pop data from the packet
-     * 
-     * @tparam DataType 
-     * @param data 
-     * @return Packet<T>& 
+     *
+     * @tparam DataType
+     * @param data
+     * @return Packet<T>&
      */
     template <typename DataType>
     friend Packet<T> &operator>>(Packet<T> &packet, DataType &data)
@@ -114,9 +114,9 @@ struct OwnedPacket
     std::shared_ptr<Connection<T>> remote = nullptr;
     Packet<T> packet;
 
-    friend std::ostream &operator<<(std::ostream &os, const OwnedPacket<T> &packet)
+    friend std::ostream &operator<<(std::ostream &os, const OwnedPacket<T> &opacket)
     {
-        os << packet.packet;
+        os << opacket.packet;
         return os;
     }
 };
