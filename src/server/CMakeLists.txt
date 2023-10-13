@@ -5,6 +5,14 @@ set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 include(FetchContent)
 
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.10.4 # Remplacez par la version souhaitée
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
+
 # Fetch and include SFML
 FetchContent_Declare(
     SFML
@@ -40,8 +48,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
     Server.hpp
-    game/Game.hpp
-    game/GameEngineServer.hpp
+    gameEngine/GameEngineServer.hpp
     ../ecs/Registry.hpp
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
@@ -57,8 +64,15 @@ set(INCLUDES
 
 set(EXEC_SRC
     Server.cpp
-    game/Game.cpp
-    game/GameEngineServer.cpp
+    gameEngine/GameEngineServer.cpp
+    gameEngine/game/gameLogic/animation.cpp
+    gameEngine/game/gameLogic/level1.cpp
+    gameEngine/game/gameLogic/miscellaneous.cpp
+    gameEngine/game/gameLogic/shoot.cpp
+    gameEngine/game/gameInitialisation/initBullets.cpp
+    gameEngine/game/gameInitialisation/initEnemy.cpp
+    gameEngine/game/gameInitialisation/initMiscellaneous.cpp
+    gameEngine/game/gameInitialisation/initStarship.cpp
     ../ecs/Registry.cpp
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/ServerSystem.cpp
@@ -76,6 +90,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/game)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network_s)
+include_directories(${nlohmann_json_SOURCE_DIR}/include)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} sfml-system Boost::asio Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)

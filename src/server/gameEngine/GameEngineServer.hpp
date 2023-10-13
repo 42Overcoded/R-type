@@ -8,12 +8,9 @@
 #ifndef GAMEENGINE_HPP_
 #define GAMEENGINE_HPP_
 
-#include "../jsonfile/include/JsonParser.hpp"
-#include "../ecs/Registry.hpp"
+#include "../../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
+#include "../../ecs/ComponentsArray/Systems/ServerSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
 
@@ -26,10 +23,16 @@ enum Scene {
 
 class gameEngine {
     public:
-        gameEngine(registry &registry) : _registry(registry) {}
+        gameEngine(registry &registry, unsigned int portNumber) : _registry(registry) {
+            try {
+                //_networkSystem = std::make_unique<NetworkSystem>(portNumber);
+            } catch (std::exception &e) {
+                std::cerr << e.what() << std::endl;
+                exit(84);
+            }
+        }
         ~gameEngine() = default;
         void register_component_to_game();
-        sf::RenderWindow &get_window();
         entity_t init_starship(int id, int i);
         entity_t init_enemy(int i);
         entity_t init_enemy_2();
@@ -65,11 +68,10 @@ class gameEngine {
     protected:
     private:
         Scene scene;
-        JsonParser *parsed;
         sf::Time elapsed;
         sf::Clock clock;
-        sf::RenderWindow _window;
-        SfmlSystem _system;
+        System _system;
+        //std::unique_ptr<NetworkSystem> _networkSystem;
         registry _registry;
 };
 

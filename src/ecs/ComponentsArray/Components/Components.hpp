@@ -24,10 +24,30 @@ struct Speed {
     float speedx = 0;
 };
 
+struct Texture {
+    std::string textureTag;
+    std::string texturePath;
+};
+
 struct State {
     int state = 0;
     int _state = 0;
     int index = 0;
+};
+
+struct Scale {
+    float scale = 1;
+};
+
+struct Rect {
+    int left;
+    int top;
+    int width;
+    int height;
+    int baseLeft;
+    int baseTop;
+    int baseWidth;
+    int baseHeight;
 };
 
 struct Clock {
@@ -49,7 +69,7 @@ struct EnemyBall {
 };
 
 struct SearchingHead {
-    bool searching = true;
+    bool searching = false;
 };
 
 struct Sprite {
@@ -86,12 +106,12 @@ struct Score {
 
 struct Text {
     sf::Text text;
-    sf::Font font;
+    std::string fontTag;
     std::string str;
 };
 
 struct Drawable {
-    bool drawable = true;
+    bool drawable = false;
 };
 
 struct Control {

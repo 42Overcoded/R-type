@@ -5,25 +5,15 @@
 ** server
 */
 #include <iostream>
-#include "game/Game.hpp"
 #include "../network_s/Network.hpp"
+#include "gameEngine/GameEngineServer.hpp"
 
-int main(int ac, char **av) {
-    unsigned int portNumber = DefaultPort;
+int main() {
+    UdpServer network(4242);
 
-    if (ac > 2) {
-        std::cerr << "Usage: ./r-type_server port" << std::endl;
-        return 84;
-    } else if (ac == 2) {
-        try {
-            portNumber = std::stoi(av[1]);
-        } catch (std::exception &e) {
-            std::cerr << "Error: port must be a number" << std::endl;
-            return 84;
-        }
-    } else {
-        std::cout << "No port specified, using default port: " << DefaultPort << std::endl;
-    }
-    game(portNumber);
+    network.run();
+    registry r;
+    gameEngine game(r, 4242);
+    game.launch_game();
     return 0;
 }

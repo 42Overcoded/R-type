@@ -5,22 +5,11 @@
 ** gameEngine
 */
 
-#include "GameEngine.hpp"
+#include "GameEngineServer.hpp"
 #include <csignal>
 #include <iostream>
 #include <optional>
-#include "Components.hpp"
-#include "Registry.hpp"
-#include "SFML/Graphics/Font.hpp"
-#include "SFML/Graphics/Rect.hpp"
-#include "SFML/System/Clock.hpp"
-#include "SfmlSystem.hpp"
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <random>
 #include <nlohmann/json.hpp>
-#include <SFML/Window/Keyboard.hpp>
 #include <ctime>
 
 void gameEngine::register_component_to_game()
@@ -50,10 +39,7 @@ void gameEngine::register_component_to_game()
 };
 
 void gameEngine::launch_game() {
-    _window.create(sf::VideoMode(1920, 1080), "R-Type");
-    _window.setFramerateLimit(60);
     register_component_to_game();
-    _system.load_texture(_registry);
     scene = MENU;
     sf::Time _elapsed;
     sf::Clock _clock;
@@ -71,7 +57,7 @@ void gameEngine::launch_game() {
     for (int i = 0; i < 3; i++)
         init_life(i);
 
-    while (_window.isOpen())
+    while (true)
     {
         auto &health = _registry.get_components<Health>();
         auto &tag = _registry.get_components<Tag>();
@@ -97,37 +83,15 @@ void gameEngine::launch_game() {
             elapsed = clock.getElapsedTime();
             _elapsed = _clock.getElapsedTime();
             clock.restart();
-
-            sf::Event event;
-            while (_window.pollEvent(event))
-            {
-                if (event.type == sf::Event::Closed)
-                    _window.close();
-            }
             _system.modify_pattern(_registry);
             spawn_wave(_elapsed, wave);
             animate_enemy();
-            _system.control_system(_registry);
             shoot_system(elapsed);
             _system.velocity_system(_registry, elapsed);
-            _system.color_system(_registry);
             _system.hitbox_system(_registry);
             death_animation();
             shoot_enemy();
             life_handler();
         }
-        _window.clear(sf::Color::Black);
-        _system.position_system(_registry);
-        _system.rect_system(_registry);
-        _system.texture_system(_registry);
-        _system.scale_system(_registry);
-        _system.font_system(_registry);
-        _system.string_system(_registry);
-        _system.draw_system(_registry, _window);
-        _window.display();
     }
-}
-
-sf::RenderWindow &gameEngine::get_window() {
-    return _window;
 }
