@@ -1,0 +1,12 @@
+{
+    "life": {
+        "tag": "life",
+        "textureTag": "starshipTexture",
+        "scale": 2,
+        "position": {
+            "x": 100,
+            "y": 950
+        },
+        "space": 200
+    }
+}

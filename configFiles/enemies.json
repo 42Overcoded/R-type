@@ -1,0 +1,202 @@
+
+{
+    "enemies": [
+        {
+            "score": 50,
+            "tag": "enemy 1",
+            "textureTag": "enemyStarshipTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 2,
+            "switch_index": 100,
+            "pattern": [
+                {
+                    "x": -0.2,
+                    "y": -0.2
+                },
+                {
+                    "x": -0.2,
+                    "y": 0.2
+                }
+            ],
+            "health": 1,
+            "state": 0,
+            "hitbox": {
+                "width": 96,
+                "height": 96
+            },
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 32,
+                "height": 32
+            },
+            "scale": 3,
+            "position": {
+                "x": 1950,
+                "y": 0
+            }
+        },
+        {
+            "score": 100,
+            "tag": "enemy 2",
+            "textureTag": "enemyScuttleTexture",
+            "pattern_index": 0,
+            "pattern_type": 50,
+            "pattern_length": 5,
+            "switch_index": 100,
+            "pattern": [
+                {
+                    "x": 0.2,
+                    "y": 0.1
+                },
+                {
+                    "x": -0.5,
+                    "y": 0.2
+                },
+                {
+                    "x": -0.3,
+                    "y": -0.3
+                },
+                {
+                    "x": 0.1,
+                    "y": -0.2
+                },
+                {
+                    "x": -0.2,
+                    "y": -0.1
+                }
+            ],
+            "health": 3,
+            "state": 0,
+            "hitbox": {
+                "width": 96,
+                "height": 96
+            },
+            "rect": {
+                "left": 2,
+                "top": 0,
+                "width": 33,
+                "height": 33
+            },
+            "scale": 3,
+            "position": {
+                "x": 1950,
+                "y": 0
+            }
+        },
+        {
+            "score": 200,
+            "tag": "enemy 3",
+            "textureTag": "enemyRobotTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 4,
+            "switch_index": 50,
+            "pattern": [
+                {
+                    "x": 0,
+                    "y": -0.2
+                },
+                {
+                    "x": -0.2,
+                    "y": 0
+                },
+                {
+                    "x": 0,
+                    "y": 0.2
+                },
+                {
+                    "x": -0.2,
+                    "y": 0
+                }
+            ],
+            "health": 8,
+            "state": 0,
+            "hitbox": {
+                "width": 96,
+                "height": 96
+            },
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 33,
+                "height": 33
+            },
+            "scale": 3,
+            "position": {
+                "x": 1950,
+                "y": 0
+            }
+        },
+        {
+            "score": 500,
+            "tag": "enemy 4",
+            "textureTag": "enemyAlienTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "speedx": -0.3,
+            "speedy": 0.3,
+            "switch_index": 100,
+            "pattern": [
+                {
+                    "x": 0,
+                    "y": 0
+                }
+            ],
+            "health": 30,
+            "state": 0,
+            "hitbox": {
+                "width": 200,
+                "height": 170
+            },
+            "texturePath": "./assets/sprites/starship.png",
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 100,
+                "height": 58
+            },
+            "scale": 3,
+            "position": {
+                "x": 1950,
+                "y": 0
+            }
+        },
+        {
+            "score": 3000,
+            "tag": "enemyBoss",
+            "textureTag": "enemyBossTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "switch_index": 0,
+            "speedx": -0.3,
+            "speedy": 0,
+            "pattern": [
+                {
+                    "x": 0,
+                    "y": 0
+                }
+            ],
+            "health": 200,
+            "state": 0,
+            "hitbox": {
+                "width": 450,
+                "height": 660
+            },
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 200,
+                "height": 250
+            },
+            "scale": 3,
+            "position": {
+                "x": 1950,
+                "y": 100
+            }
+        }
+    ]
+}
