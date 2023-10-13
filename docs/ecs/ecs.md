@@ -15,7 +15,9 @@ The ecs is composed of 5 main parts :
 
 2. The Sparse Arrays are the part that will contain the components. It's a vector of components. The Sparse Arrays are used to store the components of the same type. For example, if you have a component Position, you will have a Sparse Array that will contain all the Position components of your game.
 
-3. The Components are the data that will be used by the systems. For example, if you have a component Position, it will contain the x and y position of an entity.
+3. The Components are the data that will be used by the systems. For example, if you have a component Position, it will contain the x and y position of an entity. to see more [click here](components.md "Learn more about the components").
+
+```cpp
 
 4. The entities are the all the objects of your game. For example, if you have a player, a monster and a 10 bullet, you will have 12 entities. The entities are just an id that will be used to associate components to them.
 
