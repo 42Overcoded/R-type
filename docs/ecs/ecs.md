@@ -17,8 +17,6 @@ The ecs is composed of 5 main parts :
 
 3. The Components are the data that will be used by the systems. For example, if you have a component Position, it will contain the x and y position of an entity. to see more [click here](components.md "Learn more about the components").
 
-```cpp
-
 4. The entities are the all the objects of your game. For example, if you have a player, a monster and a 10 bullet, you will have 12 entities. The entities are just an id that will be used to associate components to them.
 
 5. The system is composed of generic functions who can be usefull not for a specific game but for all the games. For example, you can have a system that will move all the entities that have a Position and a Speed component.
