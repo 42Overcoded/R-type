@@ -55,8 +55,14 @@ set(EXEC_SRC
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     gameEngine/GameEngine.cpp
-    gameEngine/game/Game.cpp
-    gameEngine/graphics/Graphic.cpp
+    gameEngine/game/gameInitialisation/initBullets.cpp
+    gameEngine/game/gameInitialisation/initEnemy.cpp
+    gameEngine/game/gameInitialisation/initStarship.cpp
+    gameEngine/game/gameInitialisation/initMiscellaneous.cpp
+    gameEngine/game/gameLogic/animation.cpp
+    gameEngine/game/gameLogic/level1.cpp
+    gameEngine/game/gameLogic/shoot.cpp
+    gameEngine/game/gameLogic/miscellaneous.cpp
     ../network_c/Network.cpp
     ../network_c/NetworkSystems.hpp
     ../jsonfile/src/JsonParser.cpp
@@ -80,8 +86,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network_c)
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio Boost::filesystem Boost::property_tree)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-include_directories(../../json/include)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

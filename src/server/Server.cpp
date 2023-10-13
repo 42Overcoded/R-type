@@ -5,13 +5,15 @@
 ** server
 */
 #include <iostream>
-#include "game/Game.hpp"
 #include "../network_s/Network.hpp"
+#include "gameEngine/GameEngineServer.hpp"
 
 int main() {
-    game();
     UdpServer network(4242);
 
     network.run();
+    registry r;
+    gameEngine game(r);
+    game.launch_game();
     return 0;
 }

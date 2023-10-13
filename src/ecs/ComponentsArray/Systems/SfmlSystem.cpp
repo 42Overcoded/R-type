@@ -24,6 +24,74 @@
 #include <cmath>
 #include <vector>
 
+
+void SfmlSystem::load_texture(registry &r)
+{
+    sf::Texture bullet;
+    sf::Texture starship;
+    sf::Texture enemy;
+    sf::Texture enemyTwo;
+    sf::Texture enemyThree;
+    sf::Texture enemyFour;
+    sf::Texture beambar;
+    sf::Texture explosion;
+    sf::Texture parallax;
+    sf::Texture enemyBullet;
+    sf::Texture enemyBlueBullet;
+    sf::Texture enemyBoss;
+    sf::Texture background;
+    sf::Texture menuButton;
+    sf::Texture playButton;
+    sf::Font font;
+
+    if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
+        exit(84);
+    if (!menuButton.loadFromFile("./assets/lobby.png"))
+        exit(84);
+    if (!playButton.loadFromFile("./assets/start.png"))
+        exit(84);
+    if (!background.loadFromFile("./assets/background.png"))
+        exit(84);
+    if (!enemyBoss.loadFromFile("./assets/enemyBoss.png"))
+        exit(84);
+    if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
+        exit(84);
+    if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
+        exit(84);
+    if (!enemyBullet.loadFromFile("./assets/enemyBullet.png"))
+        exit(84);
+    if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))
+        exit(84);
+    if  (!enemyTwo.loadFromFile("./assets/enemyScuttle.png"))
+        exit(84);
+    if (!bullet.loadFromFile("./assets/playerBullet.png"))
+        exit(84);
+    if (!starship.loadFromFile("./assets/starship.png"))
+        exit(84);
+    if (!enemy.loadFromFile("./assets/enemyStarship.png"))
+        exit(84);
+    if (!beambar.loadFromFile("./assets/beam.png"))
+        exit(84);
+    if (!explosion.loadFromFile("./assets/explosion.png"))
+        exit(84);
+    textures["starshipTexture"] = starship;
+    textures["beambarTexture"] = beambar;
+    textures["enemyBossTexture"] = enemyBoss;
+    textures["enemyRobotTexture"] = enemyThree;
+    textures["enemyScuttleTexture"] = enemyTwo;
+    textures["enemyAlienTexture"] = enemyFour;
+    textures["enemyStarshipTexture"] = enemy;
+    textures["backgroundTexture"] = background;
+    textures["loadShootTexture"] = bullet;
+    fonts["scoreFont"] = font;
+    textures["menuTexture"] = menuButton;
+    textures["playTexture"] = playButton;
+    textures["explosionTexture"] = explosion;
+    textures["enemyBulletTexture"] = enemyBullet;
+    textures["enemyBlueBulletTexture"] = enemyBlueBullet;
+    textures["enemyBossBulletTexture"] = enemyBoss;
+}
+
 void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
 {
     auto &drawable = r.get_components<Drawable>();
@@ -158,6 +226,16 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
                 position[i]->y = 870;
             }
         }
+        if (tag[i]->tag == "starship") {
+            if (position[i]->x < 0)
+                position[i]->x = 0;
+            if (position[i]->x > 1820)
+                position[i]->x = 1820;
+            if (position[i]->y < 0)
+                position[i]->y = 0;
+            if (position[i]->y > 870)
+                position[i]->y = 870;
+        }
     }
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -166,16 +244,6 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
         if (position[i] != std::nullopt && speed[i] != std::nullopt && sprite[i] != std::nullopt) {
             position[i]->x += speed[i]->speedx * elapsed.asMilliseconds();
             position[i]->y += speed[i]->speedy * elapsed.asMilliseconds();
-            if (tag[i]->tag == "starship") {
-                if (position[i]->x < 0)
-                    position[i]->x = 0;
-                if (position[i]->x > 1820)
-                    position[i]->x = 1820;
-                if (position[i]->y < 0)
-                    position[i]->y = 0;
-                if (position[i]->y > 870)
-                    position[i]->y = 870;
-            }
         }
     }
 }
@@ -330,202 +398,24 @@ void SfmlSystem::hitbox_system(registry &r)
     }
 }
 
-void SfmlSystem::life_handler(registry &r, sf::RenderWindow &window)
+void SfmlSystem::modify_pattern(registry &r)
 {
-    auto &tag = r.get_components<Tag>();
-    auto &position = r.get_components<Position>();
-    auto &health = r.get_components<Health>();
-    auto &sprite = r.get_components<Sprite>();
-    auto &control = r.get_components<Control>();
-    auto &state = r.get_components<State>();
+    auto &speed = r.get_components<Speed>();
+    auto &pattern = r.get_components<Pattern>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i] == std::nullopt)
-            continue;
-        if (tag[i]->tag == "life") {
-            for (size_t j = 0; j < r._entity_number; j++) {
-                if (tag[j] == std::nullopt)
-                    continue;
-                if (tag[j]->tag == "starship" && control[j] != std::nullopt) {
-                    if (health[j]->health <= state[i]->state + 1) {
-                        r.kill_entity(entity_t(i));
-                    }
-                }
+        if (speed[i] && pattern[i]) {
+            if (pattern[i]->pattern_length == 0)
+                continue;
+            if (pattern[i]->pattern_index < pattern[i]->switch_index) {
+                pattern[i]->pattern_index++;
+            } else {
+                pattern[i]->pattern_index = 0;
+                pattern[i]->pattern_type++;
+                pattern[i]->pattern_type %= pattern[i]->pattern_length;
+                speed[i]->speedx = pattern[i]->pattern[pattern[i]->pattern_type].speedx;
+                speed[i]->speedy = pattern[i]->pattern[pattern[i]->pattern_type].speedy;
             }
         }
     }
-}
-
-void SfmlSystem::load_texture(registry &r)
-{
-    sf::Texture bullet;
-    sf::Texture starship;
-    sf::Texture enemy;
-    sf::Texture enemyTwo;
-    sf::Texture enemyThree;
-    sf::Texture enemyFour;
-    sf::Texture beambar;
-    sf::Texture explosion;
-    sf::Texture parallax;
-    sf::Texture enemyBullet;
-    sf::Texture enemyBlueBullet;
-    sf::Texture enemyBoss;
-    sf::Texture background;
-    sf::Texture menuButton;
-    sf::Texture playButton;
-    sf::Font font;
-    sf::IntRect enemyBossBulletRect = sf::IntRect(0, 400, 23 ,20);
-
-    if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
-        exit(84);
-    if (!menuButton.loadFromFile("./assets/lobby.png"))
-        exit(84);
-    if (!playButton.loadFromFile("./assets/start.png"))
-        exit(84);
-    if (!background.loadFromFile("./assets/background.png"))
-        exit(84);
-    if (!enemyBoss.loadFromFile("./assets/enemyBoss.png"))
-        exit(84);
-    if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
-        exit(84);
-    if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
-        exit(84);
-    if (!enemyBullet.loadFromFile("./assets/enemyBullet.png"))
-        exit(84);
-    if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))
-        exit(84);
-    if  (!enemyTwo.loadFromFile("./assets/enemyScuttle.png"))
-        exit(84);
-    if (!bullet.loadFromFile("./assets/playerBullet.png"))
-        exit(84);
-    if (!starship.loadFromFile("./assets/starship.png"))
-        exit(84);
-    if (!enemy.loadFromFile("./assets/enemyStarship.png"))
-        exit(84);
-    if (!beambar.loadFromFile("./assets/beam.png"))
-        exit(84);
-    if (!explosion.loadFromFile("./assets/explosion.png"))
-        exit(84);
-    textures["starshipTexture"] = starship;
-    textures["beambarTexture"] = beambar;
-    textures["enemyBossTexture"] = enemyBoss;
-    textures["enemyRobotTexture"] = enemyThree;
-    textures["enemyScuttleTexture"] = enemyTwo;
-    textures["enemyAlienTexture"] = enemyFour;
-    textures["enemyStarshipTexture"] = enemy;
-    textures["backgroundTexture"] = background;
-    textures["loadShootTexture"] = bullet;
-    fonts["scoreFont"] = font;
-    textures["menuTexture"] = menuButton;
-    textures["playTexture"] = playButton;
-    textures["explosionTexture"] = explosion;
-    textures["enemyBulletTexture"] = enemyBullet;
-    textures["enemyBlueBulletTexture"] = enemyBlueBullet;
-    textures["enemyBossBulletTexture"] = enemyBoss;
-}
-
-void SfmlSystem::clock_time(registry &r)
-{
-    auto &_clock = r.get_components<Clock>();
-    auto &_tag = r.get_components<Tag>();
-
-    for (size_t i = 0; i < r._entity_number; i++) {
-        if (_tag[i] == std::nullopt)
-            continue;
-        if (_tag[i]->tag == "starship") {
-            _clock[i]->time = _clock[i]->clock.getElapsedTime();
-            _clock[i]->_time = _clock[i]->_clock.getElapsedTime();
-            _clock[i]->__time = _clock[i]->__clock.getElapsedTime();
-        }
-    }
-}
-
-void SfmlSystem::animate_enemy(registry &r)
-{
-    auto &sprite = r.get_components<Sprite>();
-    auto &tag = r.get_components<Tag>();
-    auto &clock = r.get_components<Clock>();
-    auto &state = r.get_components<State>();
-    auto &rect = r.get_components<Rect>();
-
-    for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i] == std::nullopt)
-            continue;
-        if (tag[i]->tag == "enemy 1") {
-            clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 0.05) {
-                state[i]->state += 1;
-                if (state[i]->state == 7) {
-                    state[i]->state = 0;
-                }
-                rect[i]->left = rect[i]->baseLeft + (32*state[i]->state);
-                clock[i]->clock.restart();
-            }
-        }
-        if (tag[i]->tag ==  "enemy 2") {
-            clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 0.05) {
-                state[i]->state += 1;
-                if (state[i]->state == 7) {
-                    state[i]->state = 0;
-                }
-                rect[i]->left = rect[i]->baseLeft + (33*state[i]->state);
-                clock[i]->clock.restart();
-            }
-        }
-        if (tag[i]->tag == "enemy 3") {
-            clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 0.2) {
-                state[i]->state += 1;
-                if (state[i]->state == 3) {
-                    state[i]->state = 0;
-                }
-                rect[i]->left = rect[i]->baseLeft + (33*state[i]->state);
-                clock[i]->clock.restart();
-            }
-        }
-        if (tag[i]->tag == "enemy 4") {
-            clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 0.5) {
-                state[i]->state += 1;
-                if (state[i]->state == 3) {
-                    state[i]->state = 0;
-                }
-                rect[i]->left = rect[i]->baseLeft + (100*state[i]->state);
-                clock[i]->clock.restart();
-            }
-        }
-        if (tag[i]->tag == "enemyBoss") {
-            clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 0.2) {
-                state[i]->state += 1;
-                if (state[i]->state == 8) {
-                    state[i]->state = 0;
-                }
-                rect[i]->left = rect[i]->baseLeft + (200*state[i]->state);
-                clock[i]->clock.restart();
-            }
-        }
-        if (tag[i]->tag == "enemyBossBullet") {
-            clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 0.1) {
-                state[i]->state += 1;
-                if (state[i]->state == 4) {
-                    state[i]->state = 0;
-                }
-                rect[i]->left = rect[i]->baseLeft + (23*state[i]->state);
-                clock[i]->clock.restart();
-            }
-        }
-    }
-}
-
-std::unordered_map<std::string, sf::Texture> SfmlSystem::get_map()
-{
-    return this->_textures;
-}
-
-std::unordered_map<std::string, sf::IntRect> SfmlSystem::get_rect()
-{
-    return this->_rect;
 }
