@@ -13,7 +13,7 @@ int main() {
 
     network.run();
     registry r;
-    gameEngine game(r);
+    gameEngine game(r, 4242);
     game.launch_game();
     return 0;
 }

@@ -22,18 +22,14 @@ Distribution of this memo is unlimited.
     - [History](#history)
     - [Terminology](#terminology)
   - [The GTP Model](#the-gtp-model)
-  - [Communication Functions](#communication-functions)
-    - [GTP Commands](#gtp-commands)
-      - [Messages Transmission Commands](#messages-transmission-commands)
-    - [GTP Replies](#gtp-replies)
-      - [Numeric Order List of Reply Codes](#numeric-order-list-of-reply-codes)
-  - [Declarative Specifications](#declarative-specifications)
-    - [Minimum Implementation](#minimum-implementation)
-    - [Connections](#connections)
-    - [Commands](#commands)
-    - [GTP Commands](#gtp-commands-1)
-    - [GTP Command Arguments](#gtp-command-arguments)
-    - [Sequencing of commands and replies](#sequencing-of-commands-and-replies)
+  - [Commands](#commands)
+    - [None](#none)
+    - [Connection](#connection)
+    - [Disconnection](#disconnection)
+    - [Controller](#controller)
+    - [Position](#position)
+    - [Start](#start)
+    - [End](#end)
 
 ## Introduction
 
@@ -94,9 +90,9 @@ may be diagrammed for an GTP service.
 
 ```txt
 /------------------------------------\
-|        |        |                  |
-| Header |  Size  |     Payload      |
-|        |        |                  |
+|      |    |              |         |
+| Flag | Id | Payload Size | Payload |
+|      |    |              |         |
 |------------------------------------|
 |                                    |
 |                UDP                 |
@@ -107,34 +103,105 @@ may be diagrammed for an GTP service.
 As you can see, the GTP is just on top of the UDP.
 That allow it to be lightweight and highly efficient.
 
-``Header`` is a 4 bytes long (unsigned int) number.
+``Flag`` is a 1 bytes long (uint8_t) number.
   It define the following message.
-``Size`` is a 4 bytes long (unsigned int) number.
+``Id`` is a 8 bytes long (uint64_t) number.
+  It is used to identify the message.
+``Size`` is a 8 bytes long (uint64_t) number.
   It describe the size in bit of the payload.
   Value of 0 in case of no payload.
 ``Payload`` is a structure containing different information.
   It will change depending of the value of the header.
 
-## Communication Functions
+## Commands
 
-### GTP Commands
+The following commands are available in the GTP protocol.
 
-#### Messages Transmission Commands
+```txt
+| Command |  Description  |
+| ------- | ------------- |
+| 0x00    | None          |
+| 0x01    | Connection    |
+| 0x02    | Disconnection |
+| 0x03    | Controller    |
+| 0x04    | Position      |
+| 0x05    | Start         |
+| 0x06    | End           |
+```
 
-### GTP Replies
+### None
 
-#### Numeric Order List of Reply Codes
+- Flag : 0x00
+- Id : [...]
+- Size : 0x00
+- Payload : None
 
-## Declarative Specifications
+Description : This command is used to check if the server is still alive.
 
-### Minimum Implementation
+### Connection
 
-### Connections
+- Flag : 0x01
+- Id : [...]
+- Size : 0x00
+- Payload : None
 
-### Commands
+Description : This command is used to connect to the server.
 
-### GTP Commands
+### Disconnection
 
-### GTP Command Arguments
+- Flag : 0x02
+- Id : [...]
+- Size : [...]
+- Payload : None
 
-### Sequencing of commands and replies
+Description : This command is used to disconnect from the server.
+
+### Controller
+
+- Flag : 0x03
+- Id : [...]
+- Size : [...]
+- Payload :
+
+```cpp
+bool up;
+bool down;
+bool left;
+bool right;
+bool shoot;
+```
+
+Description : This command is used to send the controller state.
+
+### Position
+
+- Flag : 0x04
+- Id : [...]
+- Size : [...]
+- Payload :
+
+```cpp
+unsigned int id;
+float x;
+float y;
+```
+
+Description : This command is used to send the position of an entity.
+
+### Start
+
+- Flag : 0x05
+- Id : [...]
+- Size : 0x00
+- Payload : None
+
+Description : This command is used to start the game.
+
+### End
+
+- Flag : 0x06
+- Id : [...]
+- Size : 0x00
+- Payload : None
+
+Description : This command is used to end the game.

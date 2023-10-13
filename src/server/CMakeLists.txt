@@ -55,6 +55,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/Systems/ServerSystem.hpp
     ../network_s/Network.hpp
     ../network_s/NetworkComponent.hpp
+    ../network_s/Containers.hpp
     ../jsonfile/include/Comportment.hpp
     ../jsonfile/include/JsonParser.hpp
     ../jsonfile/include/MapLevel.hpp

@@ -23,7 +23,14 @@ enum Scene {
 
 class gameEngine {
     public:
-        gameEngine(registry &registry) : _registry(registry) {}
+        gameEngine(registry &registry, unsigned int portNumber) : _registry(registry) {
+            try {
+                _networkSystem = std::make_unique<NetworkSystem>(portNumber);
+            } catch (std::exception &e) {
+                std::cerr << e.what() << std::endl;
+                exit(84);
+            }
+        }
         ~gameEngine() = default;
         void register_component_to_game();
         entity_t init_starship(int id, int i);
@@ -64,6 +71,7 @@ class gameEngine {
         sf::Time elapsed;
         sf::Clock clock;
         System _system;
+        std::unique_ptr<NetworkSystem> _networkSystem;
         registry _registry;
 };
 
