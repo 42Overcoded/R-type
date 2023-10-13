@@ -10,6 +10,10 @@ You can go up, down, left and right
 
 <br/>
 
+<img src="./assets/arrows.png" width="300" height="300">
+
+<br/>
+
 ### __fight__
 
 To defend yourself you can of course dodge ennemy's bullets.
@@ -22,3 +26,8 @@ In order to shoot you should press space bar.
 - if you shoot power is at its max, bullet will go though ennemies
 
 <br/>
+
+<img src="./assets/space.png" width="600" height="200">
+
+<br/>
+
