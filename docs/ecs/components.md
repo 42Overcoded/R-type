@@ -25,3 +25,7 @@ there are a lot of components:
 - Score : it contains the score of an entity, it's used to know the score an enemy is worth
 - Text : it contains the text of an entity, and the string associate with it (sf::Text)
 - SearchingHead : it contains a bool to know if an enemy ball is a searching head
+
+## How to create a component ?
+if you need a component not in the list, you can create it by yourself, it's really easy, you just need to create a struct with the data that you need in the ecs/ComponentsArray/Components/Components.hpp file,
+after, dont forgot to register it.
