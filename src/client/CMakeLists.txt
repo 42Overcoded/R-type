@@ -13,6 +13,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.10.4 # Remplacez par la version souhaitée
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
+
 set(BOOST_INCLUDE_LIBRARIES asio filesystem property_tree)
 set(BOOST_ENABLE_CMAKE ON)
 
@@ -82,6 +90,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray/Components)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray/Systems)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network_c)
+include_directories(${nlohmann_json_SOURCE_DIR}/include)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio Boost::filesystem Boost::property_tree)
