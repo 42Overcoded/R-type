@@ -121,16 +121,6 @@ struct OwnedPacket
     }
 };
 
-enum class Flag : uint32_t
-{
-    Connect,
-    Disconnect,
-    StartGame,
-    EndGame,
-    PlayerInput,
-    PlayerPosition,
-};
-
 }  // namespace Network
 
 #endif /* !PACKET_HPP_ */

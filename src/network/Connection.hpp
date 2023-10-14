@@ -11,11 +11,11 @@
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <cstddef>
+#include <iostream>
 #include "PacketsQueue.hpp"
 #include "boost/asio/io_context.hpp"
 #include "boost/asio/ip/udp.hpp"
 #include <sys/types.h>
-#include <iostream>
 
 namespace Network {
 
@@ -38,11 +38,12 @@ public:
         Client
     };
 
-    Connection(Owner ownerType, boost::asio::io_context &ioContext, boost::asio::ip::udp::socket socket,
+    Connection(
+        Owner ownerType,
+        boost::asio::io_context &ioContext,
+        boost::asio::ip::udp::socket socket,
         PacketsQueue<Packet<T>> &packetsInQueue)
-        : ioContext_(ioContext)
-        , socket_(std::move(socket))
-        , packetsInQueue_(packetsInQueue)
+        : ioContext_(ioContext), socket_(std::move(socket)), packetsInQueue_(packetsInQueue)
     {
         ownerType_ = ownerType;
     }
@@ -62,8 +63,11 @@ public:
             if (socket_.is_open())
             {
                 id_ = uid;
-                
             }
+        }
+        else
+        {
+            std::cerr << "Can't connect client to client" << std::endl;
         }
     }
     bool ConnectToServer(const boost::asio::ip::udp::resolver::results_type &endpoints)
@@ -72,11 +76,11 @@ public:
         {
             boost::asio::async_connect(
                 socket_, endpoints,
-                [this](std::error_code ec, boost::asio::ip::udp::endpoint endpoint)
-                {
+                [this](std::error_code ec, boost::asio::ip::udp::endpoint endpoint) {
                     if (!ec)
                     {
-                        std::cout << "[CLIENT] Connected to server: " << endpoint.address().to_string() << std::endl;
+                        std::cout << "[CLIENT] Connected to server: "
+                                  << endpoint.address().to_string() << std::endl;
                         GetHeader();
                     }
                     else
@@ -85,6 +89,10 @@ public:
                         socket_.close();
                     }
                 });
+        }
+        else
+        {
+            std::cerr << "Can't connect server to server" << std::endl;
         }
     }
     bool Disconnect()
@@ -120,10 +128,8 @@ private:
     void SendHeader()
     {
         boost::asio::async_write(
-            socket_,
-            boost::asio::buffer(&packetsOutQueue_.Front().header, sizeof(PacketHeader<T>)),
-            [this](std::error_code ec, std::size_t length)
-            {
+            socket_, boost::asio::buffer(&packetsOutQueue_.Front().header, sizeof(PacketHeader<T>)),
+            [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
                     if (packetsOutQueue_.Front().body.size() > 0)
@@ -150,9 +156,9 @@ private:
     {
         boost::asio::async_write(
             socket_,
-            boost::asio::buffer(packetsOutQueue_.Front().body.data(), packetsOutQueue_.Front().body.size()),
-            [this](std::error_code ec, std::size_t length)
-            {
+            boost::asio::buffer(
+                packetsOutQueue_.Front().body.data(), packetsOutQueue_.Front().body.size()),
+            [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
                     packetsOutQueue_.PopFront();
@@ -172,10 +178,8 @@ private:
     void GetHeader()
     {
         boost::asio::async_read(
-            socket_,
-            boost::asio::buffer(&recvBuffer_.header, sizeof(PacketHeader<T>)),
-            [this](std::error_code ec, std::size_t length)
-            {
+            socket_, boost::asio::buffer(&recvBuffer_.header, sizeof(PacketHeader<T>)),
+            [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
                     if (recvBuffer_.header.size > 0)
@@ -198,10 +202,8 @@ private:
     void GetBody()
     {
         boost::asio::async_read(
-            socket_,
-            boost::asio::buffer(recvBuffer_.body.data(), recvBuffer_.body.size()),
-            [this](std::error_code ec, std::size_t length)
-            {
+            socket_, boost::asio::buffer(recvBuffer_.body.data(), recvBuffer_.body.size()),
+            [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
                     AddToIncomingPackageQueue();
@@ -232,7 +234,7 @@ protected:
     PacketsQueue<Packet<T>> packetsOutQueue_;
     PacketsQueue<Packet<T>> &packetsInQueue_;
     Owner ownerType_ = Owner::Server;
-    uint32_t id_ = 0;
+    uint32_t id_     = 0;
     Packet<T> recvBuffer_;
 };
 };  // namespace Network

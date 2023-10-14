@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** R-type
 ** File description:
-** NetworkServer
+** INetworkServer
 */
 
-#ifndef NETWORKSERVER_HPP_
-#define NETWORKSERVER_HPP_
+#ifndef INETWORKSERVER_HPP_
+#define INETWORKSERVER_HPP_
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <deque>
@@ -14,6 +14,7 @@
 #include <memory>
 #include "Packet.hpp"
 #include "boost/asio/io_context.hpp"
+#include "PacketsQueue.hpp"
 
 namespace Network {
 
@@ -24,19 +25,18 @@ template <typename T>
 class Packet;
 
 template <typename T>
-class PacketsQueue;
-
-template <typename T>
-class NetworkServer
+class INetworkServer
 {
 public:
-    NetworkServer(uint16_t port)
+    INetworkServer(uint16_t port)
         : socket_(ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port)){};
-    virtual ~NetworkServer()
+
+    virtual ~INetworkServer()
     {
         Stop();
     };
 
+public:
     bool Start()
     {
         try
@@ -52,6 +52,7 @@ public:
         std::cout << "[SERVER] Started" << std::endl;
         return true;
     };
+
     bool Stop()
     {
         ioContext_.stop();
@@ -99,7 +100,7 @@ public:
         };
     };
 
-    void Update(size_t maxPacketsNbr = -1)
+    void UpdateServer(size_t maxPacketsNbr = -1)
     {
         size_t packetCount = 0;
         while (packetCount < maxPacketsNbr && !packetsInQueue_.empty())
@@ -134,4 +135,4 @@ protected:
 };
 };  // namespace Network
 
-#endif /* !NETWORKSERVER_HPP_ */
+#endif /* !INETWORKSERVER_HPP_ */

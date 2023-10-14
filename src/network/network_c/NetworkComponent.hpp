@@ -7,12 +7,12 @@
 
 #ifndef NETWORKCOMPONENT_HPP_
 #define NETWORKCOMPONENT_HPP_
-#include "Network.hpp"
 #include <memory>
+#include <cstdint>
 
 struct NetworkIn
 {
-    unsigned int id;
+    uint32_t id;
 };
 
 struct NetworkOut

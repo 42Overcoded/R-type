@@ -29,54 +29,54 @@ public:
 
     const T &Front()
     {
-        std::scoped_lock lock(muxQueue);
-        return deqQueue.front();
+        std::scoped_lock lock(mutexQueue);
+        return localQueue.front();
     }
 
     const T &Back()
     {
-        std::scoped_lock lock(muxQueue);
-        return deqQueue.back();
+        std::scoped_lock lock(mutexQueue);
+        return localQueue.back();
     }
 
     T PopFront()
     {
-        std::scoped_lock lock(muxQueue);
-        auto t = std::move(deqQueue.front());
-        deqQueue.pop_front();
+        std::scoped_lock lock(mutexQueue);
+        auto t = std::move(localQueue.front());
+        localQueue.pop_front();
         return t;
     }
 
     T PopBack()
     {
-        std::scoped_lock lock(muxQueue);
-        auto t = std::move(deqQueue.back());
-        deqQueue.pop_back();
+        std::scoped_lock lock(mutexQueue);
+        auto t = std::move(localQueue.back());
+        localQueue.pop_back();
         return t;
     }
 
     void PushFront(const T &item)
     {
-        std::scoped_lock lock(muxQueue);
-        deqQueue.emplace_front(std::move(item));
+        std::scoped_lock lock(mutexQueue);
+        localQueue.emplace_front(std::move(item));
     }
 
     void PushBack(const T &item)
     {
-        std::scoped_lock lock(muxQueue);
-        deqQueue.emplace_back(std::move(item));
+        std::scoped_lock lock(mutexQueue);
+        localQueue.emplace_back(std::move(item));
     }
 
     bool IsEmpty()
     {
-        std::scoped_lock lock(muxQueue);
-        return deqQueue.empty();
+        std::scoped_lock lock(mutexQueue);
+        return localQueue.empty();
     }
 
     size_t GetSize()
     {
-        std::scoped_lock lock(muxQueue);
-        return deqQueue.size();
+        std::scoped_lock lock(mutexQueue);
+        return localQueue.size();
     }
 
     void Wait()
@@ -90,13 +90,13 @@ public:
 
     void Clear()
     {
-        std::scoped_lock lock(muxQueue);
-        deqQueue.clear();
+        std::scoped_lock lock(mutexQueue);
+        localQueue.clear();
     }
 
 protected:
-    std::mutex muxQueue;
-    std::deque<T> deqQueue;
+    std::mutex mutexQueue;
+    std::deque<T> localQueue;
     std::condition_variable cvBlocking;
     std::mutex muxBlocking;
 };

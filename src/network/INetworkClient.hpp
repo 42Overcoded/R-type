@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** R-type
 ** File description:
-** NetworkClient
+** INetworkClient
 */
 
-#ifndef NETWORKCLIENT_HPP_
-#define NETWORKCLIENT_HPP_
+#ifndef INETWORKCLIENT_HPP_
+#define INETWORKCLIENT_HPP_
 #include <boost/asio.hpp>
 #include <iostream>
 #include <memory>
@@ -20,13 +20,13 @@ template <typename T>
 class PacketsQueue;
 
 template <typename T>
-class NetworkClient
+class INetworkClient
 {
 public:
-    NetworkClient() : socket_(ioContext_)
+    INetworkClient() : socket_(ioContext_)
     {
     }
-    virtual ~NetworkClient()
+    virtual ~INetworkClient()
     {
         Disconnect();
     }
@@ -73,6 +73,14 @@ public:
         return false;
     }
 
+    void Send(const Packet<T> &packet)
+    {
+        if (IsConnected())
+        {
+            connection_->Send(packet);
+        }
+    }
+
     PacketsQueue<OwnedPacket<T>> &Incoming()
     {
         return packetsInQueue_;
@@ -89,4 +97,4 @@ private:
 };
 };  // namespace Network
 
-#endif /* !NETWORKCLIENT_HPP_ */
+#endif /* !INETWORKCLIENT_HPP_ */
