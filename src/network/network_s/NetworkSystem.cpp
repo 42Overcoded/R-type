@@ -58,6 +58,7 @@ void NetworkSystem::manageServerGetPing(
 {
     Packet<Flag> response;
 
+    std::cout << "Ping from client " << client->GetId() << std::endl;
     response.header.flag = Flag::ClientSendPing;
     client->SendPacket(response);
 }
@@ -67,6 +68,7 @@ void NetworkSystem::manageServerConnect(
 {
     Packet<Flag> response;
 
+    std::cout << "Client " << client->GetId() << " connected" << std::endl;
     response.header.flag = Flag::ClientAccepted;
     client->SendPacket(response);
 }
@@ -77,6 +79,7 @@ void NetworkSystem::manageServerUpdateControls(
     auto &network = reg.get_components<NetworkComponent>();
     auto &controls = reg.get_components<Control>();
 
+    std::cout << "Update controls from client " << client->GetId() << std::endl;
     for (unsigned int i = 0; i < network.size(); i++) {
         if (network[i]->clientId == client->GetId() && controls[i] != std::nullopt) {
             packet >> controls[i];

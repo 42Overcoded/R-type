@@ -34,6 +34,7 @@ NetworkSystem::~NetworkSystem()
 void NetworkSystem::Update(registry &reg)
 {
     manageInputs(reg);
+    manageOutputs(reg);
 }
 
 
@@ -66,18 +67,12 @@ void NetworkSystem::managePacketIn(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientAccepted(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
-
-    for (unsigned int i; i < networkInArr.size(); i++)
-    {
-        if (networkInArr[i] != std::nullopt)
-        {
-        }
-    }
+    std::cout << "Client accepted" << std::endl;
 }
 
 void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
 {
+    std::cout << "Client assign ID" << std::endl;
     SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
@@ -90,6 +85,7 @@ void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 {
+    std::cout << "Client send ping" << std::endl;
     SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
@@ -102,6 +98,7 @@ void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 {
+    std::cout << "Client add player" << std::endl;
     SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
@@ -114,6 +111,7 @@ void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet)
 {
+    std::cout << "Client remove player" << std::endl;
     SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
@@ -126,6 +124,7 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet
 
 void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet)
 {
+    std::cout << "Client create entity" << std::endl;
     SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
@@ -138,6 +137,7 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)
 {
+    std::cout << "Client update entity" << std::endl;
     SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
@@ -146,6 +146,23 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
         {
         }
     }
+}
+
+void NetworkSystem::manageOutputs(registry &reg)
+{
+    if (IsConnected())
+    {
+        manageServerGetPing();
+    }
+}
+
+void NetworkSystem::manageServerGetPing(void)
+{
+    Packet<Flag> packet;
+
+    std::cout << "Send ping to server" << std::endl;
+    packet.header.flag = Flag::ServerGetPing;
+    SendToServer(packet);
 }
 
 }  // namespace Network

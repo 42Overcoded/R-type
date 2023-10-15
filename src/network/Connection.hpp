@@ -59,6 +59,7 @@ public:
             if (socket_.is_open())
             {
                 id_ = uid;
+                GetHeader();
             }
         }
         else
@@ -68,7 +69,18 @@ public:
     }
     void ConnectToServer(boost::asio::ip::udp::resolver::results_type &endpoints)
     {
-
+        if (ownerType_ == Owner::Client)
+        {
+            Packet<T> packet;
+            packet << T::ServerConnect;
+            SendPacket(packet);
+            std::cout <<  "Connect to server" << std::endl;
+            GetHeader();
+        }
+        else
+        {
+            std::cerr << "Can't connect server to server" << std::endl;
+        }
     }
     void Disconnect()
     {

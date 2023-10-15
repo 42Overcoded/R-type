@@ -36,7 +36,12 @@ private:
     void manageClientCreateEntity(registry &reg, Packet<Flag> &packet);
     void manageClientUpdateEntity(registry &reg, Packet<Flag> &packet);
 
+    // Outputs
+    void manageOutputs(registry &reg);
 
+    void manageServerGetPing(void);
+    void manageServerConnect(void);
+    void manageServerUpdateControls(registry &reg, Packet<Flag> &packet);
 
 private:
     std::uint32_t clientId_;

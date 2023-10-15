@@ -73,11 +73,11 @@ public:
         return false;
     }
 
-    void Send(const Packet<T> &packet)
+    void SendToServer(const Packet<T> &packet)
     {
         if (IsConnected())
         {
-            connection_->Send(packet);
+            connection_->SendPacket(packet);
         }
     }
 
