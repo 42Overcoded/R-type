@@ -37,15 +37,16 @@ private:
             std::uint32_t port,
             PacketsQueue<OwnedPacket<T>> &packetsQueue,
             std::deque<std::shared_ptr<Connection<T>>> &clients)
-            : ioContext_(ioContext)
-            , socket_(ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
-            , packetsInQueue_(packetsQueue)
-            , clients_(clients){};
+            : ioContext_(ioContext), packetsInQueue_(packetsQueue), clients_(clients)
+        {
+            socket_ = std::make_unique<boost::asio::ip::udp::socket>(
+                ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
+        };
         ~ClientsManager() = default;
 
         void GetPacket()
         {
-            socket_.async_receive_from(
+            socket_->async_receive_from(
                 boost::asio::buffer(&recvBuffer_.header, sizeof(PacketHeader<T>)), remoteEndpoint_,
                 [this](std::error_code ec, std::size_t length) {
                     if (!ec)
@@ -62,7 +63,7 @@ private:
                     else
                     {
                         std::cout << "[" << id_ << "] Get Header Fail.\n";
-                        socket_.close();
+                        socket_->close();
                     }
                 });
         }
@@ -74,10 +75,10 @@ private:
             {
             case T::ServerConnect:
                 std::cout << "Server Connect" << std::endl;
+                boost::asio::ip::udp::socket socket(ioContext_, boost::asio::ip::udp::v4());
                 std::shared_ptr<Connection<T>> newClient = std::make_shared<Connection<T>>(
-                    Connection<T>::Owner::Server, ioContext_,
-                    boost::asio::ip::udp::socket(ioContext_, remoteEndpoint_.protocol(), 0),
-                    packetsInQueue_);
+                    Connection<T>::Owner::Server, ioContext_, std::move(socket), packetsInQueue_);
+                std::cout << "New client created" << std::endl;
                 newClient->ConnectToClient(remoteEndpoint_, id_++);
                 clients_.push_back(newClient);
             }
@@ -85,7 +86,7 @@ private:
         }
 
     private:
-        boost::asio::ip::udp::socket socket_;
+        std::unique_ptr<boost::asio::ip::udp::socket> socket_;
         boost::asio::io_context &ioContext_;
         PacketsQueue<OwnedPacket<T>> &packetsInQueue_;
         uint32_t id_ = 0;
@@ -98,6 +99,7 @@ public:
     INetworkServer(uint16_t port) : clientsManager_(ioContext_, port, packetsInQueue_, clients_)
     {
         std::cout << "[SERVER] Created" << std::endl;
+        Start();
     };
 
     virtual ~INetworkServer()
@@ -111,14 +113,15 @@ public:
         try
         {
             clientsManager_.GetPacket();
+            std::cout << "[SERVER] Starting..." << std::endl;
             threadContext_ = std::thread([this]() { ioContext_.run(); });
+            std::cout << "[SERVER] Started" << std::endl;
         }
         catch (const std::exception &e)
         {
             std::cerr << "[SERVER] Exception: " << e.what() << std::endl;
             return false;
         }
-        std::cout << "[SERVER] Started" << std::endl;
         return true;
     };
 
