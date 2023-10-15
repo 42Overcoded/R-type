@@ -12,18 +12,14 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <cstddef>
 #include <iostream>
+#include "Packet.hpp"
 #include "PacketsQueue.hpp"
 #include "boost/asio/io_context.hpp"
 #include "boost/asio/ip/udp.hpp"
+#include "boost/asio/write.hpp"
 #include <sys/types.h>
 
 namespace Network {
-
-template <typename T>
-class PacketHeader;
-
-template <typename T>
-class Packet;
 
 template <typename T>
 class PacketsQueue;
@@ -42,7 +38,7 @@ public:
         Owner ownerType,
         boost::asio::io_context &ioContext,
         boost::asio::ip::udp::socket socket,
-        PacketsQueue<Packet<T>> &packetsInQueue)
+        PacketsQueue<OwnedPacket<T>> &packetsInQueue)
         : ioContext_(ioContext), socket_(std::move(socket)), packetsInQueue_(packetsInQueue)
     {
         ownerType_ = ownerType;
@@ -70,30 +66,9 @@ public:
             std::cerr << "Can't connect client to client" << std::endl;
         }
     }
-    void ConnectToServer(const boost::asio::ip::udp::resolver::results_type &endpoints)
+    void ConnectToServer(boost::asio::ip::udp::resolver::results_type &endpoints)
     {
-        if (ownerType_ == Owner::Client)
-        {
-            boost::asio::async_connect(
-                socket_, endpoints,
-                [this](std::error_code ec, boost::asio::ip::udp::endpoint endpoint) {
-                    if (!ec)
-                    {
-                        std::cout << "[CLIENT] Connected to server: "
-                                  << endpoint.address().to_string() << std::endl;
-                        GetHeader();
-                    }
-                    else
-                    {
-                        std::cout << "[CLIENT] Connect Fail.\n";
-                        socket_.close();
-                    }
-                });
-        }
-        else
-        {
-            std::cerr << "Can't connect server to server" << std::endl;
-        }
+
     }
     void Disconnect()
     {
@@ -127,8 +102,8 @@ public:
 private:
     void SendHeader()
     {
-        boost::asio::async_write(
-            socket_, boost::asio::buffer(&packetsOutQueue_.Front().header, sizeof(PacketHeader<T>)),
+        socket_.async_send(
+            boost::asio::buffer(&packetsOutQueue_.Front().header, sizeof(PacketHeader<T>)),
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
@@ -154,10 +129,9 @@ private:
     }
     void SendBody()
     {
-        boost::asio::async_write(
-            socket_,
-            boost::asio::buffer(
-                packetsOutQueue_.Front().body.data(), packetsOutQueue_.Front().body.size()),
+        socket_.async_send(
+            boost::asio::buffer(packetsOutQueue_.Front().body.data(),
+                                packetsOutQueue_.Front().body.size()),
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
@@ -177,8 +151,8 @@ private:
 
     void GetHeader()
     {
-        boost::asio::async_read(
-            socket_, boost::asio::buffer(&recvBuffer_.header, sizeof(PacketHeader<T>)),
+        socket_.async_receive(
+            boost::asio::buffer(&recvBuffer_.header, sizeof(PacketHeader<T>)),
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
@@ -201,8 +175,8 @@ private:
     }
     void GetBody()
     {
-        boost::asio::async_read(
-            socket_, boost::asio::buffer(recvBuffer_.body.data(), recvBuffer_.body.size()),
+        socket_.async_receive(
+            boost::asio::buffer(recvBuffer_.body.data(), recvBuffer_.body.size()),
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
@@ -232,7 +206,7 @@ protected:
     boost::asio::ip::udp::socket socket_;
     boost::asio::io_context &ioContext_;
     PacketsQueue<Packet<T>> packetsOutQueue_;
-    PacketsQueue<Packet<T>> &packetsInQueue_;
+    PacketsQueue<OwnedPacket<T>> &packetsInQueue_;
     Owner ownerType_ = Owner::Server;
     uint32_t id_     = 0;
     Packet<T> recvBuffer_;
