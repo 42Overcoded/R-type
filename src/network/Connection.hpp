@@ -85,7 +85,6 @@ public:
             packet << T::ServerConnect;
             SendPacket(packet);
             std::cout << "Connect to server" << std::endl;
-            socket_.open(boost::asio::ip::udp::v4());
             GetHeader();
         }
         else
