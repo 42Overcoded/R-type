@@ -1,0 +1,14 @@
+{
+    "score":
+    {
+        "tag": "score",
+        "fontTag": "scoreFont",
+        "state": 0,
+        "str": "Score: 0",
+        "position": {
+            "x": 1350,
+            "y": 950
+        },
+        "scale": 1
+    }
+}

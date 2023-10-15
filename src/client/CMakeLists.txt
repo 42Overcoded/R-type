@@ -13,6 +13,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.10.4 # Remplacez par la version souhaitée
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
+
 set(BOOST_INCLUDE_LIBRARIES asio filesystem property_tree)
 set(BOOST_ENABLE_CMAKE ON)
 
@@ -60,9 +68,15 @@ set(EXEC_SRC
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     gameEngine/GameEngine.cpp
-    gameEngine/game/Game.cpp
-    gameEngine/graphics/Graphic.cpp
     ../network/network_c/NetworkSystem.cpp
+    gameEngine/game/gameInitialisation/initBullets.cpp
+    gameEngine/game/gameInitialisation/initEnemy.cpp
+    gameEngine/game/gameInitialisation/initStarship.cpp
+    gameEngine/game/gameInitialisation/initMiscellaneous.cpp
+    gameEngine/game/gameLogic/animation.cpp
+    gameEngine/game/gameLogic/level1.cpp
+    gameEngine/game/gameLogic/shoot.cpp
+    gameEngine/game/gameLogic/miscellaneous.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
@@ -81,9 +95,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray/Component
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray/Systems)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network/network_c)
+include_directories(${nlohmann_json_SOURCE_DIR}/include)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio Boost::filesystem Boost::property_tree)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json sfml-graphics sfml-window sfml-system Boost::asio Boost::filesystem Boost::property_tree)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

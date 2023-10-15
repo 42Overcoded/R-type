@@ -5,8 +5,8 @@
 ** server
 */
 #include <iostream>
-#include "game/Game.hpp"
 #include "../network/Protocol.hpp"
+#include "gameEngine/GameEngineServer.hpp"
 
 int main(int ac, char **av) {
     unsigned int portNumber = Network::DefaultPort;
@@ -24,6 +24,8 @@ int main(int ac, char **av) {
     } else {
         std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
     }
-    game(portNumber);
+    registry r;
+    gameEngine game(r, 4242);
+    game.launch_game();
     return 0;
 }

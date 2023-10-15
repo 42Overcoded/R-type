@@ -53,21 +53,51 @@ class SparseArray {
         iterator begin() {
             return _data.begin();
         };
+        /**
+         * @brief encapsulation of std::vector functions
+         * 
+         * @return const_iterator 
+         */
         const_iterator begin() const {
             return _data.begin();
         };
+        /**
+         * @brief encapsulation of std::vector functions
+         * 
+         * @return const_iterator 
+         */
         const_iterator cbegin() const {
             return _data.cbegin();
         };
+        /**
+         * @brief encapsulation of std::vector functions
+         * 
+         * @return iterator 
+         */
         iterator end() {
             return _data.end();
         };
+        /**
+         * @brief encapsulation of std::vector functions
+         * 
+         * @return const_iterator 
+         */
         const_iterator end() const {
             return _data.end();
         };
+        /**
+         * @brief encapsulation of std::vector functions
+         * 
+         * @return const_iterator 
+         */
         const_iterator cend() const {
             return _data.cend();
         };
+        /**
+         * @brief encapsulation of std::vector functions
+         * 
+         * @return iterator 
+         */
         size_type size() const {
             return _data.size();
         };

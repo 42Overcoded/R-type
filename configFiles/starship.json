@@ -1,0 +1,152 @@
+
+{
+    "starship": [
+        {
+            "tag": "starship",
+            "textureTag": "starshipTexture",
+            "health": 4,
+            "state": 0,
+            "hitbox": {
+                "width": 99,
+                "height": 54
+            },
+            "texturePath": "./assets/sprites/starship.png",
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 33,
+                "height": 18
+            },
+            "scale": 3,
+            "basespeed": 0,
+            "speed": 50,
+            "position": {
+                "x": 100,
+                "y": 300
+            }
+        },
+        {
+            "tag": "starship",
+            "textureTag": "starshipTexture",
+            "health": 4,
+            "state": 0,
+            "hitbox": {
+                "width": 99,
+                "height": 54
+            },
+            "texturePath": "./assets/sprites/starship.png",
+            "rect": {
+                "left": 0,
+                "top": 18,
+                "width": 33,
+                "height": 18
+            },
+            "scale": 3,
+            "basespeed": 0,
+            "speed": 50,
+            "position": {
+                "x": 100,
+                "y": 400
+            }
+        },
+        {
+            "tag": "starship",
+            "textureTag": "starshipTexture",
+            "health": 4,
+            "state": 0,
+            "hitbox": {
+                "width": 99,
+                "height": 54
+            },
+            "texturePath": "./assets/sprites/starship.png",
+            "rect": {
+                "left": 0,
+                "top": 36,
+                "width": 33,
+                "height": 18
+            },
+            "scale": 3,
+            "basespeed": 0,
+            "speed": 50,
+            "position": {
+                "x": 100,
+                "y": 500
+            }
+        },
+        {
+            "tag": "starship",
+            "textureTag": "starshipTexture",
+            "health": 4,
+            "state": 0,
+            "hitbox": {
+                "width": 99,
+                "height": 54
+            },
+            "texturePath": "./assets/sprites/starship.png",
+            "rect": {
+                "left": 0,
+                "top": 54,
+                "width": 33,
+                "height": 18
+            },
+            "scale": 3,
+            "basespeed": 0,
+            "speed": 50,
+            "position": {
+                "x": 100,
+                "y": 600
+            }
+        }
+    ],
+    "load_shoot": {
+        "tag": "load_shoot",
+        "textureTag": "loadShootTexture",
+        "rect": {
+            "left": 0,
+            "top": 50,
+            "width": 32,
+            "height": 32
+        },
+        "scale": 2
+    },
+    "bullet": {
+        "speed": 2,
+        "scale": 3,
+        "tag": "bullet",
+        "textureTag": "loadShootTexture",
+        "rect": [
+            {
+                "left": 249,
+                "top": 80,
+                "width": 16,
+                "height": 16
+            },
+            {
+                "left": 200,
+                "top": 115,
+                "width": 32,
+                "height": 20
+            },
+            {
+                "left": 185,
+                "top": 170,
+                "width": 80,
+                "height": 18
+            }
+        ],
+        "hitbox": [
+            {
+                "width": 48,
+                "height": 48
+            },
+            {
+                "width": 96,
+                "height": 48
+            },
+            {
+                "width": 240,
+                "height": 48
+            }
+        ]
+    }
+}
