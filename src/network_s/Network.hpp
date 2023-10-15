@@ -8,6 +8,8 @@
 #define NETWORK_HPP_
 
 #include <boost/asio.hpp>
+#include "../ecs/Registry.hpp"
+#include "NetworkComponents.hpp"
 
 class Network {
     private:
@@ -24,10 +26,12 @@ class Network {
         int _portServer;
         char cliMessage[1000];
         size_t totalReceived;
+
+        ComponentOUT componentOUT;
     public:
         Network(std::string ipServer, int portServer = 4242);
         ~Network();
-        int listen_info_from_clients(void);
+        void listen_info_from_clients(registry *reg);
         int send_info_to_client(void *strucToServer);
 };
 

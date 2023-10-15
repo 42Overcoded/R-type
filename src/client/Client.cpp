@@ -20,7 +20,7 @@ int main() {
     // gameEngine game(r);
     // game.launch_game();
 
-    Network network("192.168.122.1", 4242);
+    Network network("192.168.1.16", 4242);
     std::thread threadNetListening(&Network::listen_info_from_server, &network);
 
     registry reg;

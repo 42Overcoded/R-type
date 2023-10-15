@@ -6,8 +6,6 @@
 */
 
 #include "Network.hpp"
-#include "NetworkComponents.hpp"
-#include "../ecs/ComponentsArray/Components/Components.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -19,15 +17,15 @@ Network::Network(std::string ipServer, int portServer)
     _ipServer = ipServer;
     _portServer = portServer;
 
-    ptrIOcontext = new boost::asio::io_context;
+    ptrIOcontext = new boost::asio::io_context();
     ptrServSocket = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), portServer));
-    ptrCliEndpoint = new boost::asio::ip::udp::endpoint;
+    ptrCliEndpoint = new boost::asio::ip::udp::endpoint();
 
-    ptrIOcontextSend = new boost::asio::io_context;
+    ptrIOcontextSend = new boost::asio::io_context();
     ptrServSocketSend = new boost::asio::ip::udp::socket(*ptrIOcontext, boost::asio::ip::udp::v4());
     ptrCliEndpointSend = new boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(_ipServer), _portServer + 1);
 
-    ptrError = new boost::system::error_code;
+    ptrError = new boost::system::error_code();
 }
 
 Network::~Network()
@@ -41,6 +39,15 @@ Network::~Network()
         delete ptrIOcontextSend;
     }
 
+    if (ptrCliEndpoint != NULL)
+        delete ptrCliEndpoint;
+    if (ptrCliEndpointSend != NULL)
+        delete ptrCliEndpointSend;
+
+    if (ptrError != NULL)
+        delete ptrError;
+
+    
     if (ptrServSocket != NULL) {
         ptrServSocket->close();
         delete ptrServSocket;
@@ -49,20 +56,11 @@ Network::~Network()
         ptrServSocketSend->close();
         delete ptrServSocketSend;
     }
-
-    if (ptrCliEndpoint != NULL)
-        delete ptrCliEndpoint;
-    if (ptrCliEndpointSend != NULL)
-        delete ptrCliEndpointSend;
-
-    if (ptrError != NULL)
-        delete ptrError;
+    //delete componentOUT.ptrToThisStruct;
 }
 
-int Network::listen_info_from_clients(void)
+void Network::listen_info_from_clients(registry *reg)
 {
-    ComponentOUT componentOUT;
-
     while (true) {
         totalReceived = ptrServSocket->receive_from(boost::asio::buffer(&componentOUT, sizeof(componentOUT)), *ptrCliEndpoint, 0, *ptrError);
 
@@ -71,36 +69,82 @@ int Network::listen_info_from_clients(void)
             break;
         }
 
-        if (strcmp(componentOUT.nameStructToSend, "speed") == 0)
+        if (strcmp(componentOUT.nameStructToSend, "speed") == 0) {
             std::cout << "speed: " << componentOUT.speed.speedx << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "position") == 0)
+            entity_t entity1 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity1, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "position") == 0) {
             std::cout << "position: " << componentOUT.position.x << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "sprite") == 0)
+            entity_t entity2 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity2, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "sprite") == 0) {
             std::cout << "sprite: " << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "player") == 0)
+        }
+        if (strcmp(componentOUT.nameStructToSend, "player") == 0) {
             std::cout << "player: " << componentOUT.player.id << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "bullet") == 0)
+            entity_t entity4 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity4, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "bullet") == 0) {
             std::cout << "bullet: " << componentOUT.bullet.id << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "tag") == 0)
-            std::cout << "tag: " << componentOUT.tag.tag << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "health") == 0)
+            entity_t entity5 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity5, componentOUT);
+        }
+        // if (strcmp(componentOUT.nameStructToSend, "tag") == 0) {
+        //     std::cout << "tag: " << componentOUT.tag.tag << std::endl;
+        //     entity_t entity6 = reg->spawn_entity();
+        //     reg->register_component<ComponentOUT>();
+        //     reg->add_component(entity6, componentOUT);
+        // }
+        if (strcmp(componentOUT.nameStructToSend, "health") == 0) {
             std::cout << "health: " <<componentOUT.health.health << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "damage") == 0)
+            entity_t entity7 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity7, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "damage") == 0) {
             std::cout << "damage: " << componentOUT.damage.damage << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "score") == 0)
+            entity_t entity8 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity8, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "score") == 0) {
             std::cout << "score: " << componentOUT.score.score << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "text") == 0)
-            std::cout << "text: " << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "drawable") == 0)
+            entity_t entity9 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity9, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "drawable") == 0) {
             std::cout << "damage: " << componentOUT.drawable.drawable << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "control") == 0)
+            entity_t entity11 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity11, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "control") == 0) {
             std::cout << "control: " << componentOUT.control.up << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "pattern") == 0)
+            entity_t entity12 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity12, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "pattern") == 0) {
             std::cout << "pattern: " << componentOUT.pattern.pattern_index << std::endl;
-        if (strcmp(componentOUT.nameStructToSend, "hitbox") == 0)
+            entity_t entity13 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity13, componentOUT);
+        }
+        if (strcmp(componentOUT.nameStructToSend, "hitbox") == 0) {
             std::cout << "hitbox: " << componentOUT.hitbox.height << std::endl;
+            entity_t entity14 = reg->spawn_entity();
+            reg->register_component<ComponentOUT>();
+            reg->add_component(entity14, componentOUT);
+        }
     }
-    return 0;
 }
 
 int Network::send_info_to_client(void *strucToServer)
