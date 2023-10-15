@@ -26,13 +26,15 @@ public:
 private:
     // Inputs
     void manageInputs(registry &reg);
+    void managePacketIn(registry &reg, Packet<Flag> &packet);
+
     void manageClientAccepted(registry &reg, Packet<Flag> &packet);
     void manageClientAssignID(registry &reg, Packet<Flag> &packet);
-    void manageRegisterWithServer(registry &reg, Packet<Flag> &packet);
-    void manageUnregisterWithServer(registry &reg, Packet<Flag> &packet);
-    void manageAddPlayer(registry &reg, Packet<Flag> &packet);
-    void manageRemovePlayer(registry &reg, Packet<Flag> &packet);
-    void manageUpdatePlayer(registry &reg, Packet<Flag> &packet);
+    void manageClientSendPing(registry &reg, Packet<Flag> &packet);
+    void manageClientAddPlayer(registry &reg, Packet<Flag> &packet);
+    void manageClientRemovePlayer(registry &reg, Packet<Flag> &packet);
+    void manageClientCreateEntity(registry &reg, Packet<Flag> &packet);
+    void manageClientUpdateEntity(registry &reg, Packet<Flag> &packet);
 
 
 

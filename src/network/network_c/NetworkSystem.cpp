@@ -44,18 +44,23 @@ void NetworkSystem::manageInputs(registry &reg)
         if (!Incoming().IsEmpty())
         {
             Packet packet = Incoming().PopFront().packet;
-            switch (packet.header.flag)
-            {
-            case Flag::Client_Accepted: manageClientAccepted(reg, packet); break;
-            case Flag::Client_AssignID: manageClientAssignID(reg, packet); break;
-            case Flag::Client_RegisterWithServer: manageRegisterWithServer(reg, packet); break;
-            case Flag::Client_UnregisterWithServer: manageUnregisterWithServer(reg, packet); break;
-            case Flag::Game_AddPlayer: manageAddPlayer(reg, packet); break;
-            case Flag::Game_RemovePlayer: manageRemovePlayer(reg, packet); break;
-            case Flag::Game_UpdatePlayer: manageUpdatePlayer(reg, packet); break;
-            default: break;
-            }
+            managePacketIn(reg, packet);
         }
+    }
+}
+
+void NetworkSystem::managePacketIn(registry &reg, Packet<Flag> &packet)
+{
+    switch (packet.header.flag)
+    {
+    case Flag::ClientAccepted: manageClientAccepted(reg, packet); break;
+    case Flag::ClientAssignID: manageClientAssignID(reg, packet); break;
+    case Flag::ClientSendPing: manageClientSendPing(reg, packet); break;
+    case Flag::ClientAddPlayer: manageClientAddPlayer(reg, packet); break;
+    case Flag::ClientRemovePlayer: manageClientRemovePlayer(reg, packet); break;
+    case Flag::ClientCreateEntity: manageClientCreateEntity(reg, packet); break;
+    case Flag::ClientUpdateEntity: manageClientUpdateEntity(reg, packet); break;
+    default: break;
     }
 }
 
@@ -83,7 +88,7 @@ void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
     }
 }
 
-void NetworkSystem::manageRegisterWithServer(registry &reg, Packet<Flag> &packet)
+void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 {
     SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
 
@@ -95,7 +100,7 @@ void NetworkSystem::manageRegisterWithServer(registry &reg, Packet<Flag> &packet
     }
 }
 
-void NetworkSystem::manageUnregisterWithServer(registry &reg, Packet<Flag> &packet)
+void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 {
     SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
 
@@ -107,7 +112,7 @@ void NetworkSystem::manageUnregisterWithServer(registry &reg, Packet<Flag> &pack
     }
 }
 
-void NetworkSystem::manageAddPlayer(registry &reg, Packet<Flag> &packet)
+void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet)
 {
     SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
 
@@ -119,7 +124,7 @@ void NetworkSystem::manageAddPlayer(registry &reg, Packet<Flag> &packet)
     }
 }
 
-void NetworkSystem::manageRemovePlayer(registry &reg, Packet<Flag> &packet)
+void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet)
 {
     SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
 
@@ -131,7 +136,7 @@ void NetworkSystem::manageRemovePlayer(registry &reg, Packet<Flag> &packet)
     }
 }
 
-void NetworkSystem::manageUpdatePlayer(registry &reg, Packet<Flag> &packet)
+void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)
 {
     SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
 
@@ -142,4 +147,5 @@ void NetworkSystem::manageUpdatePlayer(registry &reg, Packet<Flag> &packet)
         }
     }
 }
+
 }  // namespace Network

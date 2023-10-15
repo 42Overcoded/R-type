@@ -15,11 +15,9 @@
 #include "Packet.hpp"
 #include "boost/asio/io_context.hpp"
 #include "PacketsQueue.hpp"
+#include "Connection.hpp"
 
 namespace Network {
-
-template <typename T>
-class Connection;
 
 template <typename T>
 class Packet;
@@ -103,9 +101,9 @@ public:
     void UpdateServer(size_t maxPacketsNbr = -1)
     {
         size_t packetCount = 0;
-        while (packetCount < maxPacketsNbr && !packetsInQueue_.empty())
+        while (packetCount < maxPacketsNbr && !packetsInQueue_.IsEmpty())
         {
-            auto packet = packetsInQueue_.pop_front();
+            auto packet = packetsInQueue_.PopFront();
             OnReceive(packet.remote, packet.packet);
             packetCount++;
         }

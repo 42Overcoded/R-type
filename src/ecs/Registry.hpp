@@ -23,7 +23,7 @@
 
 class entity_t {
     public:
-        explicit entity_t(std::size_t value) : value_(value) {}   
+        explicit entity_t(std::size_t value) : value_(value) {}
 
         operator std::size_t() const {
             return value_;
@@ -37,24 +37,24 @@ class registry {
         /**
          * @brief return entity(size_t) need to use it when you want to create an entity,
          * everything must be an entity (missile, player, shoots ...)
-         * @return entity_t 
+         * @return entity_t
          */
         entity_t spawn_entity();
 
         /**
          * @brief take a size_t to return a entity_t (its a size_t) pretty useless function
-         * 
-         * @param idx 
-         * @return entity_t 
+         *
+         * @param idx
+         * @return entity_t
          */
         entity_t entity_from_index(std::size_t idx);
 
         /**
          * @brieff add a component to an entity
-         * 
-         * @tparam Component 
-         * @param to 
-         * @param c 
+         *
+         * @tparam Component
+         * @param to
+         * @param c
          */
         template <typename Component >
         void add_component(entity_t const&to, Component&& c) {
@@ -70,27 +70,27 @@ class registry {
 
         /**
          * @brief remove a component to an entity (the value is set to null with std::optional)
-         * 
-         * @tparam Component 
-         * @param from 
+         *
+         * @tparam Component
+         * @param from
          */
         template <typename Component>
-        void remove_component (entity_t const &from) 
+        void remove_component (entity_t const &from)
         {
             std::any_cast<SparseArray<Component>>(_components_arrays.at(typeid(Component))).erase(from);
         };
 
         /**
          * @brief kill an entity set all components to null with std::optional
-         * 
-         * @param e 
+         *
+         * @param e
          */
         void kill_entity(entity_t const &e);
 
         /**
          * @brief add a new usable component for entity
-         * 
-         * @tparam Component 
+         *
+         * @tparam Component
          */
         template <class Component>
         void register_component() {
@@ -105,9 +105,9 @@ class registry {
 
         /**
          * @brief Get the entity list with the selected component, its null if the entity dosnt have the component
-         * 
-         * @tparam Component 
-         * @return SparseArray<Component>& 
+         *
+         * @tparam Component
+         * @return SparseArray<Component>&
          */
         template <class Component>
         SparseArray<Component>& get_components() {
