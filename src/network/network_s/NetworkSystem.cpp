@@ -46,31 +46,9 @@ void NetworkSystem::managePacketIn(
 {
     switch (packet.header.flag)
     {
-    case Flag::ServerGetPing: manageServerGetPing(client, packet); break;
-    case Flag::ServerConnect: manageServerConnect(client, packet); break;
     case Flag::ServerUpdateControls: manageServerUpdateControls(reg, client, packet); break;
     default: break;
     }
-}
-
-void NetworkSystem::manageServerGetPing(
-    std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
-{
-    Packet<Flag> response;
-
-    std::cout << "Ping from client " << client->GetId() << std::endl;
-    response.header.flag = Flag::ClientSendPing;
-    client->SendPacket(response);
-}
-
-void NetworkSystem::manageServerConnect(
-    std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
-{
-    Packet<Flag> response;
-
-    std::cout << "Client " << client->GetId() << " connected" << std::endl;
-    response.header.flag = Flag::ClientAccepted;
-    client->SendPacket(response);
 }
 
 void NetworkSystem::manageServerUpdateControls(

@@ -9,6 +9,7 @@
 #define INETWORKSERVER_HPP_
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
+#include <cstdint>
 #include <deque>
 #include <iostream>
 #include <memory>
@@ -31,10 +32,17 @@ private:
     class ClientsManager
     {
     public:
-        ClientsManager(boost::asio::io_context &ioContext, boost::asio::ip::udp::socket &socket, PacketsQueue<OwnedPacket<T>> &packetsQueue, std::deque<std::shared_ptr<Connection<T>>> &clients) : socket_(socket), ioContext_(ioContext), packetsInQueue_(packetsQueue), clients_(clients){};
+        ClientsManager(
+            boost::asio::io_context &ioContext,
+            std::uint32_t port,
+            PacketsQueue<OwnedPacket<T>> &packetsQueue,
+            std::deque<std::shared_ptr<Connection<T>>> &clients)
+            : ioContext_(ioContext)
+            , socket_(ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
+            , packetsInQueue_(packetsQueue)
+            , clients_(clients){};
         ~ClientsManager() = default;
 
-    protected:
         void GetPacket()
         {
             socket_.async_receive_from(
@@ -45,7 +53,9 @@ private:
                         if (recvBuffer_.header.size == 0)
                         {
                             ManageConnectionPacket();
-                        } else {
+                        }
+                        else
+                        {
                             std::cerr << "Packet size is not 0" << std::endl;
                         }
                     }
@@ -57,24 +67,25 @@ private:
                 });
         }
 
+    protected:
         void ManageConnectionPacket()
         {
             switch (recvBuffer_.header.flag)
             {
             case T::ServerConnect:
                 std::cout << "Server Connect" << std::endl;
-                boost::asio::ip::udp::socket newSocket(ioContext_, remoteEndpoint_.protocol(), 0);
-                std::shared_ptr<Connection<T>> newClient =
-                    std::make_shared<Connection<T>>(Connection<T>::Owner::Server, ioContext_,
-                    newSocket, packetsInQueue_);
-                newClient->ConnectToClient(remoteEndpoint_);
+                std::shared_ptr<Connection<T>> newClient = std::make_shared<Connection<T>>(
+                    Connection<T>::Owner::Server, ioContext_,
+                    boost::asio::ip::udp::socket(ioContext_, remoteEndpoint_.protocol(), 0),
+                    packetsInQueue_);
+                newClient->ConnectToClient(remoteEndpoint_, id_++);
                 clients_.push_back(newClient);
             }
             GetPacket();
         }
 
     private:
-        boost::asio::ip::udp::socket &socket_;
+        boost::asio::ip::udp::socket socket_;
         boost::asio::io_context &ioContext_;
         PacketsQueue<OwnedPacket<T>> &packetsInQueue_;
         uint32_t id_ = 0;
@@ -84,11 +95,10 @@ private:
     };
 
 public:
-    INetworkServer(uint16_t port)
-        : socket_(
-              ioContext_,
-              boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port)),
-              clientsManager_(ioContext_, socket_, packetsInQueue_, clients_){};
+    INetworkServer(uint16_t port) : clientsManager_(ioContext_, port, packetsInQueue_, clients_)
+    {
+        std::cout << "[SERVER] Created" << std::endl;
+    };
 
     virtual ~INetworkServer()
     {
@@ -173,7 +183,6 @@ protected:
     boost::asio::io_context ioContext_;
     std::thread threadContext_;
     uint32_t nIDCounter_ = 10000;
-    boost::asio::ip::udp::socket socket_;
     ClientsManager clientsManager_;
 };
 };  // namespace Network

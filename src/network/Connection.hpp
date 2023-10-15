@@ -54,13 +54,15 @@ public:
     {
         return id_;
     }
-    void ConnectToClient(uint32_t uid = 0)
+    void ConnectToClient(boost::asio::ip::udp::endpoint remoteEndpoint, uint32_t uid = 0)
     {
         if (ownerType_ == Owner::Server)
         {
             if (socket_.is_open() && !IsConnected_)
             {
                 id_ = uid;
+                remoteEndpoint_ = remoteEndpoint;
+                socket_.connect(remoteEndpoint_);
                 Packet<T> idPacket;
                 idPacket.header.flag = T::ClientAssignID;
                 idPacket << id_;
