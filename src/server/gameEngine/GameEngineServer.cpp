@@ -94,7 +94,7 @@ void gameEngine::launch_game() {
             death_animation();
             shoot_enemy();
             life_handler();
-            _networkSystem->update(_registry);
+            _networkSystem->Update(_registry);
         }
     }
 }
