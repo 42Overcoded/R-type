@@ -13,3 +13,5 @@ Welcome !
 - [Systems](ecs/system.md "Learn more about the systems")
 - [Network](network.md "Learn more about the network")
 - [rfc](rfc.md "Learn more about the rfc")
+- [Game](Game.md "Learn more about the game")
+- [How_to_play](How_to_play.md "Learn more about the gameplay")
