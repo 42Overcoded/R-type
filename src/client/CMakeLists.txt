@@ -44,9 +44,14 @@ set(INCLUDES
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     gameEngine/GameEngine.hpp
-    ../network_c/Network.hpp
-    ../network_c/NetworkComponent.hpp
-    ../network_c/NetworkSystem.hpp
+    ../network/Connection.hpp
+    ../network/INetworkClient.hpp
+    ../network/INetworkServer.hpp
+    ../network/Packet.hpp
+    ../network/PacketsQueue.hpp
+    ../network/Protocol.hpp
+    ../network/network_c/NetworkComponent.hpp
+    ../network/network_c/NetworkSystem.hpp
 )
 
 set(EXEC_SRC
@@ -57,8 +62,7 @@ set(EXEC_SRC
     gameEngine/GameEngine.cpp
     gameEngine/game/Game.cpp
     gameEngine/graphics/Graphic.cpp
-    ../network_c/Network.cpp
-    ../network_c/NetworkSystem.cpp
+    ../network/network_c/NetworkSystem.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
@@ -75,7 +79,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray/Components)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray/Systems)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network_c)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network/network_c)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio Boost::filesystem Boost::property_tree)
