@@ -70,13 +70,13 @@ $(function() {
 <div class="contents">
 <div class="textblock"><p>RFC Authors : <code>M. Jalbert</code>, <code>M. Peireto</code>, <code>F. Azema</code>, <code>S. Borisenko</code>, <code>J. Vignau-Espine</code> Date : <code>7 October 2023</code></p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md15"></a>
+<h1><a class="anchor" id="autotoc_md40"></a>
 Game Transmission Protocol (GTP)</h1>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md41"></a>
 Status of this Memo</h2>
 <p>This memo is the official specification of the Game Transmission Protocol (GTP).</p>
 <p>Distribution of this memo is unlimited.</p>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md42"></a>
 Index</h2>
 <ul>
 <li><a href="#game-transmission-protocol-gtp">Game Transmission Protocol (GTP)</a><ul>
@@ -102,24 +102,24 @@ Index</h2>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md43"></a>
 Introduction</h2>
 <p>The Game Transmission Protocol (GTP) is defined to make available a fast packet transmission of packet-switched computer communication in the environment of an interconnected set of computer networks. This protocol assumes that the User Datagram Protocol (UDP) <a href="https://www.ietf.org/rfc/rfc768.txt">RFC 768</a> is used as the underlying protocol.</p>
 <p>This protocol provide a procedure for games to communicate with a server. It uses UDP as a fast packet-switched computer communication protocol. Therefore the protocol is transaction oriented, and delivery and duplicate protection are not guaranteed.</p>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md44"></a>
 Overview</h2>
 <p>In this section, the history, the terminology, and the GTP model are discussed. The terms defined in this section are only those that have special significance in GTP. Some of the terminology is very specific to the GTP model; some readers may wish to turn to the section on the GTP model while reviewing the terminology.</p>
-<h3><a class="anchor" id="autotoc_md20"></a>
+<h3><a class="anchor" id="autotoc_md45"></a>
 History</h3>
 <p>The Game Transmission Protocol come from a long tradition at the Epitech school. Every year, 3nd year students have to work in teams to create a protocol allowing a fast communication between multiple game clients an a server.</p>
 <p>This protocol has been originally developed to create a multiplayer version of the R-type game. R-Type is a horizontally scrolling shooter arcade video game developed and released by Irem in 1987 and the first game in the R-Type series. The player controls a star ship, the R-9 "Arrowhead", in its efforts to destroy the Bydo, a powerful alien race bent on wiping out all of mankind. The R-9 can acquire a glowing orbicular device called a "Force", protecting it from enemy fire and providing additional firepower. The arcade version was distributed by Nintendo in North America; it is the last arcade title Nintendo distributed.</p>
-<h3><a class="anchor" id="autotoc_md21"></a>
+<h3><a class="anchor" id="autotoc_md46"></a>
 Terminology</h3>
 <p>GTP</p>
 <div class="fragment"><div class="line">Game Transmission Protocol</div>
 </div><!-- fragment --><p>UDP</p>
 <div class="fragment"><div class="line">User Datagram Protocol</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md22"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md47"></a>
 The GTP Model</h2>
 <p>With the above definitions in mind, the following model (shown in Figure 1) may be diagrammed for an GTP service.</p>
 <div class="fragment"><div class="line">/------------------------------------\</div>
@@ -133,7 +133,7 @@ The GTP Model</h2>
 <div class="line">\------------------------------------/</div>
 </div><!-- fragment --><p>As you can see, the GTP is just on top of the UDP. That allow it to be lightweight and highly efficient.</p>
 <p><code>Flag</code> is a 1 bytes long (uint8_t) number. It define the following message. <code>Id</code> is a 8 bytes long (uint64_t) number. It is used to identify the message. <code>Size</code> is a 8 bytes long (uint64_t) number. It describe the size in bit of the payload. Value of 0 in case of no payload. <code>Payload</code> is a structure containing different information. It will change depending of the value of the header.</p>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md48"></a>
 Commands</h2>
 <p>The following commands are available in the GTP protocol.</p>
 <div class="fragment"><div class="line">| Command |  Description  |</div>
@@ -146,7 +146,7 @@ Commands</h2>
 <div class="line">| 0x05    | Start         |</div>
 <div class="line">| 0x06    | End           |</div>
 <div class="ttc" id="astructPosition_html"><div class="ttname"><a href="structPosition.html">Position</a></div><div class="ttdef"><b>Definition:</b> Components.hpp:62</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md24"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md49"></a>
 None</h3>
 <ul>
 <li>Flag : 0x00</li>
@@ -155,7 +155,7 @@ None</h3>
 <li>Payload : None</li>
 </ul>
 <p>Description : This command is used to check if the server is still alive.</p>
-<h3><a class="anchor" id="autotoc_md25"></a>
+<h3><a class="anchor" id="autotoc_md50"></a>
 Connection</h3>
 <ul>
 <li>Flag : 0x01</li>
@@ -164,7 +164,7 @@ Connection</h3>
 <li>Payload : None</li>
 </ul>
 <p>Description : This command is used to connect to the server.</p>
-<h3><a class="anchor" id="autotoc_md26"></a>
+<h3><a class="anchor" id="autotoc_md51"></a>
 Disconnection</h3>
 <ul>
 <li>Flag : 0x02</li>
@@ -173,7 +173,7 @@ Disconnection</h3>
 <li>Payload : None</li>
 </ul>
 <p>Description : This command is used to disconnect from the server.</p>
-<h3><a class="anchor" id="autotoc_md27"></a>
+<h3><a class="anchor" id="autotoc_md52"></a>
 Controller</h3>
 <ul>
 <li>Flag : 0x03</li>
@@ -187,7 +187,7 @@ Controller</h3>
 <div class="line"><span class="keywordtype">bool</span> right;</div>
 <div class="line"><span class="keywordtype">bool</span> shoot;</div>
 </div><!-- fragment --><p>Description : This command is used to send the controller state.</p>
-<h3><a class="anchor" id="autotoc_md28"></a>
+<h3><a class="anchor" id="autotoc_md53"></a>
 Position</h3>
 <ul>
 <li>Flag : 0x04</li>
@@ -199,7 +199,7 @@ Position</h3>
 <div class="line"><span class="keywordtype">float</span> x;</div>
 <div class="line"><span class="keywordtype">float</span> y;</div>
 </div><!-- fragment --><p>Description : This command is used to send the position of an entity.</p>
-<h3><a class="anchor" id="autotoc_md29"></a>
+<h3><a class="anchor" id="autotoc_md54"></a>
 Start</h3>
 <ul>
 <li>Flag : 0x05</li>
@@ -208,7 +208,7 @@ Start</h3>
 <li>Payload : None</li>
 </ul>
 <p>Description : This command is used to start the game.</p>
-<h3><a class="anchor" id="autotoc_md30"></a>
+<h3><a class="anchor" id="autotoc_md55"></a>
 End</h3>
 <ul>
 <li>Flag : 0x06</li>

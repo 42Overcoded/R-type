@@ -52,9 +52,14 @@ set(INCLUDES
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     gameEngine/GameEngine.hpp
-    ../network_c/Network.hpp
-    ../network_c/NetworkComponents.hpp
-    ../network_c/NetworkSystems.hpp
+    ../network/Connection.hpp
+    ../network/INetworkClient.hpp
+    ../network/INetworkServer.hpp
+    ../network/Packet.hpp
+    ../network/PacketsQueue.hpp
+    ../network/Protocol.hpp
+    ../network/network_c/NetworkComponent.hpp
+    ../network/network_c/NetworkSystem.hpp
 )
 
 set(EXEC_SRC
@@ -63,6 +68,7 @@ set(EXEC_SRC
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     gameEngine/GameEngine.cpp
+    ../network/network_c/NetworkSystem.cpp
     gameEngine/game/gameInitialisation/initBullets.cpp
     gameEngine/game/gameInitialisation/initEnemy.cpp
     gameEngine/game/gameInitialisation/initStarship.cpp
@@ -71,8 +77,6 @@ set(EXEC_SRC
     gameEngine/game/gameLogic/level1.cpp
     gameEngine/game/gameLogic/shoot.cpp
     gameEngine/game/gameLogic/miscellaneous.cpp
-    ../network_c/Network.cpp
-    ../network_c/NetworkSystems.hpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
@@ -89,11 +93,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray/Components)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ecs/ComponentsArray/Systems)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network_c)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network/network_c)
 include_directories(${nlohmann_json_SOURCE_DIR}/include)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system Boost::asio Boost::filesystem Boost::property_tree)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json sfml-graphics sfml-window sfml-system Boost::asio Boost::filesystem Boost::property_tree)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
