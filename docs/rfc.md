@@ -23,13 +23,16 @@ Distribution of this memo is unlimited.
     - [Terminology](#terminology)
   - [The GTP Model](#the-gtp-model)
   - [Commands](#commands)
-    - [None](#none)
-    - [Connection](#connection)
-    - [Disconnection](#disconnection)
-    - [Controller](#controller)
-    - [Position](#position)
-    - [Start](#start)
-    - [End](#end)
+    - [ServerGetPing](#servergetping)
+    - [ServerConnect](#serverconnect)
+    - [ServerUpdateControls](#serverupdatecontrols)
+    - [ClientAccepted](#clientaccepted)
+    - [ClientAssignID](#clientassignid)
+    - [ClientSendPing](#clientsendping)
+    - [ClientAddPlayer](#clientaddplayer)
+    - [ClientRemovePlayer](#clientremoveplayer)
+    - [ClientCreateEntity](#clientcreateentity)
+    - [ClientUpdateEntity](#clientupdateentity)
 
 ## Introduction
 
@@ -116,90 +119,109 @@ That allow it to be lightweight and highly efficient.
 The following commands are available in the GTP protocol.
 
 ```txt
-| Command |  Description  |
-| ------- | ------------- |
-| 0x00    | None          |
-| 0x01    | Connection    |
-| 0x02    | Disconnection |
-| 0x03    | Controller    |
-| 0x04    | Position      |
-| 0x05    | Start         |
-| 0x06    | End           |
+| Command |  Description         |
+| ------- | -------------------- |
+| 0x00    | ServerGetPing        |
+| 0x01    | ServerConnect        |
+| 0x02    | ServerUpdateControls |
+| 0x03    | ClientAccepted       |
+| 0x04    | ClientAssignID       |
+| 0x05    | ClientSendPing       |
+| 0x06    | ClientAddPlayer      |
+| 0x07    | ClientRemovePlayer   |
+| 0x08    | ClientCreateEntity   |
+| 0x09    | ClientUpdateEntity   |
 ```
 
-### None
+### ServerGetPing
 
+- Origin : Client
 - Flag : 0x00
-- Id : [...]
 - Size : 0x00
 - Payload : None
 
 Description : This command is used to check if the server is still alive.
 
-### Connection
+### ServerConnect
 
+- Origin : Client
 - Flag : 0x01
-- Id : [...]
 - Size : 0x00
 - Payload : None
+
+- Response : ClientAccepted
+- Response : ClientAssignID
 
 Description : This command is used to connect to the server.
 
-### Disconnection
+### ServerUpdateControls
 
+- Origin : Client
 - Flag : 0x02
-- Id : [...]
-- Size : [...]
-- Payload : None
+- Size : 0x05 (bool * 5)
+- Payload : [bool, bool, bool, bool, bool]
 
-Description : This command is used to disconnect from the server.
+Description : This command is used to update the controls of the player.
 
-### Controller
+### ClientAccepted
 
+- Origin : Server
 - Flag : 0x03
-- Id : [...]
-- Size : [...]
-- Payload :
+- Size : 0x00
+- Payload : None
 
-```cpp
-bool up;
-bool down;
-bool left;
-bool right;
-bool shoot;
-```
+Description : This command is used to confirm the connection to the server.
 
-Description : This command is used to send the controller state.
+### ClientAssignID
 
-### Position
-
+- Origin : Server
 - Flag : 0x04
-- Id : [...]
-- Size : [...]
-- Payload :
+- Size : 0x04 (uint32_t)
+- Payload : [uint32_t]
 
-```cpp
-unsigned int id;
-float x;
-float y;
-```
+Description : This command is used to assign an ID to the client.
 
-Description : This command is used to send the position of an entity.
+### ClientSendPing
 
-### Start
-
+- Origin : Server
 - Flag : 0x05
-- Id : [...]
 - Size : 0x00
 - Payload : None
 
-Description : This command is used to start the game.
+Description : This command is used to check if the client is still alive. (Response to ServerGetPing)
 
-### End
+### ClientAddPlayer
 
+- Origin : Server
 - Flag : 0x06
-- Id : [...]
-- Size : 0x00
-- Payload : None
+- Size : 0x04 (uint32_t)
+- Payload : [uint32_t]
 
-Description : This command is used to end the game.
+Description : This command is used to add a player to the game.
+
+### ClientRemovePlayer
+
+- Origin : Server
+- Flag : 0x07
+- Size : 0x04 (uint32_t)
+- Payload : [uint32_t]
+
+Description : This command is used to remove a player from the game.
+
+### ClientCreateEntity
+
+- Origin : Server
+- Flag : 0x08
+- Size : 0x0C (uint32_t * 3)
+- Payload : [uint32_t, uint32_t, uint32_t]
+
+Description : This command is used to create an entity in the game.
+
+### ClientUpdateEntity
+
+- Origin : Server
+- Flag : 0x09
+- Size : 0x0C (uint32_t * 3)
+- Payload : [uint32_t, uint32_t, uint32_t]
+
+Description : This command is used to update an entity in the game.
