@@ -1,4 +1,4 @@
-The system is composed of generic functions who can be usefull not for a specific game but for all the games. For example, you can have a system that will move all the entities that have a \mbox{\hyperlink{structPosition}{Position}} and a \mbox{\hyperlink{structSpeed}{Speed}} component.\hypertarget{md_ecs_system_autotoc_md8}{}\doxysection{The systems\+:}\label{md_ecs_system_autotoc_md8}
+The system is composed of generic functions who can be usefull not for a specific game but for all the games. For example, you can have a system that will move all the entities that have a \mbox{\hyperlink{structPosition}{Position}} and a \mbox{\hyperlink{structSpeed}{Speed}} component.\hypertarget{md_ecs_system_autotoc_md6}{}\doxysection{The systems\+:}\label{md_ecs_system_autotoc_md6}
 
 \begin{DoxyItemize}
 \item Velocity\+\_\+system \+: it will move all the entities that have a \mbox{\hyperlink{structPosition}{Position}} and a \mbox{\hyperlink{structSpeed}{Speed}} component with a clock to have a constant speed not depending on the fps of the user
@@ -11,5 +11,5 @@ The system is composed of generic functions who can be usefull not for a specifi
 \item control\+\_\+system \+: it will put the input pressed by the player in the \mbox{\hyperlink{structControl}{Control}} component by true or false
 \item clock\+\_\+system \+: it will update the time of all the entities that have a \mbox{\hyperlink{structClock}{Clock}} component
 \item rect\+\_\+system \+: it will update the rect of all the entities that have a \mbox{\hyperlink{structRect}{Rect}} component
-\end{DoxyItemize}\hypertarget{md_ecs_system_autotoc_md9}{}\doxysection{How to create a system ?}\label{md_ecs_system_autotoc_md9}
+\end{DoxyItemize}\hypertarget{md_ecs_system_autotoc_md7}{}\doxysection{How to create a system ?}\label{md_ecs_system_autotoc_md7}
 if you need a system not in the list, you can create it by yourself, it\textquotesingle{}s really easy, you just need to create a function in the ecs/\+Components\+Array/\+System/\+Sfml\+System.\+hpp if its a sfml \mbox{\hyperlink{classSystem}{System}}, in Server\+System if not. 

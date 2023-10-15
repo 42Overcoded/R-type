@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['register_5fcomponent_79',['register_component',['../classregistry.html#a1c8a6043f3ea73045ae7d3ada058890d',1,'registry']]],
-  ['remove_5fcomponent_80',['remove_component',['../classregistry.html#ae6ae3ba636214bb3972a99492923bf7c',1,'registry']]]
+  ['menu_109',['menu',['../classgameEngine.html#af8774c92709ae3c1718b5d3c070af37a',1,'gameEngine']]]
 ];

@@ -1,14 +1,10 @@
 var searchData=
 [
-  ['scale_30',['Scale',['../structScale.html',1,'']]],
-  ['score_31',['Score',['../structScore.html',1,'']]],
-  ['searchinghead_32',['SearchingHead',['../structSearchingHead.html',1,'']]],
-  ['sfmlsystem_33',['SfmlSystem',['../classSfmlSystem.html',1,'']]],
-  ['sparsearray_34',['SparseArray',['../classSparseArray.html',1,'']]],
-  ['spawn_5fentity_35',['spawn_entity',['../classregistry.html#a75d49eb0c9936d57146007f06cbaf735',1,'registry']]],
-  ['speed_36',['Speed',['../structSpeed.html',1,'']]],
-  ['sprite_37',['Sprite',['../structSprite.html',1,'']]],
-  ['state_38',['State',['../structState.html',1,'']]],
-  ['system_39',['System',['../classSystem.html',1,'']]],
-  ['system_20documentation_40',['System documentation',['../md_ecs_system.html',1,'']]]
+  ['r_2dtype_20_2d_20rules_20and_20game_37',['R-TYPE - RULES and GAME',['../md_Game.html',1,'']]],
+  ['r_2dtype_20homepage_38',['R-type Homepage',['../index.html',1,'']]],
+  ['rect_39',['Rect',['../structRect.html',1,'']]],
+  ['register_5fcomponent_40',['register_component',['../classregistry.html#a1c8a6043f3ea73045ae7d3ada058890d',1,'registry']]],
+  ['registry_41',['registry',['../classregistry.html',1,'']]],
+  ['remove_5fcomponent_42',['remove_component',['../classregistry.html#ae6ae3ba636214bb3972a99492923bf7c',1,'registry']]],
+  ['rfc_43',['rfc',['../md_rfc.html',1,'']]]
 ];
