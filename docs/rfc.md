@@ -27,6 +27,7 @@ Distribution of this memo is unlimited.
     - [ServerConnect](#serverconnect)
     - [ServerUpdateControls](#serverupdatecontrols)
     - [ClientAccepted](#clientaccepted)
+    - [ClientDenied](#clientdenied)
     - [ClientAssignID](#clientassignid)
     - [ClientSendPing](#clientsendping)
     - [ClientAddPlayer](#clientaddplayer)
@@ -125,12 +126,13 @@ The following commands are available in the GTP protocol.
 | 0x01    | ServerConnect        |
 | 0x02    | ServerUpdateControls |
 | 0x03    | ClientAccepted       |
-| 0x04    | ClientAssignID       |
-| 0x05    | ClientSendPing       |
-| 0x06    | ClientAddPlayer      |
-| 0x07    | ClientRemovePlayer   |
-| 0x08    | ClientCreateEntity   |
-| 0x09    | ClientUpdateEntity   |
+| 0x04    | ClientDenied         |
+| 0x05    | ClientAssignID       |
+| 0x06    | ClientSendPing       |
+| 0x07    | ClientAddPlayer      |
+| 0x08    | ClientRemovePlayer   |
+| 0x09    | ClientCreateEntity   |
+| 0x0A    | ClientUpdateEntity   |
 ```
 
 ### ServerGetPing
@@ -172,10 +174,19 @@ Description : This command is used to update the controls of the player.
 
 Description : This command is used to confirm the connection to the server.
 
-### ClientAssignID
+### ClientDenied
 
 - Origin : Server
 - Flag : 0x04
+- Size : 0x00
+- Payload : None
+
+Description : This command is used to deny the connection to the server.
+
+### ClientAssignID
+
+- Origin : Server
+- Flag : 0x05
 - Size : 0x04 (uint32_t)
 - Payload : [uint32_t]
 
@@ -184,7 +195,7 @@ Description : This command is used to assign an ID to the client.
 ### ClientSendPing
 
 - Origin : Server
-- Flag : 0x05
+- Flag : 0x06
 - Size : 0x00
 - Payload : None
 
@@ -193,7 +204,7 @@ Description : This command is used to check if the client is still alive. (Respo
 ### ClientAddPlayer
 
 - Origin : Server
-- Flag : 0x06
+- Flag : 0x07
 - Size : 0x04 (uint32_t)
 - Payload : [uint32_t]
 
@@ -202,7 +213,7 @@ Description : This command is used to add a player to the game.
 ### ClientRemovePlayer
 
 - Origin : Server
-- Flag : 0x07
+- Flag : 0x08
 - Size : 0x04 (uint32_t)
 - Payload : [uint32_t]
 
@@ -211,7 +222,7 @@ Description : This command is used to remove a player from the game.
 ### ClientCreateEntity
 
 - Origin : Server
-- Flag : 0x08
+- Flag : 0x09
 - Size : 0x0C (uint32_t * 3)
 - Payload : [uint32_t, uint32_t, uint32_t]
 
@@ -220,7 +231,7 @@ Description : This command is used to create an entity in the game.
 ### ClientUpdateEntity
 
 - Origin : Server
-- Flag : 0x09
+- Flag : 0x0A
 - Size : 0x0C (uint32_t * 3)
 - Payload : [uint32_t, uint32_t, uint32_t]
 
