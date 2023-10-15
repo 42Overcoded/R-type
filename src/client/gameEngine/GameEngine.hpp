@@ -14,6 +14,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
+#include <unordered_map>
+#include  <iostream>
 
 enum Scene {
     MENU,
@@ -28,8 +30,8 @@ class gameEngine {
         ~gameEngine() = default;
         void register_component_to_game();
         sf::RenderWindow &get_window();
-        entity_t init_starship();
-        entity_t init_enemy();
+        entity_t init_starship(int id, int i);
+        entity_t init_enemy(int i);
         entity_t init_enemy_2();
         entity_t init_enemy_3();
         entity_t init_enemy_4();
@@ -41,13 +43,25 @@ class gameEngine {
         void init_beambar();
         void launch_game();
         void init_menu();
-        void init_life();
+        void init_life(int i);
         void init_parallax(int i);
         void init_score();
         void spawn_wave(sf::Time &elapsed, int &wave);
         void modify_pattern(registry &r);
         void init_load_shoot();
         void spawn_mobs(int n1, int n2, int n3, int n4);
+        void spawn_bullet(int i, int j);
+        void spawn_boss_bullet(int i, int j);
+        void shoot_enemy();
+        void decharge_shoot(sf::Time &elapsed);
+        void load_shoot(sf::Time &elapsed);
+        void spawn_ally_bullet(int i);
+        void spawn_explosion(int i);
+        void death_animation();
+        void shoot_system(sf::Time &elapsed);
+        void animate_enemy();
+        void clock_time();
+        void life_handler();
     protected:
     private:
         Scene scene;

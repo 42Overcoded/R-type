@@ -1,0 +1,147 @@
+
+
+How the ecs works \+:
+
+The ecs is composed of 5 main parts \+:
+\begin{DoxyItemize}
+\item The registry
+\item The Sparse Arrays
+\item The components
+\item The entities
+\item The systems
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item The registry is the main part of the ecs, it\textquotesingle{}s the core of it. It\textquotesingle{}s the part that will manage all the other parts. In fact, the registry contains all te functions to manage the Sparse Arrays, the entities and the components. It\textquotesingle{}s the part that will be used by the user to create his game.
+\item The Sparse Arrays are the part that will contain the components. It\textquotesingle{}s a vector of components. The Sparse Arrays are used to store the components of the same type. For example, if you have a component \mbox{\hyperlink{structPosition}{Position}}, you will have a Sparse Array that will contain all the \mbox{\hyperlink{structPosition}{Position}} components of your game.
+\item The Components are the data that will be used by the systems. For example, if you have a component \mbox{\hyperlink{structPosition}{Position}}, it will contain the x and y position of an entity. to see more \mbox{\hyperlink{md_ecs_components}{click here}}.
+\item The entities are the all the objects of your game. For example, if you have a player, a monster and a 10 bullet, you will have 12 entities. The entities are just an id that will be used to associate components to them.
+\item The system is composed of generic functions who can be usefull not for a specific game but for all the games. For example, you can have a system that will move all the entities that have a \mbox{\hyperlink{structPosition}{Position}} and a \mbox{\hyperlink{structSpeed}{Speed}} component.
+\end{DoxyEnumerate}
+
+How to use the ecs \+:
+
+
+\begin{DoxyEnumerate}
+\item you need to create a registry, its a unique object that will manage all the other parts of the ecs; the functions inside of it \+:
+\begin{DoxyItemize}
+\item register\+\_\+component \+: add a component to the registry
+\item spawn\+\_\+entity \+: create an entity and return its id
+\item add\+\_\+component \+: associate a component to an entity
+\item get\+\_\+components \+: get a vector of all the components of a type
+\item remove\+\_\+component \+: remove a component of an entity
+\item kill\+\_\+entity \+: kill an entity
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{int} main() \{}
+\DoxyCodeLine{    \mbox{\hyperlink{classregistry}{registry}} reg;}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item after you created the registry, you need to register all the components that you will use in your game. For example, if you have a \mbox{\hyperlink{structPosition}{Position}} component, you need to register it in the registry.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{int} main() \{}
+\DoxyCodeLine{    \mbox{\hyperlink{classregistry}{registry}} reg;}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structSpeed}{Speed}}>();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structPosition}{Position}}>();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structDrawable}{Drawable}}>();}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item after you registered all the components that you will use in your game, you need to create entities. if i want to create my player, i will need to create an entity and add the components that i need to it. For example, if i want to create a player with a position, a speed and a drawable components, i will need to create an entity and add the components to it.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{int} main() \{}
+\DoxyCodeLine{    \mbox{\hyperlink{classregistry}{registry}} reg;}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structSpeed}{Speed}}>();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structPosition}{Position}}>();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structDrawable}{Drawable}}>();}
+\DoxyCodeLine{    \mbox{\hyperlink{classentity__t}{entity\_t}} player = reg.\mbox{\hyperlink{classregistry_a75d49eb0c9936d57146007f06cbaf735}{spawn\_entity}}();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structSpeed}{Speed}}>(entity, \mbox{\hyperlink{structSpeed}{Speed}}());}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structPosition}{Position}}>(entity, \mbox{\hyperlink{structPosition}{Position}}());}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structDrawable}{Drawable}}>(entity, \mbox{\hyperlink{structDrawable}{Drawable}}());}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+\begin{DoxyEnumerate}
+\item to get the components of an entity and / or modify them, you need to use the get\+\_\+components function. For example, if i want to get the position of my player and set it to \{300, 300\}, i will need to use the get\+\_\+components function and get the position component of my player.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{int} main() \{}
+\DoxyCodeLine{    \mbox{\hyperlink{classregistry}{registry}} reg;}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structSpeed}{Speed}}>();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structPosition}{Position}}>();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structDrawable}{Drawable}}>();}
+\DoxyCodeLine{    \mbox{\hyperlink{classentity__t}{entity\_t}} player = reg.\mbox{\hyperlink{classregistry_a75d49eb0c9936d57146007f06cbaf735}{spawn\_entity}}();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structSpeed}{Speed}}>(entity, \mbox{\hyperlink{structSpeed}{Speed}}());}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structPosition}{Position}}>(entity, \mbox{\hyperlink{structPosition}{Position}}());}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structDrawable}{Drawable}}>(entity, \mbox{\hyperlink{structDrawable}{Drawable}}());}
+\DoxyCodeLine{    \textcolor{keyword}{auto}\& pos = reg.\mbox{\hyperlink{classregistry_a3149b283b4533fa3c8d9ee360f819769}{get\_components}}<\mbox{\hyperlink{structPosition}{Position}}>()[player]; \textcolor{comment}{// if you want to get a specific components of an entity, can use the operator []}}
+\DoxyCodeLine{    pos-\/>x = 300;}
+\DoxyCodeLine{    pos-\/>y = 300;}
+\DoxyCodeLine{    \textcolor{comment}{// if you dont want to use the entity anymore, you can kill it}}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a6c967fb2267fd8eaeb155f2be5b5650c}{kill\_entity}}(player);}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item You can now make a game with the ecs. but You can also create systems, or use the systems that are already created. For example, if you want to move all the entities that have a position and a speed component, you can use the move\+\_\+system.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void} move\_system(\mbox{\hyperlink{classregistry}{registry}}\& reg) \{}
+\DoxyCodeLine{    \textcolor{keyword}{auto}\& positions = reg.\mbox{\hyperlink{classregistry_a3149b283b4533fa3c8d9ee360f819769}{get\_components}}<\mbox{\hyperlink{structPosition}{Position}}>();}
+\DoxyCodeLine{    \textcolor{keyword}{auto}\& speeds = reg.\mbox{\hyperlink{classregistry_a3149b283b4533fa3c8d9ee360f819769}{get\_components}}<\mbox{\hyperlink{structSpeed}{Speed}}>();}
+\DoxyCodeLine{    \textcolor{keywordflow}{for} (\textcolor{keyword}{auto}\& pos : positions) \{}
+\DoxyCodeLine{        pos-\/>x += speeds[pos].x;}
+\DoxyCodeLine{        pos-\/>y += speeds[pos].y;}
+\DoxyCodeLine{    \}}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int} main() \{}
+\DoxyCodeLine{    \mbox{\hyperlink{classregistry}{registry}} reg;}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structSpeed}{Speed}}>();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structPosition}{Position}}>();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\_component}}<\mbox{\hyperlink{structDrawable}{Drawable}}>();}
+\DoxyCodeLine{    \mbox{\hyperlink{classentity__t}{entity\_t}} player = reg.\mbox{\hyperlink{classregistry_a75d49eb0c9936d57146007f06cbaf735}{spawn\_entity}}();}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structSpeed}{Speed}}>(entity, \mbox{\hyperlink{structSpeed}{Speed}}());}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structPosition}{Position}}>(entity, \mbox{\hyperlink{structPosition}{Position}}());}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\_component}}<\mbox{\hyperlink{structDrawable}{Drawable}}>(entity, \mbox{\hyperlink{structDrawable}{Drawable}}());}
+\DoxyCodeLine{    \textcolor{keyword}{auto}\& pos = reg.\mbox{\hyperlink{classregistry_a3149b283b4533fa3c8d9ee360f819769}{get\_components}}<\mbox{\hyperlink{structPosition}{Position}}>()[player]; \textcolor{comment}{// if you want to get a specific components of an entity, can use the operator []}}
+\DoxyCodeLine{    pos-\/>x = 300;}
+\DoxyCodeLine{    pos-\/>y = 300;}
+\DoxyCodeLine{    \textcolor{comment}{// if you dont want to use the entity anymore, you can kill it}}
+\DoxyCodeLine{    reg.\mbox{\hyperlink{classregistry_a6c967fb2267fd8eaeb155f2be5b5650c}{kill\_entity}}(player);}
+\DoxyCodeLine{    \textcolor{comment}{// you can now use the move\_system}}
+\DoxyCodeLine{    move\_system(reg);}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ 
