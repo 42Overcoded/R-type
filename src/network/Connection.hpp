@@ -8,7 +8,7 @@
 #ifndef CONNECTION_HPP_
 #define CONNECTION_HPP_
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <cstddef>
 #include <iostream>
@@ -70,7 +70,7 @@ public:
             std::cerr << "Can't connect client to client" << std::endl;
         }
     }
-    bool ConnectToServer(const boost::asio::ip::udp::resolver::results_type &endpoints)
+    void ConnectToServer(const boost::asio::ip::udp::resolver::results_type &endpoints)
     {
         if (ownerType_ == Owner::Client)
         {
@@ -95,7 +95,7 @@ public:
             std::cerr << "Can't connect server to server" << std::endl;
         }
     }
-    bool Disconnect()
+    void Disconnect()
     {
         if (IsConnected())
         {
@@ -112,7 +112,7 @@ public:
         if (IsConnected())
         {
             boost::asio::post(ioContext_, [this, packet]() {
-                bool isWritingPacket = !packetsOutQueue_.empty();
+                bool isWritingPacket = !packetsOutQueue_.IsEmpty();
                 packetsOutQueue_.PushBack(packet);
                 if (!isWritingPacket)
                 {
@@ -139,7 +139,7 @@ private:
                     else
                     {
                         packetsOutQueue_.PopFront();
-                        if (!packetsOutQueue_.empty())
+                        if (!packetsOutQueue_.IsEmpty())
                         {
                             SendHeader();
                         }
@@ -162,7 +162,7 @@ private:
                 if (!ec)
                 {
                     packetsOutQueue_.PopFront();
-                    if (!packetsOutQueue_.empty())
+                    if (!packetsOutQueue_.IsEmpty())
                     {
                         SendHeader();
                     }

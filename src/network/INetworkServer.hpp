@@ -8,7 +8,7 @@
 #ifndef INETWORKSERVER_HPP_
 #define INETWORKSERVER_HPP_
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <deque>
 #include <iostream>
 #include <memory>
@@ -51,7 +51,7 @@ public:
         return true;
     };
 
-    bool Stop()
+    void Stop()
     {
         ioContext_.stop();
         if (threadContext_.joinable())
