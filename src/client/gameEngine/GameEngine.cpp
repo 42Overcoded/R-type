@@ -22,6 +22,7 @@
 #include <nlohmann/json.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <ctime>
+#include "../../network/network_c/NetworkComponent.hpp"
 
 void gameEngine::register_component_to_game()
 {
@@ -47,6 +48,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Scale>();
     _registry.register_component<Rect>();
     _registry.register_component<Texture>();
+    _registry.register_component<NetworkComponent>();
 };
 
 void gameEngine::launch_game() {
@@ -124,6 +126,7 @@ void gameEngine::launch_game() {
         _system.font_system(_registry);
         _system.string_system(_registry);
         _system.draw_system(_registry, _window);
+        _networkSystem.Update(_registry);
         _window.display();
     }
 }

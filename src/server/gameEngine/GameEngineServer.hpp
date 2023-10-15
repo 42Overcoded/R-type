@@ -11,6 +11,7 @@
 #include "../../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
 #include "../../ecs/ComponentsArray/Systems/ServerSystem.hpp"
+#include "../../network/network_s/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
 
@@ -25,7 +26,7 @@ class gameEngine {
     public:
         gameEngine(registry &registry, unsigned int portNumber) : _registry(registry) {
             try {
-                //_networkSystem = std::make_unique<NetworkSystem>(portNumber);
+                _networkSystem = std::make_unique<Network::NetworkSystem>(portNumber);
             } catch (std::exception &e) {
                 std::cerr << e.what() << std::endl;
                 exit(84);
@@ -71,7 +72,7 @@ class gameEngine {
         sf::Time elapsed;
         sf::Clock clock;
         System _system;
-        //std::unique_ptr<NetworkSystem> _networkSystem;
+        std::unique_ptr<Network::NetworkSystem> _networkSystem;
         registry _registry;
 };
 

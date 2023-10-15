@@ -14,6 +14,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
+#include "../network_c/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
 
@@ -26,7 +27,7 @@ enum Scene {
 
 class gameEngine {
     public:
-        gameEngine(registry &registry) : _registry(registry) {}
+        gameEngine(registry &registry, unsigned int serverPort, std::string serverIp) : _registry(registry), _networkSystem(serverPort, serverIp) {}
         ~gameEngine() = default;
         /**
          * @brief register all component to the game
@@ -184,6 +185,7 @@ class gameEngine {
         sf::Clock clock;
         sf::RenderWindow _window;
         SfmlSystem _system;
+        Network::NetworkSystem _networkSystem;
         registry _registry;
 };
 

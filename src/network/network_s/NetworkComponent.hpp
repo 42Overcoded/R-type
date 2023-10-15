@@ -7,16 +7,14 @@
 
 #ifndef NETWORKCOMPONENT_HPP_
 #define NETWORKCOMPONENT_HPP_
-#include "Network.hpp"
 #include <memory>
+#include <sys/types.h>
 
-struct NetworkIn
+struct NetworkComponent
 {
-    unsigned int id;
+    uint32_t clientId;
+    uint32_t entityId;
 };
 
-struct NetworkOut
-{
-};
 
 #endif /* !NETWORKCOMPONENT_HPP_ */

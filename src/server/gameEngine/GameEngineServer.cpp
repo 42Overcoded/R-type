@@ -11,6 +11,7 @@
 #include <optional>
 #include <nlohmann/json.hpp>
 #include <ctime>
+#include <../../network/network_s/NetworkComponent.hpp>
 
 void gameEngine::register_component_to_game()
 {
@@ -36,6 +37,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Scale>();
     _registry.register_component<Rect>();
     _registry.register_component<Texture>();
+    _registry.register_component<NetworkComponent>();
 };
 
 void gameEngine::launch_game() {
@@ -92,6 +94,7 @@ void gameEngine::launch_game() {
             death_animation();
             shoot_enemy();
             life_handler();
+            _networkSystem->Update(_registry);
         }
     }
 }
