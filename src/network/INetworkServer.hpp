@@ -12,10 +12,12 @@
 #include <deque>
 #include <iostream>
 #include <memory>
-#include "Packet.hpp"
-#include "boost/asio/io_context.hpp"
-#include "PacketsQueue.hpp"
 #include "Connection.hpp"
+#include "Packet.hpp"
+#include "PacketsQueue.hpp"
+#include "boost/asio/io_context.hpp"
+#include "boost/asio/ip/udp.hpp"
+#include "boost/asio/write.hpp"
 
 namespace Network {
 
@@ -25,9 +27,68 @@ class Packet;
 template <typename T>
 class INetworkServer
 {
+private:
+    class ClientsManager
+    {
+    public:
+        ClientsManager(boost::asio::io_context &ioContext, boost::asio::ip::udp::socket &socket, PacketsQueue<OwnedPacket<T>> &packetsQueue, std::deque<std::shared_ptr<Connection<T>>> &clients) : socket_(socket), ioContext_(ioContext), packetsInQueue_(packetsQueue), clients_(clients){};
+        ~ClientsManager() = default;
+
+    protected:
+        void GetPacket()
+        {
+            socket_.async_receive_from(
+                boost::asio::buffer(&recvBuffer_.header, sizeof(PacketHeader<T>)), remoteEndpoint_,
+                [this](std::error_code ec, std::size_t length) {
+                    if (!ec)
+                    {
+                        if (recvBuffer_.header.size == 0)
+                        {
+                            ManageConnectionPacket();
+                        } else {
+                            std::cerr << "Packet size is not 0" << std::endl;
+                        }
+                    }
+                    else
+                    {
+                        std::cout << "[" << id_ << "] Get Header Fail.\n";
+                        socket_.close();
+                    }
+                });
+        }
+
+        void ManageConnectionPacket()
+        {
+            switch (recvBuffer_.header.flag)
+            {
+            case T::ServerConnect:
+                std::cout << "Server Connect" << std::endl;
+                boost::asio::ip::udp::socket newSocket(ioContext_, remoteEndpoint_.protocol(), 0);
+                std::shared_ptr<Connection<T>> newClient =
+                    std::make_shared<Connection<T>>(Connection<T>::Owner::Server, ioContext_,
+                    newSocket, packetsInQueue_);
+                newClient->ConnectToClient(remoteEndpoint_);
+                clients_.push_back(newClient);
+            }
+            GetPacket();
+        }
+
+    private:
+        boost::asio::ip::udp::socket &socket_;
+        boost::asio::io_context &ioContext_;
+        PacketsQueue<OwnedPacket<T>> &packetsInQueue_;
+        uint32_t id_ = 0;
+        Packet<T> recvBuffer_;
+        boost::asio::ip::udp::endpoint remoteEndpoint_;
+        std::deque<std::shared_ptr<Connection<T>>> &clients_;
+    };
+
 public:
     INetworkServer(uint16_t port)
-        : socket_(ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port)){};
+        : socket_(
+              ioContext_,
+              boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port)),
+              clientsManager_(ioContext_, socket_, packetsInQueue_, clients_){};
 
     virtual ~INetworkServer()
     {
@@ -39,7 +100,7 @@ public:
     {
         try
         {
-            WaitForClientConnection();
+            clientsManager_.GetPacket();
             threadContext_ = std::thread([this]() { ioContext_.run(); });
         }
         catch (const std::exception &e)
@@ -57,23 +118,6 @@ public:
         if (threadContext_.joinable())
             threadContext_.join();
         std::cout << "[SERVER] Stopped" << std::endl;
-    };
-
-    void WaitForClientConnection()
-    {
-        std::cout << "[SERVER] New Connection" << std::endl;
-        std::shared_ptr<Connection<T>> newClient = std::make_shared<Connection<T>>(
-            Connection<T>::OwnerType::Server, ioContext_, socket_, packetsInQueue_);
-        if (OnClientConnect(newClient))
-        {
-            clients_.push_back(std::move(newClient));
-            clients_.back()->ConnectToClient(nIDCounter_++);
-            std::cout << "[" << clients_.back()->GetID() << "] Connection Approved" << std::endl;
-        }
-        else
-        {
-            std::cout << "[-----] Connection Denied" << std::endl;
-        }
     };
 
     void SendToClient(const Packet<T> &packet, const std::shared_ptr<Connection<T>> client)
@@ -130,6 +174,7 @@ protected:
     std::thread threadContext_;
     uint32_t nIDCounter_ = 10000;
     boost::asio::ip::udp::socket socket_;
+    ClientsManager clientsManager_;
 };
 };  // namespace Network
 

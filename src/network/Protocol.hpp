@@ -18,6 +18,7 @@ enum class Flag : uint32_t
 	ServerUpdateControls,
 
 	ClientAccepted,
+	ClientDenied,
 	ClientAssignID,
 	ClientSendPing,
 	ClientAddPlayer,
