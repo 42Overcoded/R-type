@@ -1,0 +1,46 @@
+{
+    "bullet": [
+        {
+            "tag": "enemyBullet",
+            "textureTag": "enemyBulletTexture",
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "hitboxwidth": 24,
+            "hitboxheight": 24,
+            "scale": 2,
+            "speed": 0.5
+        },
+        {
+            "tag": "enemyBlueBullet",
+            "textureTag": "enemyBlueBulletTexture",
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "hitboxwidth": 32,
+            "hitboxheight": 32,
+            "scale": 2,
+            "speed": 0.5
+        },
+        {
+            "tag": "enemyBossBullet",
+            "textureTag": "enemyBossBulletTexture",
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "rect": {
+                "left": 0,
+                "top": 400,
+                "width": 23,
+                "height": 20
+            },
+            "hitboxwidth": 66,
+            "hitboxheight": 66,
+            "scale": 3,
+            "speed": 0.8
+        }
+    ]
+}

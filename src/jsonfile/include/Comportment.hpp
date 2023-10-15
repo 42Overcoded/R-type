@@ -17,8 +17,8 @@ struct JsonIDRange {
 };
 
 struct MovementVector {
-    int x; //Movement on x axis
-    int y; //Movement on y axis
+    float x; //Movement on x axis
+    float y; //Movement on y axis
 };
 
 struct JsonComportment {

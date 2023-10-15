@@ -22,18 +22,18 @@ Distribution of this memo is unlimited.
     - [History](#history)
     - [Terminology](#terminology)
   - [The GTP Model](#the-gtp-model)
-  - [Communication Functions](#communication-functions)
-    - [GTP Commands](#gtp-commands)
-      - [Messages Transmission Commands](#messages-transmission-commands)
-    - [GTP Replies](#gtp-replies)
-      - [Numeric Order List of Reply Codes](#numeric-order-list-of-reply-codes)
-  - [Declarative Specifications](#declarative-specifications)
-    - [Minimum Implementation](#minimum-implementation)
-    - [Connections](#connections)
-    - [Commands](#commands)
-    - [GTP Commands](#gtp-commands-1)
-    - [GTP Command Arguments](#gtp-command-arguments)
-    - [Sequencing of commands and replies](#sequencing-of-commands-and-replies)
+  - [Commands](#commands)
+    - [ServerGetPing](#servergetping)
+    - [ServerConnect](#serverconnect)
+    - [ServerUpdateControls](#serverupdatecontrols)
+    - [ClientAccepted](#clientaccepted)
+    - [ClientDenied](#clientdenied)
+    - [ClientAssignID](#clientassignid)
+    - [ClientSendPing](#clientsendping)
+    - [ClientAddPlayer](#clientaddplayer)
+    - [ClientRemovePlayer](#clientremoveplayer)
+    - [ClientCreateEntity](#clientcreateentity)
+    - [ClientUpdateEntity](#clientupdateentity)
 
 ## Introduction
 
@@ -94,9 +94,9 @@ may be diagrammed for an GTP service.
 
 ```txt
 /------------------------------------\
-|        |        |                  |
-| Header |  Size  |     Payload      |
-|        |        |                  |
+|      |              |              |
+| Flag | Payload Size |   Payload    |
+|      |              |              |
 |------------------------------------|
 |                                    |
 |                UDP                 |
@@ -107,34 +107,132 @@ may be diagrammed for an GTP service.
 As you can see, the GTP is just on top of the UDP.
 That allow it to be lightweight and highly efficient.
 
-``Header`` is a 4 bytes long (unsigned int) number.
+``Flag`` is a 4 bytes long (uint32_t) number.
   It define the following message.
-``Size`` is a 4 bytes long (unsigned int) number.
+``Size`` is a 4 bytes long (uint32_t) number.
   It describe the size in bit of the payload.
   Value of 0 in case of no payload.
 ``Payload`` is a structure containing different information.
   It will change depending of the value of the header.
 
-## Communication Functions
+## Commands
 
-### GTP Commands
+The following commands are available in the GTP protocol.
 
-#### Messages Transmission Commands
+```txt
+| Command |  Description         |
+| ------- | -------------------- |
+| 0x00    | ServerGetPing        |
+| 0x01    | ServerConnect        |
+| 0x02    | ServerUpdateControls |
+| 0x03    | ClientAccepted       |
+| 0x04    | ClientDenied         |
+| 0x05    | ClientAssignID       |
+| 0x06    | ClientSendPing       |
+| 0x07    | ClientAddPlayer      |
+| 0x08    | ClientRemovePlayer   |
+| 0x09    | ClientCreateEntity   |
+| 0x0A    | ClientUpdateEntity   |
+```
 
-### GTP Replies
+### ServerGetPing
 
-#### Numeric Order List of Reply Codes
+- Origin : Client
+- Flag : 0x00
+- Size : 0x00
+- Payload : None
 
-## Declarative Specifications
+Description : This command is used to check if the server is still alive.
 
-### Minimum Implementation
+### ServerConnect
 
-### Connections
+- Origin : Client
+- Flag : 0x01
+- Size : 0x00
+- Payload : None
 
-### Commands
+- Response : ClientAccepted
+- Response : ClientAssignID
 
-### GTP Commands
+Description : This command is used to connect to the server.
 
-### GTP Command Arguments
+### ServerUpdateControls
 
-### Sequencing of commands and replies
+- Origin : Client
+- Flag : 0x02
+- Size : 0x05 (bool * 5)
+- Payload : [bool, bool, bool, bool, bool]
+
+Description : This command is used to update the controls of the player.
+
+### ClientAccepted
+
+- Origin : Server
+- Flag : 0x03
+- Size : 0x00
+- Payload : None
+
+Description : This command is used to confirm the connection to the server.
+
+### ClientDenied
+
+- Origin : Server
+- Flag : 0x04
+- Size : 0x00
+- Payload : None
+
+Description : This command is used to deny the connection to the server.
+
+### ClientAssignID
+
+- Origin : Server
+- Flag : 0x05
+- Size : 0x04 (uint32_t)
+- Payload : [uint32_t]
+
+Description : This command is used to assign an ID to the client.
+
+### ClientSendPing
+
+- Origin : Server
+- Flag : 0x06
+- Size : 0x00
+- Payload : None
+
+Description : This command is used to check if the client is still alive. (Response to ServerGetPing)
+
+### ClientAddPlayer
+
+- Origin : Server
+- Flag : 0x07
+- Size : 0x04 (uint32_t)
+- Payload : [uint32_t]
+
+Description : This command is used to add a player to the game.
+
+### ClientRemovePlayer
+
+- Origin : Server
+- Flag : 0x08
+- Size : 0x04 (uint32_t)
+- Payload : [uint32_t]
+
+Description : This command is used to remove a player from the game.
+
+### ClientCreateEntity
+
+- Origin : Server
+- Flag : 0x09
+- Size : 0x0C (uint32_t * 3)
+- Payload : [uint32_t, uint32_t, uint32_t]
+
+Description : This command is used to create an entity in the game.
+
+### ClientUpdateEntity
+
+- Origin : Server
+- Flag : 0x0A
+- Size : 0x0C (uint32_t * 3)
+- Payload : [uint32_t, uint32_t, uint32_t]
+
+Description : This command is used to update an entity in the game.

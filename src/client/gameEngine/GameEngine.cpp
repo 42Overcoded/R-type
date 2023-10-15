@@ -6,11 +6,23 @@
 */
 
 #include "GameEngine.hpp"
+#include <csignal>
+#include <iostream>
 #include <optional>
+#include "Components.hpp"
+#include "Registry.hpp"
+#include "SFML/Graphics/Font.hpp"
+#include "SFML/Graphics/Rect.hpp"
+#include "SFML/System/Clock.hpp"
+#include "SfmlSystem.hpp"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <random>
+#include <nlohmann/json.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <ctime>
+#include "../../network/network_c/NetworkComponent.hpp"
 
 void gameEngine::register_component_to_game()
 {
@@ -29,151 +41,92 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Tag>();
     _registry.register_component<Pattern>();
     _registry.register_component<Hitbox>();
+    _registry.register_component<State>();
+    _registry.register_component<Clock>();
+    _registry.register_component<SearchingHead>();
+    _registry.register_component<EnemyBall>();
+    _registry.register_component<Scale>();
+    _registry.register_component<Rect>();
+    _registry.register_component<Texture>();
+    _registry.register_component<NetworkComponent>();
 };
-
-void gameEngine::modify_pattern(registry &r)
-{
-    auto &speed = r.get_components<Speed>();
-    auto &pattern = r.get_components<Pattern>();
-
-    for (size_t i = 0; i < r._entity_number; i++) { 
-        if (speed[i] && pattern[i]) {
-            if (pattern[i]->pattern_index < pattern[i]->switch_index) {
-                pattern[i]->pattern_index++;
-            } else {
-                pattern[i]->pattern_index = 0;
-                pattern[i]->pattern_type++;
-                pattern[i]->pattern_type %= pattern[i]->pattern_length;
-                speed[i]->speedx = pattern[i]->pattern[pattern[i]->pattern_type].speedx;
-                speed[i]->speedy = pattern[i]->pattern[pattern[i]->pattern_type].speedy;
-            }
-        }
-    }
-}
-
-entity_t gameEngine::init_starship()
-{
-    entity_t starship = _registry.spawn_entity();
-
-    _registry.add_component<Position>(starship, Position());
-    _registry.add_component<Speed>(starship, Speed());
-    _registry.add_component<Sprite>(starship, Sprite());
-    _registry.add_component<Drawable>(starship, Drawable());
-    _registry.add_component<Control>(starship, Control());
-    _registry.add_component<Player>(starship, Player());
-    _registry.add_component<Tag>(starship, Tag());
-
-    auto &tag = _registry.get_components<Tag>();
-    tag[starship]->tag = "starship";
-    auto &sprite = _registry.get_components<Sprite>();
-
-    sprite[starship]->sprite.setTexture(_system.get_map()["starship"]);
-
-    auto &speed = _registry.get_components<Speed>();
-    speed[starship]->speedx = 0.0f;
-    speed[starship]->speedy = 0.0f;
-
-    auto &position = _registry.get_components<Position>();
-    position[starship]->x = 100;
-    position[starship]->y = 500;
-
-    sprite[starship]->sprite.setPosition(position[starship]->x, position[starship]->y);
-    sprite[starship]->sprite.setTextureRect(sf::IntRect(0, 70, 33, 100));
-    sprite[starship]->sprite.setScale(3, 3);
-
-    return starship;
-}
-
-
-entity_t gameEngine::init_enemy()
-
-{
-    entity_t enemy = _registry.spawn_entity();
-
-    _registry.add_component<Position>(enemy, Position());
-    _registry.add_component<Speed>(enemy, Speed());
-    _registry.add_component<Sprite>(enemy, Sprite());
-    _registry.add_component<Drawable>(enemy, Drawable());
-    _registry.add_component<Enemy>(enemy, Enemy());
-    _registry.add_component<Tag>(enemy, {"enemy"});
-    _registry.add_component<Pattern>(enemy, Pattern());
-    _registry.add_component<Health>(enemy, Health());
-    _registry.add_component<Hitbox>(enemy, Hitbox());
-
-    auto &speed = _registry.get_components<Speed>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &health = _registry.get_components<Health>();
-    auto &hitbox = _registry.get_components<Hitbox>();
-
-    hitbox[enemy]->width = 33;
-    hitbox[enemy]->height = 100;
-    health[enemy]->health = 5;
-    sprite[enemy]->sprite.setTexture(_system.get_map()["enemy"]);
-    speed[enemy]->speedx -= 0.0f;
-    speed[enemy]->speedy = 0.0f;
-
-    auto &pattern = _registry.get_components<Pattern>();
-    pattern[enemy]->pattern_index = 0;
-    pattern[enemy]->pattern_type = 0;
-    pattern[enemy]->pattern_length = 2;
-    pattern[enemy]->switch_index = 100;
-    std::vector<Speed> pattern1 = {{0.2f, -0.2f}, {-0.2f, -0.2f}};
-    pattern[enemy]->pattern = pattern1;
-
-    auto &position = _registry.get_components<Position>();
-    position[enemy]->x = 1930;
-    position[enemy]->y = 800;
-
-    sprite[enemy]->sprite.setPosition(position[enemy]->x, position[enemy]->y);
-    sprite[enemy]->sprite.setScale(3, 3);
-
-    return enemy;
-}
 
 void gameEngine::launch_game() {
     _window.create(sf::VideoMode(1920, 1080), "R-Type");
     _window.setFramerateLimit(60);
-
     register_component_to_game();
-
     _system.load_texture(_registry);
+    scene = MENU;
+    sf::Time _elapsed;
+    sf::Clock _clock;
 
-    entity_t starship = init_starship();
-    for (int i = 0; i < 10; i++) {
-        entity_t enemy = init_enemy();
-        auto &position = _registry.get_components<Position>();
-        position[enemy]->x = 1930 + i * 100;
-        position[enemy]->y = 600 + i * 30;
-    }
+    int wave = 0;
 
+    for (int i = 0; i < 2; i++)
+        init_background(i);
+    init_menu();
+    init_score();
+    init_beambar();
+    init_load_shoot();
+    for (int i = 0; i != 4; i++)
+        entity_t starship = init_starship(1, i);
+    for (int i = 0; i < 3; i++)
+        init_life(i);
 
     while (_window.isOpen())
     {
-        elapsed = clock.getElapsedTime();
-        elapsedShoot = clockShoot.getElapsedTime();
-        sf::Event event;
-        while (_window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                _window.close();
+        auto &health = _registry.get_components<Health>();
+        auto &tag = _registry.get_components<Tag>();
+        int alive = 0;
+        for (size_t i = 0; i < _registry._entity_number; i++) {
+            if (tag[i] == std::nullopt)
+                continue;
+            if (tag[i]->tag == "starship") {
+                alive += 1;
+            }
+            if (health[i] != std::nullopt && health[i]->health <= 0 && tag[i]->tag == "starship") {
+                _registry.kill_entity(entity_t(i));
+            }
         }
+        if (alive == 0) {
+            scene = END;
+        }
+        if (scene == MENU || scene == LOBBY || scene == END) {
+            menu();
+        }
+        if (scene == GAME) {
+            clock_time();
+            elapsed = clock.getElapsedTime();
+            _elapsed = _clock.getElapsedTime();
+            clock.restart();
 
-        auto &position = _registry.get_components<Position>();
-        auto &control = _registry.get_components<Control>();
-        auto &speed = _registry.get_components<Speed>();
-
-        modify_pattern(_registry);
-
-        _system.control_system(_registry);
-        _system.shoot_system(_registry, clockShoot, elapsedShoot);
-        _system.velocity_system(_registry, elapsed);
-        _system.hitbox_system(_registry);
-
-        clock.restart();
-
+            sf::Event event;
+            while (_window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    _window.close();
+            }
+            _system.modify_pattern(_registry);
+            spawn_wave(_elapsed, wave);
+            animate_enemy();
+            _system.control_system(_registry);
+            shoot_system(elapsed);
+            _system.velocity_system(_registry, elapsed);
+            _system.color_system(_registry);
+            _system.hitbox_system(_registry);
+            death_animation();
+            shoot_enemy();
+            life_handler();
+        }
         _window.clear(sf::Color::Black);
-        _system.set_textures(_registry);
+        _system.position_system(_registry);
+        _system.rect_system(_registry);
+        _system.texture_system(_registry);
+        _system.scale_system(_registry);
+        _system.font_system(_registry);
+        _system.string_system(_registry);
         _system.draw_system(_registry, _window);
+        _networkSystem.Update(_registry);
         _window.display();
     }
 }

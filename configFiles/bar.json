@@ -1,0 +1,35 @@
+{
+    "beambar": {
+        "tag": "beambar",
+        "textureTag": "beambarTexture",
+        "texturePath": "./assets/sprites/beam.png",
+        "rect": {
+            "left": 0,
+            "top": 0,
+            "width": 250,
+            "height": 25
+        },
+        "scale": 2,
+        "position": {
+            "x": 730,
+            "y": 950
+        }
+    },
+    "fullbeambar": {
+        "tag": "fullbeambar",
+        "textureTag": "beambarTexture",
+        "texturePath": "./assets/sprites/beam.png",
+        "health": 0,
+        "rect": {
+            "left": 0,
+            "top": 26,
+            "width": 0,
+            "height": 25
+        },
+        "scale": 2,
+        "position": {
+            "x": 730,
+            "y": 950
+        }
+    }
+}

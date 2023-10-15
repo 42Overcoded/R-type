@@ -1,0 +1,8 @@
+{
+    "background": {
+        "speedx": -0.1,
+        "tag": "background",
+        "textureTag": "backgroundTexture",
+        "width": 1920
+    }
+}
