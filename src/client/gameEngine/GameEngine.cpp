@@ -705,9 +705,7 @@ void gameEngine::launch_game() {
         _system.set_textures(_registry);
         _system.draw_system(_registry, _window);
         _system.life_handler(_registry, _window);
-        std::cout << "updating network system" << std::endl;
         _networkSystem.Update(_registry);
-        std::cout << "network system updated" << std::endl;
         _window.display();
     }
 }
