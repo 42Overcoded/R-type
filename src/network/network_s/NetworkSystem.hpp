@@ -38,8 +38,6 @@ private:
 private:
 };
 
-const size_t MaxPacketsProcessed = 100;
-
 };  // namespace Network
 
 #endif /* !NETWORKSYSTEM_HPP_ */

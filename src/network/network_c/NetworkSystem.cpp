@@ -66,7 +66,7 @@ void NetworkSystem::managePacketIn(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientAccepted(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
     {
@@ -78,7 +78,7 @@ void NetworkSystem::manageClientAccepted(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
     {
@@ -90,7 +90,7 @@ void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
     {
@@ -102,7 +102,7 @@ void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
     {
@@ -114,7 +114,7 @@ void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
     {
@@ -126,7 +126,7 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet
 
 void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
     {
@@ -138,7 +138,7 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkIn> &networkInArr = reg.get_components<NetworkIn>();
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
 
     for (unsigned int i; i < networkInArr.size(); i++)
     {

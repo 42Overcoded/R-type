@@ -19,7 +19,7 @@
 #include <random>
 #include <SFML/Window/Keyboard.hpp>
 #include <ctime>
-#include "../../network_c/NetworkComponent.hpp"
+#include "../../network/network_c/NetworkComponent.hpp"
 
 void gameEngine::register_component_to_game()
 {
@@ -42,8 +42,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Clock>();
     _registry.register_component<SearchingHead>();
     _registry.register_component<EnemyBall>();
-    _registry.register_component<NetworkIn>();
-    _registry.register_component<NetworkOut>();
+    _registry.register_component<NetworkComponent>();
     parsed = new JsonParser();
 };
 
@@ -84,11 +83,10 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<Hitbox>(starship, Hitbox());
     _registry.add_component<State>(starship, State());
     _registry.add_component<Clock>(starship, Clock());
-    _registry.add_component<NetworkIn>(starship, NetworkIn());
+    _registry.add_component<NetworkComponent>(starship, NetworkComponent());
 
     if (id == i) {
         _registry.add_component<Control>(starship, Control());
-        _registry.add_component<NetworkOut>(starship, NetworkOut());
     }
 
     auto &clock = _registry.get_components<Clock>();
@@ -708,7 +706,7 @@ void gameEngine::launch_game() {
         _system.draw_system(_registry, _window);
         _system.life_handler(_registry, _window);
         std::cout << "updating network system" << std::endl;
-        _networkSystem.update(_registry);
+        _networkSystem.Update(_registry);
         std::cout << "network system updated" << std::endl;
         _window.display();
     }

@@ -8,6 +8,7 @@
 #ifndef PROTOCOL_HPP_
 #define PROTOCOL_HPP_
 #include <cstdint>
+#include <string>
 
 namespace Network {
 enum class Flag : uint32_t
@@ -24,6 +25,12 @@ enum class Flag : uint32_t
 	ClientCreateEntity,
 	ClientUpdateEntity,
 };
+
+const uint32_t DefaultPort = 4242;
+const std::string DefaultIp = "127.0.0.1";
+const uint32_t MaxPacketsProcessed = 10;
+const uint32_t MaxClients = 4;
+const uint32_t NetworkRefreshRate = 60;
 };
 
 #endif /* !PROTOCOL_HPP_ */

@@ -10,13 +10,9 @@
 #include <memory>
 #include <cstdint>
 
-struct NetworkIn
+struct NetworkComponent
 {
-    uint32_t id;
-};
-
-struct NetworkOut
-{
+    uint32_t entityId;
 };
 
 #endif /* !NETWORKCOMPONENT_HPP_ */

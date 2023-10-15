@@ -9,11 +9,11 @@
 #include <iostream>
 #include "../ecs/Registry.hpp"
 #include "GameEngine.hpp"
-#include "../network_c/Network.hpp"
+#include "../network/Protocol.hpp"
 
 int main(int ac, char **av) {
-    unsigned int serverPort = DefaultPort;
-    std::string serverIp = DefaultIp;
+    unsigned int serverPort = Network::DefaultPort;
+    std::string serverIp = Network::DefaultIp;
 
     if (ac > 3) {
         std::cerr << "Usage: ./r-type_server serverPort serverIp" << std::endl;
@@ -27,7 +27,7 @@ int main(int ac, char **av) {
         }
         serverIp = av[2];
     } else {
-        std::cout << "No port specified, using default port: " << DefaultPort << std::endl;
+        std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
     }
     registry r;
     gameEngine game(r, serverPort, serverIp);

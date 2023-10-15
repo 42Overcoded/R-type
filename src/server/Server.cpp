@@ -6,10 +6,10 @@
 */
 #include <iostream>
 #include "game/Game.hpp"
-#include "../network_s/Network.hpp"
+#include "../network/Protocol.hpp"
 
 int main(int ac, char **av) {
-    unsigned int portNumber = DefaultPort;
+    unsigned int portNumber = Network::DefaultPort;
 
     if (ac > 2) {
         std::cerr << "Usage: ./r-type_server port" << std::endl;
@@ -22,7 +22,7 @@ int main(int ac, char **av) {
             return 84;
         }
     } else {
-        std::cout << "No port specified, using default port: " << DefaultPort << std::endl;
+        std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
     }
     game(portNumber);
     return 0;

@@ -11,7 +11,7 @@
 #include "SFML/System/Clock.hpp"
 #include <random>
 #include <ctime>
-#include <../../network_s/NetworkComponent.hpp>
+#include <../../network/network_s/NetworkComponent.hpp>
 
 void gameEngine::register_component_to_game()
 {
@@ -34,8 +34,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Clock>();
     _registry.register_component<SearchingHead>();
     _registry.register_component<EnemyBall>();
-    _registry.register_component<NetworkIn>();
-    _registry.register_component<NetworkOut>();
+    _registry.register_component<NetworkComponent>();
     parsed = new JsonParser();
 };
 
@@ -77,8 +76,7 @@ entity_t gameEngine::init_starship()
     _registry.add_component<Hitbox>(starship, Hitbox());
     _registry.add_component<State>(starship, State());
     _registry.add_component<Clock>(starship, Clock());
-    _registry.add_component<NetworkIn>(starship, NetworkIn());
-    _registry.add_component<NetworkOut>(starship, NetworkOut());
+    _registry.add_component<NetworkComponent>(starship, NetworkComponent());
 
     auto &clock = _registry.get_components<Clock>();
     auto &health = _registry.get_components<Health>();
@@ -573,8 +571,8 @@ void gameEngine::launch_game()  {
         _system.death_animation(_registry);
         _system.shoot_enemy(_registry);
         _window.clear(sf::Color::Black);
-        if (sendPackageT.asMilliseconds() > NETWORK_REFRESH_RATE) {
-            _networkSystem->update(_registry);
+        if (sendPackageT.asMilliseconds() > 1000 / Network::NetworkRefreshRate) {
+            _networkSystem->Update(_registry);
             sendPackageC.restart();
         }
         _window.display();

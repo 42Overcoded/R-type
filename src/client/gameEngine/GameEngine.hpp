@@ -57,7 +57,7 @@ class gameEngine {
         sf::Clock clock;
         sf::RenderWindow _window;
         SfmlSystem _system;
-        NetworkSystem _networkSystem;
+        Network::NetworkSystem _networkSystem;
         registry _registry;
 };
 
