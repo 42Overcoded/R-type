@@ -54,13 +54,17 @@ public:
     {
         return id_;
     }
-    void ConnectToClient(uint32_t uid = 0)
+    void ConnectToClient(boost::asio::ip::udp::endpoint remoteEndpoint, uint32_t uid = 0)
     {
         if (ownerType_ == Owner::Server)
         {
             if (socket_.is_open() && !IsConnected_)
             {
+                std::cout << "Connecting to client" << std::endl;
                 id_ = uid;
+                remoteEndpoint_ = remoteEndpoint;
+                socket_.connect(remoteEndpoint_);
+                std::cout << "Connected to client" << std::endl;
                 Packet<T> idPacket;
                 idPacket.header.flag = T::ClientAssignID;
                 idPacket << id_;
@@ -79,10 +83,12 @@ public:
     {
         if (ownerType_ == Owner::Client && !IsConnected_)
         {
+            std::cout << "Connecting to server" << std::endl;
             remoteEndpoint_ = *endpoints.begin();
+            socket_.open(remoteEndpoint_.protocol());
             socket_.connect(remoteEndpoint_);
             Packet<T> packet;
-            packet << T::ServerConnect;
+            packet.header.flag = T::ServerConnect;
             SendPacket(packet);
             std::cout << "Connect to server" << std::endl;
             GetHeader();
@@ -101,7 +107,7 @@ public:
     }
     bool IsConnected() const
     {
-        return socket_.is_open() && IsConnected_;
+        return socket_.is_open();
     }
 
     bool SendPacket(const Packet<T> &packet)
