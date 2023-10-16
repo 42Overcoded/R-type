@@ -1,0 +1,151 @@
+\hypertarget{classSparseArray}{}\doxysection{Sparse\+Array$<$ Component $>$ Class Template Reference}
+\label{classSparseArray}\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSparseArray_a51cab75e1e237afec3ac9b87ea94e9d3}\label{classSparseArray_a51cab75e1e237afec3ac9b87ea94e9d3}} 
+using {\bfseries value\+\_\+type} = std\+::optional$<$ Component $>$
+\item 
+\mbox{\Hypertarget{classSparseArray_a3dcd1c7e75beb812abe935329a1134cd}\label{classSparseArray_a3dcd1c7e75beb812abe935329a1134cd}} 
+using {\bfseries reference\+\_\+type} = value\+\_\+type \&
+\item 
+\mbox{\Hypertarget{classSparseArray_a99aa6d8db8afb8bc59fefdac68c70855}\label{classSparseArray_a99aa6d8db8afb8bc59fefdac68c70855}} 
+using {\bfseries const\+\_\+reference\+\_\+type} = const value\+\_\+type \&
+\item 
+\mbox{\Hypertarget{classSparseArray_a5e78f0c1621c3eb988265b7501779072}\label{classSparseArray_a5e78f0c1621c3eb988265b7501779072}} 
+using {\bfseries container\+\_\+t} = std\+::vector$<$ value\+\_\+type $>$
+\item 
+\mbox{\Hypertarget{classSparseArray_a45de7fcdfc8de35374df015966db4b3a}\label{classSparseArray_a45de7fcdfc8de35374df015966db4b3a}} 
+using {\bfseries size\+\_\+type} = typename container\+\_\+t\+::size\+\_\+type
+\item 
+\mbox{\Hypertarget{classSparseArray_a92465924aa3272395fdc246e862fbca0}\label{classSparseArray_a92465924aa3272395fdc246e862fbca0}} 
+using {\bfseries iterator} = typename container\+\_\+t\+::iterator
+\item 
+\mbox{\Hypertarget{classSparseArray_a1c0205fbe9030209df2390a71fbf737a}\label{classSparseArray_a1c0205fbe9030209df2390a71fbf737a}} 
+using {\bfseries const\+\_\+iterator} = typename container\+\_\+t\+::const\+\_\+iterator
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSparseArray_a770f527960b3b5c7d4f385584c9b8421}\label{classSparseArray_a770f527960b3b5c7d4f385584c9b8421}} 
+{\bfseries Sparse\+Array} (const \mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \&)=default
+\item 
+\mbox{\Hypertarget{classSparseArray_a4f8f050bdab61912749732b5fc448542}\label{classSparseArray_a4f8f050bdab61912749732b5fc448542}} 
+{\bfseries Sparse\+Array} (\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \&\&) noexcept=default
+\item 
+\mbox{\Hypertarget{classSparseArray_a6efcc009788728193f041e4e288e4cd4}\label{classSparseArray_a6efcc009788728193f041e4e288e4cd4}} 
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \& {\bfseries operator=} (const \mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \&)
+\item 
+\mbox{\Hypertarget{classSparseArray_abd03c351b7479993ec990a6e76caacff}\label{classSparseArray_abd03c351b7479993ec990a6e76caacff}} 
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \& {\bfseries operator=} (\mbox{\hyperlink{classSparseArray}{Sparse\+Array}} \&\&) noexcept
+\item 
+\mbox{\Hypertarget{classSparseArray_a5cd57235836af14ebf5b76b9c62893f0}\label{classSparseArray_a5cd57235836af14ebf5b76b9c62893f0}} 
+reference\+\_\+type {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+t idx)
+\item 
+\mbox{\Hypertarget{classSparseArray_ab49b03d3bbc5bfb919687f64699aaa76}\label{classSparseArray_ab49b03d3bbc5bfb919687f64699aaa76}} 
+const\+\_\+reference\+\_\+type {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+t idx) const
+\item 
+iterator \mbox{\hyperlink{classSparseArray_a1ed9d2b182b52ed5cd6b544107ef8af4}{begin}} ()
+\begin{DoxyCompactList}\small\item\em Encapsulation of std\+::vector functions. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSparseArray_a7fa6228501432328b3b7e5f3142829c7}\label{classSparseArray_a7fa6228501432328b3b7e5f3142829c7}} 
+const\+\_\+iterator {\bfseries begin} () const
+\item 
+\mbox{\Hypertarget{classSparseArray_a151cffafe878041d1be19fc1f651b3fe}\label{classSparseArray_a151cffafe878041d1be19fc1f651b3fe}} 
+const\+\_\+iterator {\bfseries cbegin} () const
+\item 
+\mbox{\Hypertarget{classSparseArray_a4d32f10955bedd6229eba1da50e79bea}\label{classSparseArray_a4d32f10955bedd6229eba1da50e79bea}} 
+iterator {\bfseries end} ()
+\item 
+\mbox{\Hypertarget{classSparseArray_a9b75ec5365af5f139019f5acdc80854e}\label{classSparseArray_a9b75ec5365af5f139019f5acdc80854e}} 
+const\+\_\+iterator {\bfseries end} () const
+\item 
+\mbox{\Hypertarget{classSparseArray_a5765bcd8d4357cce3cace1be2a656d78}\label{classSparseArray_a5765bcd8d4357cce3cace1be2a656d78}} 
+const\+\_\+iterator {\bfseries cend} () const
+\item 
+\mbox{\Hypertarget{classSparseArray_a3b485311dcd6c7e4f3bffee764297b42}\label{classSparseArray_a3b485311dcd6c7e4f3bffee764297b42}} 
+size\+\_\+type {\bfseries size} () const
+\item 
+void \mbox{\hyperlink{classSparseArray_a4bae5c04a8a771d111849babc21599bb}{insert\+\_\+at}} (size\+\_\+type pos, const Component \&component)
+\begin{DoxyCompactList}\small\item\em link an entity with a component \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSparseArray_a76205362ae74688813e93b2dfdb696f9}\label{classSparseArray_a76205362ae74688813e93b2dfdb696f9}} 
+void {\bfseries insert\+\_\+at} (size\+\_\+type pos, Component \&\&component)
+\item 
+void \mbox{\hyperlink{classSparseArray_ab00e54b0c21ac9380db0f5c493138da0}{erase}} (size\+\_\+type pos)
+\begin{DoxyCompactList}\small\item\em function to delink the component of an entity / kill an entity \end{DoxyCompactList}\item 
+size\+\_\+type \mbox{\hyperlink{classSparseArray_a149a6e79d9c6fac27a28f8a47a9ff588}{get\+\_\+index}} (const value\+\_\+type \&type) const
+\begin{DoxyCompactList}\small\item\em Get the index object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSparseArray_a1ed9d2b182b52ed5cd6b544107ef8af4}\label{classSparseArray_a1ed9d2b182b52ed5cd6b544107ef8af4}} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!begin@{begin}}
+\index{begin@{begin}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+iterator \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Encapsulation of std\+::vector functions. 
+
+\begin{DoxyReturn}{Returns}
+iterator 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSparseArray_ab00e54b0c21ac9380db0f5c493138da0}\label{classSparseArray_ab00e54b0c21ac9380db0f5c493138da0}} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!erase@{erase}}
+\index{erase@{erase}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{erase()}{erase()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+void \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::erase (\begin{DoxyParamCaption}\item[{size\+\_\+type}]{pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+function to delink the component of an entity / kill an entity 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSparseArray_a149a6e79d9c6fac27a28f8a47a9ff588}\label{classSparseArray_a149a6e79d9c6fac27a28f8a47a9ff588}} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!get\_index@{get\_index}}
+\index{get\_index@{get\_index}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{get\_index()}{get\_index()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+size\+\_\+type \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::get\+\_\+index (\begin{DoxyParamCaption}\item[{const value\+\_\+type \&}]{type }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the index object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+size\+\_\+type 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSparseArray_a4bae5c04a8a771d111849babc21599bb}\label{classSparseArray_a4bae5c04a8a771d111849babc21599bb}} 
+\index{SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}!insert\_at@{insert\_at}}
+\index{insert\_at@{insert\_at}!SparseArray$<$ Component $>$@{SparseArray$<$ Component $>$}}
+\doxysubsubsection{\texorpdfstring{insert\_at()}{insert\_at()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+void \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$\+::insert\+\_\+at (\begin{DoxyParamCaption}\item[{size\+\_\+type}]{pos,  }\item[{const Component \&}]{component }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+link an entity with a component 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & \\
+\hline
+{\em component} & \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/flo/delivery/trimestre5/\+RType/\+R-\/type/src/ecs/\+Components\+Array/Sparse\+Array.\+hpp\end{DoxyCompactItemize}

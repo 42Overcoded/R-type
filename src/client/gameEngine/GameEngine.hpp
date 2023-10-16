@@ -14,6 +14,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
+#include "../network_c/NetworkSystem.hpp"
+#include <unordered_map>
+#include  <iostream>
 
 enum Scene {
     MENU,
@@ -24,30 +27,156 @@ enum Scene {
 
 class gameEngine {
     public:
-        gameEngine(registry &registry) : _registry(registry) {}
+        gameEngine(registry &registry, unsigned int serverPort, std::string serverIp) : _registry(registry), _networkSystem(serverPort, serverIp) {}
         ~gameEngine() = default;
+        /**
+         * @brief register all component to the game
+         * 
+         */
         void register_component_to_game();
+        /**
+         * @brief return the window
+         * 
+         * @return sf::RenderWindow 
+         */
         sf::RenderWindow &get_window();
-        entity_t init_starship();
-        entity_t init_enemy();
-        entity_t init_enemy_2();
-        entity_t init_enemy_3();
-        entity_t init_enemy_4();
-        entity_t init_boss();
+        /**
+         * @brief init the starships values according to the ecs
+         * 
+         * @return registry 
+         */
+        entity_t init_starship(int id, int i);
+        /**
+         * @brief init the enemies values according to the ecs
+         * 
+         * @return registry 
+         */
+        entity_t init_enemy(int i);
+        /**
+         * @brief menu of the game / pause scene / end scene / lobby
+         * 
+         */
         void menu();
+        /**
+         * @brief spawn the enemies according to the wave
+         * 
+         */
         void spawn_enemy();
+        /**
+         * @brief init the background to make parallax
+         * 
+         * @param i 
+         */
         void init_background(int i);
-        void init_texture();
+        /**
+         * @brief init the beambar
+         * 
+         */
         void init_beambar();
+        /**
+         * @brief game loop of the game and core of the game
+         * 
+         */
         void launch_game();
+        /**
+         * @brief init the menu
+         * 
+         */
         void init_menu();
-        void init_life();
-        void init_parallax(int i);
+        /**
+         * @brief init the life displayer of the starship
+         * 
+         * @param i 
+         */
+        void init_life(int i);
+        /**
+         * @brief init the score displayer
+         * 
+         */
         void init_score();
+        /**
+         * @brief spawn the wave of enemies according to the time
+         * 
+         * @param elapsed 
+         * @param wave 
+         */
         void spawn_wave(sf::Time &elapsed, int &wave);
-        void modify_pattern(registry &r);
+        /**
+         * @brief init the load shoot animation
+         * 
+         */
         void init_load_shoot();
+        /**
+         * @brief spawn the mobs the parametters given
+         * 
+         * @param n1 
+         * @param n2 
+         * @param n3 
+         * @param n4 
+         */
         void spawn_mobs(int n1, int n2, int n3, int n4);
+        /**
+         * @brief spawn enemy bullet
+         * 
+         */
+        void spawn_bullet(int i, int j);
+        /**
+         * @brief spawn boss bullet
+         * 
+         */
+        void spawn_boss_bullet(int i, int j);
+        void shoot_enemy();
+        /**
+         * @brief decharge the shoot of the starship and reset the beambar
+         * 
+         * @param elapsed 
+         */
+        void decharge_shoot(sf::Time &elapsed);
+        /**
+         * @brief load the shoot of the starship
+         * 
+         * @param elapsed 
+         */
+        void load_shoot(sf::Time &elapsed);
+        /**
+         * @brief spawn the ally bullet when shoot decharge
+         * 
+         * @param i 
+         */
+        void spawn_ally_bullet(int i);
+        /**
+         * @brief spawn the explosion animation after the death of the enemy
+         * 
+         * @param i 
+         */
+        void spawn_explosion(int i);
+        /**
+         * @brief animate the explosion
+         * 
+         * @param i 
+         */
+        void death_animation();
+        /**
+         * @brief handle the shoot of the starship
+         * 
+         * @param elapsed 
+         */
+        void shoot_system(sf::Time &elapsed);
+        /**
+         * @brief animate the enemies
+         * 
+         */
+        void animate_enemy();
+        /**
+         * @brief handle the clock of the game
+         * 
+         */
+        void clock_time();
+        /**
+         * @brief handle the life of the starship
+         * 
+         */
+        void life_handler();
     protected:
     private:
         Scene scene;
@@ -56,6 +185,7 @@ class gameEngine {
         sf::Clock clock;
         sf::RenderWindow _window;
         SfmlSystem _system;
+        Network::NetworkSystem _networkSystem;
         registry _registry;
 };
 

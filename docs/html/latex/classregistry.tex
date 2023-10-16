@@ -1,0 +1,163 @@
+\hypertarget{classregistry}{}\doxysection{registry Class Reference}
+\label{classregistry}\index{registry@{registry}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} \mbox{\hyperlink{classregistry_a75d49eb0c9936d57146007f06cbaf735}{spawn\+\_\+entity}} ()
+\begin{DoxyCompactList}\small\item\em return entity(size\+\_\+t) need to use it when you want to create an entity, everything must be an entity (missile, player, shoots ...) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} \mbox{\hyperlink{classregistry_a5abcb8ad71ffd1de0f6080da9c89e8c1}{entity\+\_\+from\+\_\+index}} (std\+::size\+\_\+t idx)
+\begin{DoxyCompactList}\small\item\em take a size\+\_\+t to return a \mbox{\hyperlink{classentity__t}{entity\+\_\+t}} (its a size\+\_\+t) pretty useless function \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Component $>$ }\\void \mbox{\hyperlink{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}{add\+\_\+component}} (\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} const \&to, Component \&\&c)
+\item 
+\mbox{\Hypertarget{classregistry_a245565b59dedad1febf261592d6b13c1}\label{classregistry_a245565b59dedad1febf261592d6b13c1}} 
+{\footnotesize template$<$typename Component $>$ }\\void {\bfseries add\+\_\+component} (\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} const \&to, Component \&c)
+\item 
+{\footnotesize template$<$typename Component $>$ }\\void \mbox{\hyperlink{classregistry_ae6ae3ba636214bb3972a99492923bf7c}{remove\+\_\+component}} (\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} const \&from)
+\begin{DoxyCompactList}\small\item\em remove a component to an entity (the value is set to null with std\+::optional) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classregistry_a6c967fb2267fd8eaeb155f2be5b5650c}{kill\+\_\+entity}} (\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} const \&e)
+\begin{DoxyCompactList}\small\item\em kill an entity set all components to null with std\+::optional \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Component $>$ }\\void \mbox{\hyperlink{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}{register\+\_\+component}} ()
+\begin{DoxyCompactList}\small\item\em add a new usable component for entity \end{DoxyCompactList}\item 
+{\footnotesize template$<$class Component $>$ }\\\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \& \mbox{\hyperlink{classregistry_a3149b283b4533fa3c8d9ee360f819769}{get\+\_\+components}} ()
+\begin{DoxyCompactList}\small\item\em Get the entity list with the selected component, its null if the entity dosnt have the component. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classregistry_a96648581207f4d4f5d2d15b003a6273e}\label{classregistry_a96648581207f4d4f5d2d15b003a6273e}} 
+{\footnotesize template$<$class Component $>$ }\\const \mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$ Component $>$ \& {\bfseries get\+\_\+components} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classregistry_adc537ae551034c497c8f7ef17d796fe6}\label{classregistry_adc537ae551034c497c8f7ef17d796fe6}} 
+std\+::size\+\_\+t {\bfseries \+\_\+entity\+\_\+number} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}\label{classregistry_a49084d6b8c636cb58dc0e9c4b442a339}} 
+\index{registry@{registry}!add\_component@{add\_component}}
+\index{add\_component@{add\_component}!registry@{registry}}
+\doxysubsubsection{\texorpdfstring{add\_component()}{add\_component()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+void registry\+::add\+\_\+component (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} const \&}]{to,  }\item[{Component \&\&}]{c }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+@brieff add a component to an entity
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em to} & \\
+\hline
+{\em c} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classregistry_a5abcb8ad71ffd1de0f6080da9c89e8c1}\label{classregistry_a5abcb8ad71ffd1de0f6080da9c89e8c1}} 
+\index{registry@{registry}!entity\_from\_index@{entity\_from\_index}}
+\index{entity\_from\_index@{entity\_from\_index}!registry@{registry}}
+\doxysubsubsection{\texorpdfstring{entity\_from\_index()}{entity\_from\_index()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classentity__t}{entity\+\_\+t}} registry\+::entity\+\_\+from\+\_\+index (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{idx }\end{DoxyParamCaption})}
+
+
+
+take a size\+\_\+t to return a \mbox{\hyperlink{classentity__t}{entity\+\_\+t}} (its a size\+\_\+t) pretty useless function 
+
+
+\begin{DoxyParams}{Parameters}
+{\em idx} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classregistry_a3149b283b4533fa3c8d9ee360f819769}\label{classregistry_a3149b283b4533fa3c8d9ee360f819769}} 
+\index{registry@{registry}!get\_components@{get\_components}}
+\index{get\_components@{get\_components}!registry@{registry}}
+\doxysubsubsection{\texorpdfstring{get\_components()}{get\_components()}}
+{\footnotesize\ttfamily template$<$class Component $>$ \\
+\mbox{\hyperlink{classSparseArray}{Sparse\+Array}}$<$Component$>$\& registry\+::get\+\_\+components (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the entity list with the selected component, its null if the entity dosnt have the component. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+Sparse\+Array$<$\+Component$>$\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classregistry_a6c967fb2267fd8eaeb155f2be5b5650c}\label{classregistry_a6c967fb2267fd8eaeb155f2be5b5650c}} 
+\index{registry@{registry}!kill\_entity@{kill\_entity}}
+\index{kill\_entity@{kill\_entity}!registry@{registry}}
+\doxysubsubsection{\texorpdfstring{kill\_entity()}{kill\_entity()}}
+{\footnotesize\ttfamily void registry\+::kill\+\_\+entity (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} const \&}]{e }\end{DoxyParamCaption})}
+
+
+
+kill an entity set all components to null with std\+::optional 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}\label{classregistry_a1c8a6043f3ea73045ae7d3ada058890d}} 
+\index{registry@{registry}!register\_component@{register\_component}}
+\index{register\_component@{register\_component}!registry@{registry}}
+\doxysubsubsection{\texorpdfstring{register\_component()}{register\_component()}}
+{\footnotesize\ttfamily template$<$class Component $>$ \\
+void registry\+::register\+\_\+component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+add a new usable component for entity 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & \\
+\hline
+\end{DoxyTemplParams}
+\mbox{\Hypertarget{classregistry_ae6ae3ba636214bb3972a99492923bf7c}\label{classregistry_ae6ae3ba636214bb3972a99492923bf7c}} 
+\index{registry@{registry}!remove\_component@{remove\_component}}
+\index{remove\_component@{remove\_component}!registry@{registry}}
+\doxysubsubsection{\texorpdfstring{remove\_component()}{remove\_component()}}
+{\footnotesize\ttfamily template$<$typename Component $>$ \\
+void registry\+::remove\+\_\+component (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} const \&}]{from }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+remove a component to an entity (the value is set to null with std\+::optional) 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Component} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em from} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classregistry_a75d49eb0c9936d57146007f06cbaf735}\label{classregistry_a75d49eb0c9936d57146007f06cbaf735}} 
+\index{registry@{registry}!spawn\_entity@{spawn\_entity}}
+\index{spawn\_entity@{spawn\_entity}!registry@{registry}}
+\doxysubsubsection{\texorpdfstring{spawn\_entity()}{spawn\_entity()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classentity__t}{entity\+\_\+t}} registry\+::spawn\+\_\+entity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+return entity(size\+\_\+t) need to use it when you want to create an entity, everything must be an entity (missile, player, shoots ...) 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/flo/delivery/trimestre5/\+RType/\+R-\/type/src/ecs/Registry.\+hpp\item 
+/home/flo/delivery/trimestre5/\+RType/\+R-\/type/src/ecs/Registry.\+cpp\end{DoxyCompactItemize}

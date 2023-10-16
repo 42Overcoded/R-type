@@ -16,28 +16,86 @@
 class SfmlSystem {
     public:
         SfmlSystem() = default;
-        void shoot_system(registry &r, sf::Time &elapsed);
+        /**
+         * @brief draw all the entities
+         * 
+         * @param r 
+         * @param window 
+         */
         void draw_system(registry &r, sf::RenderWindow &window);
-        void set_texture(registry &r);
+        /**
+         * @brief scale all the entities
+         * 
+         * @param r 
+         */
+        void scale_system(registry &r);
+        /**
+         * @brief modify the pattern of the entities
+         * 
+         * @param r 
+         */
+        void modify_pattern(registry &r);
+        /**
+         * @brief position all the entities
+         * 
+         * @param r 
+         */
+        void position_system(registry &r);
+        /**
+         * @brief set font all the entities
+         * 
+         * @param r 
+         */
+        void font_system(registry &r);
+        /**
+         * @brief set texture all the entities
+         * 
+         * @param r 
+         */
+        void texture_system(registry &r);
+        /**
+         * @brief set rect all the entities
+         * 
+         * @param r 
+         */
+        void rect_system(registry &r);
+        /**
+         * @brief set string all the entities
+         * 
+         * @param r 
+         */
+        void string_system(registry &r);
+        /**
+         * @brief set the control of the entities if a key is pressed the control of the entity is set to true
+         * 
+         * @param r 
+         */
         void control_system(registry &r);
+        /**
+         * @brief calculate the velocity of the entities
+         * 
+         * @param r 
+         */
         void velocity_system(registry &r, sf::Time &elapsed);
+        /**
+         * @brief detect the collision between the entities
+         * 
+         * @param r 
+         */
         void hitbox_system(registry &r);
+        /**
+         * @brief load the texture of the entities and put it in a map to not reload it when it's already loaded
+         * 
+         * @param r 
+         */
         void load_texture(registry &r);
-        void set_textures(registry &r);
-        void death_animation(registry &r);
-        void clock_time(registry &r);
-        void animate_enemy(registry &r);
-        void life_handler(registry &r, sf::RenderWindow &window);
-        void shoot_enemy(registry &r);
-        void decharge_shoot(registry &r, sf::Time &elapsed);
-        void load_shoot(registry &r, sf::Time &elapsed);
-        std::unordered_map<std::string, sf::Texture> get_map();
-        std::unordered_map<std::string, sf::IntRect> get_rect();
+        
+        void color_system(registry &r);
         ~SfmlSystem() = default;
     protected:
     private:
-        std::unordered_map<std::string, sf::Texture> _textures;
-        std::unordered_map<std::string, sf::IntRect> _rect;
+        std::unordered_map<std::string, sf::Font> fonts;
+        std::unordered_map<std::string, sf::Texture> textures;
 };
 
 #endif /* !SYSTEM_HPP_ */

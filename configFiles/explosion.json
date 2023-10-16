@@ -1,0 +1,14 @@
+{
+    "explosion": {
+        "state": 0,
+        "tag": "explosion",
+        "textureTag": "explosionTexture",
+        "scale": 3,
+        "rect": {
+            "left": 130,
+            "top": 0,
+            "width": 32,
+            "height": 32
+        }
+    }
+}
