@@ -47,12 +47,6 @@ class gameEngine {
          */
         entity_t init_starship(int id, int i);
         /**
-         * @brief init the enemies values according to the ecs
-         * 
-         * @return registry 
-         */
-        entity_t init_enemy(int i);
-        /**
          * @brief 
          * 
          * @param enemy_id ID of the enemy
@@ -61,7 +55,7 @@ class gameEngine {
          * @param y Coordinate y
          * @return entity_t 
          */
-        entity_t init_enemy2(int enemy_id, int comportment_id, float x, float y);
+        entity_t init_enemy(int enemy_id, int comportment_id, float x, float y);
         /**
          * @brief menu of the game / pause scene / end scene / lobby
          * 

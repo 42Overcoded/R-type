@@ -16,28 +16,28 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4)
     for (int i = 0; i < n1; i++) {
         int rand = std::rand() % 950;
         auto &position = _registry.get_components<Position>();
-        entity_t enemy = init_enemy2(0, 0, 1950, 0);
+        entity_t enemy = init_enemy(0, 0, 1950, 0);
         position[enemy]->x += 100 * i;
         position[enemy]->y = rand;
     }
     for (int i = 0; i < n2; i++) {
         int rand = std::rand() % 950;
         auto &position = _registry.get_components<Position>();
-        entity_t enemy = init_enemy2(1, 1, 1950, 0);
+        entity_t enemy = init_enemy(1, 1, 1950, 0);
         position[enemy]->x += 300 * i;
         position[enemy]->y = rand;
     }
     for (int i = 0; i < n3; i++) {
         int rand = std::rand() % 950;
         auto &position = _registry.get_components<Position>();
-        entity_t enemy = init_enemy2(2, 2, 1950, 0);
+        entity_t enemy = init_enemy(2, 2, 1950, 0);
         position[enemy]->x += 500 * i;
         position[enemy]->y = rand;
     }
     for (int i = 0; i < n4; i++) {
         int rand = std::rand() % 950;
         auto &position = _registry.get_components<Position>();
-        entity_t enemy = init_enemy2(3, 3, 1950, 0);
+        entity_t enemy = init_enemy(3, 3, 1950, 0);
         position[enemy]->y = rand;
     }
 }
