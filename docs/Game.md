@@ -56,6 +56,9 @@ Your starship has two primary weapons:
 - A canon that shoot very slowly but inflict a lot of damages
 
 <br/>
+
+<img src="assets/rtype_gameplay.png" width="600" height="300px">
+
 <br/>
 <br/>
 <br/>
@@ -73,6 +76,9 @@ Il est depuis devenu un titre emblématique et influent dans le genre du shoot '
 Le jeu est connu pour son gameplay exigeant, son système de power-up unique et son style visuel distinctif.
 
 <br/>
+
+<img src="assets/rtype.jpg" width="600" height="300px">
+
 <br/>
 
 ## Jouabilité à Défilement Latéral
@@ -120,4 +126,7 @@ Votre vaisseau spatial dispose de deux armes principales :
 - Un canon qui tire très lentement mais inflige de lourds dégâts.
 
 <br/>
+
+<img src="assets/rtype_gameplay.png" width="600" height="300px">
+
 <br/>
