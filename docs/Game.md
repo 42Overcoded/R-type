@@ -9,12 +9,9 @@ It has since become an iconic and influential title in the shoot 'em up genre.
 The game is known for its challenging gameplay, unique power-up system, and distinctive visual style.
 
 <br/>
-
-<img src="./assets/rtype.jpg" width="600" height="300px">
-
 <br/>
 
-### __Side Scrolling Gameplay__
+### Side Scrolling Gameplay
 
 R-Type is played on a 2D side-scrolling plane. 
 <br/>
