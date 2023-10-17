@@ -47,11 +47,15 @@ class gameEngine {
          */
         entity_t init_starship(int id, int i);
         /**
-         * @brief init the enemies values according to the ecs
+         * @brief 
          * 
-         * @return registry 
+         * @param enemy_id ID of the enemy
+         * @param comportment_id ID of the comportment
+         * @param x Coordinate x
+         * @param y Coordinate y
+         * @return entity_t 
          */
-        entity_t init_enemy(int i);
+        entity_t init_enemy(int enemy_id, int comportment_id, float x, float y);
         /**
          * @brief menu of the game / pause scene / end scene / lobby
          * 
