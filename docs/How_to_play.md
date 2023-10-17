@@ -1,8 +1,8 @@
 # How to play
 
-## __controls__
+## controls
 
-### __movements__ 
+### movements
 
 In order to move your spaceship you must use your arrows keys on your keyboard.
 <br/>
@@ -11,7 +11,7 @@ You can go up, down, left and right
 <br/>
 <br/>
 
-### __fight__
+### fight
 
 To defend yourself you can of course dodge ennemy's bullets.
 <br/>
@@ -32,9 +32,9 @@ In order to shoot you should press space bar.
 
 # Comment jouer 
 
-## __controles__
+## controles
 
-### __mouvements__ 
+### mouvements 
 
 Afin de vous déplacer vous pouvez utiliser les fleches de votre clavier.
 <br/>
@@ -43,7 +43,7 @@ Vous pouvez vous déplacer vers le haut, le bas, la droite et la gauche
 <br/>
 <br/>
 
-### __combats__
+### combats
 
 Afin de vous protéger vous devez esquiver les tirs de vos ennemis
 <br/>
