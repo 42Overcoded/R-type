@@ -10,4 +10,4 @@ Welcome to our documentation page !
 - [Network](network.md "Learn more about the network")
 - [rfc](rfc.md "Learn more about the rfc")
 - [Game](Game.md "Learn more about the game")
-- [How_to_play](HowToPlay.md "Learn more about the gameplay")
+- [How To Play](HowToPlay.md "Learn more about the gameplay")
