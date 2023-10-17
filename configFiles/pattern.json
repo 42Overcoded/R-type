@@ -1,0 +1,56 @@
+{
+    "patterns": [
+        {
+            "pattern": [
+                { "x": -0.2, "y": -0.2 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 2,
+            "switch_index": 100
+        },
+        {
+            "pattern": [
+                { "x": 0.2, "y": 0.1 },
+                { "x": -0.5, "y": 0.2 },
+                { "x": -0.3, "y": -0.3 },
+                { "x": 0.1, "y": -0.2 },
+                { "x": -0.2, "y": -0.1 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 50,
+            "pattern_length": 5,
+            "switch_index": 100
+        },
+        {
+            "pattern": [
+                { "x": 0, "y": -0.2 },
+                { "x": -0.2, "y": 0 },
+                { "x": 0, "y": 0.2 },
+                { "x": -0.2, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 4,
+            "switch_index": 50
+        },
+        {
+            "pattern": [
+                { "x": 0, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "switch_index": 100
+        },
+        {
+            "pattern": [
+                { "x": 0, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "switch_index": 0
+        }
+    ]
+}
