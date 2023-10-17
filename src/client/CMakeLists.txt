@@ -16,7 +16,7 @@ FetchContent_MakeAvailable(SFML)
 FetchContent_Declare(
     nlohmann_json
     GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG v3.10.4 # Remplacez par la version souhaitée
+    GIT_TAG v3.10.4
 )
 
 FetchContent_MakeAvailable(nlohmann_json)
