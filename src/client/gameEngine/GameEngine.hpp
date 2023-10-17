@@ -62,7 +62,7 @@ class gameEngine {
          * @param y Coordinate y
          * @return entity_t 
          */
-        entity_t init_enemy(int enemy_id, int comportment_id, float x, float y);
+        entity_t init_enemy(int enemy_id, int comportment_id);
         /**
          * @brief menu of the game / pause scene / end scene / lobby
          * 

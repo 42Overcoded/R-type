@@ -4,7 +4,7 @@
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
 
-entity_t gameEngine::init_enemy(int enemy_id, int pattern_id, float x, float y)
+entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
 {
     std::ifstream file("configFiles/enemies.json");
 
@@ -89,8 +89,8 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id, float x, float y)
     pattern[enemy]->switch_index = patternsJson["patterns"][pattern_id]["switch_index"];
     pattern[enemy]->pattern = _pattern;
 
-    position[enemy]->x = x;
-    position[enemy]->y = y;
+    position[enemy]->x = patternsJson["patterns"][pattern_id]["position"]["x"];
+    position[enemy]->y = patternsJson["patterns"][pattern_id]["position"]["y"];
 
     return enemy;
 }

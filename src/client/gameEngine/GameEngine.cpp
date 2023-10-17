@@ -40,22 +40,22 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
         std::cout << randomNb << ", Wave: " << wave << std::endl;
         randomNb += 1;
         if (randomNb / 20 < wave) {
-            entity_t enemy = init_enemy(0);
+            entity_t enemy = init_enemy(0, 0);
             auto &position = _registry.get_components<Position>();
             position[enemy]->y = std::rand() % 950;
         }
         if (randomNb / 10 < wave) {
-            entity_t enemy = init_enemy(1);
+            entity_t enemy = init_enemy(1, 1);
             auto &position = _registry.get_components<Position>();
             position[enemy]->y = std::rand() % 950;
         }
         if (randomNb < wave) {
-            entity_t enemy = init_enemy(2);
+            entity_t enemy = init_enemy(2, 2);
             auto &position = _registry.get_components<Position>();
             position[enemy]->y = std::rand() % 950;
         }
         if (randomNb * 5 < wave) {
-            entity_t enemy = init_enemy(3);
+            entity_t enemy = init_enemy(3, 3);
             auto &position = _registry.get_components<Position>();
             position[enemy]->y = std::rand() % 950;
         }
