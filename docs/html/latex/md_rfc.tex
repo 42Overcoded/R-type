@@ -1,11 +1,11 @@
 RFC Authors \+: {\ttfamily M. Jalbert}, {\ttfamily M. Peireto}, {\ttfamily F. Azema}, {\ttfamily S. Borisenko}, {\ttfamily J. Vignau-\/\+Espine} Date \+: {\ttfamily 7 October 2023}
 
 \DoxyHorRuler{0}
-\hypertarget{md_rfc_autotoc_md41}{}\doxysection{Game Transmission Protocol (\+GTP)}\label{md_rfc_autotoc_md41}
-\hypertarget{md_rfc_autotoc_md42}{}\doxysubsection{Status of this Memo}\label{md_rfc_autotoc_md42}
+\hypertarget{md_rfc_autotoc_md43}{}\doxysection{Game Transmission Protocol (\+GTP)}\label{md_rfc_autotoc_md43}
+\hypertarget{md_rfc_autotoc_md44}{}\doxysubsection{Status of this Memo}\label{md_rfc_autotoc_md44}
 This memo is the official specification of the Game Transmission Protocol (GTP).
 
-Distribution of this memo is unlimited.\hypertarget{md_rfc_autotoc_md43}{}\doxysubsection{Index}\label{md_rfc_autotoc_md43}
+Distribution of this memo is unlimited.\hypertarget{md_rfc_autotoc_md45}{}\doxysubsection{Index}\label{md_rfc_autotoc_md45}
 
 \begin{DoxyItemize}
 \item \href{\#game-transmission-protocol-gtp}{\texttt{ Game Transmission Protocol (GTP)}}
@@ -34,14 +34,14 @@ Distribution of this memo is unlimited.\hypertarget{md_rfc_autotoc_md43}{}\doxys
 \item \href{\#clientupdateentity}{\texttt{ Client\+Update\+Entity}}
 \end{DoxyItemize}
 \end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{md_rfc_autotoc_md44}{}\doxysubsection{Introduction}\label{md_rfc_autotoc_md44}
+\end{DoxyItemize}\hypertarget{md_rfc_autotoc_md46}{}\doxysubsection{Introduction}\label{md_rfc_autotoc_md46}
 The Game Transmission Protocol (GTP) is defined to make available a fast packet transmission of packet-\/switched computer communication in the environment of an interconnected set of computer networks. This protocol assumes that the User Datagram Protocol (UDP) \href{https://www.ietf.org/rfc/rfc768.txt}{\texttt{ RFC 768}} is used as the underlying protocol.
 
-This protocol provide a procedure for games to communicate with a server. It uses UDP as a fast packet-\/switched computer communication protocol. Therefore the protocol is transaction oriented, and delivery and duplicate protection are not guaranteed.\hypertarget{md_rfc_autotoc_md45}{}\doxysubsection{Overview}\label{md_rfc_autotoc_md45}
-In this section, the history, the terminology, and the GTP model are discussed. The terms defined in this section are only those that have special significance in GTP. Some of the terminology is very specific to the GTP model; some readers may wish to turn to the section on the GTP model while reviewing the terminology.\hypertarget{md_rfc_autotoc_md46}{}\doxysubsubsection{History}\label{md_rfc_autotoc_md46}
+This protocol provide a procedure for games to communicate with a server. It uses UDP as a fast packet-\/switched computer communication protocol. Therefore the protocol is transaction oriented, and delivery and duplicate protection are not guaranteed.\hypertarget{md_rfc_autotoc_md47}{}\doxysubsection{Overview}\label{md_rfc_autotoc_md47}
+In this section, the history, the terminology, and the GTP model are discussed. The terms defined in this section are only those that have special significance in GTP. Some of the terminology is very specific to the GTP model; some readers may wish to turn to the section on the GTP model while reviewing the terminology.\hypertarget{md_rfc_autotoc_md48}{}\doxysubsubsection{History}\label{md_rfc_autotoc_md48}
 The Game Transmission Protocol come from a long tradition at the Epitech school. Every year, 3nd year students have to work in teams to create a protocol allowing a fast communication between multiple game clients an a server.
 
-This protocol has been originally developed to create a multiplayer version of the R-\/type game. R-\/\+Type is a horizontally scrolling shooter arcade video game developed and released by Irem in 1987 and the first game in the R-\/\+Type series. The player controls a star ship, the R-\/9 \char`\"{}\+Arrowhead\char`\"{}, in its efforts to destroy the Bydo, a powerful alien race bent on wiping out all of mankind. The R-\/9 can acquire a glowing orbicular device called a \char`\"{}\+Force\char`\"{}, protecting it from enemy fire and providing additional firepower. The arcade version was distributed by Nintendo in North America; it is the last arcade title Nintendo distributed.\hypertarget{md_rfc_autotoc_md47}{}\doxysubsubsection{Terminology}\label{md_rfc_autotoc_md47}
+This protocol has been originally developed to create a multiplayer version of the R-\/type game. R-\/\+Type is a horizontally scrolling shooter arcade video game developed and released by Irem in 1987 and the first game in the R-\/\+Type series. The player controls a star ship, the R-\/9 \char`\"{}\+Arrowhead\char`\"{}, in its efforts to destroy the Bydo, a powerful alien race bent on wiping out all of mankind. The R-\/9 can acquire a glowing orbicular device called a \char`\"{}\+Force\char`\"{}, protecting it from enemy fire and providing additional firepower. The arcade version was distributed by Nintendo in North America; it is the last arcade title Nintendo distributed.\hypertarget{md_rfc_autotoc_md49}{}\doxysubsubsection{Terminology}\label{md_rfc_autotoc_md49}
 GTP
 
 
@@ -58,7 +58,7 @@ UDP
 \DoxyCodeLine{User Datagram Protocol}
 
 \end{DoxyCode}
-\hypertarget{md_rfc_autotoc_md48}{}\doxysubsection{The GTP Model}\label{md_rfc_autotoc_md48}
+\hypertarget{md_rfc_autotoc_md50}{}\doxysubsection{The GTP Model}\label{md_rfc_autotoc_md50}
 With the above definitions in mind, the following model (shown in Figure 1) may be diagrammed for an GTP service.
 
 
@@ -78,7 +78,7 @@ With the above definitions in mind, the following model (shown in Figure 1) may 
 
 As you can see, the GTP is just on top of the UDP. That allow it to be lightweight and highly efficient.
 
-{\ttfamily Flag} is a 4 bytes long (uint32\+\_\+t) number. It define the following message. {\ttfamily Size} is a 4 bytes long (uint32\+\_\+t) number. It describe the size in bit of the payload. Value of 0 in case of no payload. {\ttfamily Payload} is a structure containing different information. It will change depending of the value of the header.\hypertarget{md_rfc_autotoc_md49}{}\doxysubsection{Commands}\label{md_rfc_autotoc_md49}
+{\ttfamily Flag} is a 4 bytes long (uint32\+\_\+t) number. It define the following message. {\ttfamily Size} is a 4 bytes long (uint32\+\_\+t) number. It describe the size in bit of the payload. Value of 0 in case of no payload. {\ttfamily Payload} is a structure containing different information. It will change depending of the value of the header.\hypertarget{md_rfc_autotoc_md51}{}\doxysubsection{Commands}\label{md_rfc_autotoc_md51}
 The following commands are available in the GTP protocol.
 
 
@@ -98,7 +98,7 @@ The following commands are available in the GTP protocol.
 \DoxyCodeLine{| 0x0A    | ClientUpdateEntity   |}
 
 \end{DoxyCode}
-\hypertarget{md_rfc_autotoc_md50}{}\doxysubsubsection{Server\+Get\+Ping}\label{md_rfc_autotoc_md50}
+\hypertarget{md_rfc_autotoc_md52}{}\doxysubsubsection{Server\+Get\+Ping}\label{md_rfc_autotoc_md52}
 
 \begin{DoxyItemize}
 \item Origin \+: Client
@@ -107,7 +107,7 @@ The following commands are available in the GTP protocol.
 \item Payload \+: None
 \end{DoxyItemize}
 
-Description \+: This command is used to check if the server is still alive.\hypertarget{md_rfc_autotoc_md51}{}\doxysubsubsection{Server\+Connect}\label{md_rfc_autotoc_md51}
+Description \+: This command is used to check if the server is still alive.\hypertarget{md_rfc_autotoc_md53}{}\doxysubsubsection{Server\+Connect}\label{md_rfc_autotoc_md53}
 
 \begin{DoxyItemize}
 \item Origin \+: Client
@@ -118,7 +118,7 @@ Description \+: This command is used to check if the server is still alive.\hype
 \item Response \+: Client\+Assign\+ID
 \end{DoxyItemize}
 
-Description \+: This command is used to connect to the server.\hypertarget{md_rfc_autotoc_md52}{}\doxysubsubsection{Server\+Update\+Controls}\label{md_rfc_autotoc_md52}
+Description \+: This command is used to connect to the server.\hypertarget{md_rfc_autotoc_md54}{}\doxysubsubsection{Server\+Update\+Controls}\label{md_rfc_autotoc_md54}
 
 \begin{DoxyItemize}
 \item Origin \+: Client
@@ -127,7 +127,7 @@ Description \+: This command is used to connect to the server.\hypertarget{md_rf
 \item Payload \+: \mbox{[}bool, bool, bool, bool, bool\mbox{]}
 \end{DoxyItemize}
 
-Description \+: This command is used to update the controls of the player.\hypertarget{md_rfc_autotoc_md53}{}\doxysubsubsection{Client\+Accepted}\label{md_rfc_autotoc_md53}
+Description \+: This command is used to update the controls of the player.\hypertarget{md_rfc_autotoc_md55}{}\doxysubsubsection{Client\+Accepted}\label{md_rfc_autotoc_md55}
 
 \begin{DoxyItemize}
 \item Origin \+: Server
@@ -136,7 +136,7 @@ Description \+: This command is used to update the controls of the player.\hyper
 \item Payload \+: None
 \end{DoxyItemize}
 
-Description \+: This command is used to confirm the connection to the server.\hypertarget{md_rfc_autotoc_md54}{}\doxysubsubsection{Client\+Denied}\label{md_rfc_autotoc_md54}
+Description \+: This command is used to confirm the connection to the server.\hypertarget{md_rfc_autotoc_md56}{}\doxysubsubsection{Client\+Denied}\label{md_rfc_autotoc_md56}
 
 \begin{DoxyItemize}
 \item Origin \+: Server
@@ -145,7 +145,7 @@ Description \+: This command is used to confirm the connection to the server.\hy
 \item Payload \+: None
 \end{DoxyItemize}
 
-Description \+: This command is used to deny the connection to the server.\hypertarget{md_rfc_autotoc_md55}{}\doxysubsubsection{Client\+Assign\+ID}\label{md_rfc_autotoc_md55}
+Description \+: This command is used to deny the connection to the server.\hypertarget{md_rfc_autotoc_md57}{}\doxysubsubsection{Client\+Assign\+ID}\label{md_rfc_autotoc_md57}
 
 \begin{DoxyItemize}
 \item Origin \+: Server
@@ -154,7 +154,7 @@ Description \+: This command is used to deny the connection to the server.\hyper
 \item Payload \+: \mbox{[}uint32\+\_\+t\mbox{]}
 \end{DoxyItemize}
 
-Description \+: This command is used to assign an ID to the client.\hypertarget{md_rfc_autotoc_md56}{}\doxysubsubsection{Client\+Send\+Ping}\label{md_rfc_autotoc_md56}
+Description \+: This command is used to assign an ID to the client.\hypertarget{md_rfc_autotoc_md58}{}\doxysubsubsection{Client\+Send\+Ping}\label{md_rfc_autotoc_md58}
 
 \begin{DoxyItemize}
 \item Origin \+: Server
@@ -163,7 +163,7 @@ Description \+: This command is used to assign an ID to the client.\hypertarget{
 \item Payload \+: None
 \end{DoxyItemize}
 
-Description \+: This command is used to check if the client is still alive. (Response to Server\+Get\+Ping)\hypertarget{md_rfc_autotoc_md57}{}\doxysubsubsection{Client\+Add\+Player}\label{md_rfc_autotoc_md57}
+Description \+: This command is used to check if the client is still alive. (Response to Server\+Get\+Ping)\hypertarget{md_rfc_autotoc_md59}{}\doxysubsubsection{Client\+Add\+Player}\label{md_rfc_autotoc_md59}
 
 \begin{DoxyItemize}
 \item Origin \+: Server
@@ -172,7 +172,7 @@ Description \+: This command is used to check if the client is still alive. (Res
 \item Payload \+: \mbox{[}uint32\+\_\+t\mbox{]}
 \end{DoxyItemize}
 
-Description \+: This command is used to add a player to the game.\hypertarget{md_rfc_autotoc_md58}{}\doxysubsubsection{Client\+Remove\+Player}\label{md_rfc_autotoc_md58}
+Description \+: This command is used to add a player to the game.\hypertarget{md_rfc_autotoc_md60}{}\doxysubsubsection{Client\+Remove\+Player}\label{md_rfc_autotoc_md60}
 
 \begin{DoxyItemize}
 \item Origin \+: Server
@@ -181,7 +181,7 @@ Description \+: This command is used to add a player to the game.\hypertarget{md
 \item Payload \+: \mbox{[}uint32\+\_\+t\mbox{]}
 \end{DoxyItemize}
 
-Description \+: This command is used to remove a player from the game.\hypertarget{md_rfc_autotoc_md59}{}\doxysubsubsection{Client\+Create\+Entity}\label{md_rfc_autotoc_md59}
+Description \+: This command is used to remove a player from the game.\hypertarget{md_rfc_autotoc_md61}{}\doxysubsubsection{Client\+Create\+Entity}\label{md_rfc_autotoc_md61}
 
 \begin{DoxyItemize}
 \item Origin \+: Server
@@ -190,7 +190,7 @@ Description \+: This command is used to remove a player from the game.\hypertarg
 \item Payload \+: \mbox{[}uint32\+\_\+t, uint32\+\_\+t, uint32\+\_\+t\mbox{]}
 \end{DoxyItemize}
 
-Description \+: This command is used to create an entity in the game.\hypertarget{md_rfc_autotoc_md60}{}\doxysubsubsection{Client\+Update\+Entity}\label{md_rfc_autotoc_md60}
+Description \+: This command is used to create an entity in the game.\hypertarget{md_rfc_autotoc_md62}{}\doxysubsubsection{Client\+Update\+Entity}\label{md_rfc_autotoc_md62}
 
 \begin{DoxyItemize}
 \item Origin \+: Server
