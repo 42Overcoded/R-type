@@ -29,7 +29,7 @@ In order to shoot you should press space bar.
 
 <br/>
 
-<img src="./assets/space.png" width="600" height="200">
+<img src="assets/space.png" width="600" height="200">
 
 <br/>
 <br/>
