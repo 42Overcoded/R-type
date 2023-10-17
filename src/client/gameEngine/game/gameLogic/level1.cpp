@@ -69,7 +69,7 @@ void gameEngine::spawn_wave(sf::Time &elapsed, int &wave)
     }
     if (is_enemy == 0 && wave == 4) {
         wave = 5;
-        entity_t enemy = init_enemy(4);
+        entity_t enemy = init_enemy(4, 4, 1950, 0);
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (enemy[i] != std::nullopt && wave == 5) {
