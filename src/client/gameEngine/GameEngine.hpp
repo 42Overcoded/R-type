@@ -25,6 +25,13 @@ enum Scene {
     END
 };
 
+enum Mode {
+    NONE,
+    LEVELS,
+    INFINITE,
+    VERSUS
+};
+
 class gameEngine {
     public:
         gameEngine(registry &registry, unsigned int serverPort, std::string serverIp) : _registry(registry), _networkSystem(serverPort, serverIp) {}
@@ -100,7 +107,7 @@ class gameEngine {
          * @param elapsed 
          * @param wave 
          */
-        void spawn_wave(sf::Time &elapsed, int &wave);
+        void spawn_wave(sf::Time &elapsed, float &wave);
         /**
          * @brief init the load shoot animation
          * 
@@ -177,9 +184,11 @@ class gameEngine {
          * 
          */
         void life_handler();
+        void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
     protected:
     private:
         Scene scene;
+        Mode mode;
         JsonParser *parsed;
         sf::Time elapsed;
         sf::Clock clock;

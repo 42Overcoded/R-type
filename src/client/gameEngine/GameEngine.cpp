@@ -19,10 +19,49 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <random>
+#include <chrono>
 #include <nlohmann/json.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <ctime>
 #include "../../network/network_c/NetworkComponent.hpp"
+
+void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,float &wave)
+{
+    auto currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::default_random_engine generator(static_cast<unsigned>(currentTime));
+
+    std::uniform_int_distribution<int> distribution(0, 5000);
+    std::uniform_int_distribution<int> distribution2(0, 900);
+
+    if (_elapsed.asSeconds() > 0.1) {
+        wave += 0.05;
+        int rand = distribution2(generator);
+        float randomNb = distribution(generator);
+        std::cout << randomNb << ", Wave: " << wave << std::endl;
+        randomNb += 1;
+        if (randomNb / 20 < wave) {
+            entity_t enemy = init_enemy(0);
+            auto &position = _registry.get_components<Position>();
+            position[enemy]->y = std::rand() % 950;
+        }
+        if (randomNb / 10 < wave) {
+            entity_t enemy = init_enemy(1);
+            auto &position = _registry.get_components<Position>();
+            position[enemy]->y = std::rand() % 950;
+        }
+        if (randomNb < wave) {
+            entity_t enemy = init_enemy(2);
+            auto &position = _registry.get_components<Position>();
+            position[enemy]->y = std::rand() % 950;
+        }
+        if (randomNb * 5 < wave) {
+            entity_t enemy = init_enemy(3);
+            auto &position = _registry.get_components<Position>();
+            position[enemy]->y = std::rand() % 950;
+        }
+        _clock.restart();
+    }
+}
 
 void gameEngine::register_component_to_game()
 {
@@ -60,8 +99,11 @@ void gameEngine::launch_game() {
     sf::Time _elapsed;
     sf::Clock _clock;
 
-    int wave = 0;
-
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
+    float wave = 0;
+    mode = INFINITE;
+    if(mode == INFINITE)
+        wave = 10;
     for (int i = 0; i < 2; i++)
         init_background(i);
     init_menu();
@@ -72,7 +114,6 @@ void gameEngine::launch_game() {
         entity_t starship = init_starship(1, i);
     for (int i = 0; i < 3; i++)
         init_life(i);
-
     while (_window.isOpen())
     {
         auto &health = _registry.get_components<Health>();
@@ -107,7 +148,10 @@ void gameEngine::launch_game() {
                     _window.close();
             }
             _system.modify_pattern(_registry);
-            spawn_wave(_elapsed, wave);
+            if (mode == LEVELS)
+                spawn_wave(_elapsed, wave);
+            if (mode == INFINITE)
+                spawn_infinite_wave(_elapsed, _clock, wave);
             animate_enemy();
             _system.control_system(_registry);
             shoot_system(elapsed);
