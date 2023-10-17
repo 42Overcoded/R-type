@@ -44,35 +44,35 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture playButton;
     sf::Font font;
 
-    if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
+    if  (!font.loadFromFile(PATH_ASSETS + "GothamMedium.ttf"))
         exit(84);
-    if (!menuButton.loadFromFile("./assets/lobby.png"))
+    if (!menuButton.loadFromFile(PATH_ASSETS + "lobby.png"))
         exit(84);
-    if (!playButton.loadFromFile("./assets/start.png"))
+    if (!playButton.loadFromFile(PATH_ASSETS + "start.png"))
         exit(84);
-    if (!background.loadFromFile("./assets/background.png"))
+    if (!background.loadFromFile(PATH_ASSETS + "background.png"))
         exit(84);
-    if (!enemyBoss.loadFromFile("./assets/enemyBoss.png"))
+    if (!enemyBoss.loadFromFile(PATH_ASSETS + "enemyBoss.png"))
         exit(84);
-    if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
+    if (!enemyBlueBullet.loadFromFile(PATH_ASSETS + "enemyBlueBullet.png"))
         exit(84);
-    if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
+    if (!enemyFour.loadFromFile(PATH_ASSETS + "enemyAlien.png"))
         exit(84);
-    if (!enemyBullet.loadFromFile("./assets/enemyBullet.png"))
+    if (!enemyBullet.loadFromFile(PATH_ASSETS + "enemyBullet.png"))
         exit(84);
-    if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))
+    if (!enemyThree.loadFromFile(PATH_ASSETS + "enemyRobot.png"))
         exit(84);
-    if  (!enemyTwo.loadFromFile("./assets/enemyScuttle.png"))
+    if  (!enemyTwo.loadFromFile(PATH_ASSETS + "enemyScuttle.png"))
         exit(84);
-    if (!bullet.loadFromFile("./assets/playerBullet.png"))
+    if (!bullet.loadFromFile(PATH_ASSETS + "playerBullet.png"))
         exit(84);
-    if (!starship.loadFromFile("./assets/starship.png"))
+    if (!starship.loadFromFile(PATH_ASSETS + "starship.png"))
         exit(84);
-    if (!enemy.loadFromFile("./assets/enemyStarship.png"))
+    if (!enemy.loadFromFile(PATH_ASSETS + "enemyStarship.png"))
         exit(84);
-    if (!beambar.loadFromFile("./assets/beam.png"))
+    if (!beambar.loadFromFile(PATH_ASSETS + "beam.png"))
         exit(84);
-    if (!explosion.loadFromFile("./assets/explosion.png"))
+    if (!explosion.loadFromFile(PATH_ASSETS + "explosion.png"))
         exit(84);
     textures["starshipTexture"] = starship;
     textures["beambarTexture"] = beambar;

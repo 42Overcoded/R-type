@@ -21,8 +21,8 @@
 
 #define TRUE 1
 #define FALSE 0
-#define PATH_ASSETS std::string("/../games/rtype/assets/")
-#define PATH_JSON std::string("/../games/rtype/json/")
+#define PATH_ASSETS std::string("../games/rtype/assets/")
+#define PATH_JSON std::string("../games/rtype/json/")
 #define GLOBAL_INSTALL FALSE
 
 
