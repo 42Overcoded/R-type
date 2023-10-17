@@ -39,7 +39,7 @@ int main(int ac, char **av) {
     //Network network;
 
 
-    NetworkS networkS("10.15.194.182", 4242);
+    NetworkS networkS("192.168.1.16", 4242);
 
 
     registry reg2;

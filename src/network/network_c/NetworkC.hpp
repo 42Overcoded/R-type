@@ -8,6 +8,7 @@
 #define NETWORK_HPP_
 
 #include <boost/asio.hpp>
+#include "../../ecs/Registry.hpp"
 
 class NetworkC {
     private:
@@ -25,7 +26,7 @@ class NetworkC {
         NetworkC(std::string ipServer, int portServer = 4242);
         ~NetworkC();
         int send_info_to_server(void *strucToServer);
-        int listen_info_from_server(void);
+        int listen_info_from_server(registry *reg);
 };
 
 #endif

@@ -33,11 +33,14 @@ int main(int ac, char **av) {
     //     std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
     // }
     // registry r;
-    // gameEngine game(r, serverPort, serverIp);
+    // gameEngine game(r, 4242, "192.168.1.16");
     // game.launch_game();
 
-    NetworkC networkC("10.15.194.182", 4242);
-    std::thread threadNetListening(&NetworkC::listen_info_from_server, &networkC);
+    NetworkC networkC("192.168.1.16", 4242);
+
+    registry reg2;
+    registry *ptrReg = &reg2;
+    std::thread threadNetListening(&NetworkC::listen_info_from_server, &networkC, ptrReg);
 
     registry reg;
     // gameEngine game(reg, 4242, "192.168.1.16");
@@ -112,4 +115,51 @@ int main(int ac, char **av) {
     networkSystem.send_system(reg);
 
     threadNetListening.join();
+
+
+    SparseArray<ComponentOUT> SpAr = reg2.get_components<ComponentOUT>();
+
+    for (int i = 0; i < SpAr.size(); i++) {
+        if (SpAr[i] != std::nullopt) {
+            if (strcmp(SpAr[i]->nameStructToSend, "speed") == 0) {
+                std::cout << "1 speed: " << SpAr[i]->speed.speedx << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "position") == 0) {
+                std::cout << "1 position: " << SpAr[i]->position.x << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "sprite") == 0) {
+                std::cout << "1 sprite: " << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "player") == 0) {
+                std::cout << "1 player: " << SpAr[i]->player.id << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "bullet") == 0) {
+                std::cout << "1 bullet: " << SpAr[i]->bullet.id << std::endl;
+            }
+            // if (strcmp(SpAr[i]->nameStructToSend, "tag") == 0) {
+            //     std::cout << "tag: " << SpAr[i]->tag.tag << std::endl;
+            // }
+            if (strcmp(SpAr[i]->nameStructToSend, "health") == 0) {
+                std::cout << "1 health: " << SpAr[i]->health.health << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "damage") == 0) {
+                std::cout << "1 damage: " << SpAr[i]->damage.damage << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "score") == 0) {
+                std::cout << "1 score: " << SpAr[i]->score.score << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "drawable") == 0) {
+                std::cout << "1 damage: " << SpAr[i]->drawable.drawable << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "control") == 0) {
+                std::cout << "1 control: " << SpAr[i]->control.up << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "pattern") == 0) {
+                std::cout << "1 pattern: " << SpAr[i]->pattern.pattern_index << std::endl;
+            }
+            if (strcmp(SpAr[i]->nameStructToSend, "hitbox") == 0) {
+                std::cout << "1 hitbox: " << SpAr[i]->hitbox.height << std::endl;
+            }
+        }
+    }
 }
