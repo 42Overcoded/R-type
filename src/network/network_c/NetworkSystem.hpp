@@ -13,6 +13,7 @@
 #include "../ecs/Registry.hpp"
 #include "../Protocol.hpp"
 #include "../INetworkClient.hpp"
+#include "../network/network_c/NetworkC.hpp"
 
 namespace Network {
 class NetworkSystem: public INetworkClient<Flag>
@@ -22,6 +23,8 @@ public:
     ~NetworkSystem();
 
     void Update(registry &reg);
+    void setNetwork(NetworkC *ptrNetworkC);
+    void send_system(registry &r);
 
 private:
     // Inputs
@@ -43,8 +46,8 @@ private:
     void manageServerConnect(void);
     void manageServerUpdateControls(registry &reg, Packet<Flag> &packet);
 
-private:
     std::uint32_t clientId_;
+    NetworkC *_ptrNetworkC;
 };
 };  // namespace Nerwork
 

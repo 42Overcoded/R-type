@@ -165,4 +165,21 @@ void NetworkSystem::manageServerGetPing(void)
     SendToServer(packet);
 }
 
+void NetworkSystem::setNetwork(NetworkC *ptrNetworkC)
+{
+    _ptrNetworkC = ptrNetworkC;
+}
+
+
+void NetworkSystem::send_system(registry &r)
+{
+    SparseArray<ComponentOUT> &SpAr = r.get_components<ComponentOUT>();
+
+    for (int i = 0; i < SpAr.size(); i++) {
+        if (SpAr[i] != std::nullopt && _ptrNetworkC != NULL) {
+            _ptrNetworkC->send_info_to_server(SpAr[i]->ptrToThisStruct);
+        }
+    }
+}
+
 }  // namespace Network

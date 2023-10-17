@@ -10,56 +10,37 @@
 #include "../ecs/Registry.hpp"
 #include "GameEngine.hpp"
 #include "../network/Protocol.hpp"
+#include "../network/network_c/NetworkC.hpp"
+#include "../network/network_c/NetworkComponent.hpp"
+#include "../network/network_c/NetworkSystem.hpp"
 
 int main(int ac, char **av) {
-    unsigned int serverPort = Network::DefaultPort;
-    std::string serverIp = Network::DefaultIp;
+    // unsigned int serverPort = Network::DefaultPort;
+    // std::string serverIp = Network::DefaultIp;
 
-    if (ac > 3) {
-        std::cerr << "Usage: ./r-type_server serverPort serverIp" << std::endl;
-        return 84;
-    } else if (ac == 3) {
-        try {
-            serverPort = std::stoi(av[1]);
-        } catch (std::exception &e) {
-            std::cerr << "Error: port must be a number" << std::endl;
-            return 84;
-        }
-        serverIp = av[2];
-    } else {
-        std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
-    }
-    registry r;
-    gameEngine game(r, serverPort, serverIp);
-    game.launch_game();
-}
-/*
-** EPITECH PROJECT, 2023
-** R-type
-** File description:
-** client
-*/
-
-#include <cstddef>
-#include <iostream>
-#include "../ecs/Registry.hpp"
-#include "GameEngine.hpp"
-#include "../network_c/Network.hpp"
-#include "../network_c/NetworkComponents.hpp"
-#include "../network_c/NetworkSystems.hpp"
-
-
-
-int main() {
+    // if (ac > 3) {
+    //     std::cerr << "Usage: ./r-type_server serverPort serverIp" << std::endl;
+    //     return 84;
+    // } else if (ac == 3) {
+    //     try {
+    //         serverPort = std::stoi(av[1]);
+    //     } catch (std::exception &e) {
+    //         std::cerr << "Error: port must be a number" << std::endl;
+    //         return 84;
+    //     }
+    //     serverIp = av[2];
+    // } else {
+    //     std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
+    // }
     // registry r;
-    // gameEngine game(r);
+    // gameEngine game(r, serverPort, serverIp);
     // game.launch_game();
 
-    Network network("192.168.1.16", 4242);
-    std::thread threadNetListening(&Network::listen_info_from_server, &network);
+    NetworkC networkC("10.15.194.182", 4242);
+    std::thread threadNetListening(&NetworkC::listen_info_from_server, &networkC);
 
     registry reg;
-    gameEngine game(reg);
+    // gameEngine game(reg, 4242, "192.168.1.16");
     entity_t entity1 = reg.spawn_entity();
     entity_t entity2 = reg.spawn_entity();
     entity_t entity3 = reg.spawn_entity();
@@ -69,8 +50,8 @@ int main() {
     reg.register_component<ComponentOUT>();
 
 
-    NetworkSystem networkSystem;
-    networkSystem.setNetwork(&network);
+    Network::NetworkSystem networkSystem(4242, "192.168.1.16");
+    networkSystem.setNetwork(&networkC);
 
 
     Speed speed = {19, 22};

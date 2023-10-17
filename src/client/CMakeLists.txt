@@ -60,6 +60,7 @@ set(INCLUDES
     ../network/Protocol.hpp
     ../network/network_c/NetworkComponent.hpp
     ../network/network_c/NetworkSystem.hpp
+    ../network/network_c/NetworkC.hpp
 )
 
 set(EXEC_SRC
@@ -69,6 +70,7 @@ set(EXEC_SRC
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     gameEngine/GameEngine.cpp
     ../network/network_c/NetworkSystem.cpp
+    ../network/network_c/NetworkC.cpp
     gameEngine/game/gameInitialisation/initBullets.cpp
     gameEngine/game/gameInitialisation/initEnemy.cpp
     gameEngine/game/gameInitialisation/initStarship.cpp

@@ -7,48 +7,48 @@
 #include <iostream>
 #include "../network/Protocol.hpp"
 #include "gameEngine/GameEngineServer.hpp"
-#include "../network_s/Network.hpp"
-#include "../network_s/NetworkComponents.hpp"
+#include "../network/network_s/NetworkS.hpp"
+#include "../network/network_s/NetworkSystem.hpp"
+// #include "../network_s/NetworkComponents.hpp"
 
-#include "../network_s/NetworkComponents.hpp"
-#include "../network_s/NetworkSystems.hpp"
+// #include "../network_s/NetworkComponents.hpp"
+// #include "../network_s/NetworkSystems.hpp"
 
 int main(int ac, char **av) {
-    unsigned int portNumber = Network::DefaultPort;
+    // unsigned int portNumber = Network::DefaultPort;
 
-    if (ac > 2) {
-        std::cerr << "Usage: ./r-type_server port" << std::endl;
-        return 84;
-    } else if (ac == 2) {
-        try {
-            portNumber = std::stoi(av[1]);
-        } catch (std::exception &e) {
-            std::cerr << "Error: port must be a number" << std::endl;
-            return 84;
-        }
-    } else {
-        std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
-    }
-    registry r;
-    gameEngine game(r, 4242);
-    game.launch_game();
+    // if (ac > 2) {
+    //     std::cerr << "Usage: ./r-type_server port" << std::endl;
+    //     return 84;
+    // } else if (ac == 2) {
+    //     try {
+    //         portNumber = std::stoi(av[1]);
+    //     } catch (std::exception &e) {
+    //         std::cerr << "Error: port must be a number" << std::endl;
+    //         return 84;
+    //     }
+    // } else {
+    //     std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
+    // }
+    // registry r;
+    // gameEngine game(r, 4242);
+    // game.launch_game();
 // int main() {
     std::cout << "Hello, i'm the server function" << std::endl;
     //game();
     //Network network;
 
 
-    Network network("192.168.1.16", 4242);
-    // network.listen_info_from_clients();
+    NetworkS networkS("10.15.194.182", 4242);
 
 
     registry reg2;
     registry *ptrReg = &reg2;
-    std::thread threadNetListening(&Network::listen_info_from_clients, &network, ptrReg);
+    std::thread threadNetListening(&NetworkS::listen_info_from_clients, &networkS, ptrReg);
 
 
     registry reg;
-    //sgameEngine game(reg);
+    //gameEngine game(reg);
     entity_t entity1 = reg.spawn_entity();
     entity_t entity2 = reg.spawn_entity();
     entity_t entity3 = reg.spawn_entity();
@@ -58,8 +58,8 @@ int main(int ac, char **av) {
     reg.register_component<ComponentOUT>();
 
 
-    NetworkSystem networkSystem;
-    networkSystem.setNetwork(&network);
+    Network::NetworkSystem networkSystem(4242);
+    networkSystem.setNetwork(&networkS);
 
 
     Speed speed = {19, 22};
