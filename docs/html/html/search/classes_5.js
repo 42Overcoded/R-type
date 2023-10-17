@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['health_73',['Health',['../structHealth.html',1,'']]],
-  ['hitbox_74',['Hitbox',['../structHitbox.html',1,'']]]
+  ['health_98',['Health',['../structHealth.html',1,'']]],
+  ['hitbox_99',['Hitbox',['../structHitbox.html',1,'']]]
 ];

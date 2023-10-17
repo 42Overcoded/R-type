@@ -1,6 +1,6 @@
 # R-TYPE - RULES and GAME
 
-## __Game__:
+## Game:
 
 R-Type is a classic side-scrolling shoot 'em up (shmup) video game that was first released in the arcades by Irem in 1987. 
 <br/>
@@ -22,7 +22,7 @@ Your spaceship, known as the R-9, moves from left to right through a series of h
 
 <br/>
 
-### __Objective__
+### Objective
 
 The main objective of R-Type is to progress through the game's levels, defeating waves of enemies and ultimately facing and defeating the powerful end-of-level bosses. 
 <br/>
@@ -30,13 +30,13 @@ Your goal is to complete all the levels and save the universe from the Bydo, an 
 
 <br/>
 
-### __Life system__
+### Life system
 
 In R-Type, you have a limited number of lives, and when you lose all of them, you'll need to restart at the beginning of the level.
 
 <br/>
 
-### __Highscore__
+### Highscore
 
 As with many classic arcade games, R-Type encourages players to compete for high scores. 
 <br/>
@@ -44,7 +44,7 @@ Scoring is based on destroying enemies.
 
 <br/>
 
-### __Atmosphere and Aestheics__
+### Atmosphere and Aestheics
 
 R-Type is known for its dark and atmospheric sci-fi setting. 
 <br/>
@@ -52,16 +52,13 @@ The game's graphics, music, and sound effects create an immersive experience.
 
 <br/>
 
-### __Weapons__
+### Weapons
 
 Your starship has two primary weapons: 
 - A blaster that can shoot lots of bullets but inflict small damages.
 - A canon that shoot very slowly but inflict a lot of damages
 
 <br/>
-
-<img src="./assets/rtype_gameplay.png" width="600" height="300px">
-
 <br/>
 <br/>
 <br/>
@@ -79,9 +76,6 @@ Il est depuis devenu un titre emblématique et influent dans le genre du shoot '
 Le jeu est connu pour son gameplay exigeant, son système de power-up unique et son style visuel distinctif.
 
 <br/>
-
-<img src="./assets/rtype.jpg" width="600" height="300px">
-
 <br/>
 
 ## Jouabilité à Défilement Latéral
@@ -129,7 +123,4 @@ Votre vaisseau spatial dispose de deux armes principales :
 - Un canon qui tire très lentement mais inflige de lourds dégâts.
 
 <br/>
-
-<img src="./assets/rtype_gameplay.png" width="600" height="300px">
-
 <br/>

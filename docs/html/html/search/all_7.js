@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['icontainer_24',['IContainer',['../structIContainer.html',1,'']]],
-  ['insert_5fat_25',['insert_at',['../classSparseArray.html#a4bae5c04a8a771d111849babc21599bb',1,'SparseArray']]]
+  ['health_28',['Health',['../structHealth.html',1,'']]],
+  ['hitbox_29',['Hitbox',['../structHitbox.html',1,'']]],
+  ['hitbox_5fsystem_30',['hitbox_system',['../classSfmlSystem.html#ade02c3f0192dbb48ca36646cf0d219cb',1,'SfmlSystem']]],
+  ['how_20to_20play_31',['How to play',['../md_How_to_play.html',1,'']]]
 ];

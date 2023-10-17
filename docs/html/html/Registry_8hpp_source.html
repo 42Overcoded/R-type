@@ -97,7 +97,7 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classentity__t.html">   24</a></span>&#160;<span class="keyword">class </span><a class="code" href="classentity__t.html">entity_t</a> {</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classentity__t.html">entity_t</a>(std::size_t value) : value_(value) {}   </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classentity__t.html">entity_t</a>(std::size_t value) : value_(value) {}</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">operator</span> std::size_t()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordflow">return</span> value_;</div>
@@ -125,7 +125,7 @@ $(function() {
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        };</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Component&gt;</div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classregistry.html#ae6ae3ba636214bb3972a99492923bf7c">   78</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classregistry.html#ae6ae3ba636214bb3972a99492923bf7c">remove_component</a> (<a class="code" href="classentity__t.html">entity_t</a> <span class="keyword">const</span> &amp;from) </div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classregistry.html#ae6ae3ba636214bb3972a99492923bf7c">   78</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classregistry.html#ae6ae3ba636214bb3972a99492923bf7c">remove_component</a> (<a class="code" href="classentity__t.html">entity_t</a> <span class="keyword">const</span> &amp;from)</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        {</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            std::any_cast&lt;SparseArray&lt;Component&gt;&gt;(_components_arrays.at(<span class="keyword">typeid</span>(Component))).erase(from);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        };</div>
@@ -162,7 +162,7 @@ $(function() {
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* !ECS_HPP_ */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aclassSparseArray_html"><div class="ttname"><a href="classSparseArray.html">SparseArray</a></div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:17</div></div>
-<div class="ttc" id="aclassSparseArray_html_ab00e54b0c21ac9380db0f5c493138da0"><div class="ttname"><a href="classSparseArray.html#ab00e54b0c21ac9380db0f5c493138da0">SparseArray::erase</a></div><div class="ttdeci">void erase(size_type pos)</div><div class="ttdoc">function to delink the component of an entity / kill an entity</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:99</div></div>
+<div class="ttc" id="aclassSparseArray_html_ab00e54b0c21ac9380db0f5c493138da0"><div class="ttname"><a href="classSparseArray.html#ab00e54b0c21ac9380db0f5c493138da0">SparseArray::erase</a></div><div class="ttdeci">void erase(size_type pos)</div><div class="ttdoc">function to delink the component of an entity / kill an entity</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:129</div></div>
 <div class="ttc" id="aclassentity__t_html"><div class="ttname"><a href="classentity__t.html">entity_t</a></div><div class="ttdef"><b>Definition:</b> Registry.hpp:24</div></div>
 <div class="ttc" id="aclassregistry_html"><div class="ttname"><a href="classregistry.html">registry</a></div><div class="ttdef"><b>Definition:</b> Registry.hpp:35</div></div>
 <div class="ttc" id="aclassregistry_html_a1c8a6043f3ea73045ae7d3ada058890d"><div class="ttname"><a href="classregistry.html#a1c8a6043f3ea73045ae7d3ada058890d">registry::register_component</a></div><div class="ttdeci">void register_component()</div><div class="ttdoc">add a new usable component for entity</div><div class="ttdef"><b>Definition:</b> Registry.hpp:96</div></div>

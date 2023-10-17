@@ -9,9 +9,6 @@ In order to move your spaceship you must use your arrows keys on your keyboard.
 You can go up, down, left and right
 
 <br/>
-
-<img src="./assets/arrows.png" width="300" height="300">
-
 <br/>
 
 ### __fight__
@@ -26,9 +23,6 @@ In order to shoot you should press space bar.
 - if you shoot power is at its max, bullet will go though ennemies
 
 <br/>
-
-<img src="./assets/space.png" width="600" height="200">
-
 <br/>
 <br/>
 <br/>
@@ -47,9 +41,6 @@ Afin de vous déplacer vous pouvez utiliser les fleches de votre clavier.
 Vous pouvez vous déplacer vers le haut, le bas, la droite et la gauche
 
 <br/>
-
-<img src="./assets/arrows.png" width="300" height="300">
-
 <br/>
 
 ### __combats__
@@ -64,7 +55,4 @@ Pour tirer vous pouvez appuyer sur la touche espace
 - Si vous atteignez la puissance max, votre tir traversera les ennemis
 
 <br/>
-
-<img src="./assets/space.png" width="600" height="200">
-
 <br/>
