@@ -152,7 +152,7 @@ void NetworkSystem::manageOutputs(registry &reg)
 {
     if (IsConnected())
     {
-        // manageServerGetPing();
+        manageServerGetPing();
     }
 }
 
