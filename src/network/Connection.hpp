@@ -54,6 +54,7 @@ public:
     {
         return id_;
     }
+
     void ConnectToClient(boost::asio::ip::udp::endpoint remoteEndpoint, uint32_t uid = 0)
     {
         if (ownerType_ == Owner::Server)
@@ -98,6 +99,7 @@ public:
             std::cerr << "Can't connect server to server" << std::endl;
         }
     }
+
     void Disconnect()
     {
         if (IsConnected())
@@ -105,6 +107,7 @@ public:
             boost::asio::post(ioContext_, [this]() { socket_.close(); });
         }
     }
+
     bool IsConnected() const
     {
         return socket_.is_open();
@@ -144,6 +147,11 @@ protected:
                     }
                     else
                     {
+                        if (ownerType_ == Owner::Client && packetsOutQueue_.Front().header.flag == T::ServerConnect)
+                        {
+                            std::cout << "Open connection of server" << std::endl;
+                            socket_.connect(boost::asio::ip::udp::endpoint());
+                        }
                         packetsOutQueue_.PopFront();
                         if (!packetsOutQueue_.IsEmpty())
                         {
@@ -177,7 +185,7 @@ protected:
                 {
                     std::cout << "[" << id_ << "] Send Body Fail." << std::endl;
                     std::cerr << ec.message() << std::endl;
-                    // socket_.close();
+                    socket_.close();
                 }
             });
     }
