@@ -37,7 +37,6 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
         wave += 0.05;
         int rand = distribution2(generator);
         float randomNb = distribution(generator);
-        std::cout << randomNb << ", Wave: " << wave << std::endl;
         randomNb += 1;
         if (randomNb / 20 < wave) {
             entity_t enemy = init_enemy(0, 0);
