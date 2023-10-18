@@ -283,6 +283,7 @@ protected:
     {
         if (ManageConnectionPacket())
         {
+            GetHeader();
             return;
         }
         if (ownerType_ == Owner::Server)
