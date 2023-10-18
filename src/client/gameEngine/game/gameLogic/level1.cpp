@@ -43,7 +43,7 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5)
     for (int i = 0; i < n5; i++) {
         int rand = std::rand() % 950;
         auto &position = _registry.get_components<Position>();
-        entity_t enemy = init_enemy(5, 1, 1950, 0);
+        entity_t enemy = init_enemy(5, 6, 1950, 0);
         position[enemy]->y = rand;
     }
 }

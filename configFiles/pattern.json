@@ -60,6 +60,17 @@
             "pattern_type": 0,
             "pattern_length": 2,
             "switch_index": 100
+        },
+        {
+            "pattern": [
+                { "x": -0.2, "y": 0 },
+                { "x": 0, "y": 0}
+
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 4,
+            "switch_index": 50
         }
     ]
 }
