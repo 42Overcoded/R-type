@@ -150,6 +150,16 @@ void gameEngine::shoot_enemy() {
                 spawn_bullet(i, 1);
             }
         }
+        if (tag[i]->tag == "tank") {
+            clock[i]->_time = clock[i]->_clock.getElapsedTime();
+            if (clock[i]->_time.asSeconds() > 1.5) {
+                if (position[i]->x >= 1920) {
+                    continue;
+                }
+                clock[i]->_clock.restart();
+                spawn_bullet(i, 3);
+            }
+        }
         if (tag[i]->tag == "enemyBoss") {
             clock[i]->_time = clock[i]->_clock.getElapsedTime();
             clock[i]->__time = clock[i]->__clock.getElapsedTime();

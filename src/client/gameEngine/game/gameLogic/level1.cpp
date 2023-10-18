@@ -6,7 +6,7 @@
 #include <nlohmann/json.hpp>
 #include <random>
 
-void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4)
+void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -40,6 +40,12 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4)
         entity_t enemy = init_enemy(3, 3, 1950, 0);
         position[enemy]->y = rand;
     }
+    for (int i = 0; i < n5; i++) {
+        int rand = std::rand() % 950;
+        auto &position = _registry.get_components<Position>();
+        entity_t enemy = init_enemy(5, 1, 1950, 0);
+        position[enemy]->y = rand;
+    }
 }
 
 void gameEngine::spawn_wave(sf::Time &elapsed, int &wave)
@@ -47,20 +53,20 @@ void gameEngine::spawn_wave(sf::Time &elapsed, int &wave)
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
-        spawn_mobs(50, 5, 1, 0);
+        spawn_mobs(0,0,0,0, 1);
     }
-    if (elapsed.asSeconds() > 15 && wave == 1) {
-        wave = 2;
-        spawn_mobs(13, 4, 2, 0);
-    }
-    if (elapsed.asSeconds() > 35 && wave == 2) {
-        wave = 3;
-        spawn_mobs(0, 0, 0, 2);
-    }
-    if (elapsed.asSeconds() > 50 && wave == 3) {
-        wave = 4;
-        spawn_mobs(18, 7, 3, 1);
-    }
+    // if (elapsed.asSeconds() > 15 && wave == 1) {
+    //     wave = 2;
+    //     spawn_mobs(1, 1, 1, 0, 1);
+    // }
+    // if (elapsed.asSeconds() > 35 && wave == 2) {
+    //     wave = 3;
+    //     spawn_mobs(0, 0, 0, 1, 1);
+    // }
+    // if (elapsed.asSeconds() > 50 && wave == 3) {
+    //     wave = 4;
+    //     spawn_mobs(1, 1, 1, 1, 1);
+    // }
     auto &enemy = _registry.get_components<Enemy>();
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (enemy[i] != std::nullopt && wave == 4) {

@@ -118,7 +118,7 @@ class gameEngine {
          * @param n3 
          * @param n4 
          */
-        void spawn_mobs(int n1, int n2, int n3, int n4);
+        void spawn_mobs(int n1, int n2, int n3, int n4, int n5);
         /**
          * @brief spawn enemy bullet
          * 

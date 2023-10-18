@@ -41,6 +41,24 @@
             "hitboxheight": 66,
             "scale": 3,
             "speed": 0.8
+        },
+        {
+            "tag": "enemyBullet",
+            "textureTag": "enemyBulletTexture",
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "rect": {
+                "left": 0,
+                "top": 400,
+                "width": 23,
+                "height": 20
+            },
+            "hitboxwidth": 66,
+            "hitboxheight": 66,
+            "scale": 3,
+            "speed": 0.4
         }
     ]
 }
