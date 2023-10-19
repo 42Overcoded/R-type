@@ -11,18 +11,14 @@
 #include <optional>
 #include "Components.hpp"
 #include "Registry.hpp"
-#include "SFML/Graphics/Font.hpp"
-#include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Clock.hpp"
 #include "SfmlSystem.hpp"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Text.hpp>
 #include <random>
 #include <chrono>
 #include <nlohmann/json.hpp>
 #include <SFML/Window/Keyboard.hpp>
-#include <ctime>
 #include "../../network/network_c/NetworkComponent.hpp"
 
 void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,float &wave)
