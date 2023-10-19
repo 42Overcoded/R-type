@@ -135,7 +135,7 @@ void gameEngine::launch_game() {
             _system.modify_pattern(_registry);
             if (mode == LEVELS)
                 spawn_wave(_elapsed, wave);
-            if (mode == INFINITE)
+            if (mode == ENDLESS)
                 spawn_infinite_wave(_elapsed, _clock, wave);
             animate_enemy();
             shoot_system(elapsed);
