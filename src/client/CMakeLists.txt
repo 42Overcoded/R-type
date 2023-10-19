@@ -52,6 +52,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     gameEngine/GameEngine.hpp
+    gameEngine/game.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
     ../network/INetworkServer.hpp
