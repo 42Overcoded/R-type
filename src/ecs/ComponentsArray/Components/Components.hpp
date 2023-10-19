@@ -120,6 +120,10 @@ struct Player {
     int id;
 };
 
+struct isClick {
+    bool clicked = false;
+};
+
 /**
  * @brief Enemy is a tag to know if the entity is an enemy and the score it gives when killed
  * 
@@ -142,6 +146,7 @@ struct Bullet {
  */
 struct Tag {
     std::string tag;
+    std::string groupTag;
 };
 
 /**

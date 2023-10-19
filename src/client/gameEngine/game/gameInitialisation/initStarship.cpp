@@ -43,14 +43,15 @@ entity_t gameEngine::init_starship(int id, int i)
     auto &scale = _registry.get_components<Scale>();
     auto &texture = _registry.get_components<Texture>();
     auto &rect = _registry.get_components<Rect>();
+    auto &drawable = _registry.get_components<Drawable>();
 
+    drawable[starship]->drawable = true;
     health[starship]->health = starshipJson["starship"][i]["health"];
     state[starship]->state = starshipJson["starship"][i]["state"];
     hitbox[starship]->width = starshipJson["starship"][i]["hitbox"]["width"];
     hitbox[starship]->height = starshipJson["starship"][i]["hitbox"]["height"];
     tag[starship]->tag = starshipJson["starship"][i]["tag"];
     texture[starship]->textureTag = starshipJson["starship"][i]["textureTag"];
-    texture[starship]->texturePath = starshipJson["starship"][i]["texturePath"];
     scale[starship]->scale = starshipJson["starship"][i]["scale"];
     speed[starship]->speedx = starshipJson["starship"][i]["basespeed"];
     speed[starship]->speedy = starshipJson["starship"][i]["basespeed"];
@@ -138,7 +139,9 @@ void gameEngine::init_life(int i) {
     auto &rect = _registry.get_components<Rect>();
     auto &state = _registry.get_components<State>();
     auto &control = _registry.get_components<Control>();
+    auto &drawable = _registry.get_components<Drawable>();
 
+    drawable[life]->drawable = true;
     int space = lifeJson["life"]["space"];
     state[life]->state = i;
     texture[life]->textureTag = lifeJson["life"]["textureTag"];

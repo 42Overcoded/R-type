@@ -12,6 +12,7 @@
 #include "../../Registry.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Clock.hpp"
+#include "../../../client/gameEngine/game.hpp"
 
 class SfmlSystem {
     public:
@@ -70,7 +71,7 @@ class SfmlSystem {
          * 
          * @param r 
          */
-        void control_system(registry &r);
+        void control_system(registry &r, sf::RenderWindow &window, Scene &scene);
         /**
          * @brief calculate the velocity of the entities
          * 

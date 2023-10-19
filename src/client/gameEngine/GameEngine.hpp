@@ -9,6 +9,7 @@
 #define GAMEENGINE_HPP_
 
 #include "../jsonfile/include/JsonParser.hpp"
+#include "game.hpp"
 #include "../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
 #include <SFML/Graphics.hpp>
@@ -17,13 +18,6 @@
 #include "../network_c/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
-
-enum Scene {
-    MENU,
-    LOBBY,
-    GAME,
-    END
-};
 
 enum Mode {
     NONE,
@@ -187,6 +181,8 @@ class gameEngine {
          * @brief handle the life of the starship
          * 
          */
+        void init_button(int i);
+        void init_game();
         void life_handler();
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
     protected:
@@ -194,6 +190,7 @@ class gameEngine {
         Scene scene;
         Mode mode;
         JsonParser *parsed;
+        int id;
         sf::Time elapsed;
         sf::Clock clock;
         sf::RenderWindow _window;

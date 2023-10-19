@@ -14,6 +14,7 @@
 #include "GameEngine.hpp"
 #include "SFML/Graphics.hpp"
 #include "SFML/Graphics/Rect.hpp"
+#include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/Texture.hpp"
 #include "SFML/System.hpp"
 #include "SFML/System/Clock.hpp"
@@ -42,9 +43,12 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture background;
     sf::Texture menuButton;
     sf::Texture playButton;
+    sf::Texture button;
     sf::Font font;
 
     if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
+        exit(84);
+    if (!button.loadFromFile("./assets/button.png"))
         exit(84);
     if (!menuButton.loadFromFile("./assets/lobby.png"))
         exit(84);
@@ -74,6 +78,7 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
+    textures["buttonTexture"] = button;
     textures["starshipTexture"] = starship;
     textures["beambarTexture"] = beambar;
     textures["enemyBossTexture"] = enemyBoss;
@@ -84,6 +89,7 @@ void SfmlSystem::load_texture(registry &r)
     textures["backgroundTexture"] = background;
     textures["loadShootTexture"] = bullet;
     fonts["scoreFont"] = font;
+    fonts["menuFont"] = font;
     textures["menuTexture"] = menuButton;
     textures["playTexture"] = playButton;
     textures["explosionTexture"] = explosion;
@@ -248,7 +254,7 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
     }
 }
 
-void SfmlSystem::control_system(registry &r)
+void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &scene)
 {
     auto &control = r.get_components<Control>();
     auto &position = r.get_components<Position>();
@@ -256,6 +262,11 @@ void SfmlSystem::control_system(registry &r)
     auto &speed = r.get_components<Speed>();
     auto &state = r.get_components<State>();
     auto &rect = r.get_components<Rect>();
+    auto &scale = r.get_components<Scale>();
+    auto &click = r.get_components<isClick>();
+    auto &hitbox = r.get_components<Hitbox>();
+    auto &tag = r.get_components<Tag>();
+    auto &clock = r.get_components<Clock>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (control[i] != std::nullopt && speed[i] != std::nullopt) {
@@ -287,6 +298,31 @@ void SfmlSystem::control_system(registry &r)
                 control[i]->shoot = true;
             } else {
                 control[i]->shoot = false;
+            }
+        }
+    }
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (click[i] != std::nullopt) {
+            sf::Vector2i mousePos = sf::Mouse::getPosition(_window);
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePos.x > position[i]->x && mousePos.x < position[i]->x + scale[i]->scale * hitbox[i]->width && mousePos.y > position[i]->y && mousePos.y < position[i]->y + scale[i]->scale * hitbox[i]->height) {
+                for (size_t j = 0; j < r._entity_number; j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->tag == "onlinebutton" && scene == MENU) {
+                        click[i]->clicked = true;
+                        clock[j]->clock.restart();
+                        return;
+                    }
+                    if (tag[j]->tag == "onlinebutton") {
+                        if (clock[j]->time.asSeconds() < 0.2 && (scene != MENU)) {
+                            return;
+                        } else {
+                            click[i]->clicked = true;
+                        }
+                    }
+                }
             }
         }
     }

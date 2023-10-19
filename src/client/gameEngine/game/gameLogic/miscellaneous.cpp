@@ -27,43 +27,119 @@ void gameEngine::menu()
     auto &clock = _registry.get_components<Clock>();
     auto &text = _registry.get_components<Text>();
     auto &drawable = _registry.get_components<Drawable>();
+    auto &click = _registry.get_components<isClick>();
 
     for (size_t i = 0; i < tag.size(); i++) {
         if (tag[i] == std::nullopt)
             continue;
-        if (tag[i]->tag == "play") {
+        if (tag[i]->tag == "onlinebutton") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
         }
-        sf::Event event;
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            if (position[i]->x <= sf::Mouse::getPosition(_window).x && sf::Mouse::getPosition(_window).x <= position[i]->x + 600 && position[i]->y <= sf::Mouse::getPosition(_window).y && sf::Mouse::getPosition(_window).y <= position[i]->y + 200) {
-                if (tag[i]->tag == "menu" && scene == MENU) {
-                    scene = LOBBY;
-                    for (size_t i = 0; i < tag.size(); i++) {
-                        if (tag[i] == std::nullopt)
-                            continue;
-                        if (tag[i]->tag == "play") {
-                            drawable[i]->drawable = true;
-                            clock[i]->clock.restart();
-                        }
+        if (scene == OFFLINE) {
+            if (tag[i]->groupTag == "offline") {
+                drawable[i]->drawable = true;
+            }
+            if (tag[i]->tag == "backbuttonoffline" && click[i]->clicked == true) {
+                scene = MENU;
+                click[i]->clicked = false;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->tag == "offlinebutton") {
+                        click[j]->clicked = false;
                     }
-                    _registry.kill_entity(entity_t(i));
+                    if (tag[j]->groupTag == "offline")
+                        drawable[j]->drawable = false;
+                    if (tag[j]->groupTag == "mainMenu")
+                        drawable[j]->drawable = true;
                 }
-                if (tag[i]->tag == "play" && scene == LOBBY && clock[i]->time.asSeconds() > 0.5) {
+            }
+            if (tag[i]->tag == "adventurebutton") {
+                if (click[i]->clicked == true) {
+                    mode = LEVELS;
                     scene = GAME;
-                    for (size_t i = 0; i < tag.size(); i++) {
-                        if (drawable[i] == std::nullopt)
+                    drawable[i]->drawable = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
                             continue;
-                        drawable[i]->drawable = true;
+                        if (tag[j]->groupTag == "offline")
+                            drawable[j]->drawable = false;
                     }
-                    _registry.kill_entity(entity_t(i));
+                    init_game();
+                }
+            }
+            if (tag[i]->tag == "endlessbutton") {
+                if (click[i]->clicked == true) {
+                    mode = INFINITE;
+                    scene = GAME;
+                    drawable[i]->drawable = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
+                            continue;
+                        if (tag[j]->groupTag == "offline")
+                            drawable[j]->drawable = false;
+                    }
+                    init_game();
                 }
             }
         }
-        while (_window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                _window.close();
+        if (scene == ONLINE) {
+            if (tag[i]->groupTag == "online") {
+                if (tag[i]->tag == "backbuttononline" || tag[i]->tag == "backonline" || tag[i]->tag == "playerConnected")
+                    drawable[i]->drawable = true;
+                if (tag[i]->tag == "waitingPlayer") {
+                    if (id != 0)
+                        drawable[i]->drawable = true;
+                } else if (id == 0)
+                    drawable[i]->drawable = true;
+            }
+            if (tag[i]->tag == "backbuttononline" && click[i]->clicked == true) {
+                scene = MENU;
+                click[i]->clicked = false;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->tag == "onlinebutton") {
+                        click[j]->clicked = false;
+                    }
+                    if (tag[j]->groupTag == "online")
+                        drawable[j]->drawable = false;
+                    if (tag[j]->groupTag == "mainMenu")
+                        drawable[j]->drawable = true;
+                }
+            }
+        }
+        if (scene == MENU) {
+            if (tag[i]->tag == "offlinebutton") {
+                if (click[i]->clicked == true) {
+                    clock[i]->clock.restart();
+                    scene = OFFLINE;
+                    drawable[i]->drawable = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
+                            continue;
+                        if (tag[j]->tag == "onlinebutton") {
+                            clock[j]->clock.restart();
+                        }
+                        if (tag[j]->groupTag == "mainMenu") {
+                            drawable[j]->drawable = false;
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "onlinebutton") {
+                if (click[i]->clicked == true) {
+                    clock[i]->clock.restart();
+                    scene = ONLINE;
+                    drawable[i]->drawable = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
+                            continue;
+                        if (tag[j]->groupTag == "mainMenu")
+                            drawable[j]->drawable = false;
+                    }
+                }
+            }
         }
     }
     if (scene == END) {

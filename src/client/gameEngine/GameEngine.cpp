@@ -87,6 +87,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Rect>();
     _registry.register_component<Texture>();
     _registry.register_component<NetworkComponent>();
+    _registry.register_component<isClick>();
 };
 
 void gameEngine::launch_game() {
@@ -100,59 +101,47 @@ void gameEngine::launch_game() {
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
     float wave = 0;
-    mode = INFINITE;
-    if(mode == INFINITE)
-        wave = 10;
-    for (int i = 0; i < 2; i++)
-        init_background(i);
-    init_menu();
-    init_score();
-    init_beambar();
-    init_load_shoot();
-    for (int i = 0; i != 4; i++)
-        entity_t starship = init_starship(1, i);
-    for (int i = 0; i < 3; i++)
-        init_life(i);
+    id = 1;
+    mode = NONE;
+    for (int i = 0; i < 12; i ++)
+        init_button(i);
     while (_window.isOpen())
     {
         auto &health = _registry.get_components<Health>();
         auto &tag = _registry.get_components<Tag>();
         int alive = 0;
-        for (size_t i = 0; i < _registry._entity_number; i++) {
-            if (tag[i] == std::nullopt)
-                continue;
-            if (tag[i]->tag == "starship") {
-                alive += 1;
-            }
-            if (health[i] != std::nullopt && health[i]->health <= 0 && tag[i]->tag == "starship") {
-                _registry.kill_entity(entity_t(i));
-            }
+        sf::Event event;
+        while (_window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                _window.close();
         }
-        if (alive == 0) {
-            scene = END;
-        }
-        if (scene == MENU || scene == LOBBY || scene == END) {
+        if (scene == MENU || scene == OFFLINE || scene == ONLINE ||scene == END)
             menu();
-        }
         if (scene == GAME) {
+            for (size_t i = 0; i < _registry._entity_number; i++) {
+                if (tag[i] == std::nullopt)
+                    continue;
+                if (tag[i]->tag == "starship") {
+                    alive += 1;
+                }
+                if (health[i] != std::nullopt && health[i]->health <= 0 && tag[i]->tag == "starship") {
+                    _registry.kill_entity(entity_t(i));
+                }
+            }
+            if (alive == 0) {
+                scene = END;
+            }
             clock_time();
             elapsed = clock.getElapsedTime();
             _elapsed = _clock.getElapsedTime();
             clock.restart();
-
-            sf::Event event;
-            while (_window.pollEvent(event))
-            {
-                if (event.type == sf::Event::Closed)
-                    _window.close();
-            }
             _system.modify_pattern(_registry);
             if (mode == LEVELS)
                 spawn_wave(_elapsed, wave);
             if (mode == INFINITE)
                 spawn_infinite_wave(_elapsed, _clock, wave);
             animate_enemy();
-            _system.control_system(_registry);
             shoot_system(elapsed);
             _system.velocity_system(_registry, elapsed);
             _system.color_system(_registry);
@@ -161,6 +150,7 @@ void gameEngine::launch_game() {
             shoot_enemy();
             life_handler();
         }
+        _system.control_system(_registry, _window, scene);
         _window.clear(sf::Color::Black);
         _system.position_system(_registry);
         _system.rect_system(_registry);

@@ -1,6 +1,7 @@
 #include "../../GameEngine.hpp"
 #include <iostream>
 #include <optional>
+#include "Components.hpp"
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
 
@@ -40,7 +41,10 @@ void gameEngine::init_beambar()
     auto &health = _registry.get_components<Health>();
     auto &scale = _registry.get_components<Scale>();
     auto &rect = _registry.get_components<Rect>();
+    auto &drawable = _registry.get_components<Drawable>();
 
+    drawable[beambar]->drawable = true;
+    drawable[fullbeambar]->drawable = true;
     tag[beambar]->tag = barJson["beambar"]["tag"];
     tag[fullbeambar]->tag = barJson["fullbeambar"]["tag"];
     texture[beambar]->textureTag = barJson["beambar"]["textureTag"];
@@ -72,7 +76,65 @@ void gameEngine::init_beambar()
     rect[fullbeambar]->height = barJson["fullbeambar"]["rect"]["height"];
 }
 
+void gameEngine::init_button(int i)
+{
+    std::ifstream file("configFiles/menu.json");
 
+    if (!file.is_open())
+        exit(84);
+    nlohmann::json menuJson;
+    file >> menuJson;
+    file.close();
+
+    entity_t button = _registry.spawn_entity();
+    entity_t texte = _registry.spawn_entity();
+
+    _registry.add_component<Clock>(button, Clock());
+    _registry.add_component<Position>(button, Position());
+    _registry.add_component<Sprite>(button, Sprite());
+    _registry.add_component<Drawable>(button, Drawable());
+    _registry.add_component<Tag>(button, Tag());
+    _registry.add_component<Texture>(button, Texture());
+    _registry.add_component<Scale>(button, Scale());
+    _registry.add_component<isClick>(button, isClick());
+    _registry.add_component<Hitbox>(button, Hitbox());
+
+    _registry.add_component<Position>(texte, Position());
+    _registry.add_component<Text>(texte, Text());
+    _registry.add_component<Drawable>(texte, Drawable());
+    _registry.add_component<Tag>(texte, Tag());
+    _registry.add_component<State>(texte, State());
+    _registry.add_component<Scale>(texte, Scale());
+
+    auto &tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &position = _registry.get_components<Position>();
+    auto &texture = _registry.get_components<Texture>();
+    auto &drawable = _registry.get_components<Drawable>();
+    auto &text = _registry.get_components<Text>();
+    auto &scale = _registry.get_components<Scale>();
+    auto &click = _registry.get_components<isClick>();
+    auto &hitbox = _registry.get_components<Hitbox>();
+
+    click[button]->clicked = false;
+    hitbox[button]->width = menuJson["button"][i]["hitbox"]["width"];
+    hitbox[button]->height = menuJson["button"][i]["hitbox"]["height"];
+    scale[button]->scale = menuJson["button"][i]["scale"];
+    scale[texte]->scale = menuJson["button"][i]["textscale"];
+    tag[button]->tag = menuJson["button"][i]["tag"];
+    texture[button]->textureTag = menuJson["button"][i]["textureTag"];
+    position[button]->x = menuJson["button"][i]["position"]["x"];
+    position[button]->y = menuJson["button"][i]["position"]["y"];
+    tag[texte]->tag = menuJson["button"][i]["texttag"];
+    tag[texte]->groupTag = menuJson["button"][i]["grouptag"];
+    tag[button]->groupTag = menuJson["button"][i]["grouptag"];
+    text[texte]->str = menuJson["button"][i]["text"];
+    text[texte]->fontTag = menuJson["button"][i]["fontTag"];
+    position[texte]->x = menuJson["button"][i]["positiontext"]["x"];
+    position[texte]->y = menuJson["button"][i]["positiontext"]["y"];
+    drawable[texte]->drawable = menuJson["button"][i]["drawable"];
+    drawable[button]->drawable = menuJson["button"][i]["drawable"];
+}
 
 void gameEngine::init_background(int i) {
     std::ifstream file("configFiles/background.json");
@@ -97,9 +159,11 @@ void gameEngine::init_background(int i) {
     auto &position = _registry.get_components<Position>();
     auto &speed = _registry.get_components<Speed>();
     auto &texture = _registry.get_components<Texture>();
+    auto &drawable = _registry.get_components<Drawable>();
 
     int width = backJson["background"]["width"];
 
+    drawable[background]->drawable = true;
     texture[background]->textureTag = backJson["background"]["textureTag"];
     speed[background]->speedx = backJson["background"]["speedx"];
     tag[background]->tag = backJson["background"]["tag"];
@@ -128,7 +192,9 @@ void gameEngine::init_score() {
     auto &position = _registry.get_components<Position>();
     auto &state = _registry.get_components<State>();
     auto &scale = _registry.get_components<Scale>();
+    auto &drawable = _registry.get_components<Drawable>();
 
+    drawable[score]->drawable = true;
     text[score]->str = scoreJson["score"]["str"];
     text[score]->fontTag = scoreJson["score"]["fontTag"];
     state[score]->state = scoreJson["score"]["state"];
@@ -179,7 +245,7 @@ void gameEngine::init_menu()
     position[play]->x = menuJson["play"]["position"]["x"];
     position[play]->y = menuJson["play"]["position"]["y"];
     drawable[play]->drawable = false;
-    drawable[menu]->drawable = true;
+    drawable[menu]->drawable = false;
 }
 
 
@@ -277,4 +343,17 @@ void gameEngine::death_animation()
             }
         }
     }
+}
+
+void gameEngine::init_game()
+{
+    for (int i = 0; i < 2; i++)
+        init_background(i);
+    init_score();
+    init_beambar();
+    init_load_shoot();
+    for (int i = 0; i != 1; i++)
+        entity_t starship = init_starship(id, i);
+    for (int i = 0; i < 3; i++)
+        init_life(i);
 }
