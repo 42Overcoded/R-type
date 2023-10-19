@@ -101,7 +101,7 @@ void gameEngine::launch_game() {
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
     float wave = 0;
-    id = 1;
+    id = 0;
     mode = NONE;
     for (int i = 0; i < 12; i ++)
         init_button(i);
