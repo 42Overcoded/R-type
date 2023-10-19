@@ -54,6 +54,7 @@ public:
     {
         return id_;
     }
+
     void ConnectToClient(boost::asio::ip::udp::endpoint remoteEndpoint, uint32_t uid = 0)
     {
         if (ownerType_ == Owner::Server)
@@ -61,7 +62,7 @@ public:
             if (socket_.is_open() && !IsConnected_)
             {
                 std::cout << "Connecting to client" << std::endl;
-                id_ = uid;
+                id_             = uid;
                 remoteEndpoint_ = remoteEndpoint;
                 socket_.connect(remoteEndpoint_);
                 std::cout << "Connected to client" << std::endl;
@@ -91,13 +92,13 @@ public:
             packet.header.flag = T::ServerConnect;
             SendPacket(packet);
             std::cout << "Connect to server" << std::endl;
-            GetHeader();
         }
         else
         {
             std::cerr << "Can't connect server to server" << std::endl;
         }
     }
+
     void Disconnect()
     {
         if (IsConnected())
@@ -105,6 +106,7 @@ public:
             boost::asio::post(ioContext_, [this]() { socket_.close(); });
         }
     }
+
     bool IsConnected() const
     {
         return socket_.is_open();
@@ -135,12 +137,21 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    if (packetsOutQueue_.Front().body.size() > 0)
+                    std::cout << "Send packet" << std::endl;
+                    if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
+                        packetsOutQueue_.Front().body.size() > 0)
                     {
                         SendBody();
                     }
                     else
                     {
+                        if (ownerType_ == Owner::Client &&
+                            packetsOutQueue_.Front().header.flag == T::ServerConnect)
+                        {
+                            std::cout << "Open connection of server" << std::endl;
+                            socket_.connect(boost::asio::ip::udp::endpoint());
+                            GetHeader();
+                        }
                         packetsOutQueue_.PopFront();
                         if (!packetsOutQueue_.IsEmpty())
                         {
@@ -150,7 +161,7 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Send Header Fail.\n";
+                    std::cout << "[" << id_ << "] Send Header Fail." << std::endl;
                     socket_.close();
                 }
             });
@@ -164,6 +175,7 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
+                    std::cout << "Send body" << std::endl;
                     packetsOutQueue_.PopFront();
                     if (!packetsOutQueue_.IsEmpty())
                     {
@@ -172,7 +184,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Send Body Fail.\n";
+                    std::cout << "[" << id_ << "] Send Body Fail." << std::endl;
+                    std::cerr << ec.message() << std::endl;
                     socket_.close();
                 }
             });
@@ -185,8 +198,13 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
+                    std::cout << "Receive packet" << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
+                        if (recvBuffer_.header.flag == T::ClientAssignID)
+                        {
+                            socket_.connect(remoteEndpoint_);
+                        }
                         recvBuffer_.body.resize(recvBuffer_.header.size);
                         GetBody();
                     }
@@ -197,7 +215,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Get Header Fail.\n";
+                    std::cout << "[" << id_ << "] Get Header Fail." << std::endl;
+                    std::cerr << ec.message() << std::endl;
                     socket_.close();
                 }
             });
@@ -206,7 +225,7 @@ protected:
     void GetBody()
     {
         socket_.async_receive_from(
-            boost::asio::buffer(recvBuffer_.body.data(), recvBuffer_.body.size()), remoteEndpoint_,
+            boost::asio::buffer(recvBuffer_.body, recvBuffer_.body.size()), remoteEndpoint_,
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
@@ -214,7 +233,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Get Body Fail.\n";
+                    std::cout << "[" << id_ << "] Get Body Fail." << std::endl;
+                    std::cerr << ec.message() << std::endl;
                     socket_.close();
                 }
             });
@@ -224,14 +244,17 @@ protected:
     {
         if (ownerType_ == Owner::Server)
         {
+            Packet<T> packet;
+
             switch (recvBuffer_.header.flag)
             {
             case T::ServerGetPing:
                 std::cout << "Server Ping" << std::endl;
-                Packet<T> pingPacket;
-                pingPacket.header.flag = T::ClientSendPing;
-                SendPacket(pingPacket);
+                packet.header.flag = T::ClientSendPing;
+                SendPacket(packet);
                 return true;
+                ;
+            default: break;
             }
         }
         else
@@ -242,11 +265,13 @@ protected:
                 std::cout << "Server Accept" << std::endl;
                 socket_.connect(remoteEndpoint_);
                 IsConnected_ = true;
-                return true;;
+                return true;
+                ;
             case T::ClientDenied:
                 std::cout << "Server Deny" << std::endl;
                 socket_.close();
-                return true;;
+                return true;
+                ;
             case T::ClientSendPing: std::cout << "Server Ping" << std::endl; break;
             default: break;
             }
@@ -258,6 +283,7 @@ protected:
     {
         if (ManageConnectionPacket())
         {
+            GetHeader();
             return;
         }
         if (ownerType_ == Owner::Server)

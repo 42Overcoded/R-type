@@ -53,16 +53,19 @@ private:
                     {
                         if (recvBuffer_.header.size == 0)
                         {
+                            std::cout << "[" << id_ << "] Get Header Success." << std::endl;
                             ManageConnectionPacket();
                         }
                         else
                         {
                             std::cerr << "Packet size is not 0" << std::endl;
+                            GetPacket();
                         }
                     }
                     else
                     {
-                        std::cout << "[" << id_ << "] Get Header Fail.\n";
+                        std::cout << "[" << id_ << "] Get Header Fail." << std::endl;
+                        std::cerr << ec.message() << std::endl;
                         socket_->close();
                     }
                 });
@@ -75,9 +78,12 @@ private:
             {
             case T::ServerConnect:
                 std::cout << "Server Connect" << std::endl;
-                boost::asio::ip::udp::socket socket(ioContext_, boost::asio::ip::udp::v4());
+
                 std::shared_ptr<Connection<T>> newClient = std::make_shared<Connection<T>>(
-                    Connection<T>::Owner::Server, ioContext_, std::move(socket), packetsInQueue_);
+                    Connection<T>::Owner::Server, ioContext_,
+                    boost::asio::ip::udp::socket(
+                        ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)),
+                    packetsInQueue_);
                 std::cout << "New client created" << std::endl;
                 newClient->ConnectToClient(remoteEndpoint_, id_++);
                 clients_.push_back(newClient);
