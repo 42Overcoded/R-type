@@ -9,6 +9,7 @@
 #define GAMEENGINE_HPP_
 
 #include "../jsonfile/include/JsonParser.hpp"
+#include "game.hpp"
 #include "../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
 #include <SFML/Graphics.hpp>
@@ -18,16 +19,16 @@
 #include <unordered_map>
 #include  <iostream>
 
-enum Scene {
-    MENU,
-    LOBBY,
-    GAME,
-    END
+enum Mode {
+    NONE,
+    LEVELS,
+    ENDLESS,
+    VERSUS
 };
 
 class gameEngine {
     public:
-        gameEngine(registry &registry, unsigned int serverPort, std::string serverIp) : _registry(registry), _networkSystem(serverPort, serverIp) {}
+        gameEngine(registry &registry, ClientType type/*, unsigned int serverPort, std::string serverIp*/) : _registry(registry), _type(type)/*, _networkSystem(serverPort, serverIp)*/ {}
         ~gameEngine() = default;
         /**
          * @brief register all component to the game
@@ -55,7 +56,7 @@ class gameEngine {
          * @param y Coordinate y
          * @return entity_t 
          */
-        entity_t init_enemy(int enemy_id, int comportment_id, float x, float y);
+        entity_t init_enemy(int enemy_id, int comportment_id);
         /**
          * @brief menu of the game / pause scene / end scene / lobby
          * 
@@ -104,7 +105,7 @@ class gameEngine {
          * @param elapsed 
          * @param wave 
          */
-        void spawn_wave(sf::Time &elapsed, int &wave);
+        void spawn_wave(sf::Time &elapsed, float &wave);
         /**
          * @brief init the load shoot animation
          * 
@@ -180,16 +181,22 @@ class gameEngine {
          * @brief handle the life of the starship
          * 
          */
+        void init_button(int i);
+        void init_game();
         void life_handler();
+        void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
     protected:
     private:
         Scene scene;
+        Mode mode;
         JsonParser *parsed;
+        int id;
+        ClientType _type;
         sf::Time elapsed;
         sf::Clock clock;
         sf::RenderWindow _window;
         SfmlSystem _system;
-        Network::NetworkSystem _networkSystem;
+        //Network::NetworkSystem _networkSystem;
         registry _registry;
 };
 

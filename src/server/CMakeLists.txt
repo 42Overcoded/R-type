@@ -48,7 +48,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
     Server.hpp
-    gameEngine/GameEngineServer.hpp
+    ../gameEngine/GameEngine.hpp
     ../ecs/Registry.hpp
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
@@ -69,15 +69,16 @@ set(INCLUDES
 
 set(EXEC_SRC
     Server.cpp
-    gameEngine/GameEngineServer.cpp
-    gameEngine/game/gameLogic/animation.cpp
-    gameEngine/game/gameLogic/level1.cpp
-    gameEngine/game/gameLogic/miscellaneous.cpp
-    gameEngine/game/gameLogic/shoot.cpp
-    gameEngine/game/gameInitialisation/initBullets.cpp
-    gameEngine/game/gameInitialisation/initEnemy.cpp
-    gameEngine/game/gameInitialisation/initMiscellaneous.cpp
-    gameEngine/game/gameInitialisation/initStarship.cpp
+    ../gameEngine/GameEngine.cpp
+    ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
+    ../gameEngine/game/gameLogic/animation.cpp
+    ../gameEngine/game/gameLogic/level1.cpp
+    ../gameEngine/game/gameLogic/miscellaneous.cpp
+    ../gameEngine/game/gameLogic/shoot.cpp
+    ../gameEngine/game/gameInitialisation/initBullets.cpp
+    ../gameEngine/game/gameInitialisation/initEnemy.cpp
+    ../gameEngine/game/gameInitialisation/initMiscellaneous.cpp
+    ../gameEngine/game/gameInitialisation/initStarship.cpp
     ../ecs/Registry.cpp
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/ServerSystem.cpp
