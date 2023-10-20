@@ -70,7 +70,7 @@ void gameEngine::menu()
             }
             if (tag[i]->tag == "endlessbutton") {
                 if (click[i]->clicked == true) {
-                    mode = INFINITE;
+                    mode = ENDLESS;
                     scene = GAME;
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {

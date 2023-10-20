@@ -22,7 +22,7 @@
 enum Mode {
     NONE,
     LEVELS,
-    INFINITE,
+    ENDLESS,
     VERSUS
 };
 
