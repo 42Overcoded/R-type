@@ -51,8 +51,8 @@ set(INCLUDES
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
-    gameEngine/GameEngine.hpp
-    gameEngine/game.hpp
+    ../gameEngine/GameEngine.hpp
+    ../gameEngine/game.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
     ../network/INetworkServer.hpp
@@ -68,16 +68,16 @@ set(EXEC_SRC
     ../ecs/Registry.cpp
     ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
-    gameEngine/GameEngine.cpp
+    ../gameEngine/GameEngine.cpp
     ../network/network_c/NetworkSystem.cpp
-    gameEngine/game/gameInitialisation/initBullets.cpp
-    gameEngine/game/gameInitialisation/initEnemy.cpp
-    gameEngine/game/gameInitialisation/initStarship.cpp
-    gameEngine/game/gameInitialisation/initMiscellaneous.cpp
-    gameEngine/game/gameLogic/animation.cpp
-    gameEngine/game/gameLogic/level1.cpp
-    gameEngine/game/gameLogic/shoot.cpp
-    gameEngine/game/gameLogic/miscellaneous.cpp
+    ../gameEngine/game/gameInitialisation/initBullets.cpp
+    ../gameEngine/game/gameInitialisation/initEnemy.cpp
+    ../gameEngine/game/gameInitialisation/initStarship.cpp
+    ../gameEngine/game/gameInitialisation/initMiscellaneous.cpp
+    ../gameEngine/game/gameLogic/animation.cpp
+    ../gameEngine/game/gameLogic/level1.cpp
+    ../gameEngine/game/gameLogic/shoot.cpp
+    ../gameEngine/game/gameLogic/miscellaneous.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp

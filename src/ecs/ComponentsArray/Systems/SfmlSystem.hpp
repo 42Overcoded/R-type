@@ -12,7 +12,7 @@
 #include "../../Registry.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Clock.hpp"
-#include "../../../client/gameEngine/game.hpp"
+#include "../../../gameEngine/game.hpp"
 
 class SfmlSystem {
     public:

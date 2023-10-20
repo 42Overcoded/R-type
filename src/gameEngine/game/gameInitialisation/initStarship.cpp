@@ -1,10 +1,8 @@
-#include "../../GameEngineServer.hpp"
+#include "../../GameEngine.hpp"
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
-#include <fstream>
-#include <../../network/network_s/NetworkComponent.hpp>
 
 entity_t gameEngine::init_starship(int id, int i)
 {
@@ -31,7 +29,6 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<Scale>(starship, Scale());
     _registry.add_component<Texture>(starship, Texture());
     _registry.add_component<Rect>(starship, Rect());
-    _registry.register_component<NetworkComponent>();
     if (id == i)
         _registry.add_component<Control>(starship, Control());
 
@@ -46,14 +43,15 @@ entity_t gameEngine::init_starship(int id, int i)
     auto &scale = _registry.get_components<Scale>();
     auto &texture = _registry.get_components<Texture>();
     auto &rect = _registry.get_components<Rect>();
+    auto &drawable = _registry.get_components<Drawable>();
 
+    drawable[starship]->drawable = true;
     health[starship]->health = starshipJson["starship"][i]["health"];
     state[starship]->state = starshipJson["starship"][i]["state"];
     hitbox[starship]->width = starshipJson["starship"][i]["hitbox"]["width"];
     hitbox[starship]->height = starshipJson["starship"][i]["hitbox"]["height"];
     tag[starship]->tag = starshipJson["starship"][i]["tag"];
     texture[starship]->textureTag = starshipJson["starship"][i]["textureTag"];
-    texture[starship]->texturePath = starshipJson["starship"][i]["texturePath"];
     scale[starship]->scale = starshipJson["starship"][i]["scale"];
     speed[starship]->speedx = starshipJson["starship"][i]["basespeed"];
     speed[starship]->speedy = starshipJson["starship"][i]["basespeed"];
@@ -91,13 +89,16 @@ void gameEngine::init_load_shoot()
     _registry.add_component<Texture>(load_shoot, Texture());
     _registry.add_component<Rect>(load_shoot, Rect());
     _registry.add_component<Scale>(load_shoot, Scale());
+    _registry.add_component<State>(load_shoot, State());
 
     auto &tag = _registry.get_components<Tag>();
     auto &texture = _registry.get_components<Texture>();
     auto &rect = _registry.get_components<Rect>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &scale = _registry.get_components<Scale>();
-    
+    auto &state = _registry.get_components<State>();
+    auto &clock = _registry.get_components<Clock>();
+
     tag[load_shoot]->tag = starshipJson["load_shoot"]["tag"];
     texture[load_shoot]->textureTag = starshipJson["load_shoot"]["textureTag"];
     scale[load_shoot]->scale = starshipJson["load_shoot"]["scale"];
@@ -109,6 +110,7 @@ void gameEngine::init_load_shoot()
     rect[load_shoot]->top = starshipJson["load_shoot"]["rect"]["top"];
     rect[load_shoot]->width = starshipJson["load_shoot"]["rect"]["width"];
     rect[load_shoot]->height = starshipJson["load_shoot"]["rect"]["height"];
+    clock[load_shoot]->clock.restart();
 }
 
 
@@ -141,7 +143,9 @@ void gameEngine::init_life(int i) {
     auto &rect = _registry.get_components<Rect>();
     auto &state = _registry.get_components<State>();
     auto &control = _registry.get_components<Control>();
+    auto &drawable = _registry.get_components<Drawable>();
 
+    drawable[life]->drawable = true;
     int space = lifeJson["life"]["space"];
     state[life]->state = i;
     texture[life]->textureTag = lifeJson["life"]["textureTag"];

@@ -10,8 +10,8 @@
 #include <iostream>
 #include <optional>
 #include "../ecs/Registry.hpp"
-#include "Components.hpp"
-#include "GameEngine.hpp"
+#include "../Components/Components.hpp"
+#include "../../../gameEngine/GameEngine.hpp"
 #include "SFML/Graphics.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"

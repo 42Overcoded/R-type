@@ -8,6 +8,11 @@
 #ifndef GAME_HPP_
 #define GAME_HPP_
 
+enum ClientType {
+    SERVER,
+    CLIENT
+};
+
 enum Scene {
     MENU,
     ONLINE,

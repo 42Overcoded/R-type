@@ -9,10 +9,10 @@
 #include <csignal>
 #include <iostream>
 #include <optional>
-#include "Components.hpp"
-#include "Registry.hpp"
+#include "../ecs/ComponentsArray/Components/Components.hpp"
+#include "../ecs/Registry.hpp"
 #include "SFML/System/Clock.hpp"
-#include "SfmlSystem.hpp"
+#include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <random>
@@ -87,10 +87,12 @@ void gameEngine::register_component_to_game()
 };
 
 void gameEngine::launch_game() {
-    _window.create(sf::VideoMode(1920, 1080), "R-Type");
-    _window.setFramerateLimit(60);
+    if (_type == CLIENT) {
+        _window.create(sf::VideoMode(1920, 1080), "R-Type");
+        _window.setFramerateLimit(60);
+        _system.load_texture(_registry);
+    }
     register_component_to_game();
-    _system.load_texture(_registry);
     scene = MENU;
     sf::Time _elapsed;
     sf::Clock _clock;
@@ -101,17 +103,11 @@ void gameEngine::launch_game() {
     mode = NONE;
     for (int i = 0; i < 12; i ++)
         init_button(i);
-    while (_window.isOpen())
+    while (true)
     {
         auto &health = _registry.get_components<Health>();
         auto &tag = _registry.get_components<Tag>();
         int alive = 0;
-        sf::Event event;
-        while (_window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                _window.close();
-        }
         if (scene == MENU || scene == OFFLINE || scene == ONLINE ||scene == END)
             menu();
         if (scene == GAME) {
@@ -146,17 +142,25 @@ void gameEngine::launch_game() {
             shoot_enemy();
             life_handler();
         }
-        _system.control_system(_registry, _window, scene);
-        _window.clear(sf::Color::Black);
-        _system.position_system(_registry);
-        _system.rect_system(_registry);
-        _system.texture_system(_registry);
-        _system.scale_system(_registry);
-        _system.font_system(_registry);
-        _system.string_system(_registry);
-        _system.draw_system(_registry, _window);
-        _networkSystem.Update(_registry);
-        _window.display();
+        if (_type == CLIENT) {
+            sf::Event event;
+            while (_window.pollEvent(event))
+            {
+                if (event.type == sf::Event::Closed)
+                    _window.close();
+            }
+            _system.control_system(_registry, _window, scene);
+            _window.clear(sf::Color::Black);
+            _system.position_system(_registry);
+            _system.rect_system(_registry);
+            _system.texture_system(_registry);
+            _system.scale_system(_registry);
+            _system.font_system(_registry);
+            _system.string_system(_registry);
+            _system.draw_system(_registry, _window);
+            _window.display();
+        }
+        //_networkSystem.Update(_registry);
     }
 }
 
