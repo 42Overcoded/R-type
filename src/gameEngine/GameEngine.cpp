@@ -19,6 +19,7 @@
 #include <chrono>
 #include <nlohmann/json.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Audio/Music.hpp>
 #include "../../network/network_c/NetworkComponent.hpp"
 
 void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,float &wave)
@@ -91,6 +92,9 @@ void gameEngine::launch_game() {
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
         _system.load_texture(_registry);
+        _music.openFromFile("assets/R-Type (Arcade Soundtrack) 01 Title_1.mp3");
+        _music.setLoop(true);
+        _music.play();
     }
     register_component_to_game();
     scene = MENU;
@@ -123,6 +127,12 @@ void gameEngine::launch_game() {
             }
             if (alive == 0) {
                 scene = END;
+                if (_type == CLIENT) {
+                    _music.stop();
+                    _music.setLoop(false);
+                    _music.openFromFile("assets/R-Type (Arcade Soundtrack) 13 Game Over_1.mp3");
+                    _music.play();
+                }
             }
             clock_time();
             elapsed = clock.getElapsedTime();

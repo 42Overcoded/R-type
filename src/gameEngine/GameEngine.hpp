@@ -198,6 +198,7 @@ class gameEngine {
         SfmlSystem _system;
         //Network::NetworkSystem _networkSystem;
         registry _registry;
+        sf::Music _music;
 };
 
 #endif /* !GAMEENGINE_HPP_ */

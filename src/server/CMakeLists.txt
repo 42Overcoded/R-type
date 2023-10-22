@@ -99,7 +99,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network/network_s)
 include_directories(${nlohmann_json_SOURCE_DIR}/include)
 
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json Boost::asio Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json Boost::asio Boost::filesystem Boost::system Boost::property_tree sfml-graphics sfml-window sfml-system sfml-audio)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
