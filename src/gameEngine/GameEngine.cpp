@@ -20,6 +20,7 @@
 #include <nlohmann/json.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include "../../network/network_c/NetworkComponent.hpp"
+#include "../../network/network_s/NetworkComponent.hpp"
 
 void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,float &wave)
 {
