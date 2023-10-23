@@ -160,7 +160,7 @@ void gameEngine::launch_game() {
             _system.draw_system(_registry, _window);
             _window.display();
         }
-        //_networkSystem.Update(_registry);
+        _networkSystem.Update(_registry);
     }
 }
 

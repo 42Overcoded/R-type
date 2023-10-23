@@ -16,6 +16,7 @@
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "../network_c/NetworkSystem.hpp"
+#include "../network_s/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
 
@@ -28,7 +29,7 @@ enum Mode {
 
 class gameEngine {
     public:
-        gameEngine(registry &registry, ClientType type/*, unsigned int serverPort, std::string serverIp*/) : _registry(registry), _type(type)/*, _networkSystem(serverPort, serverIp)*/ {}
+        gameEngine(registry &registry, ClientType type, unsigned int serverPort, std::string serverIp) : _registry(registry), _type(type), _networkSystem(serverPort, serverIp) {}
         ~gameEngine() = default;
         /**
          * @brief register all component to the game
@@ -196,7 +197,7 @@ class gameEngine {
         sf::Clock clock;
         sf::RenderWindow _window;
         SfmlSystem _system;
-        //Network::NetworkSystem _networkSystem;
+        Network::NetworkSystem _networkSystem;
         registry _registry;
 };
 

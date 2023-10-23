@@ -14,7 +14,7 @@
 #include "NetworkComponent.hpp"
 
 namespace Network {
-NetworkSystem::NetworkSystem(unsigned int serverPort) : INetworkServer(serverPort)
+NetworkSystem::NetworkSystem(unsigned int serverPort, std::string serverIp) : INetworkServer(serverPort)
 {
 }
 

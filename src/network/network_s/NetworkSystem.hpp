@@ -20,7 +20,7 @@ class UdpServer;
 class NetworkSystem : public INetworkServer<Flag>
 {
 public:
-    NetworkSystem(unsigned int serverPort);
+    NetworkSystem(unsigned int serverPort, std::string serverIp);
     ~NetworkSystem();
 
     void Update(registry &reg);
