@@ -11,8 +11,10 @@
 #include <optional>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "../ecs/Registry.hpp"
+#include "Protocol.hpp"
 #include "SFML/System/Clock.hpp"
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
+#include "SFML/System/Sleep.hpp"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <random>
@@ -21,6 +23,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "../../network/network_c/NetworkComponent.hpp"
 #include "../../network/network_s/NetworkComponent.hpp"
+#include <unistd.h>
 
 void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,float &wave)
 {
@@ -161,7 +164,10 @@ void gameEngine::launch_game() {
             _system.draw_system(_registry, _window);
             _window.display();
         }
-        _networkSystem.Update(_registry);
+        if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate) {
+            networkClock.restart();
+            _networkSystem.Update(_registry);
+        }
     }
 }
 

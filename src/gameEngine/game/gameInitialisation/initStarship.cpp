@@ -3,6 +3,7 @@
 #include <optional>
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
+#include "../../../network/network_c/NetworkComponent.hpp"
 
 entity_t gameEngine::init_starship(int id, int i)
 {
@@ -29,6 +30,7 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<Scale>(starship, Scale());
     _registry.add_component<Texture>(starship, Texture());
     _registry.add_component<Rect>(starship, Rect());
+    _registry.add_component<NetworkComponent>(starship, NetworkComponent());
     if (id == i)
         _registry.add_component<Control>(starship, Control());
 

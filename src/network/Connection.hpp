@@ -20,6 +20,7 @@
 #include "boost/asio/ip/udp.hpp"
 #include "boost/asio/write.hpp"
 #include <sys/types.h>
+#include "Protocol.hpp"
 
 namespace Network {
 
@@ -201,6 +202,12 @@ protected:
                     std::cout << "Receive packet" << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
+                        if (recvBuffer_.header.size > MaxPacketSize) {
+                            std::cerr << "Packet size is too big" << std::endl;
+                            recvBuffer_.header.size = 0;
+                            GetHeader();
+                            return;
+                        }
                         if (recvBuffer_.header.flag == T::ClientAssignID)
                         {
                             socket_.connect(remoteEndpoint_);

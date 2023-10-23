@@ -9,6 +9,7 @@
 #define GAMEENGINE_HPP_
 
 #include "../jsonfile/include/JsonParser.hpp"
+#include "SFML/System/Clock.hpp"
 #include "game.hpp"
 #include "../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
@@ -195,6 +196,7 @@ class gameEngine {
         ClientType _type;
         sf::Time elapsed;
         sf::Clock clock;
+        sf::Clock networkClock;
         sf::RenderWindow _window;
         SfmlSystem _system;
         Network::NetworkSystem _networkSystem;

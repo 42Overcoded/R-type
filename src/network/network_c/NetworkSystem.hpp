@@ -41,7 +41,7 @@ private:
 
     void manageServerGetPing(void);
     void manageServerConnect(void);
-    void manageServerUpdateControls(registry &reg, Packet<Flag> &packet);
+    void manageServerUpdateControls(registry &reg);
 
 private:
     std::uint32_t clientId_;

@@ -35,6 +35,7 @@ private:
 
     void manageOutputs(registry &reg);
 
+    void manageClientUpdateEntity(registry &reg);
 private:
 };
 

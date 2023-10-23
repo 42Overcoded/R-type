@@ -12,6 +12,7 @@
 #include <string>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "NetworkComponent.hpp"
+#include "network_c/NetworkSystem.hpp"
 
 namespace Network {
 NetworkSystem::NetworkSystem(unsigned int serverPort, std::string serverIp) : INetworkServer(serverPort)
@@ -67,7 +68,22 @@ void NetworkSystem::manageServerUpdateControls(
 
 void NetworkSystem::manageOutputs(registry &reg)
 {
-    //TODO: manageOutputs
+    manageClientUpdateEntity(reg);
+}
+
+void NetworkSystem::manageClientUpdateEntity(registry &reg)
+{
+    auto &network = reg.get_components<NetworkComponent>();
+    auto &position = reg.get_components<Position>();
+
+    for (unsigned int i = 0; i < network.size(); i++) {
+        if (network[i] != std::nullopt && position[i] != std::nullopt) {
+            Packet<Flag> packet;
+            packet.header.flag = Flag::ClientUpdateEntity;
+            packet << (uint32_t)i << (uint32_t)position[i]->x << (uint32_t)position[i]->y;
+            SendToAllClients(packet);
+        }
+    }
 }
 
 };  // namespace Network

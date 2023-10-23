@@ -147,22 +147,21 @@ public:
     {
         if (client && client->IsConnected())
         {
-            client->Send(packet);
+            client->SendPacket(packet);
         }
         else
         {
             OnClientDisconnect(client);
-            client.reset();
             clients_->erase(std::remove(clients_->begin(), clients_->end(), client), clients_->end());
         }
     };
 
     void SendToAllClients(const Packet<T> &packet)
     {
-        for (auto &client : clients_)
+        for (std::shared_ptr<Connection<T>> client : *clients_)
         {
             SendToClient(packet, client);
-        };
+        }
     };
 
     void UpdateServer(size_t maxPacketsNbr = -1)
