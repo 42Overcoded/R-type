@@ -15,6 +15,7 @@
 #include "SFML/System/Clock.hpp"
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "SFML/System/Sleep.hpp"
+#include "game.hpp"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <random>
@@ -106,6 +107,9 @@ void gameEngine::launch_game() {
     mode = NONE;
     for (int i = 0; i < 12; i ++)
         init_button(i);
+    if (_type == SERVER) {
+        scene = ONLINE;
+    }
     while (true)
     {
         auto &health = _registry.get_components<Health>();
@@ -138,6 +142,7 @@ void gameEngine::launch_game() {
                 spawn_infinite_wave(_elapsed, _clock, wave);
             animate_enemy();
             shoot_system(elapsed);
+            movement_system(_registry);
             _system.velocity_system(_registry, elapsed);
             _system.color_system(_registry);
             _system.hitbox_system(_registry);

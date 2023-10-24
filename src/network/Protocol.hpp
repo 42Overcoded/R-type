@@ -16,6 +16,7 @@ enum class Flag : uint32_t
 	ServerGetPing,
 	ServerConnect,
 	ServerUpdateControls,
+	ServerStartGame,
 
 	ClientAccepted,
 	ClientDenied,
@@ -25,6 +26,9 @@ enum class Flag : uint32_t
 	ClientRemovePlayer,
 	ClientCreateEntity,
 	ClientUpdateEntity,
+	ClientDestroyEntity,
+	ClientStartGame,
+	ClientEndGame,
 };
 
 const uint32_t DefaultPort = 4242;

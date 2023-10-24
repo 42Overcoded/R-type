@@ -194,8 +194,8 @@ protected:
     std::shared_ptr<std::deque<std::shared_ptr<Connection<T>>>> clients_;
     boost::asio::io_context ioContext_;
     std::thread threadContext_;
-    uint32_t nIDCounter_ = 10000;
     std::unique_ptr<ClientsManager> clientsManager_;
+    uint32_t lastEntityId_ = 0;
 };
 };  // namespace Network
 

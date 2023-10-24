@@ -165,7 +165,7 @@ void SfmlSystem::position_system(registry &r)
         if (position[i] != std::nullopt && text[i] != std::nullopt) {
             text[i]->text.setPosition(position[i]->x, position[i]->y);
         }
-    }   
+    }
 }
 
 void SfmlSystem::rect_system(registry &r)
@@ -259,7 +259,6 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
     auto &control = r.get_components<Control>();
     auto &position = r.get_components<Position>();
     auto &sprite = r.get_components<Sprite>();
-    auto &speed = r.get_components<Speed>();
     auto &state = r.get_components<State>();
     auto &rect = r.get_components<Rect>();
     auto &scale = r.get_components<Scale>();
@@ -269,35 +268,27 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
     auto &clock = r.get_components<Clock>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (control[i] != std::nullopt && speed[i] != std::nullopt) {
-            speed[i]->speedx = 0.0f;
-            speed[i]->speedy = 0.0f;
+        if (control[i] != std::nullopt) {
+            control[i]->up = false;
+            control[i]->down = false;
+            control[i]->left = false;
+            control[i]->right = false;
+            control[i]->shoot = false;
+
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 control[i]->up = true;
-                speed[i]->speedy = -0.5f;
-                rect[i]->left = rect[i]->baseLeft + 132;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 control[i]->down = true;
-                speed[i]->speedy = 0.5f;
-                rect[i]->left = rect[i]->baseLeft;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 control[i]->left = true;
-                speed[i]->speedx = -0.5f;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 control[i]->right = true;
-                speed[i]->speedx = 0.5f;
-                rect[i]->left = rect[i]->baseLeft + 66;
-            }
-            if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                rect[i]->left = rect[i]->baseLeft + 33;
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
                 control[i]->shoot = true;
-            } else {
-                control[i]->shoot = false;
             }
         }
     }

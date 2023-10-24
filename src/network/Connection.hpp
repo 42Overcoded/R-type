@@ -48,6 +48,7 @@ public:
     }
     virtual ~Connection()
     {
+        Disconnect();
     }
 
 public:
@@ -138,7 +139,7 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Send packet" << std::endl;
+                    // std::cout << "Send packet" << std::endl;
                     if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
                         packetsOutQueue_.Front().body.size() > 0)
                     {
@@ -176,7 +177,7 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Send body" << std::endl;
+                    // std::cout << "Send body" << std::endl;
                     packetsOutQueue_.PopFront();
                     if (!packetsOutQueue_.IsEmpty())
                     {
@@ -199,7 +200,7 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Receive packet" << std::endl;
+                    // std::cout << "Receive packet" << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
                         if (recvBuffer_.header.size > MaxPacketSize) {

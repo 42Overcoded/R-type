@@ -83,7 +83,7 @@ void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
     {
         if (networkInArr[i] != std::nullopt && controllArr[i] != std::nullopt)
         {
-            packet >> networkInArr[i]->entityId;
+            packet >> networkInArr[i]->clientId;
         }
     }
 }
@@ -130,14 +130,7 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet
 void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet)
 {
     std::cout << "Client create entity" << std::endl;
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
-
-    for (unsigned int i; i < networkInArr.size(); i++)
-    {
-        if (networkInArr[i] != std::nullopt)
-        {
-        }
-    }
+    
 }
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)
@@ -153,7 +146,7 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
             uint32_t entityId;
 
             packet >> entityId;
-            if (networkInArr[i]->entityId == entityId) {
+            if (networkInArr[i]->entityId != 0 && networkInArr[i]->entityId == entityId) {
                 uint32_t x;
                 uint32_t y;
 
@@ -161,6 +154,45 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
                 positionArr[i]->x = x;
                 positionArr[i]->y = y;
             }
+        }
+    }
+}
+
+void NetworkSystem::manageClientDestroyEntity(registry &reg, Packet<Flag> &packet)
+{
+    std::cout << "Client destroy entity" << std::endl;
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+
+    for (unsigned int i; i < networkInArr.size(); i++)
+    {
+        if (networkInArr[i] != std::nullopt)
+        {
+        }
+    }
+}
+
+void NetworkSystem::manageClientStartGame(registry &reg, Packet<Flag> &packet)
+{
+    std::cout << "Client start game" << std::endl;
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+
+    for (unsigned int i; i < networkInArr.size(); i++)
+    {
+        if (networkInArr[i] != std::nullopt)
+        {
+        }
+    }
+}
+
+void NetworkSystem::manageClientEndGame(registry &reg, Packet<Flag> &packet)
+{
+    std::cout << "Client end game" << std::endl;
+    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+
+    for (unsigned int i; i < networkInArr.size(); i++)
+    {
+        if (networkInArr[i] != std::nullopt)
+        {
         }
     }
 }
@@ -199,6 +231,15 @@ void NetworkSystem::manageServerUpdateControls(registry &reg)
             SendToServer(packet);
         }
     }
+}
+
+void NetworkSystem::manageServerStartGame(registry &reg)
+{
+    Packet<Flag> packet;
+
+    std::cout << "Send start game to server" << std::endl;
+    packet.header.flag = Flag::ServerStartGame;
+    SendToServer(packet);
 }
 
 }  // namespace Network

@@ -170,6 +170,11 @@ class gameEngine {
          */
         void shoot_system(sf::Time &elapsed);
         /**
+         * @brief handle the movement of the player
+         * 
+         */
+        void movement_system(registry &r);
+        /**
          * @brief animate the enemies
          * 
          */

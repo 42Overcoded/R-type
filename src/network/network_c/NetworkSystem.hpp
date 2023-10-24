@@ -35,6 +35,9 @@ private:
     void manageClientRemovePlayer(registry &reg, Packet<Flag> &packet);
     void manageClientCreateEntity(registry &reg, Packet<Flag> &packet);
     void manageClientUpdateEntity(registry &reg, Packet<Flag> &packet);
+    void manageClientDestroyEntity(registry &reg, Packet<Flag> &packet);
+    void manageClientStartGame(registry &reg, Packet<Flag> &packet);
+    void manageClientEndGame(registry &reg, Packet<Flag> &packet);
 
     // Outputs
     void manageOutputs(registry &reg);
@@ -42,6 +45,7 @@ private:
     void manageServerGetPing(void);
     void manageServerConnect(void);
     void manageServerUpdateControls(registry &reg);
+    void manageServerStartGame(registry &reg);
 
 private:
     std::uint32_t clientId_;

@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2023
+** R-type
+** File description:
+** miscellaneous
+*/
+
 #include "../../GameEngine.hpp"
 #include <iostream>
 #include <optional>
