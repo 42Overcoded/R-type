@@ -23,7 +23,6 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "../../network/network_c/NetworkComponent.hpp"
 #include "../../network/network_s/NetworkComponent.hpp"
-#include <unistd.h>
 
 void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,float &wave)
 {
