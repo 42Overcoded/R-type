@@ -10,7 +10,7 @@
 
 #include "../jsonfile/include/JsonParser.hpp"
 #include "SFML/System/Clock.hpp"
-#include "game.hpp"
+#include "Game.hpp"
 #include "../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
 #include <SFML/Graphics.hpp>
@@ -20,13 +20,6 @@
 #include "../network_s/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
-
-enum Mode {
-    NONE,
-    LEVELS,
-    ENDLESS,
-    VERSUS
-};
 
 class gameEngine {
     public:

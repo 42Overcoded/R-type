@@ -15,7 +15,7 @@
 #include "SFML/System/Clock.hpp"
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "SFML/System/Sleep.hpp"
-#include "game.hpp"
+#include "Game.hpp"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <random>

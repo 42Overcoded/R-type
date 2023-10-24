@@ -52,7 +52,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     ../gameEngine/GameEngine.hpp
-    ../gameEngine/game.hpp
+    ../gameEngine/Game.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
     ../network/INetworkServer.hpp
@@ -66,7 +66,6 @@ set(INCLUDES
 set(EXEC_SRC
     Client.cpp
     ../ecs/Registry.cpp
-    ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     ../gameEngine/GameEngine.cpp
     ../network/network_c/NetworkSystem.cpp
