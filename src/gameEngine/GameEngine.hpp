@@ -23,7 +23,8 @@ enum Mode {
     NONE,
     LEVELS,
     ENDLESS,
-    VERSUS
+    VERSUS1,
+    VERSUS2
 };
 
 class gameEngine {
