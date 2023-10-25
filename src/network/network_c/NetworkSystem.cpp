@@ -85,15 +85,15 @@ void NetworkSystem::manageClientDenied(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
     SparseArray<Control> &controllArr           = reg.get_components<Control>();
 
     std::cout << "Client assign ID" << std::endl;
-    for (size_t i = 0; i < networkInArr.size(); i++)
+    for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkInArr[i] != std::nullopt && controllArr[i] != std::nullopt)
+        if (networkArr[i] != std::nullopt && controllArr[i] != std::nullopt)
         {
-            packet >> networkInArr[i]->clientId;
+            packet >> networkArr[i]->clientId;
         }
     }
 }
@@ -101,11 +101,11 @@ void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
 void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 {
     std::cout << "Client send ping" << std::endl;
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
 
-    for (size_t i = 0; i < networkInArr.size(); i++)
+    for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkInArr[i] != std::nullopt)
+        if (networkArr[i] != std::nullopt)
         {
         }
     }
@@ -114,11 +114,11 @@ void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 {
     std::cout << "Client add player" << std::endl;
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
 
-    for (size_t i = 0; i < networkInArr.size(); i++)
+    for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkInArr[i] != std::nullopt)
+        if (networkArr[i] != std::nullopt)
         {
         }
     }
@@ -127,11 +127,11 @@ void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet)
 {
     std::cout << "Client remove player" << std::endl;
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
 
-    for (size_t i = 0; i < networkInArr.size(); i++)
+    for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkInArr[i] != std::nullopt)
+        if (networkArr[i] != std::nullopt)
         {
         }
     }
@@ -140,27 +140,43 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet
 void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet)
 {
     std::cout << "Client create entity" << std::endl;
+    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
+
+    for (size_t i = 0; i < networkArr.size(); i++)
+    {
+        if (networkArr[i] != std::nullopt)
+        {
+            //TODO replace with true creator code
+            if (networkArr[i]->entityId != 0)
+                continue;
+            uint32_t entityId;
+
+            // packet >> entityId;
+            // networkArr[i]->entityId = entityId;
+            // std::cout << "create : id " << networkArr[i]->entityId << std::endl;
+        }
+    }
 }
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)
 {
     std::cout << "Client update entity" << std::endl;
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
     SparseArray<Position> &positionArr          = reg.get_components<Position>();
 
-    for (size_t i = 0; i < networkInArr.size(); i++)
+    for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkInArr[i] != std::nullopt && positionArr[i] != std::nullopt)
+        if (networkArr[i] != std::nullopt && positionArr[i] != std::nullopt)
         {
             uint32_t entityId;
 
             packet >> entityId;
-            if (networkInArr[i]->entityId != 0 && networkInArr[i]->entityId == entityId)
+            if (networkArr[i]->entityId != 0 && networkArr[i]->entityId == entityId)
             {
                 uint32_t x;
                 uint32_t y;
 
-                packet >> x >> y;
+                packet >> y >> x;
                 positionArr[i]->x = x;
                 positionArr[i]->y = y;
             }
@@ -171,11 +187,11 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
 void NetworkSystem::manageClientDestroyEntity(registry &reg, Packet<Flag> &packet)
 {
     std::cout << "Client destroy entity" << std::endl;
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
 
-    for (size_t i = 0; i < networkInArr.size(); i++)
+    for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkInArr[i] != std::nullopt)
+        if (networkArr[i] != std::nullopt)
         {
         }
     }
@@ -241,12 +257,12 @@ void NetworkSystem::manageServerGetPing(void)
 
 void NetworkSystem::manageServerUpdateControls(registry &reg)
 {
-    SparseArray<NetworkComponent> &networkInArr = reg.get_components<NetworkComponent>();
+    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
     SparseArray<Control> &controllArr           = reg.get_components<Control>();
 
-    for (size_t i = 0; i < networkInArr.size(); i++)
+    for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkInArr[i] != std::nullopt && controllArr[i] != std::nullopt)
+        if (networkArr[i] != std::nullopt && controllArr[i] != std::nullopt)
         {
             Packet<Flag> packet;
             packet.header.flag = Flag::ServerUpdateControls;
