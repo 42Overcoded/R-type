@@ -44,6 +44,7 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture background;
     sf::Texture menuButton;
     sf::Texture playButton;
+    sf::Texture blueBall;
     sf::Font font;
 
     if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
@@ -58,13 +59,15 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!tank.loadFromFile("./assets/tank.png"))
         exit(84);
-    if (!tankBullet.loadFromFile("./assets/enemyBullet.png"))
+    if (!tankBullet.loadFromFile("./assets/blueBall.png"))
         exit(84);
     if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
         exit(84);
     if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
         exit(84);
     if (!enemyBullet.loadFromFile("./assets/enemyBullet.png"))
+        exit(84);
+    if (!blueBall.loadFromFile("./assets/blueBall.png"))
         exit(84);
     if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))
         exit(84);
@@ -95,6 +98,7 @@ void SfmlSystem::load_texture(registry &r)
     textures["playTexture"] = playButton;
     textures["explosionTexture"] = explosion;
     textures["enemyBulletTexture"] = enemyBullet;
+    textures["blueBallTexture"] = blueBall;
     textures["enemyBlueBulletTexture"] = enemyBlueBullet;
     textures["enemyBossBulletTexture"] = enemyBoss;
     textures["tankBulletTexture"] = tankBullet;
