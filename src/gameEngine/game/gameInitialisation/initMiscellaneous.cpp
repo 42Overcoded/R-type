@@ -4,6 +4,7 @@
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
+#include <random>
 
 void gameEngine::init_beambar()
 {
@@ -289,7 +290,62 @@ void gameEngine::spawn_explosion(int i) {
     rect[explosion]->width = boomJson["explosion"]["rect"]["width"];
     rect[explosion]->height = boomJson["explosion"]["rect"]["height"];
     scale[explosion]->scale = boomJson["explosion"]["scale"];
-    _registry.kill_entity(entity_t(i));
+}
+
+void gameEngine::spawn_power_up(int i)
+{
+    int j = -1;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(0, 1080);
+
+    int random = distribution(gen);
+    if (random < 50) {
+        j = 0;
+    }
+    if (j == -1)
+        return;
+
+    std::ifstream file("configFiles/powerup.json");
+    if (!file.is_open())
+        exit(84);
+    nlohmann::json powerJson;
+    file >> powerJson;
+    file.close();
+
+    entity_t power = _registry.spawn_entity();
+    _registry.add_component<Position>(power, Position());
+    _registry.add_component<Sprite>(power, Sprite());
+    _registry.add_component<Drawable>(power, Drawable());
+    _registry.add_component<Tag>(power, Tag());
+    _registry.add_component<State>(power, State());
+    _registry.add_component<Clock>(power, Clock());
+    _registry.add_component<Texture>(power, Texture());
+    _registry.add_component<Speed>(power, Speed());
+    _registry.add_component<Hitbox>(power, Hitbox());
+
+    auto &state = _registry.get_components<State>();
+    auto &drawable = _registry.get_components<Drawable>();
+    auto &tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &position = _registry.get_components<Position>();
+    auto &texture = _registry.get_components<Texture>();
+    auto &rect = _registry.get_components<Rect>();
+    auto &scale = _registry.get_components<Scale>();
+    auto &speed = _registry.get_components<Speed>();
+    auto &hitbox = _registry.get_components<Hitbox>();
+
+    state[power]->state = 0;
+    drawable[power]->drawable = true;
+    tag[power]->groupTag = powerJson["powerup"][j]["groupTag"];
+    texture[power]->textureTag = powerJson["powerup"][j]["textureTag"];
+    position[power]->x = position[i]->x;
+    position[power]->y = position[i]->y;
+    hitbox[power]->width = powerJson["powerup"][j]["hitbox"]["width"];
+    hitbox[power]->height = powerJson["powerup"][j]["hitbox"]["height"];
+    tag[power]->tag = powerJson["powerup"][j]["tag"];
+    scale[power]->scale = powerJson["powerup"][j]["scale"];
+    speed[power]->speedx = powerJson["powerup"][j]["speed"];
 }
 
 void gameEngine::death_animation()
@@ -339,7 +395,9 @@ void gameEngine::death_animation()
                         text[j]->str = "Score : " + std::to_string(state[j]->state);
                     }
                 }
+                spawn_power_up(i);
                 spawn_explosion(i);
+                _registry.kill_entity(entity_t(i));
             }
         }
     }

@@ -25,7 +25,6 @@
 #include <cmath>
 #include <vector>
 
-
 void SfmlSystem::load_texture(registry &r)
 {
     sf::Texture bullet;
@@ -41,11 +40,14 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture enemyBlueBullet;
     sf::Texture enemyBoss;
     sf::Texture background;
+    sf::Texture shield;
     sf::Texture menuButton;
     sf::Texture playButton;
     sf::Texture button;
     sf::Font font;
 
+    if (!shield.loadFromFile("./assets/shield.png"))
+        exit(84);
     if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
         exit(84);
     if (!button.loadFromFile("./assets/button.png"))
@@ -78,6 +80,7 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
+    textures["shieldTexture"] = shield;
     textures["buttonTexture"] = button;
     textures["starshipTexture"] = starship;
     textures["beambarTexture"] = beambar;
@@ -88,14 +91,14 @@ void SfmlSystem::load_texture(registry &r)
     textures["enemyStarshipTexture"] = enemy;
     textures["backgroundTexture"] = background;
     textures["loadShootTexture"] = bullet;
-    fonts["scoreFont"] = font;
-    fonts["menuFont"] = font;
     textures["menuTexture"] = menuButton;
     textures["playTexture"] = playButton;
     textures["explosionTexture"] = explosion;
     textures["enemyBulletTexture"] = enemyBullet;
     textures["enemyBlueBulletTexture"] = enemyBlueBullet;
     textures["enemyBossBulletTexture"] = enemyBoss;
+    fonts["scoreFont"] = font;
+    fonts["menuFont"] = font;
 }
 
 void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
@@ -328,6 +331,25 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
     }
 }
 
+void SfmlSystem::set_color(registry &r)
+{
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
+    auto &health = r.get_components<Health>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &clock = r.get_components<Clock>();
+    auto &state = r.get_components<State>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &color = r.get_components<Color>();
+
+    for  (size_t i = 0; i < r._entity_number; i++) {
+        if (color[i] != std::nullopt) {
+            std::cout << "color" << std::endl;
+            sprite[i]->sprite.setColor(sf::Color(color[i]->r, color[i]->g, color[i]->b, color[i]->a));
+        }
+    }
+}
+
 void SfmlSystem::color_system(registry &r)
 {
     auto &tag = r.get_components<Tag>();
@@ -336,24 +358,44 @@ void SfmlSystem::color_system(registry &r)
     auto &sprite = r.get_components<Sprite>();
     auto &clock = r.get_components<Clock>();
     auto &state = r.get_components<State>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &color = r.get_components<Color>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
             continue;
         }
+        if (tag[i]->groupTag == "powerup" && drawable[i]->drawable == false) {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            for (size_t j = 0; j < r._entity_number; j++) {
+                if (tag[j] == std::nullopt)
+                    continue;
+                if (tag[j]->tag == "starship") {
+                    color[j]->r = 150;
+                    color[j]->g = 150;
+                    color[j]->b = 255;
+                    if (clock[i]->time.asSeconds() > 5) {
+                        color[j]->r = 255;
+                        color[j]->g = 255;
+                        color[j]->b = 255;
+                        r.kill_entity(entity_t(i));
+                    }
+                }
+            }
+        }
         if (tag[i]->tag == "starship" && state[i]->state == 1) {
             if (clock[i]->__time.asSeconds() > 0 && clock[i]->__time.asSeconds() < 0.5)
-                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+                color[i]->a = 128;
             if (clock[i]->__time.asSeconds() > 0.5 && clock[i]->__time.asSeconds() < 1)
-                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+                color[i]->a = 255;
             if (clock[i]->__time.asSeconds() > 1 && clock[i]->__time.asSeconds() < 1.5)
-                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+                color[i]->a = 128;
             if (clock[i]->__time.asSeconds() > 1.5 && clock[i]->__time.asSeconds() < 2)
-                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+                color[i]->a = 255;
             if (clock[i]->__time.asSeconds() > 2 && clock[i]->__time.asSeconds() < 2.5)
-                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 128));
+                color[i]->a = 128;
             if (clock[i]->__time.asSeconds() > 2.5) {
-                sprite[i]->sprite.setColor(sf::Color(255, 255, 255, 255));
+                color[i]->a = 255;
             }
         }
     }
@@ -370,6 +412,8 @@ void SfmlSystem::hitbox_system(registry &r)
     auto &enemy = r.get_components<Enemy>();
     auto &clock = r.get_components<Clock>();
     auto &enemyBall = r.get_components<EnemyBall>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &color = r.get_components<Color>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -385,13 +429,25 @@ void SfmlSystem::hitbox_system(registry &r)
         if (tag[i] == std::nullopt) {
             continue;
         }
+        if (tag[i]->groupTag == "powerup") {
+            for (size_t j = 0; j < r._entity_number; j++) {
+                if (tag[j] == std::nullopt || tag[i] == std::nullopt)
+                    continue;
+                if (tag[j]->tag == "starship") {
+                    if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
+                        drawable[i]->drawable = false;
+                    }
+                }
+            }
+        }
         if (enemy[i] != std::nullopt || enemyBall[i] != std::nullopt) {
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (tag[j] == std::nullopt || tag[i] == std::nullopt)
                     continue;
                 if (tag[j]->tag == "starship") {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height && state[j]->state == 0) {
-                        health[j]->health -= 1;
+                        if (color[j]->r == 255)
+                            health[j]->health -= 1;
                         health[i]->health -= 5;
                         position[j]->x = 100;
                         position[j]->y = 500;
