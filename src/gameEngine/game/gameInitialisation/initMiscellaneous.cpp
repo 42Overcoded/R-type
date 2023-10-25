@@ -306,6 +306,15 @@ void gameEngine::spawn_power_up(int i)
     if (random > 10 && random < 20) {
         j = 1;
     }
+    if (random > 20 && random < 30) {
+        j = 2;
+    }
+    if (random > 35 && random < 40) {
+        j = 3;
+    }
+    if (random > 40 && random < 50) {
+        j = 4;
+    }
     if (j == -1)
         return;
     std::ifstream file("configFiles/powerup.json");

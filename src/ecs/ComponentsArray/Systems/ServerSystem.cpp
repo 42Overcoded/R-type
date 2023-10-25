@@ -24,10 +24,23 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
     auto &sprite = r.get_components<Sprite>();
     auto &tag = r.get_components<Tag>();
     auto &enemy = r.get_components<Enemy>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &color = r.get_components<Color>();
+    auto &clock = r.get_components<Clock>();
+
+    int isFrozen = 0;
 
     for (size_t i = 0; i < r._entity_number; i++) {
+
         if (tag[i] == std::nullopt)
             continue;
+        if (tag[i]->tag == "ice" && drawable[i]->drawable == false) {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            isFrozen = 1;
+            if (clock[i]->time.asSeconds() > 5) {
+                r.kill_entity(entity_t(i));
+            }
+        }
         if (tag[i]->tag == "background") {
             if (position[i]->x <= -1920) {
                 position[i]->x = 1920;
@@ -70,6 +83,12 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
     }
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
+            continue;
+        }
+        if (enemy[i] != std::nullopt && isFrozen == 1) {
+            color[i]->r = 50;
+            color[i]->g = 50;
+            color[i]->b = 255;
             continue;
         }
         if (position[i] != std::nullopt && speed[i] != std::nullopt && sprite[i] != std::nullopt) {

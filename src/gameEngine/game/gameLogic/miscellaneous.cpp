@@ -70,7 +70,7 @@ void gameEngine::menu()
             }
             if (tag[i]->tag == "endlessbutton") {
                 if (click[i]->clicked == true) {
-                    wave = 10;
+                    wave = 20;
                     mode = ENDLESS;
                     scene = GAME;
                     drawable[i]->drawable = false;
@@ -170,6 +170,7 @@ void gameEngine::life_handler()
     auto &sprite = _registry.get_components<Sprite>();
     auto &control = _registry.get_components<Control>();
     auto &state = _registry.get_components<State>();
+    auto &drawable = _registry.get_components<Drawable>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (tag[i] == std::nullopt)
@@ -180,7 +181,9 @@ void gameEngine::life_handler()
                     continue;
                 if (tag[j]->tag == "starship" && control[j] != std::nullopt) {
                     if (health[j]->health <= state[i]->state + 1) {
-                        _registry.kill_entity(entity_t(i));
+                        drawable[i]->drawable = false;
+                    } else {
+                        drawable[i]->drawable = true;
                     }
                 }
             }

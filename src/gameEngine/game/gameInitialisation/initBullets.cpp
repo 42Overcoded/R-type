@@ -173,6 +173,16 @@ void gameEngine::spawn_bullet(int i, int j)
     file >> bulletJson;
     file.close();
 
+    auto &_tag = _registry.get_components<Tag>();
+    auto &_drawable = _registry.get_components<Drawable>();
+
+    for (size_t k = 0; k < _registry._entity_number; k++) {
+        if (_tag[k] == std::nullopt)
+            continue;
+        if (_tag[k]->tag == "ice" && _drawable[k]->drawable == false) {
+            return;
+        }
+    }
     entity_t bullet = _registry.spawn_entity();
 
     _registry.add_component<Speed>(bullet, Speed());
