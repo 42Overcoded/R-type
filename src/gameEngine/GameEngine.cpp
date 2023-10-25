@@ -138,6 +138,8 @@ void gameEngine::launch_game()
             menu();
         if (gameState.scene == GAME)
         {
+            if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
+                continue;
             for (size_t i = 0; i < _registry._entity_number; i++)
             {
                 if (tag[i] == std::nullopt)

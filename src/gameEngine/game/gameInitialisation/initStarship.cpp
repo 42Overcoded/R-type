@@ -136,7 +136,6 @@ void gameEngine::init_life(int i) {
     _registry.add_component<Rect>(life, Rect());
     _registry.add_component<State>(life, State());
 
-    
     auto &tag = _registry.get_components<Tag>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &position = _registry.get_components<Position>();

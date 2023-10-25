@@ -116,6 +116,7 @@ void NetworkSystem::manageOutputs(registry &reg)
     manageClientCreateEntity(reg);
     manageClientStartGame(reg);
     manageClientEndGame(reg);
+    // debugSpaceshipPosition(reg);
 }
 
 void NetworkSystem::manageClientAddPlayer(registry &reg)
@@ -133,7 +134,6 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
 
     for (unsigned int i = 0; i < network.size(); i++) {
         if (network[i] != std::nullopt && position[i] != std::nullopt) {
-            std::cout << "create : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
             if (network[i]->entityId != 0)
                 continue;
             network[i]->entityId = ++lastEntityId_;
@@ -201,6 +201,22 @@ void NetworkSystem::manageClientEndGame(registry &reg)
                 gameLauncher.isGameLaunched = false;
             }
             return;
+        }
+    }
+}
+
+void NetworkSystem::debugSpaceshipPosition(registry &reg)
+{
+    auto &network = reg.get_components<NetworkComponent>();
+    auto &position = reg.get_components<Position>();
+    auto &tag = reg.get_components<Tag>();
+
+    for (unsigned int i = 0; i < network.size(); i++) {
+        if (position[i] != std::nullopt && tag[i]->tag == "starship") {
+            // if (network[i]->entityId == 0)
+            //     continue;
+            // std::cout << "Spaceship " << network[i]->entityId << " : " << position[i]->x << " " << position[i]->y << std::endl;
+            std::cout << "Spaceship pos : " << position[i]->x << " " << position[i]->y << std::endl;
         }
     }
 }

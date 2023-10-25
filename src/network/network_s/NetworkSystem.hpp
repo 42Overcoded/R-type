@@ -41,6 +41,8 @@ private:
     void manageClientDestroyEntity(registry &reg);
     void manageClientStartGame(registry &reg);
     void manageClientEndGame(registry &reg);
+
+    void debugSpaceshipPosition(registry &reg);
 private:
 };
 
