@@ -30,8 +30,8 @@ enum Scene {
 };
 
 struct GameStateComponent {
-    Scene scene;
-    Mode mode;
+    Scene scene = MENU;
+    Mode mode = NONE;
 };
 
 #endif /* !GAME_HPP_ */

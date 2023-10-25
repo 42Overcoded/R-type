@@ -71,7 +71,7 @@ class SfmlSystem {
          *
          * @param r
          */
-        void control_system(registry &r, sf::RenderWindow &window, Scene &scene);
+        void control_system(registry &r, sf::RenderWindow &window);
         /**
          * @brief calculate the velocity of the entities
          *

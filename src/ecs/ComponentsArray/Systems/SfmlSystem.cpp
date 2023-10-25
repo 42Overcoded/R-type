@@ -254,7 +254,7 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
     }
 }
 
-void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &scene)
+void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
 {
     auto &control = r.get_components<Control>();
     auto &position = r.get_components<Position>();
@@ -266,6 +266,16 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
     auto &hitbox = r.get_components<Hitbox>();
     auto &tag = r.get_components<Tag>();
     auto &clock = r.get_components<Clock>();
+    auto &gameStateArray = r.get_components<GameStateComponent>();
+    size_t gameStateIndex = 0;
+
+    for (gameStateIndex = 0; gameStateIndex < r._entity_number; gameStateIndex++) {
+        if (gameStateArray[gameStateIndex] != std::nullopt)
+            break;
+    }
+    if (gameStateArray[gameStateIndex] == std::nullopt)
+        throw std::runtime_error("No game state component found");
+    GameStateComponent &gameState = *gameStateArray[gameStateIndex];
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (control[i] != std::nullopt) {
@@ -301,13 +311,13 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
                 for (size_t j = 0; j < r._entity_number; j++) {
                     if (tag[j] == std::nullopt)
                         continue;
-                    if (tag[j]->tag == "onlinebutton" && scene == MENU) {
+                    if (tag[j]->tag == "onlinebutton" && gameState.scene == MENU) {
                         click[i]->clicked = true;
                         clock[j]->clock.restart();
                         return;
                     }
                     if (tag[j]->tag == "onlinebutton") {
-                        if (clock[j]->time.asSeconds() < 0.2 && (scene != MENU)) {
+                        if (clock[j]->time.asSeconds() < 0.2 && (gameState.scene != MENU)) {
                             return;
                         } else {
                             click[i]->clicked = true;

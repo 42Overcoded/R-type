@@ -177,6 +177,12 @@ class gameEngine {
          * 
          */
         void clock_time();
+
+        /**
+         * @brief get the game state object
+         * @return GameStateComponent reference
+         */
+        GameStateComponent &get_game_state();
         /**
          * @brief handle the life of the starship
          * 
@@ -187,8 +193,6 @@ class gameEngine {
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
     protected:
     private:
-        Scene scene;
-        Mode mode;
         JsonParser *parsed;
         int id;
         ClientType _type;

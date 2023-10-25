@@ -51,6 +51,8 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4)
 
 void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
 {
+    GameStateComponent &gameState = get_game_state();
+
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
@@ -84,6 +86,6 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
         }
     }
     if (wave == 5 && is_enemy == 0) {
-        scene = END;
+        gameState.scene = END;
     }
 }
