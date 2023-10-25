@@ -139,7 +139,8 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    // std::cout << "Send packet" << std::endl;
+                    std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
+                              << std::endl;
                     if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
                         packetsOutQueue_.Front().body.size() > 0)
                     {
@@ -200,7 +201,7 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    // std::cout << "Receive packet" << std::endl;
+                    std::cout << "Get Packet: size = " << recvBuffer_.header.size << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
                         if (recvBuffer_.header.size > MaxPacketSize) {
@@ -213,7 +214,7 @@ protected:
                         {
                             socket_.connect(remoteEndpoint_);
                         }
-                        recvBuffer_.body.resize(recvBuffer_.header.size);
+                        recvBuffer_.body.resize(recvBuffer_.header.size - sizeof(PacketHeader<T>));
                         GetBody();
                     }
                     else

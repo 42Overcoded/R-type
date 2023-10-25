@@ -248,11 +248,14 @@ void NetworkSystem::manageServerUpdateControls(registry &reg)
     {
         if (networkInArr[i] != std::nullopt && controllArr[i] != std::nullopt)
         {
-            std::cout << "Send controls to server" << std::endl;
             Packet<Flag> packet;
             packet.header.flag = Flag::ServerUpdateControls;
-            packet << controllArr[i]->up << controllArr[i]->down << controllArr[i]->left
-                   << controllArr[i]->right << controllArr[i]->shoot;
+            packet << controllArr[i]->up;
+            packet << controllArr[i]->down;
+            packet << controllArr[i]->left;
+            packet << controllArr[i]->right;
+            packet << controllArr[i]->shoot;
+            std::cout << "Send controls to server : " << controllArr[i]->up << controllArr[i]->down << controllArr[i]->left << controllArr[i]->right << controllArr[i]->shoot << std::endl;
             SendToServer(packet);
             return;
         }

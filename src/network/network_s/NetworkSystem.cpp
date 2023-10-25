@@ -61,10 +61,17 @@ void NetworkSystem::manageServerUpdateControls(
     auto &network = reg.get_components<NetworkComponent>();
     auto &controls = reg.get_components<Control>();
 
-    std::cout << "Update controls from client " << client->GetId() << std::endl;
     for (unsigned int i = 0; i < network.size(); i++) {
         if (network[i]->clientId == client->GetId() && controls[i] != std::nullopt) {
-            packet >> controls[i]->up >> controls[i]->down >> controls[i]->left >> controls[i]->right;
+            bool up, down, left, right, shoot;
+
+            packet >> shoot >> right >> left >> down >> up;
+            controls[i]->up = up;
+            controls[i]->down = down;
+            controls[i]->left = left;
+            controls[i]->right = right;
+            controls[i]->shoot = shoot;
+            std::cout << "Update controls from client " << client->GetId() << " : " << up << down << left << right << shoot << std::endl;
         }
     }
 }
@@ -150,7 +157,7 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg)
                 continue;
             Packet<Flag> packet;
             packet.header.flag = Flag::ClientUpdateEntity;
-            packet << (uint32_t)network[i]->entityId << (uint32_t)position[i]->x << (uint32_t)position[i]->y;
+            packet << (uint32_t)network[i]->entityId << (uint32_t)position[i]->y << (uint32_t)position[i]->x;
             std::cout << "update : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
             SendToAllClients(packet);
         }
