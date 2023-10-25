@@ -19,7 +19,8 @@ enum Scene {
     OFFLINE,
     LOBBY,
     GAME,
-    END
+    END,
+    GENERATE
 };
 
 #endif /* !GAME_HPP_ */

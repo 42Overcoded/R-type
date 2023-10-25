@@ -70,6 +70,29 @@
             }
         },
         {
+            "drawable": false,
+            "hitbox": {
+            "width": 500,
+            "height": 125
+            },
+            "grouptag": "offline",
+            "tag": "generatebutton",
+            "texttag": "generatetext",
+            "positiontext": {
+                "x": 1000,
+                "y": 600
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Generate",
+            "textscale": 1.5,
+            "scale": 1,
+            "position": {
+                "x": 1000,
+                "y": 600
+            }
+        },
+        {
             "grouptag": "offline",
             "drawable": false,
             "hitbox": {
@@ -207,6 +230,98 @@
                 "y": 840
             }
         },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "backbuttongenerate",
+            "texttag": "backbuttongeneratetext",
+            "positiontext": {
+                "x": 890,
+                "y": 860
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Back",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 840,
+                "y": 840
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "generatediffmoins",
+            "texttag": "generatediffmoinstext",
+            "positiontext": {
+                "x": 500,
+                "y": 220
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Difficulty -",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 450,
+                "y": 200
+            }
+        }, 
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "generatediffplus",
+            "texttag": "generatediffplustext",
+            "positiontext": {
+                "x": 1000,
+                "y": 220
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Difficulty +",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 950,
+                "y": 200
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "difficulty",
+            "texttag": "difficultytext",
+            "positiontext": {
+                "x": 750,
+                "y": 220
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "5",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 700,
+                "y": 200
+            }
+        }, 
         {
             "grouptag": "offline",
             "drawable": false,

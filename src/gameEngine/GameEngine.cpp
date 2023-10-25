@@ -102,14 +102,13 @@ void gameEngine::launch_game() {
     float wave = 0;
     id = 0;
     mode = NONE;
-    for (int i = 0; i < 12; i ++)
-        init_button(i);
+    init_button(-1);
     while (true)
     {
         auto &health = _registry.get_components<Health>();
         auto &tag = _registry.get_components<Tag>();
         int alive = 0;
-        if (scene == MENU || scene == OFFLINE || scene == ONLINE ||scene == END)
+        if (scene == MENU || scene == OFFLINE || scene == ONLINE ||scene == END || scene == GENERATE)
             menu();
         if (scene == GAME) {
             for (size_t i = 0; i < _registry._entity_number; i++) {

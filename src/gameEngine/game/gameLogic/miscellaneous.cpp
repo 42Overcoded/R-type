@@ -1,9 +1,11 @@
 #include "../../GameEngine.hpp"
+#include <cstddef>
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
 #include <random>
+#include <string>
 
 
 std::vector<Speed> Mv_to_speed(std::vector<MovementVector> movementVector)
@@ -34,6 +36,51 @@ void gameEngine::menu()
             continue;
         if (tag[i]->tag == "onlinebutton") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
+        }
+        if (scene == GENERATE) {
+            if (tag[i]->tag == "backbuttongenerate") {
+                if (click[i]->clicked == true) {
+                    scene = OFFLINE;
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
+                            continue;
+                        if (tag[j]->groupTag == "offline")
+                            drawable[j]->drawable = true;
+                        if (tag[j]->groupTag == "generate")
+                            drawable[j]->drawable = false;
+                    }
+                }
+            }
+            if (tag[i]->tag == "generatediffplus") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "difficultytext") {
+                            int diff = std::stoi(text[j]->str);
+                            if (diff < 10) {
+                                diff++;
+                                text[j]->str = std::to_string(diff);
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "generatediffminus") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "difficultytext") {
+                            int diff = std::stoi(text[j]->str);
+                            if (diff > 1) {
+                                diff--;
+                                text[j]->str = std::to_string(diff);
+                            }
+                        }
+                    }
+                }
+            }
+        
         }
         if (scene == OFFLINE) {
             if (tag[i]->groupTag == "offline") {
@@ -80,6 +127,21 @@ void gameEngine::menu()
                             drawable[j]->drawable = false;
                     }
                     init_game();
+                }
+            }
+            if (tag[i]->tag == "generatebutton") {
+                if (click[i]->clicked == true) {
+                    scene = GENERATE;
+                    click[i]->clicked = false;
+                    drawable[i]->drawable = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
+                            continue;
+                        if (tag[j]->groupTag == "offline")
+                            drawable[j]->drawable = false;
+                        if (tag[j]->groupTag == "generate")
+                            drawable[j]->drawable = true;
+                    }
                 }
             }
         }
