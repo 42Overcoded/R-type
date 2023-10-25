@@ -157,7 +157,7 @@ void gameEngine::shoot_enemy() {
                     continue;
                 }
                 clock[i]->_clock.restart();
-                spawn_bullet(i, 3);
+                spawn_bullet(i, 4);
             }
         }
         if (tag[i]->tag == "enemyBoss") {

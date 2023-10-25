@@ -40,6 +40,7 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture enemyBlueBullet;
     sf::Texture enemyBoss;
     sf::Texture tank;
+    sf::Texture tankBullet;
     sf::Texture background;
     sf::Texture menuButton;
     sf::Texture playButton;
@@ -56,6 +57,8 @@ void SfmlSystem::load_texture(registry &r)
     if (!enemyBoss.loadFromFile("./assets/enemyBoss.png"))
         exit(84);
     if (!tank.loadFromFile("./assets/tank.png"))
+        exit(84);
+    if (!tankBullet.loadFromFile("./assets/enemyBullet.png"))
         exit(84);
     if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
         exit(84);
@@ -94,6 +97,7 @@ void SfmlSystem::load_texture(registry &r)
     textures["enemyBulletTexture"] = enemyBullet;
     textures["enemyBlueBulletTexture"] = enemyBlueBullet;
     textures["enemyBossBulletTexture"] = enemyBoss;
+    textures["tankBulletTexture"] = tankBullet;
 }
 
 void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)

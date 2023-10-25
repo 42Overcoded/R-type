@@ -59,6 +59,18 @@
             "hitboxheight": 66,
             "scale": 3,
             "speed": 0.4
+        },
+        {
+            "tag": "tankBullet",
+            "textureTag": "tankBulletTexture",
+            "position": {
+                "x": 0,
+                "y": -150
+            },
+            "hitboxwidth": 24,
+            "hitboxheight": 24,
+            "scale": 2,
+            "speed": -0.5
         }
     ]
 }

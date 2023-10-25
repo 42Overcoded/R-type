@@ -223,10 +223,10 @@
             "rect": {
                 "left": 0,
                 "top": 0,
-                "width": 40,
-                "height": 48
+                "width": 152,
+                "height": 120
             },
-            "scale": 2.5,
+            "scale": 1,
             "position": {
                 "x": 1950,
                 "y": 100
