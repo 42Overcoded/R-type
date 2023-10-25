@@ -53,7 +53,7 @@ void gameEngine::spawn_wave(sf::Time &elapsed, int &wave)
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
-        spawn_mobs(0,0,0,0, 1);
+        spawn_mobs(0,0,0,0, 3);
     }
     // if (elapsed.asSeconds() > 15 && wave == 1) {
     //     wave = 2;

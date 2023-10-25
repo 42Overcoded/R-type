@@ -201,7 +201,7 @@
         {
             "score": 69,
             "tag": "tank",
-            "textureTag": "enemyStarshipTexture",
+            "textureTag": "tankTexture",
             "pattern_index": 0,
             "pattern_type": 0,
             "pattern_length": 0,
@@ -223,10 +223,10 @@
             "rect": {
                 "left": 0,
                 "top": 0,
-                "width": 32,
-                "height": 32
+                "width": 291,
+                "height": 173
             },
-            "scale": 3,
+            "scale": 0.5,
             "position": {
                 "x": 1950,
                 "y": 100
