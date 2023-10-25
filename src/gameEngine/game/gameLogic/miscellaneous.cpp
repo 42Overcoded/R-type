@@ -44,7 +44,7 @@ void gameEngine::menu()
             break;
     }
     if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
-        throw std::runtime_error("No game state component found");
+        throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
     if (gameLauncher.isGameLaunched == true) {
@@ -141,6 +141,7 @@ void gameEngine::menu()
                 }
             }
             if (tag[i]->tag == "endlessbuttononline" && click[i]->clicked == true) {
+                std::cout << "endless" << std::endl;
                 gameState.mode = ENDLESS;
                 gameLauncher.isRequestingGame = true;
             }

@@ -193,7 +193,7 @@ void NetworkSystem::manageClientStartGame(registry &reg, Packet<Flag> &packet)
             break;
     }
     if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
-        throw std::runtime_error("No game state component found");
+        throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
     for (size_t i = 0; i < reg._entity_number; i++)
@@ -270,7 +270,7 @@ void NetworkSystem::manageServerStartGame(registry &reg)
             break;
     }
     if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
-        throw std::runtime_error("No game state component found");
+        throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
     if (gameLauncher.isWaitingForServer || !gameLauncher.isRequestingGame)
@@ -279,7 +279,7 @@ void NetworkSystem::manageServerStartGame(registry &reg)
     {
         if (gameStateArr[i] != std::nullopt)
         {
-            if (gameStateArr[i]->scene == Scene::GAME) {
+            if (gameStateArr[i]->scene == Scene::ONLINE) {
                 std::cout << "Send start game to server" << std::endl;
                 Packet<Flag> packet;
 

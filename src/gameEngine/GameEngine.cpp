@@ -138,7 +138,6 @@ void gameEngine::launch_game()
             menu();
         if (gameState.scene == GAME)
         {
-            std::cout << "GAME" << std::endl;
             for (size_t i = 0; i < _registry._entity_number; i++)
             {
                 if (tag[i] == std::nullopt)
