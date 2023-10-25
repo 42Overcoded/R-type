@@ -96,6 +96,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<NetworkComponent>();
     _registry.register_component<isClick>();
     _registry.register_component<GameStateComponent>();
+    _registry.register_component<GameLauncher>();
 };
 
 void gameEngine::launch_game()
@@ -117,6 +118,8 @@ void gameEngine::launch_game()
     entity_t gameManagerEntity = _registry.spawn_entity();
     _registry.add_component<GameStateComponent>(
         gameManagerEntity, GameStateComponent{Scene::MENU, Mode::NONE});
+    _registry.add_component<GameLauncher>(
+    gameManagerEntity, GameLauncher{});
     for (int i = 0; i < 12; i++)
         init_button(i);
     if (_type == SERVER)
@@ -193,10 +196,16 @@ void gameEngine::launch_game()
             _system.draw_system(_registry, _window);
             _window.display();
         }
-        if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
-        {
-            networkClock.restart();
-            _networkSystem.Update(_registry);
+        if (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE)) {
+            if (_networkSystem == nullptr)
+                _networkSystem = std::make_unique<Network::NetworkSystem>(port_, ip_);
+            if (_networkSystem != nullptr) {
+                if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
+                {
+                    networkClock.restart();
+                    _networkSystem->Update(_registry);
+                }
+            }
         }
     }
 }

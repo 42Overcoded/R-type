@@ -35,7 +35,7 @@ const uint32_t DefaultPort = 4242;
 const std::string DefaultIp = "127.0.0.1";
 const uint32_t MaxPacketsProcessed = 10;
 const uint32_t MaxClients = 4;
-const uint32_t NetworkRefreshRate = 60;
+const uint32_t NetworkRefreshRate = 1;
 const uint32_t MaxPacketSize = 2042;
 };
 

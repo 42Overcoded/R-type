@@ -47,7 +47,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
-    Server.hpp
     ../gameEngine/GameEngine.hpp
     ../ecs/Registry.hpp
     ../ecs/ComponentsArray/SparseArray.hpp

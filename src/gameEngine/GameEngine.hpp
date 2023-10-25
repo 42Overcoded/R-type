@@ -20,10 +20,11 @@
 #include "../network_s/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
+#include <memory>
 
 class gameEngine {
     public:
-        gameEngine(registry &registry, ClientType type, unsigned int serverPort, std::string serverIp) : _registry(registry), _type(type), _networkSystem(serverPort, serverIp) {}
+        gameEngine(registry &registry, ClientType type, unsigned int serverPort, std::string serverIp) : _registry(registry), _type(type), port_(serverPort), ip_(serverIp)  {}
         ~gameEngine() = default;
         /**
          * @brief register all component to the game
@@ -201,8 +202,10 @@ class gameEngine {
         sf::Clock networkClock;
         sf::RenderWindow _window;
         SfmlSystem _system;
-        Network::NetworkSystem _networkSystem;
+        std::unique_ptr<Network::NetworkSystem> _networkSystem;
         registry _registry;
+        unsigned int port_;
+        std::string ip_;
 };
 
 #endif /* !GAMEENGINE_HPP_ */

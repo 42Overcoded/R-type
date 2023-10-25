@@ -124,8 +124,8 @@ That allow it to be lightweight and highly efficient.
 The following commands are available in the GTP protocol.
 
 ```txt
-| Command | Description          |
-| ------- | --------------------   |
+| Command | Description           |
+| ------- | --------------------  |
 | 0x00    | ServerGetPing         |
 | 0x01    | ServerConnect         |
 | 0x02    | ServerUpdateControls  |

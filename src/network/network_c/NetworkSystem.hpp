@@ -29,6 +29,7 @@ private:
     void managePacketIn(registry &reg, Packet<Flag> &packet);
 
     void manageClientAccepted(registry &reg, Packet<Flag> &packet);
+    void manageClientDenied(registry &reg, Packet<Flag> &packet);
     void manageClientAssignID(registry &reg, Packet<Flag> &packet);
     void manageClientSendPing(registry &reg, Packet<Flag> &packet);
     void manageClientAddPlayer(registry &reg, Packet<Flag> &packet);
@@ -48,7 +49,7 @@ private:
     void manageServerStartGame(registry &reg);
 
 private:
-    std::uint32_t clientId_;
+    std::uint32_t clientId_ = 0;
 };
 };  // namespace Nerwork
 

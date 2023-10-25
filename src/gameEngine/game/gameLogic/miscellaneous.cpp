@@ -36,6 +36,16 @@ void gameEngine::menu()
     auto &drawable = _registry.get_components<Drawable>();
     auto &click = _registry.get_components<isClick>();
     GameStateComponent &gameState = get_game_state();
+    auto &gameLauncherArray = _registry.get_components<GameLauncher>();
+    size_t gameLauncherIndex = 0;
+
+    for (gameLauncherIndex = 0; gameLauncherIndex < _registry._entity_number; gameLauncherIndex++) {
+        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+            break;
+    }
+    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+        throw std::runtime_error("No game state component found");
+    GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
     for (size_t i = 0; i < tag.size(); i++) {
         if (tag[i] == std::nullopt)
@@ -115,6 +125,54 @@ void gameEngine::menu()
                     if (tag[j]->groupTag == "mainMenu")
                         drawable[j]->drawable = true;
                 }
+            }
+            if (tag[i]->tag == "endlessbuttononline" && click[i]->clicked == true) {
+                gameState.mode = ENDLESS;
+                gameLauncher.isGameLaunched = true;
+                drawable[i]->drawable = false;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->groupTag == "online")
+                        drawable[j]->drawable = false;
+                }
+                init_game();
+            }
+            if (tag[i]->tag == "adventurebuttononline" && click[i]->clicked == true) {
+                gameState.mode = LEVELS;
+                gameLauncher.isGameLaunched = true;
+                drawable[i]->drawable = false;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->groupTag == "online")
+                        drawable[j]->drawable = false;
+                }
+                init_game();
+            }
+            if (tag[i]->tag == "1v1buttononline" && click[i]->clicked == true) {
+                gameState.mode = VERSUS;
+                gameLauncher.isGameLaunched = true;
+                drawable[i]->drawable = false;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->groupTag == "online")
+                        drawable[j]->drawable = false;
+                }
+                init_game();
+            }
+            if (tag[i]->tag == "2v2buttononline" && click[i]->clicked == true) {
+                gameState.mode = VERSUS;
+                gameLauncher.isGameLaunched = true;
+                drawable[i]->drawable = false;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->groupTag == "online")
+                        drawable[j]->drawable = false;
+                }
+                init_game();
             }
         }
         if (gameState.scene == MENU) {
