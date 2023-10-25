@@ -222,8 +222,9 @@ struct Hitbox {
 };
 
 struct GameLauncher {
-    bool isGameLaunched = false;
+    bool isRequestingGame = false;
     bool isWaitingForServer = false;
+    bool isGameLaunched = false;
 };
 
 #endif /* !COMPONENTS_HPP_ */

@@ -138,6 +138,7 @@ void gameEngine::launch_game()
             menu();
         if (gameState.scene == GAME)
         {
+            std::cout << "GAME" << std::endl;
             for (size_t i = 0; i < _registry._entity_number; i++)
             {
                 if (tag[i] == std::nullopt)
@@ -196,8 +197,8 @@ void gameEngine::launch_game()
             _system.draw_system(_registry, _window);
             _window.display();
         }
-        if (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE)) {
-            if (_networkSystem == nullptr)
+        if (_type == SERVER || (_type == CLIENT && (gameState.scene == ONLINE || gameState.scene == GAME))) {
+            if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE)))
                 _networkSystem = std::make_unique<Network::NetworkSystem>(port_, ip_);
             if (_networkSystem != nullptr) {
                 if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
@@ -206,6 +207,9 @@ void gameEngine::launch_game()
                     _networkSystem->Update(_registry);
                 }
             }
+        }
+        if ((gameState.scene == MENU || gameState.scene == OFFLINE) && _networkSystem != nullptr) {
+            _networkSystem.reset();
         }
     }
 }

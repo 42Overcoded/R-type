@@ -200,10 +200,8 @@ void NetworkSystem::manageClientStartGame(registry &reg, Packet<Flag> &packet)
     {
         if (gameStateArr[i] != std::nullopt)
         {
-            gameStateArr[i]->scene = Scene::GAME;
             packet >> gameStateArr[i]->mode;
-            gameLauncher.isGameLaunched = false;
-            gameLauncher.isWaitingForServer = false;
+            gameLauncher.isGameLaunched = true;
         }
     }
 }
@@ -256,6 +254,7 @@ void NetworkSystem::manageServerUpdateControls(registry &reg)
             packet << controllArr[i]->up << controllArr[i]->down << controllArr[i]->left
                    << controllArr[i]->right << controllArr[i]->shoot;
             SendToServer(packet);
+            return;
         }
     }
 }
@@ -274,7 +273,7 @@ void NetworkSystem::manageServerStartGame(registry &reg)
         throw std::runtime_error("No game state component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
-    if (gameLauncher.isWaitingForServer || !gameLauncher.isGameLaunched)
+    if (gameLauncher.isWaitingForServer || !gameLauncher.isRequestingGame)
         return;
     for (size_t i = 0; i < reg._entity_number; i++)
     {
