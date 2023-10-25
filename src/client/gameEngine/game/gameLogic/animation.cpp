@@ -71,6 +71,17 @@ void gameEngine::animate_enemy()
                 clock[i]->clock.restart();
             }
         }
+        if (tag[i]->tag == "tank") {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            if (clock[i]->time.asSeconds() > 1) {
+                state[i]->state += 1;
+                if (state[i]->state == 4) {
+                    state[i]->state = 0;
+                }
+                rect[i]->top = (rect[i]->height*state[i]->state);
+                clock[i]->clock.restart();
+            }
+        }
         if (tag[i]->tag == "enemyBossBullet") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
             if (clock[i]->time.asSeconds() > 0.1) {
