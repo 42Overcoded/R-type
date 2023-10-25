@@ -39,6 +39,15 @@ void gameEngine::menu()
             if (tag[i]->groupTag == "offline") {
                 drawable[i]->drawable = true;
             }
+            if (tag[i]->tag == "optionbuttonoff" && click[i]->clicked == true) {
+                scene = OPTIONOFFLINE;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->groupTag == "offline")
+                        drawable[j]->drawable = false;
+                }
+            }
             if (tag[i]->tag == "backbuttonoffline" && click[i]->clicked == true) {
                 scene = MENU;
                 click[i]->clicked = false;
@@ -93,6 +102,15 @@ void gameEngine::menu()
                         drawable[i]->drawable = true;
                 } else if (id == 0)
                     drawable[i]->drawable = true;
+            }
+            if (tag[i]->tag == "optionbutton" && click[i]->clicked == true) {
+                scene = OPTIONONLINE;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->groupTag == "online")
+                        drawable[j]->drawable = false;
+                }
             }
             if (tag[i]->tag == "backbuttononline" && click[i]->clicked == true) {
                 scene = MENU;

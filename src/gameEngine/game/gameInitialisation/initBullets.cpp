@@ -195,7 +195,9 @@ void gameEngine::spawn_bullet(int i, int j)
     _registry.add_component<Texture>(bullet, Texture());
     _registry.add_component<Scale>(bullet, Scale());
     _registry.add_component<SearchingHead>(bullet, SearchingHead());
+    _registry.add_component<Color>(bullet, Color());
 
+    auto &color = _registry.get_components<Color>();
     auto &tag = _registry.get_components<Tag>();
     auto &speed = _registry.get_components<Speed>();
     auto &sprite = _registry.get_components<Sprite>();
@@ -207,6 +209,11 @@ void gameEngine::spawn_bullet(int i, int j)
     auto &searchingHead = _registry.get_components<SearchingHead>();
 
     drawable[bullet]->drawable = true;
+    color[bullet]->r = 255;
+    color[bullet]->g = 255;
+    color[bullet]->b = 255;
+    color[bullet]->a = 255;
+    tag[bullet]->groupTag = bulletJson["bullet"][j]["groupTag"];
     position[bullet]->x = position[i]->x;
     position[bullet]->y = position[i]->y;
     tag[bullet]->tag = bulletJson["bullet"][j]["tag"];

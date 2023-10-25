@@ -103,7 +103,7 @@ void gameEngine::launch_game() {
     wave = 0;
     id = 0;
     mode = NONE;
-    for (int i = 0; i < 12; i ++)
+    for (int i = 0; i < 15; i ++)
         init_button(i);
     while (true)
     {

@@ -233,6 +233,7 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
             clock[i]->time = clock[i]->clock.getElapsedTime();
             isFrozen = 1;
             if (clock[i]->time.asSeconds() > 5) {
+                std::cout << "KILLED";
                 r.kill_entity(entity_t(i));
             }
         }
@@ -350,6 +351,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
         if (click[i] != std::nullopt) {
             sf::Vector2i mousePos = sf::Mouse::getPosition(_window);
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePos.x > position[i]->x && mousePos.x < position[i]->x + scale[i]->scale * hitbox[i]->width && mousePos.y > position[i]->y && mousePos.y < position[i]->y + scale[i]->scale * hitbox[i]->height) {
+                std::cout << "1" << std::endl;
                 for (size_t j = 0; j < r._entity_number; j++) {
                     if (tag[j] == std::nullopt)
                         continue;
@@ -363,6 +365,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
                             return;
                         } else {
                             click[i]->clicked = true;
+                            clock[j]->clock.restart();
                         }
                     }
                 }
@@ -475,9 +478,11 @@ void SfmlSystem::hitbox_system(registry &r)
                 if (tag[j]->tag == "starship") {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
                         drawable[i]->drawable = false;
+                        clock[i]->clock.restart();
                         if (tag[i]->tag == "lifeBoost") {
                             if (health[j]->health < 4)
                                 health[j]->health += 1;
+                            r.kill_entity(entity_t(i));
                         }
                         if (tag[i]->tag == "bombBoost") {
                             for (size_t k = 0; k < r._entity_number; k++) {

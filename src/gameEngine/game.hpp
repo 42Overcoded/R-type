@@ -19,6 +19,8 @@ enum Scene {
     OFFLINE,
     LOBBY,
     ONLINEGAME,
+    OPTIONONLINE,
+    OPTIONOFFLINE,
     GAME,
     END
 };
