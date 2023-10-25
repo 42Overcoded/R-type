@@ -43,9 +43,12 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture shield;
     sf::Texture menuButton;
     sf::Texture playButton;
+    sf::Texture shootBoost;
     sf::Texture button;
     sf::Font font;
 
+    if (!shootBoost.loadFromFile("./assets/star.png"))
+        exit(84);
     if (!shield.loadFromFile("./assets/shield.png"))
         exit(84);
     if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
@@ -80,6 +83,7 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
+    textures["shootBoostTexture"] = shootBoost;
     textures["shieldTexture"] = shield;
     textures["buttonTexture"] = button;
     textures["starshipTexture"] = starship;
@@ -365,7 +369,7 @@ void SfmlSystem::color_system(registry &r)
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (tag[i]->groupTag == "powerup" && drawable[i]->drawable == false) {
+        if (tag[i]->tag == "shield" && drawable[i]->drawable == false) {
             clock[i]->time = clock[i]->clock.getElapsedTime();
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (tag[j] == std::nullopt)
@@ -374,7 +378,7 @@ void SfmlSystem::color_system(registry &r)
                     color[j]->r = 150;
                     color[j]->g = 150;
                     color[j]->b = 255;
-                    if (clock[i]->time.asSeconds() > 5) {
+                    if (clock[i]->time.asSeconds() > 10) {
                         color[j]->r = 255;
                         color[j]->g = 255;
                         color[j]->b = 255;

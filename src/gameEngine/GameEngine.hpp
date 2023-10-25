@@ -189,6 +189,7 @@ class gameEngine {
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
     protected:
     private:
+        float wave;
         Scene scene;
         Mode mode;
         JsonParser *parsed;

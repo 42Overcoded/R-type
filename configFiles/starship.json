@@ -111,6 +111,7 @@
     },
     "bullet": {
         "speed": 2,
+        "speedy": 0.5,
         "scale": 3,
         "tag": "bullet",
         "textureTag": "loadShootTexture",

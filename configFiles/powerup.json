@@ -10,6 +10,17 @@
                 "width": 64,
                 "height": 64
             }
+        },
+        {
+            "tag": "shootBoost",
+            "textureTag": "shootBoostTexture",
+            "scale": 1,
+            "speed": -0.3,
+            "groupTag": "powerup",
+            "hitbox": {
+                "width": 64,
+                "height": 64
+            }
         }
     ]
 }

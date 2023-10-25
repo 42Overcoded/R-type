@@ -13,73 +13,101 @@ void gameEngine::spawn_ally_bullet(int i)
     nlohmann::json starshipJson;
     file >> starshipJson;
     file.close();
-
-    entity_t bullet = _registry.spawn_entity();
-    _registry.add_component<Speed>(bullet, Speed());
-    _registry.add_component<Tag>(bullet, Tag());
-    _registry.add_component<Sprite>(bullet, Sprite());
-    _registry.add_component<Drawable>(bullet, Drawable());
-    _registry.add_component<Hitbox>(bullet, Hitbox());
-    _registry.add_component<Position>(bullet, Position());
-    _registry.add_component<Rect>(bullet, Rect());
-    _registry.add_component<Texture>(bullet, Texture());
-    _registry.add_component<Scale>(bullet, Scale());
-    _registry.add_component<State>(bullet, State());
-
-    auto &tag = _registry.get_components<Tag>();
-    auto &speed = _registry.get_components<Speed>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &hitbox = _registry.get_components<Hitbox>();
-    auto &state = _registry.get_components<State>();
-    auto &_health = _registry.get_components<Health>();
-    auto &rect = _registry.get_components<Rect>();
-    auto &_drawable = _registry.get_components<Drawable>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &control = _registry.get_components<Control>();
     
-    _drawable[bullet]->drawable = true;
-    tag[bullet]->tag = starshipJson["bullet"]["tag"];
-    texture[bullet]->textureTag = starshipJson["bullet"]["textureTag"];
-    speed[bullet]->speedx = starshipJson["bullet"]["speed"];
-    scale[bullet]->scale = starshipJson["bullet"]["scale"];
-    for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+    auto &_tag = _registry.get_components<Tag>();
+    auto &_drawable = _registry.get_components<Drawable>();
+    int j = 1;
+    for (size_t k = 0; k < _registry._entity_number; k++) {
+        if (_tag[k] == std::nullopt)
             continue;
+        if (_tag[k]->tag == "shootBoost" && _drawable[k]->drawable == false) {
+            j = 3;
         }
-        if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
-            position[bullet]->x = position[i]->x + 80;
-            position[bullet]->y = position[i]->y;
+    }
+    for (int id = 0; id != j; id++) {
+        entity_t bullet = _registry.spawn_entity();
+        _registry.add_component<Speed>(bullet, Speed());
+        _registry.add_component<Tag>(bullet, Tag());
+        _registry.add_component<Sprite>(bullet, Sprite());
+        _registry.add_component<Drawable>(bullet, Drawable());
+        _registry.add_component<Hitbox>(bullet, Hitbox());
+        _registry.add_component<Position>(bullet, Position());
+        _registry.add_component<Rect>(bullet, Rect());
+        _registry.add_component<Texture>(bullet, Texture());
+        _registry.add_component<Scale>(bullet, Scale());
+        _registry.add_component<State>(bullet, State());
+        _registry.add_component<Orientation>(bullet, Orientation());
+        
+        auto &orientation = _registry.get_components<Orientation>();
+        auto &tag = _registry.get_components<Tag>();
+        auto &speed = _registry.get_components<Speed>();
+        auto &sprite = _registry.get_components<Sprite>();
+        auto &position = _registry.get_components<Position>();
+        auto &hitbox = _registry.get_components<Hitbox>();
+        auto &state = _registry.get_components<State>();
+        auto &_health = _registry.get_components<Health>();
+        auto &rect = _registry.get_components<Rect>();
+        auto &_drawable = _registry.get_components<Drawable>();
+        auto &texture = _registry.get_components<Texture>();
+        auto &scale = _registry.get_components<Scale>();
+        auto &control = _registry.get_components<Control>();
+        
+        _drawable[bullet]->drawable = true;
+        tag[bullet]->tag = starshipJson["bullet"]["tag"];
+        texture[bullet]->textureTag = starshipJson["bullet"]["textureTag"];
+        speed[bullet]->speedx = starshipJson["bullet"]["speed"];
+        scale[bullet]->scale = starshipJson["bullet"]["scale"];
+        if (id == 1) {
+            speed[bullet]->speedx = starshipJson["bullet"]["speed"];
+            speed[bullet]->speedy = starshipJson["bullet"]["speedy"];
+            speed[bullet]->speedy *= -1;
+            orientation[bullet]->orientation = -30;
         }
-        if (tag[i]->tag == "fullbeambar") {
-            state[bullet]->state = 0;
-            hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][0]["width"];
-            hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][0]["height"];
-            rect[bullet]->width = starshipJson["bullet"]["rect"][0]["width"];
-            rect[bullet]->height = starshipJson["bullet"]["rect"][0]["height"];
-            rect[bullet]->left = starshipJson["bullet"]["rect"][0]["left"];
-            rect[bullet]->top = starshipJson["bullet"]["rect"][0]["top"];
-            if (_health[i]->health > 30 && _health[i]->health < 85) {
-                state[bullet]->state = 1;
-                hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][1]["width"];
-                hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][1]["height"];
-                rect[bullet]->width = starshipJson["bullet"]["rect"][1]["width"];
-                rect[bullet]->height = starshipJson["bullet"]["rect"][1]["height"];
-                rect[bullet]->left = starshipJson["bullet"]["rect"][1]["left"];
-                rect[bullet]->top = starshipJson["bullet"]["rect"][1]["top"];
+        if (id == 2) {
+            speed[bullet]->speedx = starshipJson["bullet"]["speed"];
+            speed[bullet]->speedy = starshipJson["bullet"]["speedy"];
+            orientation[bullet]->orientation = 30;
+        }
+        if (id == 0) {
+            orientation[bullet]->orientation = 0;
+        }
+        for (size_t i = 0; i < _registry._entity_number; i++) {
+            if (tag[i] == std::nullopt) {
+                continue;
             }
-            if (_health[i]->health >= 85) {
-                state[bullet]->state = 2;
-                hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][2]["width"];
-                hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][2]["height"];
-                rect[bullet]->width = starshipJson["bullet"]["rect"][2]["width"];
-                rect[bullet]->height = starshipJson["bullet"]["rect"][2]["height"];
-                rect[bullet]->left = starshipJson["bullet"]["rect"][2]["left"];
-                rect[bullet]->top = starshipJson["bullet"]["rect"][2]["top"];
+            if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
+                position[bullet]->x = position[i]->x + 80;
+                position[bullet]->y = position[i]->y;
             }
-            _health[i]->health = 0;
-            rect[i]->width = rect[i]->baseWidth;
+            if (tag[i]->tag == "fullbeambar") {
+                state[bullet]->state = 0;
+                hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][0]["width"];
+                hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][0]["height"];
+                rect[bullet]->width = starshipJson["bullet"]["rect"][0]["width"];
+                rect[bullet]->height = starshipJson["bullet"]["rect"][0]["height"];
+                rect[bullet]->left = starshipJson["bullet"]["rect"][0]["left"];
+                rect[bullet]->top = starshipJson["bullet"]["rect"][0]["top"];
+                if (_health[i]->health > 30 && _health[i]->health < 85) {
+                    state[bullet]->state = 1;
+                    hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][1]["width"];
+                    hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][1]["height"];
+                    rect[bullet]->width = starshipJson["bullet"]["rect"][1]["width"];
+                    rect[bullet]->height = starshipJson["bullet"]["rect"][1]["height"];
+                    rect[bullet]->left = starshipJson["bullet"]["rect"][1]["left"];
+                    rect[bullet]->top = starshipJson["bullet"]["rect"][1]["top"];
+                }
+                if (_health[i]->health >= 85) {
+                    state[bullet]->state = 2;
+                    hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][2]["width"];
+                    hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][2]["height"];
+                    rect[bullet]->width = starshipJson["bullet"]["rect"][2]["width"];
+                    rect[bullet]->height = starshipJson["bullet"]["rect"][2]["height"];
+                    rect[bullet]->left = starshipJson["bullet"]["rect"][2]["left"];
+                    rect[bullet]->top = starshipJson["bullet"]["rect"][2]["top"];
+                }
+                _health[i]->health = 0;
+                rect[i]->width = rect[i]->baseWidth;
+            }
         }
     }
 }

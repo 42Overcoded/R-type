@@ -70,6 +70,7 @@ void gameEngine::menu()
             }
             if (tag[i]->tag == "endlessbutton") {
                 if (click[i]->clicked == true) {
+                    wave = 10;
                     mode = ENDLESS;
                     scene = GAME;
                     drawable[i]->drawable = false;
@@ -191,6 +192,7 @@ void gameEngine::clock_time()
 {
     auto &_clock = _registry.get_components<Clock>();
     auto &_tag = _registry.get_components<Tag>();
+    auto &_drawable = _registry.get_components<Drawable>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (_tag[i] == std::nullopt)
@@ -199,6 +201,12 @@ void gameEngine::clock_time()
             _clock[i]->time = _clock[i]->clock.getElapsedTime();
             _clock[i]->_time = _clock[i]->_clock.getElapsedTime();
             _clock[i]->__time = _clock[i]->__clock.getElapsedTime();
+        }
+        if (_tag[i]->tag == "shootBoost" && _drawable[i]->drawable == false) {
+            _clock[i]->time = _clock[i]->clock.getElapsedTime();
+            if (_clock[i]->time.asSeconds() > 10) {
+                _registry.kill_entity(entity_t(i));
+            }
         }
     }
 }

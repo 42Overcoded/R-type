@@ -85,6 +85,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<NetworkComponent>();
     _registry.register_component<isClick>();
     _registry.register_component<Color>();
+    _registry.register_component<Orientation>();
 };
 
 void gameEngine::launch_game() {
@@ -99,7 +100,7 @@ void gameEngine::launch_game() {
     sf::Clock _clock;
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    float wave = 0;
+    wave = 0;
     id = 0;
     mode = NONE;
     for (int i = 0; i < 12; i ++)

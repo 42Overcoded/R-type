@@ -300,12 +300,14 @@ void gameEngine::spawn_power_up(int i)
     std::uniform_int_distribution<int> distribution(0, 1080);
 
     int random = distribution(gen);
-    if (random < 50) {
+    if (random < 10) {
         j = 0;
+    }
+    if (random > 10 && random < 20) {
+        j = 1;
     }
     if (j == -1)
         return;
-
     std::ifstream file("configFiles/powerup.json");
     if (!file.is_open())
         exit(84);
