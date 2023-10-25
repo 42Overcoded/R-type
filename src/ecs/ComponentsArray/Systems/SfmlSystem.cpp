@@ -233,7 +233,6 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
             clock[i]->time = clock[i]->clock.getElapsedTime();
             isFrozen = 1;
             if (clock[i]->time.asSeconds() > 5) {
-                std::cout << "KILLED";
                 r.kill_entity(entity_t(i));
             }
         }
@@ -311,6 +310,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
     auto &hitbox = r.get_components<Hitbox>();
     auto &tag = r.get_components<Tag>();
     auto &clock = r.get_components<Clock>();
+    auto &drawable = r.get_components<Drawable>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (control[i] != std::nullopt && speed[i] != std::nullopt) {
@@ -351,22 +351,19 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window, Scene &s
         if (click[i] != std::nullopt) {
             sf::Vector2i mousePos = sf::Mouse::getPosition(_window);
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePos.x > position[i]->x && mousePos.x < position[i]->x + scale[i]->scale * hitbox[i]->width && mousePos.y > position[i]->y && mousePos.y < position[i]->y + scale[i]->scale * hitbox[i]->height) {
-                std::cout << "1" << std::endl;
                 for (size_t j = 0; j < r._entity_number; j++) {
                     if (tag[j] == std::nullopt)
                         continue;
-                    if (tag[j]->tag == "onlinebutton" && scene == MENU) {
+                    if (tag[j]->tag == "onlinebutton") {
+                        if (clock[j]->time.asSeconds() < 0.2) {
+                            return;
+                        }
+                        if (drawable[i]->drawable == false) {
+                            continue;
+                        }
                         click[i]->clicked = true;
                         clock[j]->clock.restart();
                         return;
-                    }
-                    if (tag[j]->tag == "onlinebutton") {
-                        if (clock[j]->time.asSeconds() < 0.2 && (scene != MENU)) {
-                            return;
-                        } else {
-                            click[i]->clicked = true;
-                            clock[j]->clock.restart();
-                        }
                     }
                 }
             }

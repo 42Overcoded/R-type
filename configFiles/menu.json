@@ -344,6 +344,52 @@
                 "x": 1600,
                 "y": 50
             }
+        },
+        {
+            "grouptag": "optiononline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "backbuttonoptonline",
+            "texttag": "backoptonline",
+            "positiontext": {
+                "x": 940,
+                "y": 860
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Back",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 840,
+                "y": 840
+            }
+        },
+        {
+            "grouptag": "optionoffline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "backbuttonoptoffline",
+            "texttag": "backoptoffline",
+            "positiontext": {
+                "x": 940,
+                "y": 860
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Back",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 840,
+                "y": 840
+            }
         }
     ]
 }

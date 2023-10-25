@@ -35,17 +35,48 @@ void gameEngine::menu()
         if (tag[i]->tag == "onlinebutton") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
         }
+        if (scene == OPTIONOFFLINE) {
+            if (tag[i]->tag == "backbuttonoptoffline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                scene = OFFLINE;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->groupTag == "offline")
+                        drawable[j]->drawable = true;
+                    if (tag[j]->groupTag == "optionoffline")
+                        drawable[j]->drawable = false;
+                }
+            }
+        }
+        if (scene == OPTIONONLINE) {
+            if (tag[i]->tag == "backbuttonoptonline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                scene = ONLINE;
+                for (size_t j = 0; j < tag.size(); j++) {
+                    if (tag[j] == std::nullopt)
+                        continue;
+                    if (tag[j]->groupTag == "online")
+                        drawable[j]->drawable = true;
+                    if (tag[j]->groupTag == "optiononline")
+                        drawable[j]->drawable = false;
+                }
+            }
+        }
         if (scene == OFFLINE) {
             if (tag[i]->groupTag == "offline") {
                 drawable[i]->drawable = true;
             }
             if (tag[i]->tag == "optionbuttonoff" && click[i]->clicked == true) {
                 scene = OPTIONOFFLINE;
+                click[i]->clicked = false;
                 for (size_t j = 0; j < tag.size(); j++) {
                     if (tag[j] == std::nullopt)
                         continue;
                     if (tag[j]->groupTag == "offline")
                         drawable[j]->drawable = false;
+                    if (tag[j]->groupTag == "optionoffline")
+                        drawable[j]->drawable = true;
                 }
             }
             if (tag[i]->tag == "backbuttonoffline" && click[i]->clicked == true) {
@@ -65,6 +96,7 @@ void gameEngine::menu()
             }
             if (tag[i]->tag == "adventurebutton") {
                 if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
                     mode = LEVELS;
                     scene = GAME;
                     drawable[i]->drawable = false;
@@ -79,6 +111,7 @@ void gameEngine::menu()
             }
             if (tag[i]->tag == "endlessbutton") {
                 if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
                     wave = 20;
                     mode = ENDLESS;
                     scene = GAME;
@@ -105,11 +138,14 @@ void gameEngine::menu()
             }
             if (tag[i]->tag == "optionbutton" && click[i]->clicked == true) {
                 scene = OPTIONONLINE;
+                click[i]->clicked = false;
                 for (size_t j = 0; j < tag.size(); j++) {
                     if (tag[j] == std::nullopt)
                         continue;
                     if (tag[j]->groupTag == "online")
                         drawable[j]->drawable = false;
+                    if (tag[j]->groupTag == "optiononline")
+                        drawable[j]->drawable = true;
                 }
             }
             if (tag[i]->tag == "backbuttononline" && click[i]->clicked == true) {
@@ -131,6 +167,7 @@ void gameEngine::menu()
         if (scene == MENU) {
             if (tag[i]->tag == "offlinebutton") {
                 if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
                     clock[i]->clock.restart();
                     scene = OFFLINE;
                     drawable[i]->drawable = false;
@@ -149,6 +186,7 @@ void gameEngine::menu()
             if (tag[i]->tag == "onlinebutton") {
                 if (click[i]->clicked == true) {
                     clock[i]->clock.restart();
+                    click[i]->clicked = false;
                     scene = ONLINE;
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
