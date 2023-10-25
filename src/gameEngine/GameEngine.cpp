@@ -177,8 +177,10 @@ void gameEngine::launch_game()
             sf::Event event;
             while (_window.pollEvent(event))
             {
-                if (event.type == sf::Event::Closed)
+                if (event.type == sf::Event::Closed) {
                     _window.close();
+                    return;
+                }
             }
             _system.control_system(_registry, _window);
             _window.clear(sf::Color::Black);
