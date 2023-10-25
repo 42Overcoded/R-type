@@ -90,6 +90,7 @@ void System::hitbox_system(registry &r)
     auto &enemy = r.get_components<Enemy>();
     auto &clock = r.get_components<Clock>();
     auto &enemyBall = r.get_components<EnemyBall>();
+    auto &drawable = r.get_components<Drawable>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -104,6 +105,17 @@ void System::hitbox_system(registry &r)
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
             continue;
+        }
+        if (tag[i]->groupTag == "powerup") {
+            for (size_t j = 0; j < r._entity_number; j++) {
+                if (tag[j] == std::nullopt || tag[i] == std::nullopt)
+                    continue;
+                if (tag[j]->tag == "starship") {
+                    if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
+                        drawable[i]->drawable = false;
+                    }
+                }
+            }
         }
         if (enemy[i] != std::nullopt || enemyBall[i] != std::nullopt) {
             for (size_t j = 0; j < r._entity_number; j++) {

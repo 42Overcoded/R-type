@@ -90,7 +90,7 @@ class SfmlSystem {
          * @param r 
          */
         void load_texture(registry &r);
-        
+        void set_color(registry &r);
         void color_system(registry &r);
         ~SfmlSystem() = default;
     protected:

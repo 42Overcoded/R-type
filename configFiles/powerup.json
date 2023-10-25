@@ -1,0 +1,15 @@
+{
+    "powerup": [
+        {
+            "tag": "shield",
+            "textureTag": "shieldTexture",
+            "scale": 1,
+            "speed": -0.3,
+            "groupTag": "powerup",
+            "hitbox": {
+                "width": 64,
+                "height": 64
+            }
+        }
+    ]
+}

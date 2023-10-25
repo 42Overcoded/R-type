@@ -185,6 +185,7 @@ class gameEngine {
         void init_button(int i);
         void init_game();
         void life_handler();
+        void spawn_power_up(int i);
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
     protected:
     private:
@@ -197,6 +198,7 @@ class gameEngine {
         sf::Clock clock;
         sf::RenderWindow _window;
         SfmlSystem _system;
+        
         //Network::NetworkSystem _networkSystem;
         registry _registry;
 };

@@ -84,6 +84,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Texture>();
     _registry.register_component<NetworkComponent>();
     _registry.register_component<isClick>();
+    _registry.register_component<Color>();
 };
 
 void gameEngine::launch_game() {
@@ -149,6 +150,7 @@ void gameEngine::launch_game() {
                 if (event.type == sf::Event::Closed)
                     _window.close();
             }
+            _system.set_color(_registry);
             _system.control_system(_registry, _window, scene);
             _window.clear(sf::Color::Black);
             _system.position_system(_registry);
