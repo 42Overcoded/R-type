@@ -53,7 +53,7 @@ class gameEngine {
         void spawn_wave(sf::Time &elapsed, int &wave);
         void modify_pattern(registry &r);
         void init_load_shoot();
-        void spawn_mobs(int n1, int n2, int n3, int n4, int n5);
+        void spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6);
         void spawn_bullet(int i, int j);
         void spawn_boss_bullet(int i, int j);
         void shoot_enemy();

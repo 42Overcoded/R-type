@@ -40,6 +40,7 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture enemyBlueBullet;
     sf::Texture enemyBoss;
     sf::Texture tank;
+    sf::Texture sprinter;
     sf::Texture tankBullet;
     sf::Texture background;
     sf::Texture menuButton;
@@ -83,10 +84,13 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
+    if (!sprinter.loadFromFile("./assets/truck.png"))
+        exit(84);
     textures["starshipTexture"] = starship;
     textures["beambarTexture"] = beambar;
     textures["enemyBossTexture"] = enemyBoss;
     textures["tankTexture"] = tank;
+    textures["sprinterTexture"] = sprinter;
     textures["enemyRobotTexture"] = enemyThree;
     textures["enemyScuttleTexture"] = enemyTwo;
     textures["enemyAlienTexture"] = enemyFour;
