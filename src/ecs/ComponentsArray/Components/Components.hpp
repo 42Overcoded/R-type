@@ -8,6 +8,7 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
+#include "SFML/Graphics/Color.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -138,6 +139,13 @@ struct Enemy {
  */
 struct Bullet {
     int id;
+};
+
+struct Color {
+    int r;
+    int g;
+    int b;
+    int a;
 };
 
 /**

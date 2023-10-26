@@ -28,6 +28,7 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<State>(starship, State());
     _registry.add_component<Clock>(starship, Clock());
     _registry.add_component<Scale>(starship, Scale());
+    _registry.add_component<Color>(starship, Color());
     _registry.add_component<Texture>(starship, Texture());
     _registry.add_component<Rect>(starship, Rect());
     _registry.add_component<NetworkComponent>(starship, NetworkComponent());
@@ -46,7 +47,12 @@ entity_t gameEngine::init_starship(int id, int i)
     auto &texture = _registry.get_components<Texture>();
     auto &rect = _registry.get_components<Rect>();
     auto &drawable = _registry.get_components<Drawable>();
+    auto &color = _registry.get_components<Color>();
 
+    color[starship]->r = 255;
+    color[starship]->g = 255;
+    color[starship]->b = 255;
+    color[starship]->a = 255;
     drawable[starship]->drawable = true;
     health[starship]->health = starshipJson["starship"][i]["health"];
     state[starship]->state = starshipJson["starship"][i]["state"];

@@ -97,6 +97,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<isClick>();
     _registry.register_component<GameStateComponent>();
     _registry.register_component<GameLauncher>();
+    _registry.register_component<Color>();
 };
 
 void gameEngine::launch_game()
@@ -188,6 +189,7 @@ void gameEngine::launch_game()
                 }
             }
             _system.control_system(_registry, _window);
+            _system.set_color(_registry);
             _window.clear(sf::Color::Black);
             _system.position_system(_registry);
             _system.rect_system(_registry);
