@@ -156,6 +156,7 @@ void gameEngine::menu()
                     }
                     init_game();
                     _level_info._generated = generateMap(std::stoi(get_this_str("lengthtext", "5000")), std::stoi(get_this_str("difficultytext", "5")), get_this_str("seedinputtext", "Basic Seed"));
+                    // _level_info._generated = loadMap("assets/map.txt"); //Example of how to load a map work just like generateMap
                 }
             }
 

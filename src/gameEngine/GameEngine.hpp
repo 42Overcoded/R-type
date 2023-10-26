@@ -189,6 +189,7 @@ class gameEngine {
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
         std::string get_this_str(std::string tag, std::string default_str);
         std::vector<Generated> generateMap(int length, int difficulty, std::string seed_str);
+        std::vector<Generated> loadMap(std::string path);
         void spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock);
     protected:
     private:

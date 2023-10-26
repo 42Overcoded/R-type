@@ -71,3 +71,35 @@ std::vector<Generated> gameEngine::generateMap(int length, int difficulty, std::
     std::sort(generated.begin(), generated.end(), order);
     return generated;
 }
+
+std::vector<Generated> gameEngine::loadMap(std::string path)
+{
+    /// Should Be replaced with a json          //
+    std::vector<int> enemies = {0, 1, 2};       //
+    std::vector<int> elite = {3};               //
+    std::vector<int> bosses = {4};              //
+    std::vector<int> pattern = {0, 1, 2};       //
+    std::vector<int> elitePattern = {3};        //
+    std::vector<int> bossesPattern = {4};       //
+    /// Should Be replaced with a json          //
+
+    std::vector<Generated> generated;
+
+    std::ifstream inputFile(path);
+    if (inputFile.is_open())
+    {
+        Generated entry;
+        while (inputFile >> entry.id >> entry.pattern >> entry.x >> entry.y)
+        {
+            if (std::find(bosses.begin(), bosses.end(), entry.id) != bosses.end())
+                entry.is_boss = true;
+            else
+                entry.is_boss = false;
+            generated.push_back(entry);
+        }
+
+        inputFile.close();
+    }
+
+    return generated;
+}
