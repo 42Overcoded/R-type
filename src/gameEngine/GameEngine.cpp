@@ -35,7 +35,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock, floa
     std::uniform_int_distribution<int> distribution(0, 5000);
     std::uniform_int_distribution<int> distribution2(0, 900);
 
-    if (_elapsed.asSeconds() > 0.1)
+    if (_elapsed.asSeconds() > 0.1 / (difficulty /2))
     {
         wave += 0.05;
         int rand       = distribution2(generator);
@@ -122,12 +122,14 @@ void gameEngine::launch_game()
         gameManagerEntity, GameStateComponent{Scene::MENU, Mode::NONE});
     _registry.add_component<GameLauncher>(
     gameManagerEntity, GameLauncher{});
-    for (int i = 0; i < 17; i++)
+    for (int i = 0; i < 29; i++)
         init_button(i);
     if (_type == SERVER)
     {
         get_game_state().scene = ONLINE;
     }
+    difficulty = 1;
+    bonus = true;
     while (true)
     {
         GameStateComponent &gameState = get_game_state();

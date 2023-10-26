@@ -299,6 +299,9 @@ void gameEngine::spawn_power_up(int i)
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(0, 1080);
 
+    if (bonus == false) {
+        return;
+    }
     int random = distribution(gen);
     if (random < 10) {
         j = 0;
