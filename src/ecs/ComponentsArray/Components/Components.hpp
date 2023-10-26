@@ -148,6 +148,10 @@ struct Color {
     int a;
 };
 
+struct Orientation {
+    int orientation;
+};
+
 /**
  * @brief Tag to know the type of the entity
  * 

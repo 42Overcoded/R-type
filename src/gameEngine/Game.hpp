@@ -17,7 +17,8 @@ enum Mode {
     NONE,
     LEVELS,
     ENDLESS,
-    VERSUS
+    VERSUS1,
+    VERSUS2
 };
 
 enum Scene {
@@ -25,6 +26,9 @@ enum Scene {
     ONLINE,
     OFFLINE,
     LOBBY,
+    ONLINEGAME,
+    OPTIONONLINE,
+    OPTIONOFFLINE,
     GAME,
     END
 };

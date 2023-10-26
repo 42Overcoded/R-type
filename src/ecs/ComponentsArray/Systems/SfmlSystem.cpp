@@ -43,9 +43,22 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture shield;
     sf::Texture menuButton;
     sf::Texture playButton;
+    sf::Texture shootBoost;
+    sf::Texture lifeBoost;
+    sf::Texture ice;
     sf::Texture button;
     sf::Font font;
+    sf::Texture texture;
+    sf::Texture Bomb;
 
+    if (!Bomb.loadFromFile("./assets/bomb.png"))
+        exit(84);
+    if (!lifeBoost.loadFromFile("./assets/hearth.png"))
+        exit(84);
+    if (!ice.loadFromFile("./assets/ice.png"))
+        exit(84);
+    if (!shootBoost.loadFromFile("./assets/star.png"))
+        exit(84);
     if (!shield.loadFromFile("./assets/shield.png"))
         exit(84);
     if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
@@ -80,7 +93,11 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
+    textures["bombTexture"] = Bomb;
+    textures["lifeBoostTexture"] = lifeBoost;
+    textures["shootBoostTexture"] = shootBoost;
     textures["shieldTexture"] = shield;
+    textures["iceTexture"] = ice;
     textures["buttonTexture"] = button;
     textures["starshipTexture"] = starship;
     textures["beambarTexture"] = beambar;
@@ -202,10 +219,23 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
     auto &sprite = r.get_components<Sprite>();
     auto &tag = r.get_components<Tag>();
     auto &enemy = r.get_components<Enemy>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &color = r.get_components<Color>();
+    auto &clock = r.get_components<Clock>();
+
+    int isFrozen = 0;
 
     for (size_t i = 0; i < r._entity_number; i++) {
+
         if (tag[i] == std::nullopt)
             continue;
+        if (tag[i]->tag == "ice" && drawable[i]->drawable == false) {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            isFrozen = 1;
+            if (clock[i]->time.asSeconds() > 5) {
+                r.kill_entity(entity_t(i));
+            }
+        }
         if (tag[i]->tag == "background") {
             if (position[i]->x <= -1920) {
                 position[i]->x = 1920;
@@ -250,6 +280,16 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
+        if (enemy[i] != std::nullopt && isFrozen == 1) {
+            color[i]->r = 150;
+            color[i]->g = 150;
+            color[i]->b = 255;
+            continue;
+        } else if (enemy[i] != std::nullopt) {
+            color[i]->b = 255;
+            color[i]->r = 255;
+            color[i]->g = 255;
+        }
         if (position[i] != std::nullopt && speed[i] != std::nullopt && sprite[i] != std::nullopt) {
             position[i]->x += speed[i]->speedx * elapsed.asMilliseconds();
             position[i]->y += speed[i]->speedy * elapsed.asMilliseconds();
@@ -269,6 +309,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
     auto &hitbox = r.get_components<Hitbox>();
     auto &tag = r.get_components<Tag>();
     auto &clock = r.get_components<Clock>();
+    auto &drawable = r.get_components<Drawable>();
     auto &gameStateArray = r.get_components<GameStateComponent>();
     size_t gameStateIndex = 0;
 
@@ -314,17 +355,15 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
                 for (size_t j = 0; j < r._entity_number; j++) {
                     if (tag[j] == std::nullopt)
                         continue;
-                    if (tag[j]->tag == "onlinebutton" && gameState.scene == MENU) {
+                    if (tag[j]->tag == "onlinebutton") {
+                        if (clock[j]->time.asSeconds() < 0.2) {
+                            return;
+                        }
+                        if (drawable[i]->drawable == false) {
+                            continue;
+                        }
                         click[i]->clicked = true;
                         clock[j]->clock.restart();
-                        return;
-                    }
-                    if (tag[j]->tag == "onlinebutton") {
-                        if (clock[j]->time.asSeconds() < 0.2 && (gameState.scene != MENU)) {
-                            return;
-                        } else {
-                            click[i]->clicked = true;
-                        }
                     }
                 }
             }
@@ -345,7 +384,6 @@ void SfmlSystem::set_color(registry &r)
 
     for  (size_t i = 0; i < r._entity_number; i++) {
         if (color[i] != std::nullopt) {
-            std::cout << "color" << std::endl;
             sprite[i]->sprite.setColor(sf::Color(color[i]->r, color[i]->g, color[i]->b, color[i]->a));
         }
     }
@@ -366,7 +404,7 @@ void SfmlSystem::color_system(registry &r)
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (tag[i]->groupTag == "powerup" && drawable[i]->drawable == false) {
+        if (tag[i]->tag == "shield" && drawable[i]->drawable == false) {
             clock[i]->time = clock[i]->clock.getElapsedTime();
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (tag[j] == std::nullopt)
@@ -375,7 +413,7 @@ void SfmlSystem::color_system(registry &r)
                     color[j]->r = 150;
                     color[j]->g = 150;
                     color[j]->b = 255;
-                    if (clock[i]->time.asSeconds() > 5) {
+                    if (clock[i]->time.asSeconds() > 10) {
                         color[j]->r = 255;
                         color[j]->g = 255;
                         color[j]->b = 255;
@@ -437,6 +475,20 @@ void SfmlSystem::hitbox_system(registry &r)
                 if (tag[j]->tag == "starship") {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
                         drawable[i]->drawable = false;
+                        clock[i]->clock.restart();
+                        if (tag[i]->tag == "lifeBoost") {
+                            if (health[j]->health < 4)
+                                health[j]->health += 1;
+                            r.kill_entity(entity_t(i));
+                        }
+                        if (tag[i]->tag == "bombBoost") {
+                            for (size_t k = 0; k < r._entity_number; k++) {
+                                if (enemy[k] != std::nullopt) {
+                                    health[k]->health -= 3;
+                                    r.kill_entity(entity_t(i));
+                                }
+                            }
+                        }
                     }
                 }
             }

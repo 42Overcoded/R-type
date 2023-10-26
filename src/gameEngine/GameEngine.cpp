@@ -98,6 +98,7 @@ void gameEngine::register_component_to_game()
     _registry.register_component<GameStateComponent>();
     _registry.register_component<GameLauncher>();
     _registry.register_component<Color>();
+    _registry.register_component<Orientation>();
 };
 
 void gameEngine::launch_game()
@@ -113,15 +114,15 @@ void gameEngine::launch_game()
     sf::Clock _clock;
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    float wave = 0;
-    id         = 0;
+    wave = 0;
+    id   = 0;
 
     entity_t gameManagerEntity = _registry.spawn_entity();
     _registry.add_component<GameStateComponent>(
         gameManagerEntity, GameStateComponent{Scene::MENU, Mode::NONE});
     _registry.add_component<GameLauncher>(
     gameManagerEntity, GameLauncher{});
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 17; i++)
         init_button(i);
     if (_type == SERVER)
     {
@@ -135,7 +136,7 @@ void gameEngine::launch_game()
         int alive    = 0;
 
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
-            gameState.scene == END)
+            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE)
             menu();
         if (gameState.scene == GAME)
         {
