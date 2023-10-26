@@ -42,6 +42,9 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture background;
     sf::Texture shield;
     sf::Texture menuButton;
+    sf::Texture tank;
+    sf::Texture sprinter;
+    sf::Texture tankBullet;
     sf::Texture playButton;
     sf::Texture shootBoost;
     sf::Texture lifeBoost;
@@ -51,6 +54,12 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture texture;
     sf::Texture Bomb;
 
+    if (!sprinter.loadFromFile("./assets/truck.png"))
+        exit(84);
+    if (!tank.loadFromFile("./assets/tank.png"))
+        exit(84);
+    if (!tankBullet.loadFromFile("./assets/blueBall.png"))
+        exit(84);
     if (!Bomb.loadFromFile("./assets/bomb.png"))
         exit(84);
     if (!lifeBoost.loadFromFile("./assets/hearth.png"))
@@ -93,10 +102,13 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
+    textures["tankTexture"] = tank;
+    textures["sprinterTexture"] = sprinter;
     textures["bombTexture"] = Bomb;
     textures["lifeBoostTexture"] = lifeBoost;
     textures["shootBoostTexture"] = shootBoost;
     textures["shieldTexture"] = shield;
+    textures["tankBulletTexture"] = tankBullet;
     textures["iceTexture"] = ice;
     textures["buttonTexture"] = button;
     textures["starshipTexture"] = starship;
