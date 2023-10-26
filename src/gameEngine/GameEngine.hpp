@@ -198,6 +198,8 @@ class gameEngine {
         float wave;
         JsonParser *parsed;
         int id;
+        float difficulty;
+        bool bonus;
         ClientType _type;
         sf::Time elapsed;
         sf::Clock clock;
