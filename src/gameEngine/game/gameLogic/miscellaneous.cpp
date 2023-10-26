@@ -21,6 +21,21 @@ std::vector<Speed> Mv_to_speed(std::vector<MovementVector> movementVector)
     return speed;
 }
 
+std::string gameEngine::get_this_str(std::string stag, std::string default_str)
+{
+    auto &tag = _registry.get_components<Tag>();
+    auto &text = _registry.get_components<Text>();
+
+    for (size_t i = 0; i < tag.size(); i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == stag)
+            return text[i]->str;
+    }
+    return default_str;
+}
+
+
 void gameEngine::menu()
 {
     auto &tag = _registry.get_components<Tag>();
@@ -66,7 +81,7 @@ void gameEngine::menu()
                     }
                 }
             }
-            if (tag[i]->tag == "generatediffminus") {
+            if (tag[i]->tag == "generatediffmoins") {
                 if (click[i]->clicked == true) {
                     click[i]->clicked = false;
                     for (size_t j = 0; j < tag.size(); j++) {
@@ -80,7 +95,70 @@ void gameEngine::menu()
                     }
                 }
             }
-        
+            if (tag[i]->tag == "generatelenplus") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "lengthtext") {
+                            int len = std::stoi(text[j]->str);
+                            if (len < 10000) {
+                                len += 100;
+                                text[j]->str = std::to_string(len);
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "generatelenmoins") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "lengthtext") {
+                            int len = std::stoi(text[j]->str);
+                            if (len > 1000) {
+                                len -= 100;
+                                text[j]->str = std::to_string(len);
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "seedinput") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "seedinputtext") {
+                            if (text[j]->str == "Seed:")
+                                text[j]->str = "";
+                            sf::Event event;
+                            while (this->_window.pollEvent(event)) {
+                                if (event.type == sf::Event::TextEntered) {
+                                    if (event.text.unicode == 8) {
+                                        if (text[j]->str.size() > 0)
+                                            text[j]->str.pop_back();
+                                    } else if (event.text.unicode < 128) {
+                                        text[j]->str += static_cast<char>(event.text.unicode);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "GenerateLevel") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    scene = GAME;
+                    mode = GENERATED;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->groupTag == "generate")
+                            drawable[j]->drawable = false;
+                    }
+                    init_game();
+                    _level_info._generated = generateMap(std::stoi(get_this_str("lengthtext", "5000")), std::stoi(get_this_str("difficultytext", "5")), get_this_str("seedinputtext", "Basic Seed"));
+                }
+            }
+
         }
         if (scene == OFFLINE) {
             if (tag[i]->groupTag == "offline") {

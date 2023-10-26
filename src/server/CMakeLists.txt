@@ -74,6 +74,7 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/animation.cpp
     ../gameEngine/game/gameLogic/level1.cpp
     ../gameEngine/game/gameLogic/miscellaneous.cpp
+    ../gameEngine/game/gameLogic/generateLevel.cpp
     ../gameEngine/game/gameLogic/shoot.cpp
     ../gameEngine/game/gameInitialisation/initBullets.cpp
     ../gameEngine/game/gameInitialisation/initEnemy.cpp

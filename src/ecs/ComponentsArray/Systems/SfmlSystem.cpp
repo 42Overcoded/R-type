@@ -344,7 +344,6 @@ void SfmlSystem::set_color(registry &r)
 
     for  (size_t i = 0; i < r._entity_number; i++) {
         if (color[i] != std::nullopt) {
-            std::cout << "color" << std::endl;
             sprite[i]->sprite.setColor(sf::Color(color[i]->r, color[i]->g, color[i]->b, color[i]->a));
         }
     }

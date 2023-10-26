@@ -375,6 +375,7 @@ void gameEngine::death_animation()
         if (enemy[i] != std::nullopt) {
             if (position[i]->x < -100) {
                 _registry.kill_entity(entity_t(i));
+                _level_info.mob_alive -= 1;
             }
         }
         if (tag[i]->tag == "enemyBullet") {
@@ -406,6 +407,7 @@ void gameEngine::death_animation()
                 spawn_power_up(i);
                 spawn_explosion(i);
                 _registry.kill_entity(entity_t(i));
+                _level_info.mob_alive -= 1;
             }
         }
     }

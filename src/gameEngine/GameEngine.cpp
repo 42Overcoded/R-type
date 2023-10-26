@@ -7,6 +7,7 @@
 
 #include "GameEngine.hpp"
 #include <csignal>
+#include <cstdlib>
 #include <iostream>
 #include <optional>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
@@ -20,6 +21,43 @@
 #include <nlohmann/json.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include "../../network/network_c/NetworkComponent.hpp"
+
+void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
+{
+    int MAGIC_VALUE = 50; //The higher the value, the faster the enemies spawn
+
+    if (_elapsed.asSeconds() > 0.1) {
+        if (_level_info.mob_alive == 0)
+            _level_info.is_boss_alive = false;
+        if (this->_level_info.is_boss_alive)
+            ;
+        else if (this->_level_info._generated.size() > 0 && _level_info._generated[0].is_boss) {
+            if (_level_info.mob_alive == 0) {
+                entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                auto &position = _registry.get_components<Position>();
+                if (position[enemy]->y == 0)
+                    position[enemy]->y = _level_info._generated[0].y;
+                _level_info._generated.erase(_level_info._generated.begin());
+                _level_info.mob_alive += 1;
+                _level_info.is_boss_alive = true;
+            }
+        }
+        else {
+            _level_info.level_progress += (MAGIC_VALUE * _elapsed.asSeconds());
+            while (this->_level_info._generated.size() > 0 && _level_info.level_progress > _level_info._generated[0].x && _level_info._generated[0].is_boss == false) {
+                entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                auto &position = _registry.get_components<Position>();
+                if (position[enemy]->y == 0)
+                    position[enemy]->y = _level_info._generated[0].y;
+                _level_info._generated.erase(_level_info._generated.begin());
+                _level_info.mob_alive += 1;
+            }
+        }
+        _clock.restart();
+        if (_level_info.mob_alive == 0 && _level_info._generated.size() == 0)
+            scene = END;
+    }
+}
 
 void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,float &wave)
 {
@@ -133,6 +171,9 @@ void gameEngine::launch_game() {
                 spawn_wave(_elapsed, wave);
             if (mode == ENDLESS)
                 spawn_infinite_wave(_elapsed, _clock, wave);
+            if (mode == GENERATED) {
+                spawn_generated_level(_elapsed, _clock);
+            }
             animate_enemy();
             shoot_system(elapsed);
             _system.velocity_system(_registry, elapsed);

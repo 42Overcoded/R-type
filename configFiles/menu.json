@@ -323,6 +323,144 @@
             }
         }, 
         {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "generatelenmoins",
+            "texttag": "generatelenmoinstext",
+            "positiontext": {
+                "x": 500,
+                "y": 420
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Level length -",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 450,
+                "y": 400
+            }
+        }, 
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "generatelenplus",
+            "texttag": "generatelenplustext",
+            "positiontext": {
+                "x": 1000,
+                "y": 420
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Level length +",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 950,
+                "y": 400
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "length",
+            "texttag": "lengthtext",
+            "positiontext": {
+                "x": 750,
+                "y": 420
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "5000",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 700,
+                "y": 400
+            }
+        }, 
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "seedinfo",
+            "texttag": "seedinfotext",
+            "positiontext": {
+                "x": 500,
+                "y": 620
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Seed:",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 450,
+                "y": 600
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "seedinput",
+            "texttag": "seedinputtext",
+            "positiontext": {
+                "x": 750,
+                "y": 620
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 700,
+                "y": 600
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "GenerateLevel",
+            "texttag": "GenerateLevelText",
+            "positiontext": {
+                "x": 750,
+                "y": 720
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Generate Level !",
+            "textscale": 1.25,
+            "scale": 1,
+            "position": {
+                "x": 700,
+                "y": 700
+            }
+        },
+        {
             "grouptag": "offline",
             "drawable": false,
             "hitbox": {

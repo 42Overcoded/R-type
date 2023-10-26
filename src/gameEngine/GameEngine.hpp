@@ -187,6 +187,9 @@ class gameEngine {
         void life_handler();
         void spawn_power_up(int i);
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
+        std::string get_this_str(std::string tag, std::string default_str);
+        std::vector<Generated> generateMap(int length, int difficulty, std::string seed_str);
+        void spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock);
     protected:
     private:
         Scene scene;
@@ -198,6 +201,7 @@ class gameEngine {
         sf::Clock clock;
         sf::RenderWindow _window;
         SfmlSystem _system;
+        Level_info _level_info;
         
         //Network::NetworkSystem _networkSystem;
         registry _registry;
