@@ -9,26 +9,22 @@
 #define GAMEENGINE_HPP_
 
 #include "../jsonfile/include/JsonParser.hpp"
-#include "game.hpp"
+#include "SFML/System/Clock.hpp"
+#include "Game.hpp"
 #include "../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "../network_c/NetworkSystem.hpp"
+#include "../network_s/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
-
-enum Mode {
-    NONE,
-    LEVELS,
-    ENDLESS,
-    VERSUS
-};
+#include <memory>
 
 class gameEngine {
     public:
-        gameEngine(registry &registry, ClientType type/*, unsigned int serverPort, std::string serverIp*/) : _registry(registry), _type(type)/*, _networkSystem(serverPort, serverIp)*/ {}
+        gameEngine(registry &registry, ClientType type, unsigned int serverPort, std::string serverIp) : _registry(registry), _type(type), port_(serverPort), ip_(serverIp)  {}
         ~gameEngine() = default;
         /**
          * @brief register all component to the game
@@ -168,6 +164,11 @@ class gameEngine {
          */
         void shoot_system(sf::Time &elapsed);
         /**
+         * @brief handle the movement of the player
+         * 
+         */
+        void movement_system(registry &r);
+        /**
          * @brief animate the enemies
          * 
          */
@@ -177,6 +178,12 @@ class gameEngine {
          * 
          */
         void clock_time();
+
+        /**
+         * @brief get the game state object
+         * @return GameStateComponent reference
+         */
+        GameStateComponent &get_game_state();
         /**
          * @brief handle the life of the starship
          * 
@@ -188,18 +195,18 @@ class gameEngine {
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
     protected:
     private:
-        Scene scene;
-        Mode mode;
         JsonParser *parsed;
         int id;
         ClientType _type;
         sf::Time elapsed;
         sf::Clock clock;
+        sf::Clock networkClock;
         sf::RenderWindow _window;
         SfmlSystem _system;
-        
-        //Network::NetworkSystem _networkSystem;
+        std::unique_ptr<Network::NetworkSystem> _networkSystem;
         registry _registry;
+        unsigned int port_;
+        std::string ip_;
 };
 
 #endif /* !GAMEENGINE_HPP_ */

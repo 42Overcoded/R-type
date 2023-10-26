@@ -229,4 +229,10 @@ struct Hitbox {
     int height;
 };
 
+struct GameLauncher {
+    bool isRequestingGame = false;
+    bool isWaitingForServer = false;
+    bool isGameLaunched = false;
+};
+
 #endif /* !COMPONENTS_HPP_ */

@@ -38,7 +38,7 @@ void gameEngine::spawn_ally_bullet(int i)
     auto &texture = _registry.get_components<Texture>();
     auto &scale = _registry.get_components<Scale>();
     auto &control = _registry.get_components<Control>();
-    
+
     _drawable[bullet]->drawable = true;
     tag[bullet]->tag = starshipJson["bullet"]["tag"];
     texture[bullet]->textureTag = starshipJson["bullet"]["textureTag"];

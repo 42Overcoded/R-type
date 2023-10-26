@@ -13,6 +13,13 @@ enum ClientType {
     CLIENT
 };
 
+enum Mode {
+    NONE,
+    LEVELS,
+    ENDLESS,
+    VERSUS
+};
+
 enum Scene {
     MENU,
     ONLINE,
@@ -20,6 +27,11 @@ enum Scene {
     LOBBY,
     GAME,
     END
+};
+
+struct GameStateComponent {
+    Scene scene = MENU;
+    Mode mode = NONE;
 };
 
 #endif /* !GAME_HPP_ */
