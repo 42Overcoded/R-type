@@ -222,6 +222,7 @@ void gameEngine::spawn_bullet(int i, int j)
     hitbox[bullet]->height = bulletJson["bullet"][j]["hitboxheight"];
     scale[bullet]->scale = bulletJson["bullet"][j]["scale"];
     float speedxy = bulletJson["bullet"][j]["speed"];
+    speed[bullet]->speedx = speedxy;
 
     if (tag[bullet]->tag == "enemyBlueBullet")
         searchingHead[bullet]->searching = true;

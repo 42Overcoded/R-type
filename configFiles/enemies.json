@@ -197,6 +197,74 @@
                 "x": 1950,
                 "y": 100
             }
+        },
+        {
+            "score": 69,
+            "tag": "tank",
+            "textureTag": "tankTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "switch_index": 0,
+            "speedx": -0.9,
+            "speedy": 0,
+            "pattern": [
+                {
+                    "x": 0,
+                    "y": 0
+                }
+            ],
+            "health": 50,
+            "state": 0,
+            "hitbox": {
+                "width": 96,
+                "height": 96
+            },
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 152,
+                "height": 120
+            },
+            "scale": 1,
+            "position": {
+                "x": 1950,
+                "y": 100
+            }
+        },
+        {
+            "score": 69,
+            "tag": "sprinter",
+            "textureTag": "sprinterTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "switch_index": 0,
+            "speedx": -0.9,
+            "speedy": 0,
+            "pattern": [
+                {
+                    "x": 0,
+                    "y": 0
+                }
+            ],
+            "health": 100,
+            "state": 0,
+            "hitbox": {
+                "width": 96,
+                "height": 96
+            },
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 926,
+                "height": 210
+            },
+            "scale": 0.4,
+            "position": {
+                "x": 1950,
+                "y": 100
+            }
         }
     ]
 }

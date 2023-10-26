@@ -146,15 +146,25 @@ void gameEngine::shoot_enemy() {
                     spawn_bullet(i, 0);
                 }
             }
-        }
-        if (tag[i]->tag == "enemy 4") {
+            if (tag[i]->tag == "tank") {
             clock[i]->_time = clock[i]->_clock.getElapsedTime();
-            if (clock[i]->_time.asSeconds() > 1.5) {
-                if (position[i]->x >= 1920) {
-                    continue;
+                if (clock[i]->_time.asSeconds() > 1.5) {
+                    if (position[i]->x >= 1920) {
+                        continue;
+                    }
+                    clock[i]->_clock.restart();
+                    spawn_bullet(i, 4);
                 }
-                clock[i]->_clock.restart();
-                spawn_bullet(i, 1);
+            }
+            if (tag[i]->tag == "enemy 4") {
+                clock[i]->_time = clock[i]->_clock.getElapsedTime();
+                if (clock[i]->_time.asSeconds() > 1.5) {
+                    if (position[i]->x >= 1920) {
+                        continue;
+                    }
+                    clock[i]->_clock.restart();
+                    spawn_bullet(i, 1);
+                }
             }
         }
         if (tag[i]->tag == "enemyBoss") {
