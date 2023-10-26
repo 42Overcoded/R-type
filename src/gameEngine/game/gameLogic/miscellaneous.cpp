@@ -28,6 +28,7 @@ void gameEngine::menu()
     auto &text = _registry.get_components<Text>();
     auto &drawable = _registry.get_components<Drawable>();
     auto &click = _registry.get_components<isClick>();
+    auto &texte = _registry.get_components<Text>();
 
     for (size_t i = 0; i < tag.size(); i++) {
         if (tag[i] == std::nullopt)
@@ -35,7 +36,72 @@ void gameEngine::menu()
         if (tag[i]->tag == "onlinebutton") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
         }
+        if (tag[i]->tag == "poweruponline") {
+            if (bonus == true)
+                texte[i]->str = "Powerup: Yes";
+            else
+                texte[i]->str = "Powerup: No";
+        }
+        if (tag[i]->tag == "diffonline") {
+            if (difficulty == 1)
+                texte[i]->str = "Difficulty: Easy";
+            else if (difficulty == 1.5)
+                texte[i]->str = "Difficulty: Medium";
+            else
+                texte[i]->str = "Difficulty: Hard";
+        }
+        if (tag[i]->tag == "powerupoffline") {
+            if (bonus == true)
+                texte[i]->str = "Powerup: Yes";
+            else
+                texte[i]->str = "Powerup: No";
+        }
+        if (tag[i]->tag == "diffoffline") {
+            if (difficulty == 1)
+                texte[i]->str = "Difficulty: Easy";
+            else if (difficulty == 1.5)
+                texte[i]->str = "Difficulty: Medium";
+            else
+                texte[i]->str = "Difficulty: Hard";
+        }
         if (scene == OPTIONOFFLINE) {
+            if (tag[i]->tag == "-poweroptoffline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                if (bonus == true) {
+                    bonus = false;
+                } else {
+                    bonus = true;
+                }
+            }
+            if (tag[i]->tag == "+poweroptoffline" && click[i]->clicked == true) {
+                std::cout << "test\n";
+                click[i]->clicked = false;
+                if (bonus == true) {
+                    bonus = false;
+                } else {
+                    bonus = true;
+                }
+            }
+            if (tag[i]->tag == "-diffoptoffline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                if (difficulty == 2) {
+                    difficulty = 1.5;
+                } else if (difficulty == 1.5) {
+                    difficulty = 1;
+                } else {
+                    difficulty = 2;
+                }
+            }
+            if (tag[i]->tag == "+diffoptoffline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                if (difficulty == 2) {
+                    difficulty = 1;
+                } else if (difficulty == 1.5) {
+                    difficulty = 2;
+                } else {
+                    difficulty = 1.5;
+                }
+            }
             if (tag[i]->tag == "backbuttonoptoffline" && click[i]->clicked == true) {
                 click[i]->clicked = false;
                 scene = OFFLINE;
@@ -50,6 +116,42 @@ void gameEngine::menu()
             }
         }
         if (scene == OPTIONONLINE) {
+            if (tag[i]->tag == "-poweroptonline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                if (bonus == true) {
+                    bonus = false;
+                } else {
+                    bonus = true;
+                }
+            }
+            if (tag[i]->tag == "+poweroptonline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                if (bonus == true) {
+                    bonus = false;
+                } else {
+                    bonus = true;
+                }
+            }
+            if (tag[i]->tag == "-diffoptonline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                if (difficulty == 2) {
+                    difficulty = 1.5;
+                } else if (difficulty == 1.5) {
+                    difficulty = 1;
+                } else {
+                    difficulty = 2;
+                }
+            }
+            if (tag[i]->tag == "+diffoptonline" && click[i]->clicked == true) {
+                click[i]->clicked = false;
+                if (difficulty == 2) {
+                    difficulty = 1;
+                } else if (difficulty == 1.5) {
+                    difficulty = 2;
+                } else {
+                    difficulty = 1.5;
+                }
+            }
             if (tag[i]->tag == "backbuttonoptonline" && click[i]->clicked == true) {
                 click[i]->clicked = false;
                 scene = ONLINE;

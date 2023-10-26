@@ -78,7 +78,7 @@ void gameEngine::animate_enemy()
                 if (state[i]->state == 4) {
                     state[i]->state = 0;
                 }
-                rect[i]->left = rect[i]->baseLeft + (23*state[i]->state);
+                rect[i]->left = (23*state[i]->state);
                 clock[i]->clock.restart();
             }
         }

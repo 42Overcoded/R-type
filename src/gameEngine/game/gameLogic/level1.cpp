@@ -12,6 +12,10 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4)
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(0, 1080);
     srand(std::time(nullptr));
+    n1 *= difficulty;
+    n2 *= difficulty;
+    n3 *= difficulty;
+    n4 *= difficulty;
 
     for (int i = 0; i < n1; i++) {
         int rand = std::rand() % 950;

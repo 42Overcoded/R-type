@@ -196,7 +196,7 @@ struct Text {
  * 
  */
 struct Drawable {
-    bool drawable = false;
+    bool drawable = true;
 };
 
 /**

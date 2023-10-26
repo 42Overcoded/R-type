@@ -29,7 +29,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
     std::uniform_int_distribution<int> distribution(0, 5000);
     std::uniform_int_distribution<int> distribution2(0, 900);
 
-    if (_elapsed.asSeconds() > 0.1) {
+    if (_elapsed.asSeconds() > 0.1 / (difficulty/2)) {
         wave += 0.05;
         int rand = distribution2(generator);
         float randomNb = distribution(generator);
@@ -103,8 +103,10 @@ void gameEngine::launch_game() {
     wave = 0;
     id = 0;
     mode = NONE;
-    for (int i = 0; i < 17; i ++)
+    for (int i = 0; i < 29; i ++)
         init_button(i);
+    difficulty = 1;
+    bonus = true;
     while (true)
     {
         auto &health = _registry.get_components<Health>();

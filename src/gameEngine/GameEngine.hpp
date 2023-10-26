@@ -192,6 +192,8 @@ class gameEngine {
         float wave;
         Scene scene;
         Mode mode;
+        float difficulty;
+        bool bonus;
         JsonParser *parsed;
         int id;
         ClientType _type;

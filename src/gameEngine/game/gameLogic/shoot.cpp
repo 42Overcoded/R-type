@@ -18,6 +18,11 @@ void gameEngine::shoot_system(sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
+        if (tag[i]->groupTag == "enemyBullet") {
+            if (position[i]->x < 0) {
+                _registry.kill_entity(entity_t(i));
+            }
+        }
         if (tag[i]->tag == "bullet") {
             if (position[i]->x > 1900) {
                 _registry.kill_entity(entity_t(i));
