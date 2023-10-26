@@ -115,6 +115,11 @@ void gameEngine::launch_game()
     std::srand(static_cast<unsigned>(std::time(nullptr)));
     wave = 0;
     id = 0;
+    entity_t gameManagerEntity = _registry.spawn_entity();
+    _registry.add_component<GameStateComponent>(
+        gameManagerEntity, GameStateComponent{Scene::MENU, Mode::NONE});
+    _registry.add_component<GameLauncher>(
+    gameManagerEntity, GameLauncher{});
     mode = NONE;
     for (int i = 0; i < 29; i ++)
         init_button(i);
