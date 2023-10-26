@@ -20,6 +20,7 @@
 #include "boost/asio/ip/udp.hpp"
 #include "boost/asio/write.hpp"
 #include <sys/types.h>
+#include "Protocol.hpp"
 
 namespace Network {
 
@@ -47,6 +48,7 @@ public:
     }
     virtual ~Connection()
     {
+        Disconnect();
     }
 
 public:
@@ -137,7 +139,8 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Send packet" << std::endl;
+                    std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
+                              << std::endl;
                     if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
                         packetsOutQueue_.Front().body.size() > 0)
                     {
@@ -175,7 +178,7 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Send body" << std::endl;
+                    // std::cout << "Send body" << std::endl;
                     packetsOutQueue_.PopFront();
                     if (!packetsOutQueue_.IsEmpty())
                     {
@@ -198,14 +201,20 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Receive packet" << std::endl;
+                    std::cout << "Get Packet: size = " << recvBuffer_.header.size << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
+                        if (recvBuffer_.header.size > MaxPacketSize) {
+                            std::cerr << "Packet size is too big" << std::endl;
+                            recvBuffer_.header.size = 0;
+                            GetHeader();
+                            return;
+                        }
                         if (recvBuffer_.header.flag == T::ClientAssignID)
                         {
                             socket_.connect(remoteEndpoint_);
                         }
-                        recvBuffer_.body.resize(recvBuffer_.header.size);
+                        recvBuffer_.body.resize(recvBuffer_.header.size - sizeof(PacketHeader<T>));
                         GetBody();
                     }
                     else

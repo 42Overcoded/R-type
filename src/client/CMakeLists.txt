@@ -52,7 +52,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     ../gameEngine/GameEngine.hpp
-    ../gameEngine/game.hpp
+    ../gameEngine/Game.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
     ../network/INetworkServer.hpp
@@ -66,7 +66,6 @@ set(INCLUDES
 set(EXEC_SRC
     Client.cpp
     ../ecs/Registry.cpp
-    ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     ../gameEngine/GameEngine.cpp
     ../network/network_c/NetworkSystem.cpp
@@ -78,6 +77,7 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/level1.cpp
     ../gameEngine/game/gameLogic/shoot.cpp
     ../gameEngine/game/gameLogic/miscellaneous.cpp
+    ../gameEngine/game/gameLogic/movements.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp

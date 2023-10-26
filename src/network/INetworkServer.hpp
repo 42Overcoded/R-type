@@ -36,7 +36,7 @@ private:
             boost::asio::io_context &ioContext,
             std::uint32_t port,
             PacketsQueue<OwnedPacket<T>> &packetsQueue,
-            std::deque<std::shared_ptr<Connection<T>>> &clients)
+            std::shared_ptr<std::deque<std::shared_ptr<Connection<T>>>> clients)
             : ioContext_(ioContext), packetsInQueue_(packetsQueue), clients_(clients)
         {
             socket_ = std::make_unique<boost::asio::ip::udp::socket>(
@@ -84,9 +84,11 @@ private:
                     boost::asio::ip::udp::socket(
                         ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)),
                     packetsInQueue_);
+                if (clients_ == nullptr)
+                    throw std::runtime_error("clients_ is null");
                 std::cout << "New client created" << std::endl;
                 newClient->ConnectToClient(remoteEndpoint_, id_++);
-                clients_.push_back(newClient);
+                clients_->push_back(newClient);
             }
             GetPacket();
         }
@@ -98,12 +100,14 @@ private:
         uint32_t id_ = 0;
         Packet<T> recvBuffer_;
         boost::asio::ip::udp::endpoint remoteEndpoint_;
-        std::deque<std::shared_ptr<Connection<T>>> &clients_;
+        std::shared_ptr<std::deque<std::shared_ptr<Connection<T>>>> clients_;
     };
 
 public:
-    INetworkServer(uint16_t port) : clientsManager_(ioContext_, port, packetsInQueue_, clients_)
+    INetworkServer(uint16_t port)
     {
+        clients_ = std::make_shared<std::deque<std::shared_ptr<Connection<T>>>>();
+        clientsManager_ = std::make_unique<ClientsManager>(ioContext_, port, packetsInQueue_, clients_);
         std::cout << "[SERVER] Created" << std::endl;
         Start();
     };
@@ -118,7 +122,7 @@ public:
     {
         try
         {
-            clientsManager_.GetPacket();
+            clientsManager_->GetPacket();
             std::cout << "[SERVER] Starting..." << std::endl;
             threadContext_ = std::thread([this]() { ioContext_.run(); });
             std::cout << "[SERVER] Started" << std::endl;
@@ -143,22 +147,21 @@ public:
     {
         if (client && client->IsConnected())
         {
-            client->Send(packet);
+            client->SendPacket(packet);
         }
         else
         {
             OnClientDisconnect(client);
-            client.reset();
-            clients_.erase(std::remove(clients_.begin(), clients_.end(), client), clients_.end());
+            clients_->erase(std::remove(clients_->begin(), clients_->end(), client), clients_->end());
         }
     };
 
     void SendToAllClients(const Packet<T> &packet)
     {
-        for (auto &client : clients_)
+        for (std::shared_ptr<Connection<T>> client : *clients_)
         {
             SendToClient(packet, client);
-        };
+        }
     };
 
     void UpdateServer(size_t maxPacketsNbr = -1)
@@ -188,11 +191,11 @@ protected:
 
 protected:
     PacketsQueue<OwnedPacket<T>> packetsInQueue_;
-    std::deque<std::shared_ptr<Connection<T>>> clients_;
+    std::shared_ptr<std::deque<std::shared_ptr<Connection<T>>>> clients_;
     boost::asio::io_context ioContext_;
     std::thread threadContext_;
-    uint32_t nIDCounter_ = 10000;
-    ClientsManager clientsManager_;
+    std::unique_ptr<ClientsManager> clientsManager_;
+    uint32_t lastEntityId_ = 0;
 };
 };  // namespace Network
 
