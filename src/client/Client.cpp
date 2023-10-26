@@ -30,6 +30,6 @@ int main(int ac, char **av) {
         std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
     }
     registry r;
-    gameEngine game(r, CLIENT/*, serverPort, serverIp*/);
+    gameEngine game(r, CLIENT, serverPort, serverIp);
     game.launch_game();
 }

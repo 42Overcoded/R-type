@@ -13,7 +13,7 @@ void gameEngine::spawn_ally_bullet(int i)
     nlohmann::json starshipJson;
     file >> starshipJson;
     file.close();
-    
+
     auto &_tag = _registry.get_components<Tag>();
     auto &_drawable = _registry.get_components<Drawable>();
     int j = 1;
@@ -37,7 +37,7 @@ void gameEngine::spawn_ally_bullet(int i)
         _registry.add_component<Scale>(bullet, Scale());
         _registry.add_component<State>(bullet, State());
         _registry.add_component<Orientation>(bullet, Orientation());
-        
+
         auto &orientation = _registry.get_components<Orientation>();
         auto &tag = _registry.get_components<Tag>();
         auto &speed = _registry.get_components<Speed>();
@@ -51,7 +51,7 @@ void gameEngine::spawn_ally_bullet(int i)
         auto &texture = _registry.get_components<Texture>();
         auto &scale = _registry.get_components<Scale>();
         auto &control = _registry.get_components<Control>();
-        
+
         _drawable[bullet]->drawable = true;
         tag[bullet]->tag = starshipJson["bullet"]["tag"];
         texture[bullet]->textureTag = starshipJson["bullet"]["textureTag"];
