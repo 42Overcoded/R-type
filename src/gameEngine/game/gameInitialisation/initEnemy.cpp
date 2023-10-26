@@ -4,7 +4,7 @@
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
 
-entity_t gameEngine::init_enemy(int enemy_id, int pattern_id, float x, float y)
+entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
 {
     std::ifstream file("configFiles/enemies.json");
 
@@ -30,7 +30,9 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id, float x, float y)
     _registry.add_component<Rect>(enemy, Rect());
     _registry.add_component<Texture>(enemy, Texture());
     _registry.add_component<Scale>(enemy, Scale());
+    _registry.add_component<Color>(enemy, Color());
 
+    auto &color = _registry.get_components<Color>();
     auto &tag = _registry.get_components<Tag>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &health = _registry.get_components<Health>();
@@ -46,6 +48,10 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id, float x, float y)
     auto &drawable = _registry.get_components<Drawable>();
 
     drawable[enemy]->drawable = true;
+    color[enemy]->r = 255;
+    color[enemy]->g = 255;
+    color[enemy]->b = 255;
+    color[enemy]->a = 255;
     tag[enemy]->tag = enemiesJson["enemies"][enemy_id]["tag"];
     texture[enemy]->textureTag = enemiesJson["enemies"][enemy_id]["textureTag"];
     enemy_[enemy]->score = enemiesJson["enemies"][enemy_id]["score"];
@@ -89,8 +95,8 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id, float x, float y)
     pattern[enemy]->switch_index = patternsJson["patterns"][pattern_id]["switch_index"];
     pattern[enemy]->pattern = _pattern;
 
-    position[enemy]->x = x;
-    position[enemy]->y = y;
+    position[enemy]->x = enemiesJson["enemies"][pattern_id]["position"]["x"];
+    position[enemy]->y = enemiesJson["enemies"][pattern_id]["position"]["y"];
 
     return enemy;
 }

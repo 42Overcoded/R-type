@@ -16,7 +16,7 @@ FetchContent_MakeAvailable(SFML)
 FetchContent_Declare(
     nlohmann_json
     GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG v3.10.4 # Remplacez par la version souhaitée
+    GIT_TAG v3.10.4
 )
 
 FetchContent_MakeAvailable(nlohmann_json)
@@ -51,7 +51,8 @@ set(INCLUDES
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
-    gameEngine/GameEngine.hpp
+    ../gameEngine/GameEngine.hpp
+    ../gameEngine/Game.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
     ../network/INetworkServer.hpp
@@ -65,18 +66,18 @@ set(INCLUDES
 set(EXEC_SRC
     Client.cpp
     ../ecs/Registry.cpp
-    ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
-    gameEngine/GameEngine.cpp
+    ../gameEngine/GameEngine.cpp
     ../network/network_c/NetworkSystem.cpp
-    gameEngine/game/gameInitialisation/initBullets.cpp
-    gameEngine/game/gameInitialisation/initEnemy.cpp
-    gameEngine/game/gameInitialisation/initStarship.cpp
-    gameEngine/game/gameInitialisation/initMiscellaneous.cpp
-    gameEngine/game/gameLogic/animation.cpp
-    gameEngine/game/gameLogic/level1.cpp
-    gameEngine/game/gameLogic/shoot.cpp
-    gameEngine/game/gameLogic/miscellaneous.cpp
+    ../gameEngine/game/gameInitialisation/initBullets.cpp
+    ../gameEngine/game/gameInitialisation/initEnemy.cpp
+    ../gameEngine/game/gameInitialisation/initStarship.cpp
+    ../gameEngine/game/gameInitialisation/initMiscellaneous.cpp
+    ../gameEngine/game/gameLogic/animation.cpp
+    ../gameEngine/game/gameLogic/level1.cpp
+    ../gameEngine/game/gameLogic/shoot.cpp
+    ../gameEngine/game/gameLogic/miscellaneous.cpp
+    ../gameEngine/game/gameLogic/movements.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
