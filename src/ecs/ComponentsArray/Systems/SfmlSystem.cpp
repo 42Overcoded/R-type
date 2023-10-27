@@ -292,12 +292,12 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (enemy[i] != std::nullopt && isFrozen == 1) {
+        if ((enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") && isFrozen == 1) {
             color[i]->r = 150;
             color[i]->g = 150;
             color[i]->b = 255;
             continue;
-        } else if (enemy[i] != std::nullopt) {
+        } else if (enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") {
             color[i]->b = 255;
             color[i]->r = 255;
             color[i]->g = 255;
