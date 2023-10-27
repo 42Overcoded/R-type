@@ -441,7 +441,6 @@ void gameEngine::menu()
                 }
             }
             if (tag[i]->tag == "endlessbuttononline" && click[i]->clicked == true) {
-                std::cout << "endless" << std::endl;
                 gameState.mode = ENDLESS;
                 gameLauncher.isRequestingGame = true;
             }

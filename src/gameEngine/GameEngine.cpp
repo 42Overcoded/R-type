@@ -218,8 +218,6 @@ void gameEngine::launch_game()
                 spawn_infinite_wave(_elapsed, _clock, wave);
             if (gameState.mode == GENERATED) {
                 spawn_generated_level(_elapsed, _clock);
-                std::cout << "mob alive: " << _level_info.mob_alive << std::endl;
-                std::cout << "generated size: " << _level_info._generated.size() << std::endl;
                 if (_level_info.mob_alive == 0 && _level_info._generated.size() == 0)
                     gameState.scene = END;
             }
