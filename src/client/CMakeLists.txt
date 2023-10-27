@@ -78,6 +78,7 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/shoot.cpp
     ../gameEngine/game/gameLogic/miscellaneous.cpp
     ../gameEngine/game/gameLogic/movements.cpp
+    ../gameEngine/game/gameLogic/generateLevel.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
