@@ -133,6 +133,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     _registry.add_component<EnemyBall>(bullet, EnemyBall());
     _registry.add_component<Texture>(bullet, Texture());
     _registry.add_component<Scale>(bullet, Scale());
+    _registry.add_component<Color>(bullet, Color());
     _registry.add_component<Rect>(bullet, Rect());
 
     auto &drawable = _registry.get_components<Drawable>();
@@ -145,8 +146,13 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     auto &texture = _registry.get_components<Texture>();
     auto &scale = _registry.get_components<Scale>();
     auto &rect = _registry.get_components<Rect>();
+    auto &color = _registry.get_components<Color>();
 
     searchingHead[bullet]->searching = true;
+    color[bullet]->r = 255;
+    color[bullet]->g = 255;
+    color[bullet]->b = 255;
+    color[bullet]->a = 255;
     drawable[bullet]->drawable = true;
     position[bullet]->x = position[i]->x + 140;
     position[bullet]->y = position[i]->y + 330;
@@ -166,6 +172,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
 void gameEngine::spawn_bullet(int i, int j)
 {
     std::ifstream file("configFiles/bullet.json");
+
 
     if (!file.is_open())
         exit(84);

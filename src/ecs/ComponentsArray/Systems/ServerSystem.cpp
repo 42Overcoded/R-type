@@ -85,7 +85,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (enemy[i] != std::nullopt && isFrozen == 1) {
+        if ((enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") && isFrozen == 1) {
             color[i]->r = 50;
             color[i]->g = 50;
             color[i]->b = 255;

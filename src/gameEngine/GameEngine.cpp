@@ -34,9 +34,18 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock, floa
 
     std::uniform_int_distribution<int> distribution(0, 5000);
     std::uniform_int_distribution<int> distribution2(0, 900);
+    auto &tag = _registry.get_components<Tag>();
+    auto &drawable = _registry.get_components<Drawable>();
 
-    if (_elapsed.asSeconds() > 0.1 / (difficulty /2))
+    for (int i = 0; i < _registry._entity_number; i++)
     {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "ice" && drawable[i]->drawable == false) {
+            return;
+        }
+    }
+    if (_elapsed.asSeconds() > 0.1 / (difficulty /2)) {
         wave += 0.05;
         int rand       = distribution2(generator);
         float randomNb = distribution(generator);
