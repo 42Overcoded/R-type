@@ -193,6 +193,10 @@ class gameEngine {
         void life_handler();
         void spawn_power_up(int i);
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
+        std::string get_this_str(std::string tag, std::string default_str);
+        std::vector<Generated> generateMap(int length, int difficulty, std::string seed_str);
+        std::vector<Generated> loadMap(std::string path);
+        void spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock);
     protected:
     private:
         float wave;
@@ -207,6 +211,9 @@ class gameEngine {
         sf::RenderWindow _window;
         SfmlSystem _system;
         std::unique_ptr<Network::NetworkSystem> _networkSystem;
+        Level_info _level_info;
+        
+        //Network::NetworkSystem _networkSystem;
         registry _registry;
         unsigned int port_;
         std::string ip_;
