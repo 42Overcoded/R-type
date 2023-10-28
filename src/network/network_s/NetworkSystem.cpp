@@ -12,9 +12,11 @@
 #include <string>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "NetworkComponent.hpp"
+#include "network_c/NetworkSystem.hpp"
+#include "../../gameEngine/Game.hpp"
 
 namespace Network {
-NetworkSystem::NetworkSystem(unsigned int serverPort) : INetworkServer(serverPort)
+NetworkSystem::NetworkSystem(unsigned int serverPort, std::string serverIp) : INetworkServer(serverPort)
 {
 }
 
@@ -46,31 +48,11 @@ void NetworkSystem::managePacketIn(
 {
     switch (packet.header.flag)
     {
-    case Flag::ServerGetPing: manageServerGetPing(client, packet); break;
-    case Flag::ServerConnect: manageServerConnect(client, packet); break;
     case Flag::ServerUpdateControls: manageServerUpdateControls(reg, client, packet); break;
+    case Flag::ServerStartGame: manageServerStartGame(reg, client, packet); break;
+
     default: break;
     }
-}
-
-void NetworkSystem::manageServerGetPing(
-    std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
-{
-    Packet<Flag> response;
-
-    std::cout << "Ping from client " << client->GetId() << std::endl;
-    response.header.flag = Flag::ClientSendPing;
-    client->SendPacket(response);
-}
-
-void NetworkSystem::manageServerConnect(
-    std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
-{
-    Packet<Flag> response;
-
-    std::cout << "Client " << client->GetId() << " connected" << std::endl;
-    response.header.flag = Flag::ClientAccepted;
-    client->SendPacket(response);
 }
 
 void NetworkSystem::manageServerUpdateControls(
@@ -79,17 +61,164 @@ void NetworkSystem::manageServerUpdateControls(
     auto &network = reg.get_components<NetworkComponent>();
     auto &controls = reg.get_components<Control>();
 
-    std::cout << "Update controls from client " << client->GetId() << std::endl;
     for (unsigned int i = 0; i < network.size(); i++) {
         if (network[i]->clientId == client->GetId() && controls[i] != std::nullopt) {
-            packet >> controls[i];
+            bool up, down, left, right, shoot;
+
+            packet >> shoot >> right >> left >> down >> up;
+            controls[i]->up = up;
+            controls[i]->down = down;
+            controls[i]->left = left;
+            controls[i]->right = right;
+            controls[i]->shoot = shoot;
+            std::cout << "Update controls from client " << client->GetId() << " : " << up << down << left << right << shoot << std::endl;
         }
     }
 }
 
+void NetworkSystem::manageServerStartGame(registry &reg, std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
+{
+    std::cout << "Start game from client " << client->GetId() << std::endl;
+    SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
+    auto &gameLauncherArray = reg.get_components<GameLauncher>();
+    size_t gameLauncherIndex = 0;
+
+    for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
+        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+            break;
+    }
+    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+        throw std::runtime_error("No game launcher component found");
+    GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
+
+    if (gameLauncher.isGameLaunched)
+        return;
+    for (size_t i = 0; i < reg._entity_number; i++)
+    {
+        if (gameStateArr[i] != std::nullopt)
+        {
+            gameLauncher.isGameLaunched = true;
+            gameStateArr[i]->scene = Scene::GAME;
+            packet >> gameStateArr[i]->mode;
+
+            Packet<Flag> sendPacket;
+            sendPacket.header.flag = Flag::ClientStartGame;
+            sendPacket << gameStateArr[i]->mode;
+            SendToAllClients(sendPacket);
+        }
+    }
+
+}
+
 void NetworkSystem::manageOutputs(registry &reg)
 {
-    //TODO: manageOutputs
+    manageClientUpdateEntity(reg);
+    manageClientCreateEntity(reg);
+    manageClientStartGame(reg);
+    manageClientEndGame(reg);
+    // debugSpaceshipPosition(reg);
+}
+
+void NetworkSystem::manageClientAddPlayer(registry &reg)
+{
+}
+
+void NetworkSystem::manageClientRemovePlayer(registry &reg)
+{
+}
+
+void NetworkSystem::manageClientCreateEntity(registry &reg)
+{
+    auto &network = reg.get_components<NetworkComponent>();
+    auto &position = reg.get_components<Position>();
+
+    for (unsigned int i = 0; i < network.size(); i++) {
+        if (network[i] != std::nullopt && position[i] != std::nullopt) {
+            if (network[i]->entityId != 0)
+                continue;
+            network[i]->entityId = ++lastEntityId_;
+            Packet<Flag> packet;
+            packet.header.flag = Flag::ClientCreateEntity;
+            packet << (uint32_t)network[i]->entityId << (uint32_t)position[i]->x << (uint32_t)position[i]->y;
+            std::cout << "create : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
+            SendToAllClients(packet);
+        }
+    }
+}
+
+void NetworkSystem::manageClientUpdateEntity(registry &reg)
+{
+    auto &network = reg.get_components<NetworkComponent>();
+    auto &position = reg.get_components<Position>();
+
+    for (unsigned int i = 0; i < network.size(); i++) {
+        if (network[i] != std::nullopt && position[i] != std::nullopt) {
+            if (network[i]->entityId == 0)
+                continue;
+            Packet<Flag> packet;
+            packet.header.flag = Flag::ClientUpdateEntity;
+            packet << (uint32_t)network[i]->entityId << (uint32_t)position[i]->y << (uint32_t)position[i]->x;
+            std::cout << "update : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
+            SendToAllClients(packet);
+        }
+    }
+}
+
+void NetworkSystem::manageClientDestroyEntity(registry &reg)
+{
+}
+
+void NetworkSystem::manageClientStartGame(registry &reg)
+{
+}
+
+void NetworkSystem::manageClientEndGame(registry &reg)
+{
+    SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
+    auto &gameLauncherArray = reg.get_components<GameLauncher>();
+    size_t gameLauncherIndex = 0;
+
+    for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
+        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+            break;
+    }
+    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+        throw std::runtime_error("No game launcher component found");
+    GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
+
+    if (!gameLauncher.isGameLaunched)
+        return;
+    for (size_t i = 0; i < reg._entity_number; i++)
+    {
+        if (gameStateArr[i] != std::nullopt)
+        {
+            if (gameStateArr[i]->scene == Scene::END)
+            {
+                std::cout << "End game" << std::endl;
+                Packet<Flag> packet;
+                packet.header.flag = Flag::ClientEndGame;
+                SendToAllClients(packet);
+                gameLauncher.isGameLaunched = false;
+            }
+            return;
+        }
+    }
+}
+
+void NetworkSystem::debugSpaceshipPosition(registry &reg)
+{
+    auto &network = reg.get_components<NetworkComponent>();
+    auto &position = reg.get_components<Position>();
+    auto &tag = reg.get_components<Tag>();
+
+    for (unsigned int i = 0; i < network.size(); i++) {
+        if (position[i] != std::nullopt && tag[i]->tag == "starship") {
+            // if (network[i]->entityId == 0)
+            //     continue;
+            // std::cout << "Spaceship " << network[i]->entityId << " : " << position[i]->x << " " << position[i]->y << std::endl;
+            std::cout << "Spaceship pos : " << position[i]->x << " " << position[i]->y << std::endl;
+        }
+    }
 }
 
 };  // namespace Network
