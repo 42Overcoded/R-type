@@ -100,3 +100,96 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
 
     return enemy;
 }
+
+entity_t gameEngine::init_worm(int id)
+{
+    std::ifstream file("configFiles/enemies.json");
+
+    if (!file.is_open())
+        exit(84);
+    nlohmann::json enemiesJson;
+    file >> enemiesJson;
+    file.close();
+
+    entity_t worm = _registry.spawn_entity();
+
+    _registry.add_component<Position>(worm, Position());
+    _registry.add_component<Speed>(worm, Speed());
+    _registry.add_component<Sprite>(worm, Sprite());
+    _registry.add_component<Drawable>(worm, Drawable());
+    _registry.add_component<Enemy>(worm, Enemy());
+    _registry.add_component<Pattern>(worm, Pattern());
+    _registry.add_component<Health>(worm, Health());
+    _registry.add_component<Hitbox>(worm, Hitbox());
+    _registry.add_component<Tag>(worm, Tag());
+    _registry.add_component<Clock>(worm, Clock());
+    _registry.add_component<State>(worm, State());
+    _registry.add_component<Rect>(worm, Rect());
+    _registry.add_component<Texture>(worm, Texture());
+    _registry.add_component<Scale>(worm, Scale());
+    _registry.add_component<Color>(worm, Color());
+    _registry.add_component<Orientation>(worm, Orientation());
+
+    auto &color = _registry.get_components<Color>();
+    auto &__tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &health = _registry.get_components<Health>();
+    auto &hitbox = _registry.get_components<Hitbox>();
+    auto &state = _registry.get_components<State>();
+    auto &enemy_ = _registry.get_components<Enemy>();
+    auto &position = _registry.get_components<Position>();
+    auto &pattern = _registry.get_components<Pattern>();
+    auto &texture = _registry.get_components<Texture>();
+    auto &rect = _registry.get_components<Rect>();
+    auto &scale = _registry.get_components<Scale>();
+    auto &speed = _registry.get_components<Speed>();
+    auto &drawable = _registry.get_components<Drawable>();
+    auto &orientation = _registry.get_components<Orientation>();
+
+    orientation[worm]->orientation = 0;
+    drawable[worm]->drawable = true;
+    color[worm]->r = 255;
+    color[worm]->g = 255;
+    color[worm]->b = 255;
+    color[worm]->a = 255;
+    state[worm]->state = 0;
+    state[worm]->index = 0;
+    __tag[worm]->tag = enemiesJson["enemies"][id]["tag"];
+    texture[worm]->textureTag = enemiesJson["enemies"][id]["textureTag"];
+    enemy_[worm]->score = enemiesJson["enemies"][id]["score"];
+    state[worm]->state = enemiesJson["enemies"][id]["state"];
+    hitbox[worm]->width = enemiesJson["enemies"][id]["hitbox"]["width"];
+    hitbox[worm]->height = enemiesJson["enemies"][id]["hitbox"]["height"];
+    health[worm]->health = enemiesJson["enemies"][id]["health"];
+    rect[worm]->baseLeft = enemiesJson["enemies"][id]["rect"]["left"];
+    rect[worm]->baseTop = enemiesJson["enemies"][id]["rect"]["top"];
+    rect[worm]->baseWidth = enemiesJson["enemies"][id]["rect"]["width"];
+    rect[worm]->baseHeight = enemiesJson["enemies"][id]["rect"]["height"];
+    rect[worm]->left = enemiesJson["enemies"][id]["rect"]["left"];
+    rect[worm]->top = enemiesJson["enemies"][id]["rect"]["top"];
+    rect[worm]->width = enemiesJson["enemies"][id]["rect"]["width"];
+    rect[worm]->height = enemiesJson["enemies"][id]["rect"]["height"];
+    scale[worm]->scale = enemiesJson["enemies"][id]["scale"];
+    speed[worm]->speedx = enemiesJson["enemies"][id]["speedx"];
+    speed[worm]->speedy = enemiesJson["enemies"][id]["speedy"];
+    position[worm]->x = enemiesJson["enemies"][id]["position"]["x"];
+    position[worm]->y = enemiesJson["enemies"][id]["position"]["y"];
+    pattern[worm]->pattern_index = enemiesJson["enemies"][8]["pattern_index"];
+    pattern[worm]->pattern_type = enemiesJson["enemies"][8]["pattern_type"];
+    pattern[worm]->pattern_length = enemiesJson["enemies"][8]["pattern_length"];
+    pattern[worm]->switch_index = enemiesJson["enemies"][8]["switch_index"];
+    for (size_t i = 0; i < enemiesJson["enemies"][8]["pattern"].size(); i++) {
+        Speed tmp;
+        tmp.speedx = enemiesJson["enemies"][8]["pattern"][i]["x"];
+        tmp.speedy = enemiesJson["enemies"][8]["pattern"][i]["y"];
+        pattern[worm]->pattern.push_back(tmp);
+    }
+    float x = pattern[worm]->pattern[pattern[worm]->pattern_index].speedx - position[worm]->x;
+    float y = pattern[worm]->pattern[pattern[worm]->pattern_index].speedy - position[worm]->y;
+    float length = sqrt(x * x + y * y);
+    speed[worm]->speedx = (x / length) * 0.5;
+    speed[worm]->speedy = (y / length) * 0.5;
+    speed[worm]->baseSpeedx = speed[worm]->speedx;
+    speed[worm]->baseSpeedy = speed[worm]->speedy;
+    return worm;
+}

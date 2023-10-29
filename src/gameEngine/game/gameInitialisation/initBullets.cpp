@@ -3,6 +3,7 @@
 #include <optional>
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
+#include <random>
 
 void gameEngine::spawn_ally_bullet(int i)
 {
@@ -61,12 +62,12 @@ void gameEngine::spawn_ally_bullet(int i)
             speed[bullet]->speedx = starshipJson["bullet"]["speed"];
             speed[bullet]->speedy = starshipJson["bullet"]["speedy"];
             speed[bullet]->speedy *= -1;
-            orientation[bullet]->orientation = -30;
+            orientation[bullet]->orientation = -15;
         }
         if (id == 2) {
             speed[bullet]->speedx = starshipJson["bullet"]["speed"];
             speed[bullet]->speedy = starshipJson["bullet"]["speedy"];
-            orientation[bullet]->orientation = 30;
+            orientation[bullet]->orientation = 15;
         }
         if (id == 0) {
             orientation[bullet]->orientation = 0;
@@ -122,6 +123,14 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     file >> bulletJson;
     file.close();
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(-100, 100);
+
+    int random = distribution(gen);
+    float random_speed = random / 100.0;
+    std::cout << random_speed << std::endl;
+
     entity_t bullet = _registry.spawn_entity();
     _registry.add_component<Speed>(bullet, Speed());
     _registry.add_component<Tag>(bullet, Tag());
@@ -129,7 +138,6 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     _registry.add_component<Drawable>(bullet, Drawable());
     _registry.add_component<Hitbox>(bullet, Hitbox());
     _registry.add_component<Position>(bullet, Position());
-    _registry.add_component<SearchingHead>(bullet, SearchingHead());
     _registry.add_component<EnemyBall>(bullet, EnemyBall());
     _registry.add_component<Texture>(bullet, Texture());
     _registry.add_component<Scale>(bullet, Scale());
@@ -142,31 +150,49 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     auto &sprite = _registry.get_components<Sprite>();
     auto &position = _registry.get_components<Position>();
     auto &hitbox = _registry.get_components<Hitbox>();
-    auto &searchingHead = _registry.get_components<SearchingHead>();
     auto &texture = _registry.get_components<Texture>();
     auto &scale = _registry.get_components<Scale>();
     auto &rect = _registry.get_components<Rect>();
     auto &color = _registry.get_components<Color>();
+    auto &state = _registry.get_components<State>();
 
-    searchingHead[bullet]->searching = true;
+    state[bullet]->state = 0;
     color[bullet]->r = 255;
     color[bullet]->g = 255;
     color[bullet]->b = 255;
     color[bullet]->a = 255;
+    tag[bullet]->tag = bulletJson["bullet"][j]["tag"];
+    tag[bullet]->groupTag = bulletJson["bullet"][j]["groupTag"];
     drawable[bullet]->drawable = true;
     position[bullet]->x = position[i]->x + 140;
     position[bullet]->y = position[i]->y + 330;
-    tag[bullet]->tag = bulletJson["bullet"][j]["tag"];
+    if (tag[bullet]->tag == "wormBullet") {
+        position[bullet]->x = position[i]->x;
+        position[bullet]->y = position[i]->y;
+    }
     hitbox[bullet]->width = bulletJson["bullet"][j]["hitboxwidth"];
     hitbox[bullet]->height = bulletJson["bullet"][j]["hitboxheight"];
     texture[bullet]->textureTag = bulletJson["bullet"][j]["textureTag"];
     scale[bullet]->scale = bulletJson["bullet"][j]["scale"];
     speed[bullet]->speedx = bulletJson["bullet"][j]["speed"];
-    speed[bullet]->speedy = bulletJson["bullet"][j]["speed"];
+    speed[bullet]->speedy = random_speed;
     rect[bullet]->left = bulletJson["bullet"][j]["rect"]["left"];
     rect[bullet]->top = bulletJson["bullet"][j]["rect"]["top"];
     rect[bullet]->width = bulletJson["bullet"][j]["rect"]["width"];
     rect[bullet]->height = bulletJson["bullet"][j]["rect"]["height"];
+    if (tag[bullet]->tag == "wormBullet") {
+        for (size_t j = 0; j < _registry._entity_number; j++) {
+            if (tag[j] == std::nullopt)
+                continue;
+            if (tag[j]->tag == "starship") {
+                float x = position[j]->x - position[i]->x;
+                float y = position[j]->y - position[i]->y;
+                float length = sqrt(x * x + y * y);
+                speed[bullet]->speedx = (x / length) * 0.5;
+                speed[bullet]->speedy = (y / length) * 0.5;
+            }
+        }
+    }
 }
 
 void gameEngine::spawn_bullet(int i, int j)

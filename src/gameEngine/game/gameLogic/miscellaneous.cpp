@@ -245,7 +245,7 @@ void gameEngine::menu()
             if (tag[i]->tag == "endlessbutton") {
                 if (click[i]->clicked == true) {
                     click[i]->clicked = false;
-                    wave = 20;
+                    wave = 50;
                     gameState.mode = ENDLESS;
                     gameState.scene = GAME;
                     drawable[i]->drawable = false;

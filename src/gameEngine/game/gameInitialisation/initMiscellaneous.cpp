@@ -375,12 +375,26 @@ void gameEngine::death_animation()
     auto &text = _registry.get_components<Text>();
     auto &rect = _registry.get_components<Rect>();
 
+    int wormAlive = -1;
+    for (size_t i = 0; i < _registry._entity_number; i++)
+    {
+        if (tag[i]->tag == "wormBody") {
+            wormAlive = 0;
+        }
+    }
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (tag[i] == std::nullopt)
             continue;
         if (enemy[i] != std::nullopt) {
-            if (position[i]->x < -100) {
+            if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 _registry.kill_entity(entity_t(i));
+            }
+        }
+        if (tag[i]->tag == "wormBody") {
+            if  (health[i] != std::nullopt) {
+                if (health[i]->health > 0) {
+                    wormAlive += 1;
+                }
             }
         }
         if (tag[i]->tag == "enemyBullet") {
@@ -399,8 +413,14 @@ void gameEngine::death_animation()
                 clock[i]->clock.restart();
             }
         }
-        if (enemy[i] != std::nullopt) {
+        if (tag[i]->tag == "wormBody") {
             if (health[i]->health <= 0) {
+                rect[i]->left = 99;
+                state[i]->state = 666;
+            }
+        }
+        if (enemy[i] != std::nullopt) {
+            if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 for (size_t j = 0; j < _registry._entity_number; j++) {
                     if (tag[j] == std::nullopt)
                         continue;
@@ -412,6 +432,25 @@ void gameEngine::death_animation()
                 spawn_power_up(i);
                 spawn_explosion(i);
                 _registry.kill_entity(entity_t(i));
+            }
+        }
+    }
+    if (wormAlive == 0) {
+        for (size_t j = 0; j < _registry._entity_number; j++) {
+            if (tag[j] == std::nullopt)
+                continue;
+            if ((tag[j]->tag == "wormHead" || tag[j]->tag == "wormBody")) {
+                for (size_t k = 0; k < _registry._entity_number; k++)
+                {
+                    if (tag[k] == std::nullopt)
+                        continue;
+                    if (tag[k]->tag == "score") {
+                        state[k]->state += enemy[j]->score;
+                        text[k]->str = "Score : " + std::to_string(state[k]->state);
+                    }
+                }
+                spawn_explosion(j);
+                _registry.kill_entity(entity_t(j));
             }
         }
     }
