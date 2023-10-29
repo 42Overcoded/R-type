@@ -185,6 +185,10 @@ class gameEngine {
         void init_game();
         void life_handler();
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
+
+        sf::Music musicMenu;
+        sf::Music musicGame;
+        sf::Music musicScore;
     protected:
     private:
         Scene scene;
@@ -198,7 +202,6 @@ class gameEngine {
         SfmlSystem _system;
         //Network::NetworkSystem _networkSystem;
         registry _registry;
-        sf::Music _music;
 };
 
 #endif /* !GAMEENGINE_HPP_ */

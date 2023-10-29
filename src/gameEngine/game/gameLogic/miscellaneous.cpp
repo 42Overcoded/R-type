@@ -59,10 +59,9 @@ void gameEngine::menu()
                     mode = LEVELS;
                     scene = GAME;
                     if (_type == CLIENT) {
-                        _music.stop();
-                        _music.setLoop(false);
-                        _music.openFromFile("assets/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1)_1.mp3");
-                        _music.play();
+                        musicGame.stop();
+                        musicGame.setLoop(false);
+                        musicGame.play();
                     }
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
@@ -79,10 +78,9 @@ void gameEngine::menu()
                     mode = ENDLESS;
                     scene = GAME;
                     if (_type == CLIENT) {
-                        _music.stop();
-                        _music.setLoop(false);
-                        _music.openFromFile("assets/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1)_1.mp3");
-                        _music.play();
+                        musicGame.stop();
+                        musicGame.setLoop(false);
+                        musicGame.play();
                     }
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {

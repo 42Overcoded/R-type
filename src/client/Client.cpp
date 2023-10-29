@@ -31,5 +31,8 @@ int main(int ac, char **av) {
     }
     registry r;
     gameEngine game(r, CLIENT/*, serverPort, serverIp*/);
+    game.musicMenu.openFromFile("assets/R-Type (Arcade Soundtrack) 01 Title_1.mp3");
+    game.musicGame.openFromFile("assets/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1)_1.mp3");
+    game.musicScore.openFromFile("assets/R-Type (Arcade Soundtrack) 13 Game Over_1.mp3");
     game.launch_game();
 }

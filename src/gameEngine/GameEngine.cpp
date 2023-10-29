@@ -92,9 +92,8 @@ void gameEngine::launch_game() {
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
         _system.load_texture(_registry);
-        _music.openFromFile("assets/R-Type (Arcade Soundtrack) 01 Title_1.mp3");
-        _music.setLoop(true);
-        _music.play();
+        musicMenu.setLoop(true);
+        musicMenu.play();
     }
     register_component_to_game();
     scene = MENU;
@@ -128,10 +127,9 @@ void gameEngine::launch_game() {
             if (alive == 0) {
                 scene = END;
                 if (_type == CLIENT) {
-                    _music.stop();
-                    _music.setLoop(false);
-                    _music.openFromFile("assets/R-Type (Arcade Soundtrack) 13 Game Over_1.mp3");
-                    _music.play();
+                    musicScore.stop();
+                    musicScore.setLoop(false);
+                    musicScore.play();
                 }
             }
             clock_time();
