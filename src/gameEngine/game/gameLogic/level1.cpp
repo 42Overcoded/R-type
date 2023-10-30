@@ -58,7 +58,6 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
 {
     GameStateComponent &gameState = get_game_state();
 
-    wave = 4;
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
