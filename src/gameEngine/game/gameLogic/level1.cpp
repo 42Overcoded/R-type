@@ -58,6 +58,7 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
 {
     GameStateComponent &gameState = get_game_state();
 
+    wave = 4;
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
@@ -86,7 +87,8 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
     auto &clock = _registry.get_components<Clock>();
     if (is_enemy == 0 && wave == 4) {
         wave = 5;
-        entity_t enemy = init_worm(7);
+        entity_t enemy = init_enemy(9, 5);
+        //entity_t enemy = init_worm(7);
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (tag[i]->tag == "wormHead") {

@@ -129,7 +129,6 @@ void gameEngine::spawn_boss_bullet(int i, int j)
 
     int random = distribution(gen);
     float random_speed = random / 100.0;
-    std::cout << random_speed << std::endl;
 
     entity_t bullet = _registry.spawn_entity();
     _registry.add_component<Speed>(bullet, Speed());
@@ -257,9 +256,12 @@ void gameEngine::spawn_bullet(int i, int j)
     float speedxy = bulletJson["bullet"][j]["speed"];
     speed[bullet]->speedx = speedxy;
 
+    if(tag[bullet]->tag == "starshipBossBullet")
+        position[bullet]->y += 100;
+
     if (tag[bullet]->tag == "enemyBlueBullet")
         searchingHead[bullet]->searching = true;
-    if (tag[bullet]->tag == "enemyBullet") {
+    if (tag[bullet]->tag == "enemyBullet" || tag[bullet]->tag == "starshipBossBullet") {
         for (size_t j = 0; j < _registry._entity_number; j++) {
             if (tag[j] == std::nullopt)
                 continue;

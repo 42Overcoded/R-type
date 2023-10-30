@@ -57,7 +57,13 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture WormHead;
     sf::Texture WormBody;
     sf::Texture wormBullet;
+    sf::Texture starshipBoss;
+    sf::Texture starshipBossBullet;
 
+    if (!starshipBossBullet.loadFromFile("./assets/enemyBlueBullet.png"))
+        exit(84);
+    if (!starshipBoss.loadFromFile("./assets/starshipboss.png"))
+        exit(84);
     if (!wormBullet.loadFromFile("./assets/worm.png"))
         exit(84);
     if (!WormHead.loadFromFile("./assets/worm.png"))
@@ -114,6 +120,8 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!explosion.loadFromFile("./assets/explosion.png"))
         exit(84);
+    textures["starshipBossBulletTexture"] = starshipBossBullet;
+    textures["starshipBossTexture"] = starshipBoss;
     textures["wormBulletTexture"] = wormBullet;
     textures["wormHeadTexture"] = WormHead;
     textures["wormBodyTexture"] = WormBody;
@@ -582,7 +590,7 @@ void SfmlSystem::modify_pattern(registry &r)
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (speed[i] && pattern[i]) {
-            if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody")
+            if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss")
                 continue;
             if (pattern[i]->pattern_length == 0)
                 continue;
@@ -598,7 +606,7 @@ void SfmlSystem::modify_pattern(registry &r)
         }
     }
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody") {
+        if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss") {
             clock[i]->_time = clock[i]->_clock.getElapsedTime();
             // if (clock[i]->_time.asSeconds() > 0.1) {
             //     state[i]->_state += 1;

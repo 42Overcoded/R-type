@@ -95,6 +95,19 @@
             "hitboxheight": 36,
             "scale": 3,
             "speed": -0.5
+        },
+        {
+            "groupTag": "enemyBullet",
+            "tag": "starshipBossBullet",
+            "textureTag": "starshipBossBulletTexture",
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "hitboxwidth": 32,
+            "hitboxheight": 32,
+            "scale": 2,
+            "speed": 0.5
         }
     ]
 }

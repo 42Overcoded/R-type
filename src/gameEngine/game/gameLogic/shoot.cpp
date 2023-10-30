@@ -193,6 +193,16 @@ void gameEngine::shoot_enemy() {
                 spawn_boss_bullet(i, 2);
             }
         }
+        if (tag[i]->tag=="starshipBoss") {
+            clock[i]->_time = clock[i]->_clock.getElapsedTime();
+                if (clock[i]->_time.asSeconds() > 1) {
+                    if (position[i]->x >= 1920) {
+                        continue;
+                    }
+                    clock[i]->_clock.restart();
+                    spawn_bullet(i, 6);
+                }
+        }
         if (searchingHead[i] != std::nullopt) {
             if (searchingHead[i]->searching == false)
                 continue;

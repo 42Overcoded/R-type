@@ -147,8 +147,9 @@ void gameEngine::launch_game()
         int alive    = 0;
 
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
-            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE)
-            menu();
+            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE){
+                menu();
+            }
         if (gameState.scene == GAME)
         {
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))

@@ -68,7 +68,7 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     rect[enemy]->width = enemiesJson["enemies"][enemy_id]["rect"]["width"];
     rect[enemy]->height = enemiesJson["enemies"][enemy_id]["rect"]["height"];
     scale[enemy]->scale = enemiesJson["enemies"][enemy_id]["scale"];
-    if (enemy_id == 3 || enemy_id == 4) {
+    if (enemy_id == 3 || enemy_id == 4 || enemy_id == 9) {
         speed[enemy]->speedx = enemiesJson["enemies"][enemy_id]["speedx"];
         speed[enemy]->speedy = enemiesJson["enemies"][enemy_id]["speedy"];
     }
@@ -88,7 +88,6 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
         tmp.speedy = patternsJson["patterns"][pattern_id]["pattern"][j]["y"];
         _pattern.push_back(tmp);
     }
-
     pattern[enemy]->pattern_index = patternsJson["patterns"][pattern_id]["pattern_index"];
     pattern[enemy]->pattern_type = patternsJson["patterns"][pattern_id]["pattern_type"];
     pattern[enemy]->pattern_length = patternsJson["patterns"][pattern_id]["pattern_length"];
@@ -97,6 +96,17 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
 
     position[enemy]->x = enemiesJson["enemies"][pattern_id]["position"]["x"];
     position[enemy]->y = enemiesJson["enemies"][pattern_id]["position"]["y"];
+
+
+    if(enemy_id == 9){
+        float x = pattern[enemy]->pattern[pattern[enemy]->pattern_index].speedx - position[enemy]->x;
+        float y = pattern[enemy]->pattern[pattern[enemy]->pattern_index].speedy - position[enemy]->y;
+        float length = sqrt(x * x + y * y);
+        speed[enemy]->speedx = (x / length) * 0.3;
+        speed[enemy]->speedy = (y / length) * 0.3;
+        speed[enemy]->baseSpeedx = speed[enemy]->speedx;
+        speed[enemy]->baseSpeedy = speed[enemy]->speedy;
+    }
 
     return enemy;
 }
