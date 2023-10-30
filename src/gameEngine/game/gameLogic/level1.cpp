@@ -61,11 +61,13 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
     for (int i = 0; i < n7; i++) {
         int rand = std::rand() % 2;
         auto &position = _registry.get_components<Position>();
-        entity_t enemy = init_enemy(7, 8, 1950, 0);
+        int x = 1950 + (i * 500);
+        entity_t enemy = init_enemy(7, 7);
         if (rand == 0)
             position[enemy]->y = 0;
         else
             position[enemy]->y = 1080;
+        position[enemy]->x = x;
     }
 }
 
@@ -76,20 +78,20 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
-        spawn_mobs(0,0,0,0, 3, 1, 2);
+        spawn_mobs(0,0,0,0, 0, 0, 100);
     }
-    if (elapsed.asSeconds() > 15 && wave == 1) {
-        wave = 2;
-        spawn_mobs(13, 4, 2, 0, 1, 1);
-    }
-    if (elapsed.asSeconds() > 35 && wave == 2) {
-        wave = 3;
-        spawn_mobs(0, 0, 0, 2, 1, 1);
-    }
-    if (elapsed.asSeconds() > 50 && wave == 3) {
-        wave = 4;
-        spawn_mobs(18, 7, 3, 1, 1, 1);
-    }
+    // if (elapsed.asSeconds() > 15 && wave == 1) {
+    //     wave = 2;
+    //     spawn_mobs(13, 4, 2, 0, 1, 1);
+    // }
+    // if (elapsed.asSeconds() > 35 && wave == 2) {
+    //     wave = 3;
+    //     spawn_mobs(0, 0, 0, 2, 1, 1);
+    // }
+    // if (elapsed.asSeconds() > 50 && wave == 3) {
+    //     wave = 4;
+    //     spawn_mobs(18, 7, 3, 1, 1, 1);
+    // }
     auto &enemy = _registry.get_components<Enemy>();
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (enemy[i] != std::nullopt && wave == 4) {
