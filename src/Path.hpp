@@ -21,9 +21,9 @@
 
 #define TRUE 1
 #define FALSE 0
-#define PATH_ASSETS std::string("/usr/games/rtype/assets/")
-#define PATH_JSON std::string("/usr/games/rtype/json/")
-#define GLOBAL_INSTALL TRUE
+#define PATH_ASSETS std::string("/assets/")
+#define PATH_JSON std::string("/json/")
+#define GLOBAL_INSTALL FALSE
 
 
 inline std::string GetExecutableParentDirectory()
@@ -55,5 +55,8 @@ inline std::string GetExecutableParentDirectory()
         return "";
     #endif
 }
+
+const std::string PATH_TO_JSON = GetExecutableParentDirectory() + PATH_JSON;
+const std::string PATH_TO_ASSETS = GetExecutableParentDirectory() + PATH_ASSETS;
 
 #endif /* !PATH_HPP_ */

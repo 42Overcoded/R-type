@@ -56,4 +56,7 @@ inline std::string GetExecutableParentDirectory()
     #endif
 }
 
+const std::string PATH_TO_JSON = GetExecutableParentDirectory() + PATH_JSON;
+const std::string PATH_TO_ASSETS = GetExecutableParentDirectory() + PATH_ASSETS;
+
 #endif /* !PATH_HPP_ */

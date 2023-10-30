@@ -54,53 +54,53 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture texture;
     sf::Texture Bomb;
 
-    if (!sprinter.loadFromFile(PATH_ASSETS + "truck.png"))
+    if (!sprinter.loadFromFile(PATH_TO_ASSETS + "truck.png"))
         exit(84);
-    if (!tank.loadFromFile(PATH_ASSETS + "tank.png"))
+    if (!tank.loadFromFile(PATH_TO_ASSETS + "tank.png"))
         exit(84);
-    if (!tankBullet.loadFromFile(PATH_ASSETS + "blueBall.png"))
+    if (!tankBullet.loadFromFile(PATH_TO_ASSETS + "blueBall.png"))
         exit(84);
-    if (!Bomb.loadFromFile(PATH_ASSETS + "bomb.png"))
+    if (!Bomb.loadFromFile(PATH_TO_ASSETS + "bomb.png"))
         exit(84);
-    if (!lifeBoost.loadFromFile(PATH_ASSETS + "hearth.png"))
+    if (!lifeBoost.loadFromFile(PATH_TO_ASSETS + "hearth.png"))
         exit(84);
-    if (!ice.loadFromFile(PATH_ASSETS + "ice.png"))
+    if (!ice.loadFromFile(PATH_TO_ASSETS + "ice.png"))
         exit(84);
-    if (!shootBoost.loadFromFile(PATH_ASSETS + "star.png"))
+    if (!shootBoost.loadFromFile(PATH_TO_ASSETS + "star.png"))
         exit(84);
-    if (!shield.loadFromFile(PATH_ASSETS + "shield.png"))
+    if (!shield.loadFromFile(PATH_TO_ASSETS + "shield.png"))
         exit(84);
-    if  (!font.loadFromFile(PATH_ASSETS + "GothamMedium.ttf"))
+    if  (!font.loadFromFile(PATH_TO_ASSETS + "GothamMedium.ttf"))
         exit(84);
-    if (!button.loadFromFile(PATH_ASSETS + "button.png"))
+    if (!button.loadFromFile(PATH_TO_ASSETS + "button.png"))
         exit(84);
-    if (!menuButton.loadFromFile(PATH_ASSETS + "lobby.png"))
+    if (!menuButton.loadFromFile(PATH_TO_ASSETS + "lobby.png"))
         exit(84);
-    if (!playButton.loadFromFile(PATH_ASSETS + "start.png"))
+    if (!playButton.loadFromFile(PATH_TO_ASSETS + "start.png"))
         exit(84);
-    if (!background.loadFromFile(PATH_ASSETS + "background.png"))
+    if (!background.loadFromFile(PATH_TO_ASSETS + "background.png"))
         exit(84);
-    if (!enemyBoss.loadFromFile(PATH_ASSETS + "enemyBoss.png"))
+    if (!enemyBoss.loadFromFile(PATH_TO_ASSETS + "enemyBoss.png"))
         exit(84);
-    if (!enemyBlueBullet.loadFromFile(PATH_ASSETS + "enemyBlueBullet.png"))
+    if (!enemyBlueBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
         exit(84);
-    if (!enemyFour.loadFromFile(PATH_ASSETS + "enemyAlien.png"))
+    if (!enemyFour.loadFromFile(PATH_TO_ASSETS + "enemyAlien.png"))
         exit(84);
-    if (!enemyBullet.loadFromFile(PATH_ASSETS + "enemyBullet.png"))
+    if (!enemyBullet.loadFromFile(PATH_TO_ASSETS + "enemyBullet.png"))
         exit(84);
-    if (!enemyThree.loadFromFile(PATH_ASSETS + "enemyRobot.png"))
+    if (!enemyThree.loadFromFile(PATH_TO_ASSETS + "enemyRobot.png"))
         exit(84);
-    if  (!enemyTwo.loadFromFile(PATH_ASSETS + "enemyScuttle.png"))
+    if  (!enemyTwo.loadFromFile(PATH_TO_ASSETS + "enemyScuttle.png"))
         exit(84);
-    if (!bullet.loadFromFile(PATH_ASSETS + "playerBullet.png"))
+    if (!bullet.loadFromFile(PATH_TO_ASSETS + "playerBullet.png"))
         exit(84);
-    if (!starship.loadFromFile(PATH_ASSETS + "starship.png"))
+    if (!starship.loadFromFile(PATH_TO_ASSETS + "starship.png"))
         exit(84);
-    if (!enemy.loadFromFile(PATH_ASSETS + "enemyStarship.png"))
+    if (!enemy.loadFromFile(PATH_TO_ASSETS + "enemyStarship.png"))
         exit(84);
-    if (!beambar.loadFromFile(PATH_ASSETS + "beam.png"))
+    if (!beambar.loadFromFile(PATH_TO_ASSETS + "beam.png"))
         exit(84);
-    if (!explosion.loadFromFile(PATH_ASSETS + "explosion.png"))
+    if (!explosion.loadFromFile(PATH_TO_ASSETS + "explosion.png"))
         exit(84);
     textures["tankTexture"] = tank;
     textures["sprinterTexture"] = sprinter;

@@ -19,10 +19,10 @@
 #include "../ecs/Registry.hpp"
 #include "../../Path.hpp"
 
-const std::string PATH_TO_COMPORTEMENT = GetExecutableParentDirectory() + PATH_JSON + "comportment.json";
-const std::string PATH_TO_MOB = GetExecutableParentDirectory() + PATH_JSON + "mob.json";
-const std::string PATH_TO_MAP_FOLDER = GetExecutableParentDirectory() + PATH_JSON + "map/";
-const std::string PATH_TO_MISC = GetExecutableParentDirectory() + PATH_JSON + "miscellaneous.json";
+const std::string PATH_TO_COMPORTEMENT = PATH_TO_JSON + "comportment.json";
+const std::string PATH_TO_MOB = PATH_TO_JSON + "mob.json";
+const std::string PATH_TO_MAP_FOLDER = PATH_TO_JSON + "map/";
+const std::string PATH_TO_MISC = PATH_TO_JSON + "miscellaneous.json";
 const std::string NO_MAP_LOADED = "No map loaded";
 const int min_level_lenght = 100;  // Temporarily set to 100 [random value]
 const int max_level_lenght = 1000; // Temporarily set to 1000 [random value]
