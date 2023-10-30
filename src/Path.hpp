@@ -9,6 +9,7 @@
 #define PATH_HPP_
 
 #if defined(_WIN32) || defined(_WIN64)
+    #include <limits.h>
 #elif defined(__linux__)
     #include <libgen.h>
     #include <unistd.h>
