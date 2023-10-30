@@ -66,7 +66,7 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
         if (rand == 0)
             position[enemy]->y = 0;
         else
-            position[enemy]->y = 1080;
+            position[enemy]->y = 830;
         position[enemy]->x = x;
     }
 }
