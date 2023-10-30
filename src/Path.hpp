@@ -9,7 +9,9 @@
 #define PATH_HPP_
 
 #if defined(_WIN32) || defined(_WIN64)
+    #define WIN32_LEAN_AND_MEAN
     #include <limits.h>
+    #include <Windows.h>
 #elif defined(__linux__)
     #include <libgen.h>
     #include <unistd.h>
