@@ -21,17 +21,17 @@
 
 #define TRUE 1
 #define FALSE 0
-#define PATH_ASSETS std::string("../games/rtype/assets/")
-#define PATH_JSON std::string("../games/rtype/json/")
-#define GLOBAL_INSTALL FALSE
+#define PATH_ASSETS std::string("/usr/games/rtype/assets/")
+#define PATH_JSON std::string("/usr/games/rtype/json/")
+#define GLOBAL_INSTALL TRUE
 
 
 inline std::string GetExecutableParentDirectory()
 {
-    char buffer[PATH_MAX];
     #if GLOBAL_INSTALL == FALSE
         #if defined(_WIN32) || defined(_WIN64)
-            GetModuleFileName(NULL, buffer, PATH_MAX);
+            char buffer[MAX_PATH];
+            GetModuleFileName(NULL, buffer, MAX_PATH);
             std::string path(buffer);
             size_t lastSlash = path.find_last_of("\\/");
             if (lastSlash != std::string::npos)
@@ -39,6 +39,7 @@ inline std::string GetExecutableParentDirectory()
             else
                 return path;
         #elif defined(__linux__)
+            char buffer[1000];
             ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
             if (len != -1)
             {

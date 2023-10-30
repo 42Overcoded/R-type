@@ -22,8 +22,8 @@ do
         shift
       ;;
     -h | --help)
-      "Usage: $0 [-p|--pack]"
-      exit 84
+      echo "Usage: $0 [-p|--pack]"
+      exit 0
       ;;
     --)
       shift;
@@ -31,6 +31,7 @@ do
       ;;
     *)
       echo "Unexpected option: $1"
+      exit 84
       ;;
   esac
 done
@@ -40,7 +41,7 @@ original_dir=${PWD}
 mkdir build > /dev/null 2>&1
 cd build > /dev/null 2>&1
 cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . -j
+cmake --build . -j 7
 if [ $PACK = True ]; then
   cpack -C CPackConfig.cmake
 fi

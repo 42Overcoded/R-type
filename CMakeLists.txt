@@ -4,5 +4,3 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 project(RType VERSION 1.0)
 
 add_subdirectory(src)
-# add_subdirectory(lib)
-# add_subdirectory(tests)

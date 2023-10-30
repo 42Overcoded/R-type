@@ -11,12 +11,17 @@
 #include "../gameEngine/GameEngine.hpp"
 #include "../network/Protocol.hpp"
 
+int printUsage() {
+    std::cerr << "Usage: ./r-type_client [serverPort serverIp]" << std::endl;
+    return 84;
+}
+
 int main(int ac, char **av) {
     unsigned int serverPort = Network::DefaultPort;
     std::string serverIp = Network::DefaultIp;
 
-    if (ac > 3) {
-        std::cerr << "Usage: ./r-type_server serverPort serverIp" << std::endl;
+    if (ac > 3 || (ac > 0 && (std::string(av[1]) == "-h" || std::string(av[1]) == "--help"))) {
+        printUsage();
         return 84;
     } else if (ac == 3) {
         try {
