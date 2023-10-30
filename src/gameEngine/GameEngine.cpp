@@ -40,6 +40,7 @@ void gameEngine::loadLevel(int level)
 void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
 {
     int MAGIC_VALUE = 50; //The higher the value, the faster the enemies spawn
+    const int boss_worm_id = 7;
 
     if (_elapsed.asSeconds() > 0.1) {
         if (_level_info.mob_alive == 0)
@@ -48,16 +49,23 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
             ;
         else if (this->_level_info._generated.size() > 0 && _level_info._generated[0].is_boss) {
             if (_level_info.mob_alive == 0) {
-                entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
-                auto &position = _registry.get_components<Position>();
-                if (position[enemy]->y == 0)
-                    position[enemy]->y = _level_info._generated[0].y;
-                _level_info._generated.erase(_level_info._generated.begin());
-                _level_info.mob_alive += 1;
-                _level_info.is_boss_alive = true;
+                if (_level_info._generated[0].id == boss_worm_id) {
+                    std::cout << "Magie noir du worm" << std::endl;
+                    entity_t enemy = init_worm(7);
+                    _level_info._generated.erase(_level_info._generated.begin());
+                    _level_info.mob_alive += 1;
+                    _level_info.is_boss_alive = true;
+                } else {
+                    entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                    auto &position = _registry.get_components<Position>();
+                    if (position[enemy]->y == 0)
+                        position[enemy]->y = _level_info._generated[0].y;
+                    _level_info._generated.erase(_level_info._generated.begin());
+                    _level_info.mob_alive += 1;
+                    _level_info.is_boss_alive = true;
+                }
             }
-        }
-        else {
+        } else {
             _level_info.level_progress += (MAGIC_VALUE * _elapsed.asSeconds());
             while (this->_level_info._generated.size() > 0 && _level_info.level_progress > _level_info._generated[0].x && _level_info._generated[0].is_boss == false) {
                 entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
@@ -191,6 +199,8 @@ void gameEngine::launch_game()
         GameStateComponent &gameState = get_game_state();
         auto &health = _registry.get_components<Health>();
         auto &tag    = _registry.get_components<Tag>();
+        auto &clockk  = _registry.get_components<Clock>();
+        auto &state  = _registry.get_components<State>();
         int alive    = 0;
 
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
@@ -203,24 +213,23 @@ void gameEngine::launch_game()
         {
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
                 continue;
-            for (size_t i = 0; i < _registry._entity_number; i++)
-            {
+            for (size_t i = 0; i < _registry._entity_number; i++) {
                 if (tag[i] == std::nullopt)
                     continue;
                 if (tag[i]->tag == "starship")
-                {
                     alive += 1;
-                }
-                if (health[i] != std::nullopt && health[i]->health <= 0 &&
-                    tag[i]->tag == "starship")
-                {
+                if (health[i] != std::nullopt && health[i]->health <= 0 && tag[i]->tag == "starship")
                     _registry.kill_entity(entity_t(i));
+                if (tag[i]->tag == "wormHead")
+                    clockk[i]->time = clockk[i]->clock.getElapsedTime();
+                if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clockk[i]->time.asSeconds() > 0.18) {
+                    state[i]->index++;
+                    init_worm(8);
+                    clockk[i]->clock.restart();
                 }
             }
             if (alive == 0)
-            {
                 gameState.scene = END;
-            }
             clock_time();
             elapsed  = clock.getElapsedTime();
             _elapsed = _clock.getElapsedTime();
