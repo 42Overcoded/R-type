@@ -95,8 +95,8 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     pattern[enemy]->switch_index = patternsJson["patterns"][pattern_id]["switch_index"];
     pattern[enemy]->pattern = _pattern;
 
-    position[enemy]->x = enemiesJson["enemies"][pattern_id]["position"]["x"];
-    position[enemy]->y = enemiesJson["enemies"][pattern_id]["position"]["y"];
+    position[enemy]->x = enemiesJson["enemies"][enemy_id]["position"]["x"];
+    position[enemy]->y = enemiesJson["enemies"][enemy_id]["position"]["y"];
 
     return enemy;
 }

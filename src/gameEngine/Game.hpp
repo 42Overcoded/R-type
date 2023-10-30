@@ -20,7 +20,9 @@ enum Mode {
     ENDLESS,
     VERSUS1,
     VERSUS2,
-    GENERATED
+    GENERATED,
+    LEVELS_G
+
 };
 
 enum Scene {

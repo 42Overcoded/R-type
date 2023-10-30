@@ -26,6 +26,17 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <nlohmann/json.hpp>
 
+void gameEngine::loadLevel(int level)
+{
+    std::string path[] = { "assets/level1design.txt",
+                           "assets/level2design.txt",
+                           "assets/level3design.txt"};
+    _level_info.mob_alive = 0;
+    _level_info.is_boss_alive = false;
+    _level_info.level_progress = 1920;
+    _level_info._generated = loadMap(path[level]);
+}
+
 void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
 {
     int MAGIC_VALUE = 50; //The higher the value, the faster the enemies spawn
@@ -161,6 +172,7 @@ void gameEngine::launch_game()
     std::srand(static_cast<unsigned>(std::time(nullptr)));
     wave = 0;
     id   = 0;
+    int level = 0;
 
     entity_t gameManagerEntity = _registry.spawn_entity();
     _registry.add_component<GameStateComponent>(
@@ -183,8 +195,10 @@ void gameEngine::launch_game()
 
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
             gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE || 
-            gameState.scene == GENERATE)
+            gameState.scene == GENERATE) {
             menu();
+            _clock.restart();
+            }
         if (gameState.scene == GAME)
         {
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
@@ -212,6 +226,16 @@ void gameEngine::launch_game()
             _elapsed = _clock.getElapsedTime();
             clock.restart();
             _system.modify_pattern(_registry);
+            if (gameState.mode == LEVELS_G) {
+                if (_level_info.mob_alive == 0 && _level_info._generated.size() == 0) {
+                    if (level < NUMBERS_OF_LEVELS)
+                        loadLevel(level++);
+                    else {
+                        gameState.scene = END;
+                    }
+                }
+                spawn_generated_level(_elapsed, _clock);
+            }
             if (gameState.mode == LEVELS)
                 spawn_wave(_elapsed, wave);
             if (gameState.mode == ENDLESS)
