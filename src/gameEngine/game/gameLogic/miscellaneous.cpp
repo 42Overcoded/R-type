@@ -122,7 +122,6 @@ void gameEngine::menu()
                 }
             }
             if (tag[i]->tag == "+poweroptoffline" && click[i]->clicked == true) {
-                std::cout << "test\n";
                 click[i]->clicked = false;
                 if (bonus == true) {
                     bonus = false;
@@ -374,7 +373,7 @@ void gameEngine::menu()
             if (tag[i]->tag == "endlessbutton") {
                 if (click[i]->clicked == true) {
                     click[i]->clicked = false;
-                    wave = 20;
+                    wave = 50;
                     gameState.mode = ENDLESS;
                     gameState.scene = GAME;
                     drawable[i]->drawable = false;

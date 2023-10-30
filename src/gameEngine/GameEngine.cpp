@@ -269,6 +269,7 @@ void gameEngine::launch_game()
             _system.set_color(_registry);
             _window.clear(sf::Color::Black);
             _system.position_system(_registry);
+            _system.set_orientation(_registry);
             _system.rect_system(_registry);
             _system.texture_system(_registry);
             _system.scale_system(_registry);
