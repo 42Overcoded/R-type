@@ -9,25 +9,22 @@
 #define GAMEENGINE_HPP_
 
 #include "../jsonfile/include/JsonParser.hpp"
+#include "SFML/System/Clock.hpp"
+#include "Game.hpp"
 #include "../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "../network_c/NetworkSystem.hpp"
+#include "../network_s/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
-
-enum Scene {
-    MENU,
-    LOBBY,
-    GAME,
-    END
-};
+#include <memory>
 
 class gameEngine {
     public:
-        gameEngine(registry &registry, unsigned int serverPort, std::string serverIp) : _registry(registry), _networkSystem(serverPort, serverIp) {}
+        gameEngine(registry &registry, ClientType type, unsigned int serverPort, std::string serverIp) : _registry(registry), _type(type), port_(serverPort), ip_(serverIp)  {}
         ~gameEngine() = default;
         /**
          * @brief register all component to the game
@@ -55,7 +52,7 @@ class gameEngine {
          * @param y Coordinate y
          * @return entity_t 
          */
-        entity_t init_enemy(int enemy_id, int comportment_id, float x, float y);
+        entity_t init_enemy(int enemy_id, int comportment_id);
         /**
          * @brief menu of the game / pause scene / end scene / lobby
          * 
@@ -104,7 +101,7 @@ class gameEngine {
          * @param elapsed 
          * @param wave 
          */
-        void spawn_wave(sf::Time &elapsed, int &wave);
+        void spawn_wave(sf::Time &elapsed, float &wave);
         /**
          * @brief init the load shoot animation
          * 
@@ -167,6 +164,11 @@ class gameEngine {
          */
         void shoot_system(sf::Time &elapsed);
         /**
+         * @brief handle the movement of the player
+         * 
+         */
+        void movement_system(registry &r);
+        /**
          * @brief animate the enemies
          * 
          */
@@ -176,21 +178,38 @@ class gameEngine {
          * 
          */
         void clock_time();
+
+        /**
+         * @brief get the game state object
+         * @return GameStateComponent reference
+         */
+        GameStateComponent &get_game_state();
         /**
          * @brief handle the life of the starship
          * 
          */
+        void init_button(int i);
+        void init_game();
         void life_handler();
+        void spawn_power_up(int i);
+        void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
     protected:
     private:
-        Scene scene;
+        float wave;
         JsonParser *parsed;
+        int id;
+        float difficulty;
+        bool bonus;
+        ClientType _type;
         sf::Time elapsed;
         sf::Clock clock;
+        sf::Clock networkClock;
         sf::RenderWindow _window;
         SfmlSystem _system;
-        Network::NetworkSystem _networkSystem;
+        std::unique_ptr<Network::NetworkSystem> _networkSystem;
         registry _registry;
+        unsigned int port_;
+        std::string ip_;
 };
 
 #endif /* !GAMEENGINE_HPP_ */

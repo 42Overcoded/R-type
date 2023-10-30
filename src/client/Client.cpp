@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <iostream>
 #include "../ecs/Registry.hpp"
-#include "GameEngine.hpp"
+#include "../gameEngine/GameEngine.hpp"
 #include "../network/Protocol.hpp"
 
 int main(int ac, char **av) {
@@ -30,6 +30,6 @@ int main(int ac, char **av) {
         std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
     }
     registry r;
-    gameEngine game(r, serverPort, serverIp);
+    gameEngine game(r, CLIENT, serverPort, serverIp);
     game.launch_game();
 }

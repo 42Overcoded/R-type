@@ -9,10 +9,12 @@
 #define NETWORKCOMPONENT_HPP_
 #include <memory>
 #include <cstdint>
+#include <sys/types.h>
 
 struct NetworkComponent
 {
-    uint32_t entityId;
+    uint32_t clientId = 0;
+    uint32_t entityId = 0;
 };
 
 #endif /* !NETWORKCOMPONENT_HPP_ */

@@ -8,6 +8,7 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
+#include "SFML/Graphics/Color.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -120,6 +121,10 @@ struct Player {
     int id;
 };
 
+struct isClick {
+    bool clicked = false;
+};
+
 /**
  * @brief Enemy is a tag to know if the entity is an enemy and the score it gives when killed
  * 
@@ -136,12 +141,24 @@ struct Bullet {
     int id;
 };
 
+struct Color {
+    int r;
+    int g;
+    int b;
+    int a;
+};
+
+struct Orientation {
+    int orientation;
+};
+
 /**
  * @brief Tag to know the type of the entity
  * 
  */
 struct Tag {
     std::string tag;
+    std::string groupTag;
 };
 
 /**
@@ -214,6 +231,12 @@ struct Pattern {
 struct Hitbox {
     int width;
     int height;
+};
+
+struct GameLauncher {
+    bool isRequestingGame = false;
+    bool isWaitingForServer = false;
+    bool isGameLaunched = false;
 };
 
 #endif /* !COMPONENTS_HPP_ */
