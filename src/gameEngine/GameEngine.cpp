@@ -182,9 +182,9 @@ void gameEngine::launch_game()
         int alive    = 0;
 
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
-            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE || 
-            gameState.scene == GENERATE)
-            menu();
+            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE){
+                menu();
+        }
         if (gameState.scene == GAME)
         {
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
@@ -245,6 +245,7 @@ void gameEngine::launch_game()
             _system.set_color(_registry);
             _window.clear(sf::Color::Black);
             _system.position_system(_registry);
+            _system.set_orientation(_registry);
             _system.rect_system(_registry);
             _system.texture_system(_registry);
             _system.scale_system(_registry);

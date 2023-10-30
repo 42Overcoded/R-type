@@ -39,6 +39,7 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture enemyBullet;
     sf::Texture enemyBlueBullet;
     sf::Texture enemyBoss;
+    sf::Texture enemyBossBullet;
     sf::Texture background;
     sf::Texture shield;
     sf::Texture menuButton;
@@ -53,7 +54,22 @@ void SfmlSystem::load_texture(registry &r)
     sf::Font font;
     sf::Texture texture;
     sf::Texture Bomb;
+    sf::Texture WormHead;
+    sf::Texture WormBody;
+    sf::Texture wormBullet;
+    sf::Texture starshipBoss;
+    sf::Texture starshipBossBullet;
 
+    if (!starshipBossBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
+        throw std::runtime_error("Cannot load starship boss bullet texture");
+    if (!starshipBoss.loadFromFile(PATH_TO_ASSETS + "starshipboss.png"))
+        throw std::runtime_error("Cannot load starship boss texture");
+    if (!wormBullet.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm bullet texture");
+    if (!WormHead.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm head texture");
+    if (!WormBody.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm body texture");
     if (!sprinter.loadFromFile(PATH_TO_ASSETS + "truck.png"))
         throw std::runtime_error("Cannot load sprinter texture");
     if (!tank.loadFromFile(PATH_TO_ASSETS + "tank.png"))
@@ -92,6 +108,8 @@ void SfmlSystem::load_texture(registry &r)
         throw std::runtime_error("Cannot load enemy robot texture");
     if  (!enemyTwo.loadFromFile(PATH_TO_ASSETS + "enemyScuttle.png"))
         throw std::runtime_error("Cannot load enemy scuttle texture");
+    if (!enemyBossBullet.loadFromFile(PATH_TO_ASSETS + "enemyBoss.png"))
+        throw std::runtime_error("Cannot load enemy boss bullet texture");
     if (!bullet.loadFromFile(PATH_TO_ASSETS + "playerBullet.png"))
         throw std::runtime_error("Cannot load bullet texture");
     if (!starship.loadFromFile(PATH_TO_ASSETS + "starship.png"))
@@ -102,6 +120,12 @@ void SfmlSystem::load_texture(registry &r)
         throw std::runtime_error("Cannot load beambar texture");
     if (!explosion.loadFromFile(PATH_TO_ASSETS + "explosion.png"))
         throw std::runtime_error("Cannot load explosion texture");
+
+    textures["starshipBossBulletTexture"] = starshipBossBullet;
+    textures["starshipBossTexture"] = starshipBoss;
+    textures["wormBulletTexture"] = wormBullet;
+    textures["wormHeadTexture"] = WormHead;
+    textures["wormBodyTexture"] = WormBody;
     textures["tankTexture"] = tank;
     textures["sprinterTexture"] = sprinter;
     textures["bombTexture"] = Bomb;
@@ -125,7 +149,7 @@ void SfmlSystem::load_texture(registry &r)
     textures["explosionTexture"] = explosion;
     textures["enemyBulletTexture"] = enemyBullet;
     textures["enemyBlueBulletTexture"] = enemyBlueBullet;
-    textures["enemyBossBulletTexture"] = enemyBoss;
+    textures["enemyBossBulletTexture"] = enemyBossBullet;
     fonts["scoreFont"] = font;
     fonts["menuFont"] = font;
 }
@@ -269,7 +293,7 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
                 position[i]->x = 1500;
             }
         }
-        if (enemy[i] != std::nullopt && position[i] != std::nullopt) {
+        if (enemy[i] != std::nullopt && position[i] != std::nullopt && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
             if (position[i]->y < 0) {
                 position[i]->y = 0;
             }
@@ -537,7 +561,7 @@ void SfmlSystem::hitbox_system(registry &r)
                             r.kill_entity(entity_t(i));
                         }
                         if (state[i]->state == 1) {
-                            health[j]->health -= 5;
+                            health[j]->health -= 7;
                             r.kill_entity(entity_t(i));
                         }
                         if (state[i]->state == 2) {
@@ -559,9 +583,16 @@ void SfmlSystem::modify_pattern(registry &r)
 {
     auto &speed = r.get_components<Speed>();
     auto &pattern = r.get_components<Pattern>();
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
+    auto &clock = r.get_components<Clock>();
+    auto &state = r.get_components<State>();
+    auto &orientation = r.get_components<Orientation>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (speed[i] && pattern[i]) {
+            if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss")
+                continue;
             if (pattern[i]->pattern_length == 0)
                 continue;
             if (pattern[i]->pattern_index < pattern[i]->switch_index) {
@@ -573,6 +604,53 @@ void SfmlSystem::modify_pattern(registry &r)
                 speed[i]->speedx = pattern[i]->pattern[pattern[i]->pattern_type].speedx;
                 speed[i]->speedy = pattern[i]->pattern[pattern[i]->pattern_type].speedy;
             }
+        }
+    }
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss") {
+            clock[i]->_time = clock[i]->_clock.getElapsedTime();
+            // if (clock[i]->_time.asSeconds() > 0.1) {
+            //     state[i]->_state += 1;
+            //     float amplitude = 0.2;
+            //     float frequency = 10;
+            //     float varSpeedx = amplitude * sin(state[i]->_state * 2 * M_PI / frequency);
+            //     float varSpeedy = amplitude * cos(state[i]->_state * 2 * M_PI / frequency);
+            //     speed[i]->varSpeedx = varSpeedx * speed[i]->baseSpeedx;
+            //     speed[i]->varSpeedy = varSpeedy * speed[i]->baseSpeedy;
+            //     speed[i]->speedx = speed[i]->baseSpeedx + speed[i]->varSpeedx;
+            //     speed[i]->speedy = speed[i]->baseSpeedy + speed[i]->varSpeedy;
+            //     clock[i]->_clock.restart();
+            // }
+            if (position[i]->x < pattern[i]->pattern[pattern[i]->pattern_index].speedx + 10 &&
+                position[i]->x > pattern[i]->pattern[pattern[i]->pattern_index].speedx - 10 &&
+                position[i]->y < pattern[i]->pattern[pattern[i]->pattern_index].speedy + 10 &&
+                position[i]->y > pattern[i]->pattern[pattern[i]->pattern_index].speedy - 10) {
+                position[i]->x = pattern[i]->pattern[pattern[i]->pattern_index].speedx;
+                position[i]->y = pattern[i]->pattern[pattern[i]->pattern_index].speedy;
+                state[i]->_state = 0;
+                pattern[i]->pattern_index++;
+                if  (pattern[i]->pattern_index > pattern[i]->pattern_length) {
+                    pattern[i]->pattern_index = 0;
+                }
+                float x = pattern[i]->pattern[pattern[i]->pattern_index].speedx - position[i]->x;
+                float y = pattern[i]->pattern[pattern[i]->pattern_index].speedy - position[i]->y;
+                float length = sqrt(x * x + y * y);
+                speed[i]->speedx = (x / length) * 0.5;
+                speed[i]->speedy = (y / length) * 0.5;
+                speed[i]->baseSpeedx = speed[i]->speedx;
+                speed[i]->baseSpeedy = speed[i]->speedy;
+            }
+        }
+    }
+}
+
+void SfmlSystem::set_orientation(registry &r)
+{
+    auto &orientation = r.get_components<Orientation>();
+    auto &sprite = r.get_components<Sprite>();
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (orientation[i] != std::nullopt && sprite[i] != std::nullopt) {
+            sprite[i]->sprite.setRotation(orientation[i]->orientation);
         }
     }
 }

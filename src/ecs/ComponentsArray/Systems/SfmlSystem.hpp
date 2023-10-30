@@ -91,6 +91,7 @@ class SfmlSystem {
          */
         void load_texture(registry &r);
         void set_color(registry &r);
+        void set_orientation(registry &r);
         void color_system(registry &r);
         ~SfmlSystem() = default;
     protected:
