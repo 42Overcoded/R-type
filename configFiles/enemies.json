@@ -319,7 +319,7 @@
             "textureTag": "wormBodyTexture",
             "pattern_index": 0,
             "pattern_type": 0,
-            "pattern_length": 9,
+            "pattern_length": 5,
             "switch_index": 50,
             "speedx": 0,
             "speedy": 0,
@@ -334,7 +334,7 @@
                 },
                 {
                     "x": -600,
-                    "y": 1300
+                    "y": 900
                 },
                 {
                     "x": 400,
@@ -343,23 +343,6 @@
                 {
                     "x": 1000,
                     "y": 500
-                },
-                {
-                    "x": 600,
-                    "y": 800
-
-                },
-                {
-                    "x": 1500,
-                    "y": 300
-                },
-                {
-                    "x": 400,
-                    "y": -300
-                },
-                {
-                    "x": 1300,
-                    "y": 1300
                 }
             ],
             "health": 15,

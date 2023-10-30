@@ -565,7 +565,7 @@ void SfmlSystem::hitbox_system(registry &r)
                         }
                         if (state[i]->state == 2) {
                             health[j]->health -= 10;
-                            if (health[j]->health >= 10) {
+                            if (health[j]->health >= 0) {
                                 r.kill_entity(entity_t(i));
                             }
                         }
@@ -607,25 +607,10 @@ void SfmlSystem::modify_pattern(registry &r)
     }
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss") {
-            clock[i]->_time = clock[i]->_clock.getElapsedTime();
-            // if (clock[i]->_time.asSeconds() > 0.1) {
-            //     state[i]->_state += 1;
-            //     float amplitude = 0.2;
-            //     float frequency = 10;
-            //     float varSpeedx = amplitude * sin(state[i]->_state * 2 * M_PI / frequency);
-            //     float varSpeedy = amplitude * cos(state[i]->_state * 2 * M_PI / frequency);
-            //     speed[i]->varSpeedx = varSpeedx * speed[i]->baseSpeedx;
-            //     speed[i]->varSpeedy = varSpeedy * speed[i]->baseSpeedy;
-            //     speed[i]->speedx = speed[i]->baseSpeedx + speed[i]->varSpeedx;
-            //     speed[i]->speedy = speed[i]->baseSpeedy + speed[i]->varSpeedy;
-            //     clock[i]->_clock.restart();
-            // }
-            if (position[i]->x < pattern[i]->pattern[pattern[i]->pattern_index].speedx + 10 &&
-                position[i]->x > pattern[i]->pattern[pattern[i]->pattern_index].speedx - 10 &&
-                position[i]->y < pattern[i]->pattern[pattern[i]->pattern_index].speedy + 10 &&
-                position[i]->y > pattern[i]->pattern[pattern[i]->pattern_index].speedy - 10) {
-                position[i]->x = pattern[i]->pattern[pattern[i]->pattern_index].speedx;
-                position[i]->y = pattern[i]->pattern[pattern[i]->pattern_index].speedy;
+            if (position[i]->x < pattern[i]->pattern[pattern[i]->pattern_index].speedx + 20 &&
+                position[i]->x > pattern[i]->pattern[pattern[i]->pattern_index].speedx - 20 &&
+                position[i]->y < pattern[i]->pattern[pattern[i]->pattern_index].speedy + 20 &&
+                position[i]->y > pattern[i]->pattern[pattern[i]->pattern_index].speedy - 20) {
                 state[i]->_state = 0;
                 pattern[i]->pattern_index++;
                 if  (pattern[i]->pattern_index > pattern[i]->pattern_length) {
@@ -639,6 +624,19 @@ void SfmlSystem::modify_pattern(registry &r)
                 speed[i]->baseSpeedx = speed[i]->speedx;
                 speed[i]->baseSpeedy = speed[i]->speedy;
             }
+            // clock[i]->_time = clock[i]->_clock.getElapsedTime();
+            // if (clock[i]->_time.asSeconds() > 0.1) {
+            //     state[i]->_state += 1;
+            //     float amplitude = 0.2;
+            //     float frequency = 10;
+            //     float varSpeedx = amplitude * sin(state[i]->_state * 2 * M_PI / frequency);
+            //     float varSpeedy = amplitude * cos(state[i]->_state * 2 * M_PI / frequency);
+            //     speed[i]->varSpeedx = varSpeedx * speed[i]->baseSpeedx;
+            //     speed[i]->varSpeedy = varSpeedy * speed[i]->baseSpeedy;
+            //     speed[i]->speedx = speed[i]->baseSpeedx + speed[i]->varSpeedx;
+            //     speed[i]->speedy = speed[i]->baseSpeedy + speed[i]->varSpeedy;
+            //     clock[i]->_clock.restart();
+            // }
         }
     }
 }
