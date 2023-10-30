@@ -82,6 +82,15 @@
             "pattern_type": 0,
             "pattern_length": 1,
             "switch_index": 50
+        },
+        {
+            "pattern": [
+                { "x": -0.12, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 1,
+            "switch_index": 50
         }
     ]
 }

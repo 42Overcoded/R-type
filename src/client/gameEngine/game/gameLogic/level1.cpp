@@ -6,7 +6,7 @@
 #include <nlohmann/json.hpp>
 #include <random>
 
-void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6)
+void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int n7)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -52,6 +52,15 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6)
         entity_t enemy = init_enemy(6, 7, 1950, 0);
         position[enemy]->y = rand;
     }
+    for (int i = 0; i < n7; i++) {
+        int rand = std::rand() % 2;
+        auto &position = _registry.get_components<Position>();
+        entity_t enemy = init_enemy(7, 8, 1950, 0);
+        if (rand == 0)
+            position[enemy]->y = 0;
+        else
+            position[enemy]->y = 1080;
+    }
 }
 
 void gameEngine::spawn_wave(sf::Time &elapsed, int &wave)
@@ -59,7 +68,7 @@ void gameEngine::spawn_wave(sf::Time &elapsed, int &wave)
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
-        spawn_mobs(0,0,0,0, 3, 1);
+        spawn_mobs(0,0,0,0, 3, 1, 2);
     }
     // if (elapsed.asSeconds() > 15 && wave == 1) {
     //     wave = 2;
