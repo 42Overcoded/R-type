@@ -42,6 +42,7 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture tank;
     sf::Texture sprinter;
     sf::Texture wall;
+    sf::Texture wall2;
     sf::Texture tankBullet;
     sf::Texture background;
     sf::Texture shield;
@@ -106,7 +107,9 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!sprinter.loadFromFile("./assets/truck.png"))
         exit(84);
-    if (!wall.loadFromFile("./assets/wall.png"))
+    if (!wall.loadFromFile("./assets/wall2.png"))
+        exit(84);
+    if (!wall2.loadFromFile("./assets/wall3.png"))
         exit(84);
     textures["bombTexture"] = Bomb;
     textures["lifeBoostTexture"] = lifeBoost;
@@ -120,6 +123,7 @@ void SfmlSystem::load_texture(registry &r)
     textures["tankTexture"] = tank;
     textures["sprinterTexture"] = sprinter;
     textures["wallTexture"] = wall;
+    textures["wall2Texture"] = wall2;
     textures["enemyRobotTexture"] = enemyThree;
     textures["enemyScuttleTexture"] = enemyTwo;
     textures["enemyAlienTexture"] = enemyFour;

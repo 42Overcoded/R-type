@@ -285,16 +285,50 @@
             "health": 20,
             "state": 0,
             "hitbox": {
-                "width": 96,
-                "height": 96
+                "width": 503,
+                "height": 80
             },
             "rect": {
                 "left": 0,
                 "top": 0,
-                "width": 604,
-                "height": 230
+                "width": 503,
+                "height": 80
             },
-            "scale": 0.5,
+            "scale": 1,
+            "position": {
+                "x": 1950,
+                "y": 100
+            }
+        },
+        {
+            "score": 69,
+            "tag": "wall2",
+            "textureTag": "wall2Texture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "switch_index": 0,
+            "speedx": -0.1,
+            "speedy": 0,
+            "pattern": [
+                {
+                    "x": -0.5,
+                    "y": 0
+                }
+            ],
+            "health": 20,
+            "state": 0,
+            "hitbox": {
+                "width": 503,
+                "height": 80
+            },
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 503,
+                "height": 80
+            },
+            "scale": 1,
             "position": {
                 "x": 1950,
                 "y": 100

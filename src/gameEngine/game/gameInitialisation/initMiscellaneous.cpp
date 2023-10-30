@@ -379,7 +379,7 @@ void gameEngine::death_animation()
         if (tag[i] == std::nullopt)
             continue;
         if (enemy[i] != std::nullopt) {
-            if (position[i]->x < -100) {
+            if (position[i]->x < -500) {
                 _registry.kill_entity(entity_t(i));
             }
         }
