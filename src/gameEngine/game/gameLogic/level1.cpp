@@ -52,17 +52,17 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
         entity_t enemy = init_enemy(3, 3);
         position[enemy]->y = rand;
     }
-    for (int i = 0; i < n5; i++) {
+    for (int i = 0; i < n6; i++) {
         int rand = std::rand() % 950;
         auto &position = _registry.get_components<Position>();
-        entity_t enemy = init_enemy(4, 4);
+        entity_t enemy = init_enemy(6, 7);
         position[enemy]->y = rand;
     }
     for (int i = 0; i < n7; i++) {
         int rand = std::rand() % 2;
         auto &position = _registry.get_components<Position>();
-        int x = 1950 + (i * 500);
-        entity_t enemy = init_enemy(7, 7);
+        int x = 1950 + (i * 300);
+        entity_t enemy = init_enemy(7, 8);
         if (rand == 0)
             position[enemy]->y = 0;
         else
@@ -78,7 +78,7 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
-        spawn_mobs(0,0,0,0, 0, 0, 100);
+        spawn_mobs(0,0,0,0, 0, 1, 100);
     }
     // if (elapsed.asSeconds() > 15 && wave == 1) {
     //     wave = 2;
