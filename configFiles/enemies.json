@@ -265,6 +265,178 @@
                 "x": 1950,
                 "y": 100
             }
+        },
+        {
+            "score": 1000,
+            "tag": "wormHead",
+            "textureTag": "wormHeadTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 2,
+            "switch_index": 100,
+            "speedx": 0,
+            "speedy": 0,
+            "pattern": [
+                {
+                    "x": -0.5,
+                    "y": 0
+                },
+                {
+                    "x": -0.5,
+                    "y": 0
+                }
+            ],
+            "health": 99999,
+            "state": 0,
+            "hitbox": {
+                "width": 90,
+                "height": 96
+            },
+            "rect": {
+                "left": 133,
+                "top": 0,
+                "width": 30,
+                "height": 32
+            },
+            "scale": 3,
+            "position": {
+                "x": 2000,
+                "y": 400
+            }
+        },
+        {
+            "score": 100,
+            "tag": "wormBody",
+            "textureTag": "wormBodyTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 9,
+            "switch_index": 50,
+            "speedx": 0,
+            "speedy": 0,
+            "pattern": [
+                {
+                    "x": 1950,
+                    "y": 400
+                },
+                {
+                    "x": 1000,
+                    "y": 110
+                },
+                {
+                    "x": -600,
+                    "y": 1300
+                },
+                {
+                    "x": 400,
+                    "y": 200
+                },
+                {
+                    "x": 1000,
+                    "y": 500
+                },
+                {
+                    "x": 600,
+                    "y": 800
+
+                },
+                {
+                    "x": 1500,
+                    "y": 300
+                },
+                {
+                    "x": 400,
+                    "y": -300
+                },
+                {
+                    "x": 1300,
+                    "y": 1300
+                }
+            ],
+            "health": 15,
+            "state": 0,
+            "hitbox": {
+                "width": 90,
+                "height": 90
+            },
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 33,
+                "height": 33
+            },
+            "scale": 3,
+            "position": {
+                "x": 2000,
+                "y": 400
+            }
+        },
+        {
+            "score": 5000,
+            "tag": "starshipBoss",
+            "textureTag": "starshipBossTexture",
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 9,
+            "switch_index": 50,
+            "speedx": -0.5,
+            "speedy": 0,
+            "pattern": [
+                {
+                    "x": 1750,
+                    "y": 400
+                },
+                {
+                    "x": 1000,
+                    "y": 110
+                },
+                {
+                    "x": 800,
+                    "y": 900
+                },
+                {
+                    "x": 400,
+                    "y": 200
+                },
+                {
+                    "x": 1500,
+                    "y": 500
+                },
+                {
+                    "x": 1800,
+                    "y": 800
+
+                },
+                {
+                    "x": 1400,
+                    "y": 100
+                },
+                {
+                    "x": 900,
+                    "y": 300
+                },
+                {
+                    "x": 1600,
+                    "y": 100
+                }
+            ],
+            "health": 500,
+            "state": 0,
+            "hitbox": {
+                "width": 650,
+                "height": 250
+            },
+            "rect": {
+                "left": 0,
+                "top": 0,
+                "width": 130,
+                "height": 50
+            },
+            "scale": 5,
+            "position": {
+                "x": 1950,
+                "y": 100
+            }
         }
     ]
 }
