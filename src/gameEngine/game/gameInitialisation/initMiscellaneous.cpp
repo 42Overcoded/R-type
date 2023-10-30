@@ -87,6 +87,14 @@ void gameEngine::init_button(int i)
     file >> menuJson;
     file.close();
 
+    int buttonNbr = 0;
+    if (i == -1) {
+        int buttonNbr = menuJson["button"].size();
+        for (int j = 0; j < buttonNbr; j++)
+            init_button(j);
+        return;
+    }
+
     entity_t button = _registry.spawn_entity();
     entity_t texte = _registry.spawn_entity();
 
@@ -388,6 +396,7 @@ void gameEngine::death_animation()
         if (enemy[i] != std::nullopt) {
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 _registry.kill_entity(entity_t(i));
+                _level_info.mob_alive -= 1;
             }
         }
         if (tag[i]->tag == "wormBody") {
@@ -432,6 +441,7 @@ void gameEngine::death_animation()
                 spawn_power_up(i);
                 spawn_explosion(i);
                 _registry.kill_entity(entity_t(i));
+                _level_info.mob_alive -= 1;
             }
         }
     }

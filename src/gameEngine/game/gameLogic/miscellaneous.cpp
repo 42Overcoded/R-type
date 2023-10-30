@@ -6,11 +6,13 @@
 */
 
 #include "../../GameEngine.hpp"
+#include <cstddef>
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
 #include <random>
+#include <string>
 
 
 std::vector<Speed> Mv_to_speed(std::vector<MovementVector> movementVector)
@@ -25,6 +27,21 @@ std::vector<Speed> Mv_to_speed(std::vector<MovementVector> movementVector)
     }
     return speed;
 }
+
+std::string gameEngine::get_this_str(std::string stag, std::string default_str)
+{
+    auto &tag = _registry.get_components<Tag>();
+    auto &text = _registry.get_components<Text>();
+
+    for (size_t i = 0; i < tag.size(); i++) {
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == stag)
+            return text[i]->str;
+    }
+    return default_str;
+}
+
 
 void gameEngine::menu()
 {
@@ -195,6 +212,118 @@ void gameEngine::menu()
                 }
             }
         }
+        if (gameState.scene == GENERATE) {
+            if (tag[i]->tag == "backbuttongenerate") {
+                if (click[i]->clicked == true) {
+                    gameState.scene = OFFLINE;
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
+                            continue;
+                        if (tag[j]->groupTag == "offline")
+                            drawable[j]->drawable = true;
+                        if (tag[j]->groupTag == "generate")
+                            drawable[j]->drawable = false;
+                    }
+                }
+            }
+            if (tag[i]->tag == "generatediffplus") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "difficultytext") {
+                            int diff = std::stoi(text[j]->str);
+                            if (diff < 10) {
+                                diff++;
+                                text[j]->str = std::to_string(diff);
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "generatediffmoins") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "difficultytext") {
+                            int diff = std::stoi(text[j]->str);
+                            if (diff > 1) {
+                                diff--;
+                                text[j]->str = std::to_string(diff);
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "generatelenplus") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "lengthtext") {
+                            int len = std::stoi(text[j]->str);
+                            if (len < 10000) {
+                                len += 100;
+                                text[j]->str = std::to_string(len);
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "generatelenmoins") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "lengthtext") {
+                            int len = std::stoi(text[j]->str);
+                            if (len > 1000) {
+                                len -= 100;
+                                text[j]->str = std::to_string(len);
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "seedinput") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j]->tag == "seedinputtext") {
+                            if (text[j]->str == "Seed:")
+                                text[j]->str = "";
+                            sf::Event event;
+                            while (this->_window.pollEvent(event)) {
+                                if (event.type == sf::Event::TextEntered) {
+                                    if (event.text.unicode == 8) {
+                                        if (text[j]->str.size() > 0)
+                                            text[j]->str.pop_back();
+                                    } else if (event.text.unicode < 128) {
+                                        text[j]->str += static_cast<char>(event.text.unicode);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (tag[i]->tag == "GenerateLevel") {
+                if (click[i]->clicked == true) {
+                    click[i]->clicked = false;
+                    gameState.scene = GAME;
+                    gameState.mode = GENERATED;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
+                                continue;
+                        if (tag[j]->groupTag == "generate") {
+                            drawable[j]->drawable = false;
+                        }
+                    }
+                    init_game();
+                    _level_info._generated = generateMap(std::stoi(get_this_str("lengthtext", "5000")), std::stoi(get_this_str("difficultytext", "5")), get_this_str("seedinputtext", "Basic Seed"));
+                    // _level_info._generated = loadMap("assets/map.txt"); //Example of how to load a map work just like generateMap
+                }
+            }
+
+        }
         if (gameState.scene == OFFLINE) {
             if (tag[i]->groupTag == "offline") {
                 drawable[i]->drawable = true;
@@ -257,6 +386,21 @@ void gameEngine::menu()
                     init_game();
                 }
             }
+            if (tag[i]->tag == "generatebutton") {
+                if (click[i]->clicked == true) {
+                    gameState.scene = GENERATE;
+                    click[i]->clicked = false;
+                    drawable[i]->drawable = false;
+                    for (size_t j = 0; j < tag.size(); j++) {
+                        if (tag[j] == std::nullopt)
+                            continue;
+                        if (tag[j]->groupTag == "offline")
+                            drawable[j]->drawable = false;
+                        if (tag[j]->groupTag == "generate")
+                            drawable[j]->drawable = true;
+                    }
+                }
+            }
         }
         if (gameState.scene == ONLINE) {
             if (tag[i]->groupTag == "online") {
@@ -296,7 +440,6 @@ void gameEngine::menu()
                 }
             }
             if (tag[i]->tag == "endlessbuttononline" && click[i]->clicked == true) {
-                std::cout << "endless" << std::endl;
                 gameState.mode = ENDLESS;
                 gameLauncher.isRequestingGame = true;
             }
