@@ -15,11 +15,11 @@ Mob JsonParser::getMob(std::string name)
         if (this->mobs.mobs[i].name == name)
             return (this->mobs.mobs[i]);
     }
-    std::cout << "Error: Mob not found" << std::endl;
+    std::cerr << "Error: Mob not found" << std::endl;
     try {
         return (this->mobs.mobs[0]);
     } catch (std::exception &e) {
-        std::cout << "Error: No mobs in the json file" << std::endl;
+        std::cerr << "Error: No mobs in the json file" << std::endl;
         exit(84); //84 Should be replaced with a macro (can wait)
     }
 }
@@ -30,11 +30,11 @@ JsonComportment JsonParser::getComportment(int id)
         if (this->comportments.comportments[i].id == id)
             return (this->comportments.comportments[i]);
     }
-    std::cout << "Error: Comportment not found" << std::endl;
+    std::cerr << "Error: Comportment not found" << std::endl;
     try {
         return (this->comportments.comportments[0]);
     } catch (std::exception &e) {
-        std::cout << "Error: No comportments in the json file" << std::endl;
+        std::cerr << "Error: No comportments in the json file" << std::endl;
         exit(84); //84 Should be replaced with a macro (can wait)
     }
 }

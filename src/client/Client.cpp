@@ -37,4 +37,5 @@ int main(int ac, char **av) {
     registry r;
     gameEngine game(r, CLIENT, serverPort, serverIp);
     game.launch_game();
+    return 0;
 }

@@ -6,10 +6,10 @@
 
 entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
 {
-    std::ifstream file("configFiles/enemies.json");
+    std::ifstream file(PATH_TO_JSON + "enemies.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "enemies.json");
     nlohmann::json enemiesJson;
     file >> enemiesJson;
     file.close();
@@ -73,10 +73,10 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
         speed[enemy]->speedy = enemiesJson["enemies"][enemy_id]["speedy"];
     }
 
-    std::ifstream file2("configFiles/pattern.json");
+    std::ifstream file2(PATH_TO_JSON + "pattern.json");
 
     if (!file2.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "pattern.json");
     nlohmann::json patternsJson;
     file2 >> patternsJson;
     file2.close();

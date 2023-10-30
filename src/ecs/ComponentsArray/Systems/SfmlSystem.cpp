@@ -55,53 +55,53 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture Bomb;
 
     if (!sprinter.loadFromFile(PATH_TO_ASSETS + "truck.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load sprinter texture");
     if (!tank.loadFromFile(PATH_TO_ASSETS + "tank.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load tank texture");
     if (!tankBullet.loadFromFile(PATH_TO_ASSETS + "blueBall.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load tank bullet texture");
     if (!Bomb.loadFromFile(PATH_TO_ASSETS + "bomb.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load bomb texture");
     if (!lifeBoost.loadFromFile(PATH_TO_ASSETS + "hearth.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load life boost texture");
     if (!ice.loadFromFile(PATH_TO_ASSETS + "ice.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load ice texture");
     if (!shootBoost.loadFromFile(PATH_TO_ASSETS + "star.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load shoot boost texture");
     if (!shield.loadFromFile(PATH_TO_ASSETS + "shield.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load shield texture");
     if  (!font.loadFromFile(PATH_TO_ASSETS + "GothamMedium.ttf"))
-        exit(84);
+        throw std::runtime_error("Cannot load font");
     if (!button.loadFromFile(PATH_TO_ASSETS + "button.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load button texture");
     if (!menuButton.loadFromFile(PATH_TO_ASSETS + "lobby.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load menu texture");
     if (!playButton.loadFromFile(PATH_TO_ASSETS + "start.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load play texture");
     if (!background.loadFromFile(PATH_TO_ASSETS + "background.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load background texture");
     if (!enemyBoss.loadFromFile(PATH_TO_ASSETS + "enemyBoss.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load enemy boss texture");
     if (!enemyBlueBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load enemy blue bullet texture");
     if (!enemyFour.loadFromFile(PATH_TO_ASSETS + "enemyAlien.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load enemy alien texture");
     if (!enemyBullet.loadFromFile(PATH_TO_ASSETS + "enemyBullet.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load enemy bullet texture");
     if (!enemyThree.loadFromFile(PATH_TO_ASSETS + "enemyRobot.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load enemy robot texture");
     if  (!enemyTwo.loadFromFile(PATH_TO_ASSETS + "enemyScuttle.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load enemy scuttle texture");
     if (!bullet.loadFromFile(PATH_TO_ASSETS + "playerBullet.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load bullet texture");
     if (!starship.loadFromFile(PATH_TO_ASSETS + "starship.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load starship texture");
     if (!enemy.loadFromFile(PATH_TO_ASSETS + "enemyStarship.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load enemy texture");
     if (!beambar.loadFromFile(PATH_TO_ASSETS + "beam.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load beambar texture");
     if (!explosion.loadFromFile(PATH_TO_ASSETS + "explosion.png"))
-        exit(84);
+        throw std::runtime_error("Cannot load explosion texture");
     textures["tankTexture"] = tank;
     textures["sprinterTexture"] = sprinter;
     textures["bombTexture"] = Bomb;
