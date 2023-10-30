@@ -226,6 +226,7 @@ void gameEngine::launch_game()
                     state[i]->index++;
                     init_worm(8);
                     clockk[i]->clock.restart();
+                    this->_level_info.mob_alive += 1;
                 }
             }
             if (alive == 0)
