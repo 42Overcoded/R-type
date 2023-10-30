@@ -25,6 +25,14 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
     n3 *= difficulty;
     n4 *= difficulty;
 
+    for (int i = 0; i < n8; i++) {
+        int rand = std::rand() % 2;
+        auto &position = _registry.get_components<Position>();
+        int x = 0 + (i * 503);
+        entity_t enemy = init_enemy(8, 8);
+        position[enemy]->y = 840;
+        position[enemy]->x = x;
+    }
     for (int i = 0; i < n1; i++) {
         int rand = std::rand() % 950;
         auto &position = _registry.get_components<Position>();
@@ -64,14 +72,6 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
         int x = 0 + (i * 503);
         entity_t enemy = init_enemy(7, 8);
         position[enemy]->y = 0;
-        position[enemy]->x = x;
-    }
-    for (int i = 0; i < n8; i++) {
-        int rand = std::rand() % 2;
-        auto &position = _registry.get_components<Position>();
-        int x = 0 + (i * 503);
-        entity_t enemy = init_enemy(8, 8);
-        position[enemy]->y = 840;
         position[enemy]->x = x;
     }
 }
