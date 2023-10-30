@@ -354,7 +354,7 @@
                 }
 
             ],
-            "health": 20,
+            "health": 15,
             "state": 0,
             "hitbox": {
                 "width": 90,
