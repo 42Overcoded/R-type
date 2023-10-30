@@ -60,66 +60,67 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture starshipBoss;
     sf::Texture starshipBossBullet;
 
-    if (!starshipBossBullet.loadFromFile("./assets/enemyBlueBullet.png"))
-        exit(84);
-    if (!starshipBoss.loadFromFile("./assets/starshipboss.png"))
-        exit(84);
-    if (!wormBullet.loadFromFile("./assets/worm.png"))
-        exit(84);
-    if (!WormHead.loadFromFile("./assets/worm.png"))
-        exit(84);
-    if (!WormBody.loadFromFile("./assets/worm.png"))
-        exit(84);
-    if (!sprinter.loadFromFile("./assets/truck.png"))
-        exit(84);
-    if (!tank.loadFromFile("./assets/tank.png"))
-        exit(84);
-    if (!tankBullet.loadFromFile("./assets/blueBall.png"))
-        exit(84);
-    if (!Bomb.loadFromFile("./assets/bomb.png"))
-        exit(84);
-    if (!lifeBoost.loadFromFile("./assets/hearth.png"))
-        exit(84);
-    if (!ice.loadFromFile("./assets/ice.png"))
-        exit(84);
-    if (!shootBoost.loadFromFile("./assets/star.png"))
-        exit(84);
-    if (!shield.loadFromFile("./assets/shield.png"))
-        exit(84);
-    if  (!font.loadFromFile("./assets/GothamMedium.ttf"))
-        exit(84);
-    if (!button.loadFromFile("./assets/button.png"))
-        exit(84);
-    if (!menuButton.loadFromFile("./assets/lobby.png"))
-        exit(84);
-    if (!playButton.loadFromFile("./assets/start.png"))
-        exit(84);
-    if (!background.loadFromFile("./assets/background.png"))
-        exit(84);
-    if (!enemyBoss.loadFromFile("./assets/enemyBoss.png"))
-        exit(84);
-    if (!enemyBlueBullet.loadFromFile("./assets/enemyBlueBullet.png"))
-        exit(84);
-    if (!enemyFour.loadFromFile("./assets/enemyAlien.png"))
-        exit(84);
-    if (!enemyBullet.loadFromFile("./assets/enemyBullet.png"))
-        exit(84);
-    if (!enemyThree.loadFromFile("./assets/enemyRobot.png"))
-        exit(84);
-    if  (!enemyTwo.loadFromFile("./assets/enemyScuttle.png"))
-        exit(84);
-    if (!enemyBossBullet.loadFromFile("./assets/enemyBoss.png"))
-        exit(84);
-    if (!bullet.loadFromFile("./assets/playerBullet.png"))
-        exit(84);
-    if (!starship.loadFromFile("./assets/starship.png"))
-        exit(84);
-    if (!enemy.loadFromFile("./assets/enemyStarship.png"))
-        exit(84);
-    if (!beambar.loadFromFile("./assets/beam.png"))
-        exit(84);
-    if (!explosion.loadFromFile("./assets/explosion.png"))
-        exit(84);
+    if (!starshipBossBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
+        throw std::runtime_error("Cannot load starship boss bullet texture");
+    if (!starshipBoss.loadFromFile(PATH_TO_ASSETS + "starshipboss.png"))
+        throw std::runtime_error("Cannot load starship boss texture");
+    if (!wormBullet.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm bullet texture");
+    if (!WormHead.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm head texture");
+    if (!WormBody.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm body texture");
+    if (!sprinter.loadFromFile(PATH_TO_ASSETS + "truck.png"))
+        throw std::runtime_error("Cannot load sprinter texture");
+    if (!tank.loadFromFile(PATH_TO_ASSETS + "tank.png"))
+        throw std::runtime_error("Cannot load tank texture");
+    if (!tankBullet.loadFromFile(PATH_TO_ASSETS + "blueBall.png"))
+        throw std::runtime_error("Cannot load tank bullet texture");
+    if (!Bomb.loadFromFile(PATH_TO_ASSETS + "bomb.png"))
+        throw std::runtime_error("Cannot load bomb texture");
+    if (!lifeBoost.loadFromFile(PATH_TO_ASSETS + "hearth.png"))
+        throw std::runtime_error("Cannot load life boost texture");
+    if (!ice.loadFromFile(PATH_TO_ASSETS + "ice.png"))
+        throw std::runtime_error("Cannot load ice texture");
+    if (!shootBoost.loadFromFile(PATH_TO_ASSETS + "star.png"))
+        throw std::runtime_error("Cannot load shoot boost texture");
+    if (!shield.loadFromFile(PATH_TO_ASSETS + "shield.png"))
+        throw std::runtime_error("Cannot load shield texture");
+    if  (!font.loadFromFile(PATH_TO_ASSETS + "GothamMedium.ttf"))
+        throw std::runtime_error("Cannot load font");
+    if (!button.loadFromFile(PATH_TO_ASSETS + "button.png"))
+        throw std::runtime_error("Cannot load button texture");
+    if (!menuButton.loadFromFile(PATH_TO_ASSETS + "lobby.png"))
+        throw std::runtime_error("Cannot load menu texture");
+    if (!playButton.loadFromFile(PATH_TO_ASSETS + "start.png"))
+        throw std::runtime_error("Cannot load play texture");
+    if (!background.loadFromFile(PATH_TO_ASSETS + "background.png"))
+        throw std::runtime_error("Cannot load background texture");
+    if (!enemyBoss.loadFromFile(PATH_TO_ASSETS + "enemyBoss.png"))
+        throw std::runtime_error("Cannot load enemy boss texture");
+    if (!enemyBlueBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
+        throw std::runtime_error("Cannot load enemy blue bullet texture");
+    if (!enemyFour.loadFromFile(PATH_TO_ASSETS + "enemyAlien.png"))
+        throw std::runtime_error("Cannot load enemy alien texture");
+    if (!enemyBullet.loadFromFile(PATH_TO_ASSETS + "enemyBullet.png"))
+        throw std::runtime_error("Cannot load enemy bullet texture");
+    if (!enemyThree.loadFromFile(PATH_TO_ASSETS + "enemyRobot.png"))
+        throw std::runtime_error("Cannot load enemy robot texture");
+    if  (!enemyTwo.loadFromFile(PATH_TO_ASSETS + "enemyScuttle.png"))
+        throw std::runtime_error("Cannot load enemy scuttle texture");
+    if (!enemyBossBullet.loadFromFile(PATH_TO_ASSETS + "enemyBoss.png"))
+        throw std::runtime_error("Cannot load enemy boss bullet texture");
+    if (!bullet.loadFromFile(PATH_TO_ASSETS + "playerBullet.png"))
+        throw std::runtime_error("Cannot load bullet texture");
+    if (!starship.loadFromFile(PATH_TO_ASSETS + "starship.png"))
+        throw std::runtime_error("Cannot load starship texture");
+    if (!enemy.loadFromFile(PATH_TO_ASSETS + "enemyStarship.png"))
+        throw std::runtime_error("Cannot load enemy texture");
+    if (!beambar.loadFromFile(PATH_TO_ASSETS + "beam.png"))
+        throw std::runtime_error("Cannot load beambar texture");
+    if (!explosion.loadFromFile(PATH_TO_ASSETS + "explosion.png"))
+        throw std::runtime_error("Cannot load explosion texture");
+
     textures["starshipBossBulletTexture"] = starshipBossBullet;
     textures["starshipBossTexture"] = starshipBoss;
     textures["wormBulletTexture"] = wormBullet;

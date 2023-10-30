@@ -7,10 +7,10 @@
 
 entity_t gameEngine::init_starship(int id, int i)
 {
-    std::ifstream file("configFiles/starship.json");
+    std::ifstream file(PATH_TO_JSON + "starship.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "starship.json");
     nlohmann::json starshipJson;
     file >> starshipJson;
     file.close();
@@ -80,10 +80,10 @@ entity_t gameEngine::init_starship(int id, int i)
 
 void gameEngine::init_load_shoot()
 {
-    std::ifstream file("configFiles/starship.json");
+    std::ifstream file(PATH_TO_JSON + "starship.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "starship.json");
     nlohmann::json starshipJson;
     file >> starshipJson;
     file.close();
@@ -123,10 +123,10 @@ void gameEngine::init_load_shoot()
 
 
 void gameEngine::init_life(int i) {
-    std::ifstream file("configFiles/life.json");
+    std::ifstream file(PATH_TO_JSON + "life.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "life.json");
     nlohmann::json lifeJson;
     file >> lifeJson;
     file.close();

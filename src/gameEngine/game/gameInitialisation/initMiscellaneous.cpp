@@ -8,10 +8,10 @@
 
 void gameEngine::init_beambar()
 {
-    std::ifstream file("configFiles/bar.json");
+    std::ifstream file(PATH_TO_JSON + "bar.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "bar.json");
     nlohmann::json barJson;
     file >> barJson;
     file.close();
@@ -79,10 +79,10 @@ void gameEngine::init_beambar()
 
 void gameEngine::init_button(int i)
 {
-    std::ifstream file("configFiles/menu.json");
+    std::ifstream file(PATH_TO_JSON + "menu.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
     nlohmann::json menuJson;
     file >> menuJson;
     file.close();
@@ -146,10 +146,10 @@ void gameEngine::init_button(int i)
 }
 
 void gameEngine::init_background(int i) {
-    std::ifstream file("configFiles/background.json");
+    std::ifstream file(PATH_TO_JSON + "background.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "background.json");
     nlohmann::json backJson;
     file >> backJson;
     file.close();
@@ -180,10 +180,10 @@ void gameEngine::init_background(int i) {
 }
 
 void gameEngine::init_score() {
-    std::ifstream file("configFiles/score.json");
+    std::ifstream file(PATH_TO_JSON + "score.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "score.json");
     nlohmann::json scoreJson;
     file >> scoreJson;
     file.close();
@@ -215,10 +215,10 @@ void gameEngine::init_score() {
 
 void gameEngine::init_menu()
 {
-    std::ifstream file("configFiles/menu.json");
+    std::ifstream file(PATH_TO_JSON + "menu.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
     nlohmann::json menuJson;
     file >> menuJson;
     file.close();
@@ -259,10 +259,10 @@ void gameEngine::init_menu()
 
 
 void gameEngine::spawn_explosion(int i) {
-    std::ifstream file("configFiles/explosion.json");
+    std::ifstream file(PATH_TO_JSON + "explosion.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "explosion.json");
     nlohmann::json boomJson;
     file >> boomJson;
     file.close();
@@ -328,9 +328,9 @@ void gameEngine::spawn_power_up(int i)
     }
     if (j == -1)
         return;
-    std::ifstream file("configFiles/powerup.json");
+    std::ifstream file(PATH_TO_JSON + "powerup.json");
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "powerup.json");
     nlohmann::json powerJson;
     file >> powerJson;
     file.close();
