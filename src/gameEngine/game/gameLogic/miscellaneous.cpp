@@ -358,7 +358,7 @@ void gameEngine::menu()
             if (tag[i]->tag == "adventurebutton") {
                 if (click[i]->clicked == true) {
                     click[i]->clicked = false;
-                    gameState.mode = LEVELS;
+                    gameState.mode = LEVELS_G;
                     gameState.scene = GAME;
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {

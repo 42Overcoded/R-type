@@ -22,6 +22,8 @@
 #include  <iostream>
 #include <memory>
 
+const int NUMBERS_OF_LEVELS = 3;
+
 class gameEngine {
     public:
         gameEngine(registry &registry, ClientType type, unsigned int serverPort, std::string serverIp) : _registry(registry), _type(type), port_(serverPort), ip_(serverIp)  {}
@@ -197,6 +199,7 @@ class gameEngine {
         std::string get_this_str(std::string tag, std::string default_str);
         std::vector<Generated> generateMap(int length, int difficulty, std::string seed_str);
         std::vector<Generated> loadMap(std::string path);
+        void loadLevel(int level);
         void spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock);
     protected:
     private:
