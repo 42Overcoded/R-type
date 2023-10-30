@@ -24,7 +24,7 @@
 #define TRUE 1
 #define FALSE 0
 #define PATH_ASSETS std::string("/assets/")
-#define PATH_JSON std::string("/json/")
+#define PATH_JSON std::string("/configFiles/")
 #define GLOBAL_INSTALL FALSE
 
 
