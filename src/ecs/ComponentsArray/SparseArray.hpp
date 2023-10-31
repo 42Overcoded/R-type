@@ -130,7 +130,7 @@ class SparseArray {
         {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
-            _data[pos] = std::nullopt;
+            _data[pos].reset();
         };
 
         /**
