@@ -555,6 +555,7 @@ void gameEngine::clock_time()
             _clock[i]->time = _clock[i]->clock.getElapsedTime();
             if (_clock[i]->time.asSeconds() > 10) {
                 _registry.kill_entity(entity_t(i));
+                continue;
             }
         }
     }

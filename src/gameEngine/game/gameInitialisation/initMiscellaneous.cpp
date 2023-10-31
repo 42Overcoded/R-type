@@ -397,6 +397,7 @@ void gameEngine::death_animation()
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
+                continue;
             }
         }
         if (tag[i]->tag == "wormBody") {
@@ -409,6 +410,7 @@ void gameEngine::death_animation()
         if (tag[i]->tag == "enemyBullet") {
             if (position[i]->x < -100) {
                 _registry.kill_entity(entity_t(i));
+                continue;
             }
         }
         if (tag[i]->tag == "explosion") {
@@ -418,6 +420,7 @@ void gameEngine::death_animation()
                     continue;
                 if (state[i]->state >= 6) {
                     _registry.kill_entity(entity_t(i));
+                    continue;
                 }
                 state[i]->state += 1;
                 rect[i]->left += 33;
@@ -444,6 +447,7 @@ void gameEngine::death_animation()
                 spawn_explosion(i);
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
+                continue;
             }
         }
     }
@@ -463,6 +467,7 @@ void gameEngine::death_animation()
                 }
                 spawn_explosion(j);
                 _registry.kill_entity(entity_t(j));
+                continue;
             }
         }
     }

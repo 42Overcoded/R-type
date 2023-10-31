@@ -270,6 +270,7 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
             isFrozen = 1;
             if (clock[i]->time.asSeconds() > 5) {
                 r.kill_entity(entity_t(i));
+                continue;
             }
         }
         if (tag[i]->tag == "background") {
@@ -454,6 +455,7 @@ void SfmlSystem::color_system(registry &r)
                         color[j]->g = 255;
                         color[j]->b = 255;
                         r.kill_entity(entity_t(i));
+                        continue;
                     }
                 }
             }
@@ -516,12 +518,14 @@ void SfmlSystem::hitbox_system(registry &r)
                             if (health[j]->health < 4)
                                 health[j]->health += 1;
                             r.kill_entity(entity_t(i));
+                            continue;
                         }
                         if (tag[i]->tag == "bombBoost") {
                             for (size_t k = 0; k < r._entity_number; k++) {
                                 if (enemy[k].has_value()) {
                                     health[k]->health -= 3;
                                     r.kill_entity(entity_t(i));
+                                    continue;
                                 }
                             }
                         }
@@ -534,7 +538,15 @@ void SfmlSystem::hitbox_system(registry &r)
                 if (!tag[j].has_value() || !tag[i].has_value())
                     continue;
                 if (tag[j]->tag == "starship") {
-                    if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height && state[j]->state == 0) {
+                    if (position[i].has_value() && hitbox[i].has_value() &&
+                        position[j].has_value() && hitbox[j].has_value() && health[i].has_value() &&
+                        health[j].has_value() && state[j].has_value() &&
+                        clock[j].has_value() &&
+                        color[j].has_value() && position[i]->x + hitbox[i]->width > position[j]->x &&
+                        position[i]->x < position[j]->x + hitbox[j]->width &&
+                        position[i]->y + hitbox[i]->height > position[j]->y &&
+                        position[i]->y < position[j]->y + hitbox[j]->height && state[j]->state == 0)
+                    {
                         if (color[j]->r == 255)
                             health[j]->health -= 1;
                         health[i]->health -= 5;
@@ -544,6 +556,7 @@ void SfmlSystem::hitbox_system(registry &r)
                         clock[j]->__clock.restart();
                         if (enemyBall[i].has_value()) {
                             r.kill_entity(entity_t(i));
+                            continue;
                         }
                         break;
                     }
@@ -556,22 +569,29 @@ void SfmlSystem::hitbox_system(registry &r)
                     continue;
                 if (enemy[j].has_value()) {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
-                        if (state[i]->state == 0) {
+                        if (!state[i].has_value() || !health[j].has_value())
+                            continue;
+                        if (state[i]->state == 0)
+                        {
                             health[j]->health -= 1;
                             r.kill_entity(entity_t(i));
+                            health[j]->health -= 1;
+                            break;
                         }
                         if (state[i]->state == 1) {
                             health[j]->health -= 7;
                             r.kill_entity(entity_t(i));
+                            health[j]->health -= 1;
+                            break;
                         }
                         if (state[i]->state == 2) {
                             health[j]->health -= 10;
                             if (health[j]->health >= 10) {
                                 r.kill_entity(entity_t(i));
+                                health[j]->health -= 1;
+                                break;
                             }
                         }
-                        health[j]->health -= 1;
-                        break;
                     }
                 }
             }

@@ -215,6 +215,7 @@ void gameEngine::launch_game()
                     tag[i]->tag == "starship")
                 {
                     _registry.kill_entity(entity_t(i));
+                    continue;
                 }
             }
             if (alive == 0)

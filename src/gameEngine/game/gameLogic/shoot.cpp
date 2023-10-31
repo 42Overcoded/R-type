@@ -28,8 +28,10 @@ void gameEngine::shoot_system(sf::Time &elapsed)
         if (tag[i]->tag == "bullet") {
             if (position[i]->x > 1850) {
                 _registry.kill_entity(entity_t(i));
+                continue;
             }
         }
+        std::cout << "hasvalue : " << std::boolalpha << tag[i].has_value() << std::endl;
         if (tag[i]->tag == "starship" && control[i].has_value()) {
             if (control[i]->shoot == true) {
                 load_shoot(elapsed);

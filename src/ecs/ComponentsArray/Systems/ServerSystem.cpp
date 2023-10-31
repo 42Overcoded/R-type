@@ -39,6 +39,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
             isFrozen = 1;
             if (clock[i]->time.asSeconds() > 5) {
                 r.kill_entity(entity_t(i));
+                continue;
             }
         }
         if (tag[i]->tag == "background") {
@@ -150,6 +151,7 @@ void System::hitbox_system(registry &r)
                         clock[j]->__clock.restart();
                         if (enemyBall[i].has_value()) {
                             r.kill_entity(entity_t(i));
+                            continue;
                         }
                         break;
                     }
@@ -165,19 +167,23 @@ void System::hitbox_system(registry &r)
                         if (state[i]->state == 0) {
                             health[j]->health -= 1;
                             r.kill_entity(entity_t(i));
+                            health[j]->health -= 1;
+                            break;
                         }
                         if (state[i]->state == 1) {
                             health[j]->health -= 5;
                             r.kill_entity(entity_t(i));
+                            health[j]->health -= 1;
+                            break;
                         }
                         if (state[i]->state == 2) {
                             health[j]->health -= 10;
                             if (health[j]->health >= 10) {
                                 r.kill_entity(entity_t(i));
+                                health[j]->health -= 1;
+                                break;
                             }
                         }
-                        health[j]->health -= 1;
-                        break;
                     }
                 }
             }
