@@ -86,7 +86,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
 
     for (int i = 0; i < _registry._entity_number; i++)
     {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (tag[i]->tag == "ice" && drawable[i]->drawable == false) {
             return;
@@ -205,7 +205,7 @@ void gameEngine::launch_game()
                 continue;
             for (size_t i = 0; i < _registry._entity_number; i++)
             {
-                if (tag[i] == std::nullopt)
+                if (!tag[i].has_value())
                     continue;
                 if (tag[i]->tag == "starship")
                 {

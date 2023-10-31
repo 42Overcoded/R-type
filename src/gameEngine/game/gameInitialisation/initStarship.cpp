@@ -164,10 +164,10 @@ void gameEngine::init_life(int i) {
     position[life]->x += i * space;
     scale[life]->scale = lifeJson["life"]["scale"];
     for (size_t i = 0; i < tag.size(); i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (tag[i]->tag == "starship") {
-            if (control[i] == std::nullopt)
+            if (!control[i].has_value())
                 continue;
             rect[life]->top = rect[i]->baseTop;
             rect[life]->left = rect[i]->baseLeft;

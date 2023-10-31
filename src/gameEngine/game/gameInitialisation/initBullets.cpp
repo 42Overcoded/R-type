@@ -19,7 +19,7 @@ void gameEngine::spawn_ally_bullet(int i)
     auto &_drawable = _registry.get_components<Drawable>();
     int j = 1;
     for (size_t k = 0; k < _registry._entity_number; k++) {
-        if (_tag[k] == std::nullopt)
+        if (!_tag[k].has_value())
             continue;
         if (_tag[k]->tag == "shootBoost" && _drawable[k]->drawable == false) {
             j = 3;
@@ -73,7 +73,7 @@ void gameEngine::spawn_ally_bullet(int i)
             orientation[bullet]->orientation = 0;
         }
         for (size_t i = 0; i < _registry._entity_number; i++) {
-            if (tag[i] == std::nullopt) {
+            if (!tag[i].has_value()) {
                 continue;
             }
             if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
@@ -181,7 +181,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     rect[bullet]->height = bulletJson["bullet"][j]["rect"]["height"];
     if (tag[bullet]->tag == "wormBullet") {
         for (size_t j = 0; j < _registry._entity_number; j++) {
-            if (tag[j] == std::nullopt)
+            if (!tag[j].has_value())
                 continue;
             if (tag[j]->tag == "starship") {
                 float x = position[j]->x - position[i]->x;
@@ -208,7 +208,7 @@ void gameEngine::spawn_bullet(int i, int j)
     auto &_drawable = _registry.get_components<Drawable>();
 
     for (size_t k = 0; k < _registry._entity_number; k++) {
-        if (_tag[k] == std::nullopt)
+        if (!_tag[k].has_value())
             continue;
         if (_tag[k]->tag == "ice" && _drawable[k]->drawable == false) {
             return;
@@ -262,7 +262,7 @@ void gameEngine::spawn_bullet(int i, int j)
         searchingHead[bullet]->searching = true;
     if (tag[bullet]->tag == "enemyBullet" || tag[bullet]->tag == "starshipBossBullet") {
         for (size_t j = 0; j < _registry._entity_number; j++) {
-            if (tag[j] == std::nullopt)
+            if (!tag[j].has_value())
                 continue;
             if (tag[j]->tag == "starship") {
                 float x = position[j]->x - position[i]->x;

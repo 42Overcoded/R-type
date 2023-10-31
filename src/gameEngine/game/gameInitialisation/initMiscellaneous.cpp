@@ -391,7 +391,7 @@ void gameEngine::death_animation()
         }
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt || position[i] == std::nullopt)
+        if (!tag[i].has_value() || !position[i].has_value())
             continue;
         if (enemy[i] != std::nullopt) {
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
@@ -433,7 +433,7 @@ void gameEngine::death_animation()
         if (enemy[i] != std::nullopt) {
             if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 for (size_t j = 0; j < _registry._entity_number; j++) {
-                    if (tag[j] == std::nullopt)
+                    if (!tag[j].has_value())
                         continue;
                     if (tag[j]->tag == "score") {
                         state[j]->state += enemy[i]->score;
@@ -449,12 +449,12 @@ void gameEngine::death_animation()
     }
     if (wormAlive == 0) {
         for (size_t j = 0; j < _registry._entity_number; j++) {
-            if (tag[j] == std::nullopt)
+            if (!tag[j].has_value())
                 continue;
             if ((tag[j]->tag == "wormHead" || tag[j]->tag == "wormBody")) {
                 for (size_t k = 0; k < _registry._entity_number; k++)
                 {
-                    if (tag[k] == std::nullopt)
+                    if (!tag[k].has_value())
                         continue;
                     if (tag[k]->tag == "score") {
                         state[k]->state += enemy[j]->score;

@@ -32,7 +32,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
 
     for (size_t i = 0; i < r._entity_number; i++) {
 
-        if (tag[i] == std::nullopt)
+        if (tag[i].has_value())
             continue;
         if (tag[i]->tag == "ice" && drawable[i]->drawable == false) {
             clock[i]->time = clock[i]->clock.getElapsedTime();
@@ -82,7 +82,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
         }
     }
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+        if (!tag[i].has_value()) {
             continue;
         }
         if ((enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") && isFrozen == 1) {
@@ -112,7 +112,7 @@ void System::hitbox_system(registry &r)
     auto &drawable = r.get_components<Drawable>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+        if (!tag[i].has_value()) {
             continue;
         }
         if (tag[i]->tag == "starship" && state[i]->state == 1) {
@@ -122,12 +122,12 @@ void System::hitbox_system(registry &r)
         }
     }
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+        if (!tag[i].has_value()) {
             continue;
         }
         if (tag[i]->groupTag == "powerup") {
             for (size_t j = 0; j < r._entity_number; j++) {
-                if (tag[j] == std::nullopt || tag[i] == std::nullopt)
+                if (!tag[j].has_value() || !tag[i].has_value())
                     continue;
                 if (tag[j]->tag == "starship") {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
@@ -138,7 +138,7 @@ void System::hitbox_system(registry &r)
         }
         if (enemy[i] != std::nullopt || enemyBall[i] != std::nullopt) {
             for (size_t j = 0; j < r._entity_number; j++) {
-                if (tag[j] == std::nullopt || tag[i] == std::nullopt)
+                if (!tag[j].has_value() || !tag[i].has_value())
                     continue;
                 if (tag[j]->tag == "starship") {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height && state[j]->state == 0) {
@@ -158,7 +158,7 @@ void System::hitbox_system(registry &r)
         }
         if (tag[i]->tag == "bullet") {
             for (size_t j = 0; j < r._entity_number; j++) {
-                if (tag[j] == std::nullopt || tag[i] == std::nullopt)
+                if (!tag[j].has_value() || !tag[i].has_value())
                     continue;
                 if (enemy[j] != std::nullopt) {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {

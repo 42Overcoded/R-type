@@ -87,7 +87,7 @@ void NetworkSystem::manageServerStartGame(registry &reg, std::shared_ptr<Connect
         if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
             break;
     }
-    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+    if (!gameLauncherArray[gameLauncherIndex].has_value())
         throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
@@ -182,7 +182,7 @@ void NetworkSystem::manageClientEndGame(registry &reg)
         if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
             break;
     }
-    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+    if (!gameLauncherArray[gameLauncherIndex].has_value())
         throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 

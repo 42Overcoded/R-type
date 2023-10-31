@@ -22,7 +22,7 @@ void gameEngine::shoot_system(sf::Time &elapsed)
     auto &clock = _registry.get_components<Clock>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+        if (!tag[i].has_value()) {
             continue;
         }
         if (tag[i]->tag == "bullet") {
@@ -53,13 +53,13 @@ void gameEngine::load_shoot(sf::Time &elapsed)
     auto &rect = _registry.get_components<Rect>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+        if (!tag[i].has_value()) {
             continue;
         }
         if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
             control[i]->shoot = true;
             for (size_t j = 0; j < _registry._entity_number; j++) {
-                if (tag[j] == std::nullopt)
+                if (!tag[j].has_value())
                     continue;
                 if (tag[j]->tag == "load_shoot") {
                     clock[j]->time = clock[j]->clock.getElapsedTime();
@@ -94,7 +94,7 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
 
     bool is_return = false;
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (_tag[i] == std::nullopt) {
+        if (!_tag[i].has_value()) {
             continue;
         }
         if (_tag[i]->tag == "load_shoot") {
@@ -110,7 +110,7 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
     if (is_return == true)
         return;
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (_tag[i] == std::nullopt) {
+        if (!_tag[i].has_value()) {
             continue;
         }
         if (_tag[i]->tag == "starship" && control[i] != std::nullopt) {
@@ -132,7 +132,7 @@ void gameEngine::shoot_enemy() {
     auto &state = _registry.get_components<State>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (enemy[i] != std::nullopt) {
             if (tag[i]->tag == "enemy 3") {
@@ -207,7 +207,7 @@ void gameEngine::shoot_enemy() {
             if (searchingHead[i]->searching == false)
                 continue;
             for (size_t j = 0; j < _registry._entity_number; j++) {
-                if (tag[j] == std::nullopt)
+                if (!tag[j].has_value())
                     continue;
                 if (tag[j]->tag == "starship") {
                     float x = position[j]->x - position[i]->x;
