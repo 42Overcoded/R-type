@@ -201,6 +201,7 @@ class gameEngine {
         std::vector<Generated> loadMap(std::string path);
         void loadLevel(int level);
         void spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock);
+        bool is_frozen();
     protected:
     private:
         float wave;

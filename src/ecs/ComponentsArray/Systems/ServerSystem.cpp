@@ -63,6 +63,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
             }
         }
         if (enemy[i] != std::nullopt && position[i] != std::nullopt && tag[i]->tag != "wormBody" && tag[i]->tag != "wormHead") {
+            std::cout << "enemy" << std::endl;
             if (position[i]->y < 0) {
                 position[i]->y = 0;
             }
