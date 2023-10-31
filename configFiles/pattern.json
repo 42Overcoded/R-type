@@ -102,6 +102,26 @@
                     "y": 100
                 }
             ]
+        },
+        {
+            "index": 6,
+            "pattern": [
+                { "x": -1.6, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 1,
+            "switch_index": 0
+        },
+        {
+            "index": 7,
+            "pattern": [
+                { "x": -0.3, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 1,
+            "switch_index": 0
         }
     ]
 }
