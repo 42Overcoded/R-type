@@ -61,7 +61,7 @@ public:
     {
         if (ownerType_ == Owner::Server)
         {
-            if (socket_.is_open() && !IsConnected_)
+            if (socket_.is_open() && !isConnected)
             {
                 std::cout << "Connecting to client" << std::endl;
                 id_             = uid;
@@ -77,6 +77,7 @@ public:
                 idPacket << id_;
                 SendPacket(idPacket);
                 std::cout << "assign client" << std::endl;
+                isConnected = true;
                 GetHeader();
             }
         }
@@ -88,7 +89,7 @@ public:
 
     void ConnectToServer(boost::asio::ip::udp::resolver::results_type &endpoints)
     {
-        if (ownerType_ == Owner::Client && !IsConnected_)
+        if (ownerType_ == Owner::Client && !isConnected)
         {
             std::cout << "Connecting to server" << std::endl;
             remoteEndpoint_ = *endpoints.begin();
@@ -110,17 +111,18 @@ public:
         if (IsConnected())
         {
             boost::asio::post(ioContext_, [this]() { socket_.close(); });
+            isConnected = false;
         }
     }
 
     bool IsConnected() const
     {
-        return socket_.is_open();
+        return socket_.is_open() && isConnected;
     }
 
     bool SendPacket(const Packet<T> &packet)
     {
-        if (IsConnected())
+        if (socket_.is_open())
         {
             boost::asio::post(ioContext_, [this, packet]() {
                 bool isWritingPacket = !packetsOutQueue_.IsEmpty();
@@ -277,7 +279,7 @@ protected:
             case T::ClientAccepted:
                 std::cout << "Server Accept" << std::endl;
                 socket_.connect(remoteEndpoint_);
-                IsConnected_ = true;
+                isConnected = true;
                 return true;
                 ;
             case T::ClientDenied:
@@ -318,7 +320,7 @@ protected:
     Owner ownerType_ = Owner::Server;
     uint32_t id_     = 0;
     Packet<T> recvBuffer_;
-    bool IsConnected_ = false;
+    bool isConnected = false;
     boost::asio::ip::udp::endpoint remoteEndpoint_;
 };
 };  // namespace Network

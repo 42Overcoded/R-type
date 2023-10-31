@@ -26,6 +26,8 @@ public:
     void Update(registry &reg);
 
 private:
+    void checkPlayers(registry &reg);
+
     void manageInputs(registry &reg);
     void managePacketIn(registry &reg, std::shared_ptr<Connection<Flag>> client, Packet<Flag>& msg);
 

@@ -151,6 +151,7 @@ public:
         }
         else
         {
+            std::cout << "client [" << client->GetId() << "] is not connected" << std::endl;
             OnClientDisconnect(client);
             clients_->erase(std::remove(clients_->begin(), clients_->end(), client), clients_->end());
         }

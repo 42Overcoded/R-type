@@ -26,10 +26,30 @@ NetworkSystem::~NetworkSystem()
 
 void NetworkSystem::Update(registry &reg)
 {
+    checkPlayers(reg);
     manageInputs(reg);
     manageOutputs(reg);
 }
 
+void NetworkSystem::checkPlayers(registry &reg) {
+    SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
+
+    for (size_t i = 0; i < reg._entity_number; i++)
+    {
+        if (gameStateArr[i] != std::nullopt)
+        {
+            if (gameStateArr[i]->scene == Scene::GAME)
+            {
+                if (clients_->size() == 0)
+                {
+                    std::cout << "No player connected, end game" << std::endl;
+                    gameStateArr[i]->scene = Scene::END;
+                }
+            }
+            return;
+        }
+    }
+}
 
 void NetworkSystem::manageInputs(registry &reg)
 {
