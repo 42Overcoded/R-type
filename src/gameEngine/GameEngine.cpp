@@ -34,7 +34,21 @@ void gameEngine::loadLevel(int level)
     _level_info.mob_alive = 0;
     _level_info.is_boss_alive = false;
     _level_info.level_progress = 1920;
+
     _level_info._generated = loadMap(path[level]);
+}
+
+bool gameEngine::is_frozen()
+{
+    for (size_t i = 0; i < _registry._entity_number; i++) {
+        auto &tag = _registry.get_components<Tag>();
+        auto &drawable = _registry.get_components<Drawable>();
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "ice" && drawable[i]->drawable == false)
+            return true;
+    }
+    return false;
 }
 
 void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
@@ -42,7 +56,12 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
     int MAGIC_VALUE = 50; //The higher the value, the faster the enemies spawn
     const int boss_worm_id = 7;
 
+
     if (_elapsed.asSeconds() > 0.1) {
+        if (is_frozen()) {
+            _clock.restart();
+            return;
+        }
         if (_level_info.mob_alive == 0)
             _level_info.is_boss_alive = false;
         if (this->_level_info.is_boss_alive)

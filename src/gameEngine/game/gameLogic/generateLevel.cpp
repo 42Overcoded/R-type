@@ -99,6 +99,7 @@ std::vector<Generated> gameEngine::loadMap(std::string path)
         }
 
         inputFile.close();
+        std::sort(generated.begin(), generated.end(), order);
     }
 
     return generated;
