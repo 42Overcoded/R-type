@@ -112,7 +112,7 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!wall2.loadFromFile("./assets/wall3.png"))
         exit(84);
-    if (!asteroid.loadFromFile("./assets/wall.png"))
+    if (!asteroid.loadFromFile("./assets/asteroid.png"))
         exit(84);
     textures["bombTexture"] = Bomb;
     textures["lifeBoostTexture"] = lifeBoost;
