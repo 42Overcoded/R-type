@@ -414,6 +414,8 @@ void gameEngine::death_animation()
         if (tag[i]->tag == "explosion") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
             if (clock[i]->time.asSeconds() > 0.05) {
+                if (!state[i].has_value() || !rect[i].has_value() ||!clock[i].has_value())
+                    continue;
                 if (state[i]->state >= 6) {
                     _registry.kill_entity(entity_t(i));
                 }
