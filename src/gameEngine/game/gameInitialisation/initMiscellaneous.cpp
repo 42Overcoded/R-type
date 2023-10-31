@@ -4,13 +4,14 @@
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
+#include <random>
 
 void gameEngine::init_beambar()
 {
-    std::ifstream file("configFiles/bar.json");
+    std::ifstream file(PATH_TO_JSON + "bar.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "bar.json");
     nlohmann::json barJson;
     file >> barJson;
     file.close();
@@ -78,13 +79,21 @@ void gameEngine::init_beambar()
 
 void gameEngine::init_button(int i)
 {
-    std::ifstream file("configFiles/menu.json");
+    std::ifstream file(PATH_TO_JSON + "menu.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
     nlohmann::json menuJson;
     file >> menuJson;
     file.close();
+
+    int buttonNbr = 0;
+    if (i == -1) {
+        int buttonNbr = menuJson["button"].size();
+        for (int j = 0; j < buttonNbr; j++)
+            init_button(j);
+        return;
+    }
 
     entity_t button = _registry.spawn_entity();
     entity_t texte = _registry.spawn_entity();
@@ -137,10 +146,10 @@ void gameEngine::init_button(int i)
 }
 
 void gameEngine::init_background(int i) {
-    std::ifstream file("configFiles/background.json");
+    std::ifstream file(PATH_TO_JSON + "background.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "background.json");
     nlohmann::json backJson;
     file >> backJson;
     file.close();
@@ -171,10 +180,10 @@ void gameEngine::init_background(int i) {
 }
 
 void gameEngine::init_score() {
-    std::ifstream file("configFiles/score.json");
+    std::ifstream file(PATH_TO_JSON + "score.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "score.json");
     nlohmann::json scoreJson;
     file >> scoreJson;
     file.close();
@@ -206,10 +215,10 @@ void gameEngine::init_score() {
 
 void gameEngine::init_menu()
 {
-    std::ifstream file("configFiles/menu.json");
+    std::ifstream file(PATH_TO_JSON + "menu.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
     nlohmann::json menuJson;
     file >> menuJson;
     file.close();
@@ -250,10 +259,10 @@ void gameEngine::init_menu()
 
 
 void gameEngine::spawn_explosion(int i) {
-    std::ifstream file("configFiles/explosion.json");
+    std::ifstream file(PATH_TO_JSON + "explosion.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "explosion.json");
     nlohmann::json boomJson;
     file >> boomJson;
     file.close();
@@ -289,7 +298,76 @@ void gameEngine::spawn_explosion(int i) {
     rect[explosion]->width = boomJson["explosion"]["rect"]["width"];
     rect[explosion]->height = boomJson["explosion"]["rect"]["height"];
     scale[explosion]->scale = boomJson["explosion"]["scale"];
-    _registry.kill_entity(entity_t(i));
+}
+
+void gameEngine::spawn_power_up(int i)
+{
+    int j = -1;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distribution(0, 1080);
+
+    if (bonus == false) {
+        return;
+    }
+    int random = distribution(gen);
+    if (random < 10) {
+        j = 0;
+    }
+    if (random > 12 && random < 20) {
+        j = 1;
+    }
+    if (random > 22 && random < 30) {
+        j = 2;
+    }
+    if (random > 36 && random < 40) {
+        j = 3;
+    }
+    if (random > 42 && random < 50) {
+        j = 4;
+    }
+    if (j == -1)
+        return;
+    std::ifstream file(PATH_TO_JSON + "powerup.json");
+    if (!file.is_open())
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "powerup.json");
+    nlohmann::json powerJson;
+    file >> powerJson;
+    file.close();
+
+    entity_t power = _registry.spawn_entity();
+    _registry.add_component<Position>(power, Position());
+    _registry.add_component<Sprite>(power, Sprite());
+    _registry.add_component<Drawable>(power, Drawable());
+    _registry.add_component<Tag>(power, Tag());
+    _registry.add_component<State>(power, State());
+    _registry.add_component<Clock>(power, Clock());
+    _registry.add_component<Texture>(power, Texture());
+    _registry.add_component<Speed>(power, Speed());
+    _registry.add_component<Hitbox>(power, Hitbox());
+
+    auto &state = _registry.get_components<State>();
+    auto &drawable = _registry.get_components<Drawable>();
+    auto &tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &position = _registry.get_components<Position>();
+    auto &texture = _registry.get_components<Texture>();
+    auto &rect = _registry.get_components<Rect>();
+    auto &scale = _registry.get_components<Scale>();
+    auto &speed = _registry.get_components<Speed>();
+    auto &hitbox = _registry.get_components<Hitbox>();
+
+    state[power]->state = 0;
+    drawable[power]->drawable = true;
+    tag[power]->groupTag = powerJson["powerup"][j]["groupTag"];
+    texture[power]->textureTag = powerJson["powerup"][j]["textureTag"];
+    position[power]->x = position[i]->x;
+    position[power]->y = position[i]->y;
+    hitbox[power]->width = powerJson["powerup"][j]["hitbox"]["width"];
+    hitbox[power]->height = powerJson["powerup"][j]["hitbox"]["height"];
+    tag[power]->tag = powerJson["powerup"][j]["tag"];
+    scale[power]->scale = powerJson["powerup"][j]["scale"];
+    speed[power]->speedx = powerJson["powerup"][j]["speed"];
 }
 
 void gameEngine::death_animation()
@@ -306,12 +384,27 @@ void gameEngine::death_animation()
     auto &rect = _registry.get_components<Rect>();
     auto &player = _registry.get_components<Player>();
 
+    int wormAlive = -1;
+    for (size_t i = 0; i < _registry._entity_number; i++)
+    {
+        if (tag[i]->tag == "wormBody") {
+            wormAlive = 0;
+        }
+    }
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (tag[i] == std::nullopt)
             continue;
         if (enemy[i] != std::nullopt) {
-            if (position[i]->x < -100) {
+            if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 _registry.kill_entity(entity_t(i));
+                _level_info.mob_alive -= 1;
+            }
+        }
+        if (tag[i]->tag == "wormBody") {
+            if  (health[i] != std::nullopt) {
+                if (health[i]->health > 0) {
+                    wormAlive += 1;
+                }
             }
         }
         if (tag[i]->tag == "enemyBullet") {
@@ -330,8 +423,14 @@ void gameEngine::death_animation()
                 clock[i]->clock.restart();
             }
         }
-        if (enemy[i] != std::nullopt) {
+        if (tag[i]->tag == "wormBody") {
             if (health[i]->health <= 0) {
+                rect[i]->left = 99;
+                state[i]->state = 666;
+            }
+        }
+        if (enemy[i] != std::nullopt) {
+            if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 for (size_t j = 0; j < _registry._entity_number; j++) {
                     if (tag[j] == std::nullopt)
                         continue;
@@ -340,6 +439,7 @@ void gameEngine::death_animation()
                         text[j]->str = "Score : " + std::to_string(state[j]->state);
                     }
                 }
+                spawn_power_up(i);
                 spawn_explosion(i);
                 if (tag[i]->tag == "enemy 1")
                     sounds["soundExplosion"]->play();
@@ -347,6 +447,27 @@ void gameEngine::death_animation()
                     sounds["soundExplosion2"]->play();
                 if (tag[i]->tag == "enemy 3")
                     sounds["soundExplosion3"]->play();
+                _registry.kill_entity(entity_t(i));
+                _level_info.mob_alive -= 1;
+            }
+        }
+    }
+    if (wormAlive == 0) {
+        for (size_t j = 0; j < _registry._entity_number; j++) {
+            if (tag[j] == std::nullopt)
+                continue;
+            if ((tag[j]->tag == "wormHead" || tag[j]->tag == "wormBody")) {
+                for (size_t k = 0; k < _registry._entity_number; k++)
+                {
+                    if (tag[k] == std::nullopt)
+                        continue;
+                    if (tag[k]->tag == "score") {
+                        state[k]->state += enemy[j]->score;
+                        text[k]->str = "Score : " + std::to_string(state[k]->state);
+                    }
+                }
+                spawn_explosion(j);
+                _registry.kill_entity(entity_t(j));
             }
         }
     }

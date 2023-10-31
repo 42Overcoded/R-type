@@ -8,6 +8,7 @@
 #ifndef COMPONENTS_HPP_
 #define COMPONENTS_HPP_
 
+#include "SFML/Graphics/Color.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -23,6 +24,10 @@
 struct Speed {
     float speedy = 0;
     float speedx = 0;
+    float baseSpeedy = 0;
+    float baseSpeedx = 0;
+    float varSpeedy = 0;
+    float varSpeedx = 0;
 };
 
 /**
@@ -141,6 +146,17 @@ struct Bullet {
     int id;
 };
 
+struct Color {
+    int r;
+    int g;
+    int b;
+    int a;
+};
+
+struct Orientation {
+    int orientation;
+};
+
 /**
  * @brief Tag to know the type of the entity
  * 
@@ -185,7 +201,7 @@ struct Text {
  * 
  */
 struct Drawable {
-    bool drawable = false;
+    bool drawable = true;
 };
 
 /**
@@ -220,6 +236,12 @@ struct Pattern {
 struct Hitbox {
     int width;
     int height;
+};
+
+struct GameLauncher {
+    bool isRequestingGame = false;
+    bool isWaitingForServer = false;
+    bool isGameLaunched = false;
 };
 
 #endif /* !COMPONENTS_HPP_ */

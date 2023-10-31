@@ -9,26 +9,24 @@
 #define GAMEENGINE_HPP_
 
 #include "../jsonfile/include/JsonParser.hpp"
-#include "game.hpp"
+#include "SFML/System/Clock.hpp"
+#include "Game.hpp"
 #include "../ecs/Registry.hpp"
 #include "SFML/System/Time.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "../network_c/NetworkSystem.hpp"
+#include "../network_s/NetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
+#include <memory>
 
-enum Mode {
-    NONE,
-    LEVELS,
-    ENDLESS,
-    VERSUS
-};
+const int NUMBERS_OF_LEVELS = 3;
 
 class gameEngine {
     public:
-        gameEngine(registry &registry, ClientType type/*, unsigned int serverPort, std::string serverIp*/) : _registry(registry), _type(type)/*, _networkSystem(serverPort, serverIp)*/ {}
+        gameEngine(registry &registry, ClientType type, unsigned int serverPort, std::string serverIp) : _registry(registry), _type(type), port_(serverPort), ip_(serverIp)  {}
         ~gameEngine() = default;
         /**
          * @brief register all component to the game
@@ -168,6 +166,11 @@ class gameEngine {
          */
         void shoot_system(sf::Time &elapsed);
         /**
+         * @brief handle the movement of the player
+         * 
+         */
+        void movement_system(registry &r);
+        /**
          * @brief animate the enemies
          * 
          */
@@ -177,6 +180,12 @@ class gameEngine {
          * 
          */
         void clock_time();
+
+        /**
+         * @brief get the game state object
+         * @return GameStateComponent reference
+         */
+        GameStateComponent &get_game_state();
         /**
          * @brief handle the life of the starship
          * 
@@ -184,7 +193,14 @@ class gameEngine {
         void init_button(int i);
         void init_game();
         void life_handler();
+        entity_t init_worm(int i);
+        void spawn_power_up(int i);
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
+        std::string get_this_str(std::string tag, std::string default_str);
+        std::vector<Generated> generateMap(int length, int difficulty, std::string seed_str);
+        std::vector<Generated> loadMap(std::string path);
+        void loadLevel(int level);
+        void spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock);
 
         std::unordered_map<std::string, std::shared_ptr<sf::Music>> musics;
         std::unordered_map<std::string, std::shared_ptr<sf::SoundBuffer>> soundBuffers;
@@ -192,17 +208,24 @@ class gameEngine {
 
     protected:
     private:
-        Scene scene;
-        Mode mode;
+        float wave;
         JsonParser *parsed;
         int id;
+        float difficulty;
+        bool bonus;
         ClientType _type;
         sf::Time elapsed;
         sf::Clock clock;
+        sf::Clock networkClock;
         sf::RenderWindow _window;
         SfmlSystem _system;
+        std::unique_ptr<Network::NetworkSystem> _networkSystem;
+        Level_info _level_info;
+        
         //Network::NetworkSystem _networkSystem;
         registry _registry;
+        unsigned int port_;
+        std::string ip_;
 };
 
 #endif /* !GAMEENGINE_HPP_ */

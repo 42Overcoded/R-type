@@ -3,13 +3,14 @@
 #include <optional>
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
+#include "../../../network/network_c/NetworkComponent.hpp"
 
 entity_t gameEngine::init_starship(int id, int i)
 {
-    std::ifstream file("configFiles/starship.json");
+    std::ifstream file(PATH_TO_JSON + "starship.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "starship.json");
     nlohmann::json starshipJson;
     file >> starshipJson;
     file.close();
@@ -27,8 +28,10 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<State>(starship, State());
     _registry.add_component<Clock>(starship, Clock());
     _registry.add_component<Scale>(starship, Scale());
+    _registry.add_component<Color>(starship, Color());
     _registry.add_component<Texture>(starship, Texture());
     _registry.add_component<Rect>(starship, Rect());
+    _registry.add_component<NetworkComponent>(starship, NetworkComponent());
     if (id == i)
         _registry.add_component<Control>(starship, Control());
 
@@ -44,7 +47,12 @@ entity_t gameEngine::init_starship(int id, int i)
     auto &texture = _registry.get_components<Texture>();
     auto &rect = _registry.get_components<Rect>();
     auto &drawable = _registry.get_components<Drawable>();
+    auto &color = _registry.get_components<Color>();
 
+    color[starship]->r = 255;
+    color[starship]->g = 255;
+    color[starship]->b = 255;
+    color[starship]->a = 255;
     drawable[starship]->drawable = true;
     health[starship]->health = starshipJson["starship"][i]["health"];
     state[starship]->state = starshipJson["starship"][i]["state"];
@@ -72,10 +80,10 @@ entity_t gameEngine::init_starship(int id, int i)
 
 void gameEngine::init_load_shoot()
 {
-    std::ifstream file("configFiles/starship.json");
+    std::ifstream file(PATH_TO_JSON + "starship.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "starship.json");
     nlohmann::json starshipJson;
     file >> starshipJson;
     file.close();
@@ -115,10 +123,10 @@ void gameEngine::init_load_shoot()
 
 
 void gameEngine::init_life(int i) {
-    std::ifstream file("configFiles/life.json");
+    std::ifstream file(PATH_TO_JSON + "life.json");
 
     if (!file.is_open())
-        exit(84);
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "life.json");
     nlohmann::json lifeJson;
     file >> lifeJson;
     file.close();
@@ -134,7 +142,6 @@ void gameEngine::init_life(int i) {
     _registry.add_component<Rect>(life, Rect());
     _registry.add_component<State>(life, State());
 
-    
     auto &tag = _registry.get_components<Tag>();
     auto &sprite = _registry.get_components<Sprite>();
     auto &position = _registry.get_components<Position>();

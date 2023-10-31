@@ -1,0 +1,59 @@
+{
+    "powerup": [
+        {
+            "tag": "shield",
+            "textureTag": "shieldTexture",
+            "scale": 1,
+            "speed": -0.3,
+            "groupTag": "powerup",
+            "hitbox": {
+                "width": 64,
+                "height": 64
+            }
+        },
+        {
+            "tag": "shootBoost",
+            "textureTag": "shootBoostTexture",
+            "scale": 1,
+            "speed": -0.3,
+            "groupTag": "powerup",
+            "hitbox": {
+                "width": 64,
+                "height": 64
+            }
+        },
+        {
+            "tag": "ice",
+            "textureTag": "iceTexture",
+            "scale": 1,
+            "speed": -0.3,
+            "groupTag": "powerup",
+            "hitbox": {
+                "width": 64,
+                "height": 64
+            }
+        },
+        {
+            "tag": "lifeBoost",
+            "textureTag": "lifeBoostTexture",
+            "scale": 1,
+            "speed": -0.3,
+            "groupTag": "powerup",
+            "hitbox": {
+                "width": 64,
+                "height": 64
+            }
+        },
+        {
+            "tag": "bombBoost",
+            "textureTag": "bombTexture",
+            "scale": 1,
+            "speed": -0.3,
+            "groupTag": "powerup",
+            "hitbox": {
+                "width": 64,
+                "height": 64
+            }
+        }
+    ]
+}

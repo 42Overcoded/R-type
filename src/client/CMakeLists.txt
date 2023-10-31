@@ -52,7 +52,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
     ../gameEngine/GameEngine.hpp
-    ../gameEngine/game.hpp
+    ../gameEngine/Game.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
     ../network/INetworkServer.hpp
@@ -66,7 +66,6 @@ set(INCLUDES
 set(EXEC_SRC
     Client.cpp
     ../ecs/Registry.cpp
-    ../ecs/ComponentsArray/Components/Components.cpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     ../gameEngine/GameEngine.cpp
     ../network/network_c/NetworkSystem.cpp
@@ -78,6 +77,8 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/level1.cpp
     ../gameEngine/game/gameLogic/shoot.cpp
     ../gameEngine/game/gameLogic/miscellaneous.cpp
+    ../gameEngine/game/gameLogic/movements.cpp
+    ../gameEngine/game/gameLogic/generateLevel.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
@@ -98,14 +99,24 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../network/network_c)
 include_directories(${nlohmann_json_SOURCE_DIR}/include)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../)
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json sfml-graphics sfml-window sfml-system sfml-audio Boost::asio Boost::filesystem Boost::property_tree)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+set(BINARIES_DESTINATION "bin")
+set(ASSETS_DESTINATION "games/rtype")
+set(JSON_DESTINATION "games/rtype")
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE")
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-SET(CPACK_GENERATOR "DEB")
+SET(CPACK_GENERATOR "DEB;7Z;STGZ;TGZ;TZ;ZIP;NSIS;RPM")
+set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../CPackConfig.cmake")
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "R-Type Team")
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../assets DESTINATION games/rtype/assets)
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "freeglut3-dev, libfreetype6-dev, libx11-dev, libxrandr-dev, libudev-dev, libgl1-mesa-dev, libflac-dev, libogg-dev, libvorbis-dev, libvorbisenc2, libvorbisfile3, libopenal-dev, libpthread-stubs0-dev, xorg-dev")
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${BINARIES_DESTINATION})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../assets DESTINATION ${ASSETS_DESTINATION})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../configFiles DESTINATION ${JSON_DESTINATION})
 include(CPack)

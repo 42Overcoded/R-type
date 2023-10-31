@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2023
+** R-type
+** File description:
+** level1
+*/
+
 #include "../../GameEngine.hpp"
 #include <iostream>
 #include <optional>
@@ -12,6 +19,11 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4)
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(0, 1080);
     srand(std::time(nullptr));
+
+    n1 *= difficulty;
+    n2 *= difficulty;
+    n3 *= difficulty;
+    n4 *= difficulty;
 
     for (int i = 0; i < n1; i++) {
         int rand = std::rand() % 950;
@@ -44,6 +56,8 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4)
 
 void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
 {
+    GameStateComponent &gameState = get_game_state();
+
     int is_enemy = 0;
     if (elapsed.asSeconds() > 3 && wave == 0) {
         wave = 1;
@@ -67,16 +81,34 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
             is_enemy++;
         }
     }
+    auto &tag = _registry.get_components<Tag>();
+    auto &state = _registry.get_components<State>();
+    auto &clock = _registry.get_components<Clock>();
     if (is_enemy == 0 && wave == 4) {
         wave = 5;
-        entity_t enemy = init_enemy(4, 4);
+        entity_t enemy = init_enemy(9, 5);
+        //entity_t enemy = init_worm(7);
+    }
+    for (size_t i = 0; i < _registry._entity_number; i++) {
+        if (tag[i]->tag == "wormHead") {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+        }
+        if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clock[i]->time.asSeconds() > 0.18) {
+            state[i]->index++;
+            init_worm(8);
+            clock[i]->clock.restart();
+        }
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (enemy[i] != std::nullopt && wave == 5) {
             is_enemy++;
         }
     }
-    if (wave == 5 && is_enemy == 0) {
-        scene = END;
+    if (is_enemy == 0 && wave == 5) {
+        wave = 6;
+        init_enemy(4, 4);
+    }
+    if (wave == 6 && is_enemy == 0) {
+        gameState.scene = END;
     }
 }

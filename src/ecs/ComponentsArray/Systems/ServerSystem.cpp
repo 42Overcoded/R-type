@@ -24,10 +24,23 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
     auto &sprite = r.get_components<Sprite>();
     auto &tag = r.get_components<Tag>();
     auto &enemy = r.get_components<Enemy>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &color = r.get_components<Color>();
+    auto &clock = r.get_components<Clock>();
+
+    int isFrozen = 0;
 
     for (size_t i = 0; i < r._entity_number; i++) {
+
         if (tag[i] == std::nullopt)
             continue;
+        if (tag[i]->tag == "ice" && drawable[i]->drawable == false) {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            isFrozen = 1;
+            if (clock[i]->time.asSeconds() > 5) {
+                r.kill_entity(entity_t(i));
+            }
+        }
         if (tag[i]->tag == "background") {
             if (position[i]->x <= -1920) {
                 position[i]->x = 1920;
@@ -49,7 +62,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
                 position[i]->x = 1500;
             }
         }
-        if (enemy[i] != std::nullopt && position[i] != std::nullopt) {
+        if (enemy[i] != std::nullopt && position[i] != std::nullopt && tag[i]->tag != "wormBody" && tag[i]->tag != "wormHead") {
             if (position[i]->y < 0) {
                 position[i]->y = 0;
             }
@@ -72,6 +85,12 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
+        if ((enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") && isFrozen == 1) {
+            color[i]->r = 50;
+            color[i]->g = 50;
+            color[i]->b = 255;
+            continue;
+        }
         if (position[i] != std::nullopt && speed[i] != std::nullopt && sprite[i] != std::nullopt) {
             position[i]->x += speed[i]->speedx * elapsed.asMilliseconds();
             position[i]->y += speed[i]->speedy * elapsed.asMilliseconds();
@@ -90,6 +109,7 @@ void System::hitbox_system(registry &r)
     auto &enemy = r.get_components<Enemy>();
     auto &clock = r.get_components<Clock>();
     auto &enemyBall = r.get_components<EnemyBall>();
+    auto &drawable = r.get_components<Drawable>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
@@ -104,6 +124,17 @@ void System::hitbox_system(registry &r)
     for (size_t i = 0; i < r._entity_number; i++) {
         if (tag[i] == std::nullopt) {
             continue;
+        }
+        if (tag[i]->groupTag == "powerup") {
+            for (size_t j = 0; j < r._entity_number; j++) {
+                if (tag[j] == std::nullopt || tag[i] == std::nullopt)
+                    continue;
+                if (tag[j]->tag == "starship") {
+                    if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
+                        drawable[i]->drawable = false;
+                    }
+                }
+            }
         }
         if (enemy[i] != std::nullopt || enemyBall[i] != std::nullopt) {
             for (size_t j = 0; j < r._entity_number; j++) {
@@ -158,8 +189,11 @@ void System::modify_pattern(registry &r)
 {
     auto &speed = r.get_components<Speed>();
     auto &pattern = r.get_components<Pattern>();
+    auto &tag = r.get_components<Tag>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i]->tag == "WormHead" || tag[i]->tag == "WormBody")
+            continue;
         if (speed[i] && pattern[i]) {
             if (pattern[i]->pattern_length == 0)
                 continue;
