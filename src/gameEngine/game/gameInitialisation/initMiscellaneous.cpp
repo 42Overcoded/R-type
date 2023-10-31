@@ -391,7 +391,7 @@ void gameEngine::death_animation()
         }
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt)
+        if (tag[i] == std::nullopt || position[i] == std::nullopt)
             continue;
         if (enemy[i] != std::nullopt) {
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
