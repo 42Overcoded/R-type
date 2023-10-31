@@ -91,7 +91,7 @@ void gameEngine::animate_enemy()
         }
         if (tag[i]->tag == "asteroid") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
-            if (clock[i]->time.asSeconds() > 1) {
+            if (clock[i]->time.asSeconds() > 0.5) {
                 state[i]->state += 1;
                 if (state[i]->state == 3) {
                     state[i]->state = 0;

@@ -25,14 +25,6 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
     n3 *= difficulty;
     n4 *= difficulty;
 
-    for (int i = 0; i < n8; i++) {
-        int rand = std::rand() % 2;
-        auto &position = _registry.get_components<Position>();
-        int x = 0 + (i * 503);
-        entity_t enemy = init_enemy(8, 8);
-        position[enemy]->y = 840;
-        position[enemy]->x = x;
-    }
     for (int i = 0; i < n1; i++) {
         int rand = std::rand() % 950;
         auto &position = _registry.get_components<Position>();
@@ -61,7 +53,7 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
         position[enemy]->y = rand;
     }
     for (int i = 0; i < n6; i++) {
-        int rand = std::rand() % 950;
+        int rand = std::rand() % 700;
         auto &position = _registry.get_components<Position>();
         entity_t enemy = init_enemy(6, 7);
         position[enemy]->y = rand;
@@ -74,12 +66,21 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
         position[enemy]->y = 0;
         position[enemy]->x = x;
     }
-
+    for (int i = 0; i < n8; i++) {
+        int rand = std::rand() % 2;
+        auto &position = _registry.get_components<Position>();
+        int x = 0 + (i * 503);
+        entity_t enemy = init_enemy(8, 8);
+        position[enemy]->y = 840;
+        position[enemy]->x = x;
+    }
     for (int i = 0; i < n9; i++) {
-        int rand = std::rand() % 500;
+        int rand = std::rand() % 700;
+        int x = (std::rand() % 100) * i + 1950;
         auto &position = _registry.get_components<Position>();
         entity_t enemy = init_enemy(9, 9);
-        position[enemy]->y = 150 + rand;
+        position[enemy]->y = 70 + rand;
+        position[enemy]->x = x;
     }
 }
 
@@ -88,9 +89,9 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
     GameStateComponent &gameState = get_game_state();
 
     int is_enemy = 0;
-    if (elapsed.asSeconds() > 3 && wave == 0) {
+    if (elapsed.asSeconds() > 0 && wave == 0) {
         wave = 1;
-        spawn_mobs(0,0,0,0, 0, 1, 100, 100, 1);
+        spawn_mobs(0,0,0,0, 0, 1, 100, 100, 100);
     }
     // if (elapsed.asSeconds() > 15 && wave == 1) {
     //     wave = 2;
