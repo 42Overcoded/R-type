@@ -179,6 +179,8 @@ void gameEngine::launch_game()
         gameManagerEntity, GameStateComponent{Scene::MENU, Mode::NONE});
     _registry.add_component<GameLauncher>(
     gameManagerEntity, GameLauncher{});
+    _registry.add_component<NetworkComponent>(
+        gameManagerEntity, NetworkComponent{});
     init_button(-1);
     if (_type == SERVER)
     {
