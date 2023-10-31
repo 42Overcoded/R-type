@@ -113,7 +113,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
 
     for (int i = 0; i < _registry._entity_number; i++)
     {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (tag[i]->tag == "ice" && drawable[i]->drawable == false) {
             return;
@@ -223,7 +223,7 @@ void gameEngine::launch_game()
         int alive    = 0;
 
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
-            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE || 
+            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE ||
             gameState.scene == GENERATE) {
             menu();
             _clock.restart();
@@ -232,16 +232,20 @@ void gameEngine::launch_game()
         {
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
                 continue;
-            for (size_t i = 0; i < _registry._entity_number; i++) {
-                if (tag[i] == std::nullopt)
+            for (size_t i = 0; i < _registry._entity_number; i++)
+            {
+                if (!tag[i].has_value())
                     continue;
                 if (tag[i]->tag == "starship")
                     alive += 1;
-                if (health[i] != std::nullopt && health[i]->health <= 0 && tag[i]->tag == "starship")
+                if (health[i].has_value() && health[i]->health <= 0 && tag[i]->tag == "starship") {
                     _registry.kill_entity(entity_t(i));
+                    continue;
+                }
                 if (tag[i]->tag == "wormHead")
                     clockk[i]->time = clockk[i]->clock.getElapsedTime();
-                if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clockk[i]->time.asSeconds() > 0.18) {
+                if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clockk[i]->time.asSeconds() > 0.18)
+                {
                     state[i]->index++;
                     init_worm(8);
                     clockk[i]->clock.restart();
@@ -333,7 +337,7 @@ GameStateComponent &gameEngine::get_game_state()
 
     for (size_t i = 0; i < _registry._entity_number; i++)
     {
-        if (gameStateArray[i] != std::nullopt)
+        if (gameStateArray[i].has_value())
             return gameStateArray[i].value();
     }
     throw std::runtime_error("No game state found");
