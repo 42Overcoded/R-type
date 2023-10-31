@@ -393,14 +393,14 @@ void gameEngine::death_animation()
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (!tag[i].has_value() || !position[i].has_value())
             continue;
-        if (enemy[i] != std::nullopt) {
+        if (enemy[i].has_value()) {
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
             }
         }
         if (tag[i]->tag == "wormBody") {
-            if  (health[i] != std::nullopt) {
+            if  (health[i].has_value()) {
                 if (health[i]->health > 0) {
                     wormAlive += 1;
                 }
@@ -430,7 +430,7 @@ void gameEngine::death_animation()
                 state[i]->state = 666;
             }
         }
-        if (enemy[i] != std::nullopt) {
+        if (enemy[i].has_value()) {
             if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 for (size_t j = 0; j < _registry._entity_number; j++) {
                     if (!tag[j].has_value())

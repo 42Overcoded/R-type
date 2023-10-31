@@ -76,7 +76,7 @@ void gameEngine::spawn_ally_bullet(int i)
             if (!tag[i].has_value()) {
                 continue;
             }
-            if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
+            if (tag[i]->tag == "starship" && control[i].has_value()) {
                 position[bullet]->x = position[i]->x + 80;
                 position[bullet]->y = position[i]->y;
             }

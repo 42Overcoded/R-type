@@ -30,7 +30,7 @@ void gameEngine::shoot_system(sf::Time &elapsed)
                 _registry.kill_entity(entity_t(i));
             }
         }
-        if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
+        if (tag[i]->tag == "starship" && control[i].has_value()) {
             if (control[i]->shoot == true) {
                 load_shoot(elapsed);
             } else {
@@ -56,7 +56,7 @@ void gameEngine::load_shoot(sf::Time &elapsed)
         if (!tag[i].has_value()) {
             continue;
         }
-        if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
+        if (tag[i]->tag == "starship" && control[i].has_value()) {
             control[i]->shoot = true;
             for (size_t j = 0; j < _registry._entity_number; j++) {
                 if (!tag[j].has_value())
@@ -113,7 +113,7 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
         if (!_tag[i].has_value()) {
             continue;
         }
-        if (_tag[i]->tag == "starship" && control[i] != std::nullopt) {
+        if (_tag[i]->tag == "starship" && control[i].has_value()) {
             if (clock[i]->_time.asSeconds() < 0.15)
                 return;
             spawn_ally_bullet(i);
@@ -134,7 +134,7 @@ void gameEngine::shoot_enemy() {
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (!tag[i].has_value())
             continue;
-        if (enemy[i] != std::nullopt) {
+        if (enemy[i].has_value()) {
             if (tag[i]->tag == "enemy 3") {
                 clock[i]->_time = clock[i]->_clock.getElapsedTime();
                 if (clock[i]->_time.asSeconds() > 3) {
@@ -203,7 +203,7 @@ void gameEngine::shoot_enemy() {
                     spawn_bullet(i, 6);
                 }
         }
-        if (searchingHead[i] != std::nullopt) {
+        if (searchingHead[i].has_value()) {
             if (searchingHead[i]->searching == false)
                 continue;
             for (size_t j = 0; j < _registry._entity_number; j++) {

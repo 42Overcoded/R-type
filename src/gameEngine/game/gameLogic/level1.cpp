@@ -77,7 +77,7 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
     }
     auto &enemy = _registry.get_components<Enemy>();
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (enemy[i] != std::nullopt && wave == 4) {
+        if (enemy[i].has_value() && wave == 4) {
             is_enemy++;
         }
     }
@@ -100,7 +100,7 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
         }
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (enemy[i] != std::nullopt && wave == 5) {
+        if (enemy[i].has_value() && wave == 5) {
             is_enemy++;
         }
     }

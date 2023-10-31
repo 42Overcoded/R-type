@@ -161,10 +161,10 @@ void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
     auto &sprite = r.get_components<Sprite>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (drawable[i] != std::nullopt) {
-            if (sprite[i] != std::nullopt && drawable[i]->drawable == true)
+        if (drawable[i].has_value()) {
+            if (sprite[i].has_value() && drawable[i]->drawable == true)
                 window.draw(sprite[i]->sprite);
-            if (text[i] != std::nullopt && drawable[i]->drawable == true)
+            if (text[i].has_value() && drawable[i]->drawable == true)
                 window.draw(text[i]->text);
         }
     }
@@ -175,7 +175,7 @@ void SfmlSystem::string_system(registry &r)
     auto &text = r.get_components<Text>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (text[i] != std::nullopt) {
+        if (text[i].has_value()) {
             text[i]->text.setString(text[i]->str);
         }
     }
@@ -186,7 +186,7 @@ void SfmlSystem::font_system(registry &r)
     auto &text = r.get_components<Text>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (text[i] != std::nullopt) {
+        if (text[i].has_value()) {
             text[i]->text.setFont(fonts[text[i]->fontTag]);
         }
     }
@@ -199,10 +199,10 @@ void SfmlSystem::scale_system(registry &r)
     auto &text = r.get_components<Text>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (scale[i] != std::nullopt && sprite[i] != std::nullopt) {
+        if (scale[i].has_value() && sprite[i].has_value()) {
             sprite[i]->sprite.setScale(scale[i]->scale, scale[i]->scale);
         }
-        if (scale[i] != std::nullopt && text[i] != std::nullopt) {
+        if (scale[i].has_value() && text[i].has_value()) {
             text[i]->text.setScale(scale[i]->scale, scale[i]->scale);
         }
     }
@@ -215,10 +215,10 @@ void SfmlSystem::position_system(registry &r)
     auto &text = r.get_components<Text>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (position[i] != std::nullopt && sprite[i] != std::nullopt) {
+        if (position[i].has_value() && sprite[i].has_value()) {
             sprite[i]->sprite.setPosition(position[i]->x, position[i]->y);
         }
-        if (position[i] != std::nullopt && text[i] != std::nullopt) {
+        if (position[i].has_value() && text[i].has_value()) {
             text[i]->text.setPosition(position[i]->x, position[i]->y);
         }
     }
@@ -230,7 +230,7 @@ void SfmlSystem::rect_system(registry &r)
     auto &rect = r.get_components<Rect>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (sprite[i] != std::nullopt && rect[i] != std::nullopt) {
+        if (sprite[i].has_value() && rect[i].has_value()) {
             sprite[i]->sprite.setTextureRect(sf::IntRect(rect[i]->left, rect[i]->top, rect[i]->width, rect[i]->height));
         }
     }
@@ -242,7 +242,7 @@ void SfmlSystem::texture_system(registry &r)
     auto &texture = r.get_components<Texture>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (sprite[i] != std::nullopt && texture[i] != std::nullopt) {
+        if (sprite[i].has_value() && texture[i].has_value()) {
             sprite[i]->sprite.setTexture(textures[texture[i]->textureTag]);
         }
     }
@@ -293,7 +293,7 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
                 position[i]->x = 1500;
             }
         }
-        if (enemy[i] != std::nullopt && position[i] != std::nullopt && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
+        if (enemy[i].has_value() && position[i].has_value() && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
             if (position[i]->y < 0) {
                 position[i]->y = 0;
             }
@@ -316,17 +316,17 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
         if (!tag[i].has_value()) {
             continue;
         }
-        if ((enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") && isFrozen == 1) {
+        if ((enemy[i].has_value() || tag[i]->groupTag == "enemyBullet") && isFrozen == 1) {
             color[i]->r = 150;
             color[i]->g = 150;
             color[i]->b = 255;
             continue;
-        } else if (enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") {
+        } else if (enemy[i].has_value() || tag[i]->groupTag == "enemyBullet") {
             color[i]->b = 255;
             color[i]->r = 255;
             color[i]->g = 255;
         }
-        if (position[i] != std::nullopt && speed[i] != std::nullopt && sprite[i] != std::nullopt) {
+        if (position[i].has_value() && speed[i].has_value() && sprite[i].has_value()) {
             position[i]->x += speed[i]->speedx * elapsed.asMilliseconds();
             position[i]->y += speed[i]->speedy * elapsed.asMilliseconds();
         }
@@ -350,7 +350,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
     size_t gameStateIndex = 0;
 
     for (gameStateIndex = 0; gameStateIndex < r._entity_number; gameStateIndex++) {
-        if (gameStateArray[gameStateIndex] != std::nullopt)
+        if (gameStateArray[gameStateIndex].has_value())
             break;
     }
     if (!gameStateArray[gameStateIndex].has_value())
@@ -358,7 +358,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
     GameStateComponent &gameState = *gameStateArray[gameStateIndex];
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (control[i] != std::nullopt) {
+        if (control[i].has_value()) {
             control[i]->up = false;
             control[i]->down = false;
             control[i]->left = false;
@@ -385,7 +385,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
     for (size_t i = 0; i < r._entity_number; i++) {
         if (!tag[i].has_value())
             continue;
-        if (click[i] != std::nullopt) {
+        if (click[i].has_value()) {
             sf::Vector2i mousePos = sf::Mouse::getPosition(_window);
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && mousePos.x > position[i]->x && mousePos.x < position[i]->x + scale[i]->scale * hitbox[i]->width && mousePos.y > position[i]->y && mousePos.y < position[i]->y + scale[i]->scale * hitbox[i]->height) {
                 for (size_t j = 0; j < r._entity_number; j++) {
@@ -419,7 +419,7 @@ void SfmlSystem::set_color(registry &r)
     auto &color = r.get_components<Color>();
 
     for  (size_t i = 0; i < r._entity_number; i++) {
-        if (color[i] != std::nullopt) {
+        if (color[i].has_value()) {
             sprite[i]->sprite.setColor(sf::Color(color[i]->r, color[i]->g, color[i]->b, color[i]->a));
         }
     }
@@ -519,7 +519,7 @@ void SfmlSystem::hitbox_system(registry &r)
                         }
                         if (tag[i]->tag == "bombBoost") {
                             for (size_t k = 0; k < r._entity_number; k++) {
-                                if (enemy[k] != std::nullopt) {
+                                if (enemy[k].has_value()) {
                                     health[k]->health -= 3;
                                     r.kill_entity(entity_t(i));
                                 }
@@ -529,7 +529,7 @@ void SfmlSystem::hitbox_system(registry &r)
                 }
             }
         }
-        if (enemy[i] != std::nullopt || enemyBall[i] != std::nullopt) {
+        if (enemy[i].has_value() || enemyBall[i].has_value()) {
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (!tag[j].has_value() || !tag[i].has_value())
                     continue;
@@ -542,7 +542,7 @@ void SfmlSystem::hitbox_system(registry &r)
                         position[j]->y = 500;
                         state[j]->state = 1;
                         clock[j]->__clock.restart();
-                        if (enemyBall[i] != std::nullopt) {
+                        if (enemyBall[i].has_value()) {
                             r.kill_entity(entity_t(i));
                         }
                         break;
@@ -554,7 +554,7 @@ void SfmlSystem::hitbox_system(registry &r)
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (!tag[j].has_value() || !tag[i].has_value())
                     continue;
-                if (enemy[j] != std::nullopt) {
+                if (enemy[j].has_value()) {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
                         if (state[i]->state == 0) {
                             health[j]->health -= 1;
@@ -649,7 +649,7 @@ void SfmlSystem::set_orientation(registry &r)
     auto &orientation = r.get_components<Orientation>();
     auto &sprite = r.get_components<Sprite>();
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (orientation[i] != std::nullopt && sprite[i] != std::nullopt) {
+        if (orientation[i].has_value() && sprite[i].has_value()) {
             sprite[i]->sprite.setRotation(orientation[i]->orientation);
         }
     }

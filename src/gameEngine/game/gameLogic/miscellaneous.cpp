@@ -58,7 +58,7 @@ void gameEngine::menu()
     size_t gameLauncherIndex = 0;
 
     for (gameLauncherIndex = 0; gameLauncherIndex < _registry._entity_number; gameLauncherIndex++) {
-        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+        if (gameLauncherArray[gameLauncherIndex].has_value())
             break;
     }
     if (!gameLauncherArray[gameLauncherIndex].has_value())
@@ -495,7 +495,7 @@ void gameEngine::menu()
         for (size_t i = 0; i < tag.size(); i++) {
             if (!tag[i].has_value())
                 continue;
-            if (drawable[i] != std::nullopt) {
+            if (drawable[i].has_value()) {
                 if (tag[i]->tag == "score")
                     continue;
                 drawable[i]->drawable = false;
@@ -525,7 +525,7 @@ void gameEngine::life_handler()
             for (size_t j = 0; j < _registry._entity_number; j++) {
                 if (!tag[j].has_value())
                     continue;
-                if (tag[j]->tag == "starship" && control[j] != std::nullopt) {
+                if (tag[j]->tag == "starship" && control[j].has_value()) {
                     if (health[j]->health <= state[i]->state + 1) {
                         drawable[i]->drawable = false;
                     } else {

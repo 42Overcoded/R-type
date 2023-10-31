@@ -211,7 +211,7 @@ void gameEngine::launch_game()
                 {
                     alive += 1;
                 }
-                if (health[i] != std::nullopt && health[i]->health <= 0 &&
+                if (health[i].has_value() && health[i]->health <= 0 &&
                     tag[i]->tag == "starship")
                 {
                     _registry.kill_entity(entity_t(i));
@@ -306,7 +306,7 @@ GameStateComponent &gameEngine::get_game_state()
 
     for (size_t i = 0; i < _registry._entity_number; i++)
     {
-        if (gameStateArray[i] != std::nullopt)
+        if (gameStateArray[i].has_value())
             return gameStateArray[i].value();
     }
     throw std::runtime_error("No game state found");
