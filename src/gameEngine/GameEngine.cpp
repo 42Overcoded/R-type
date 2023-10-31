@@ -246,8 +246,6 @@ void gameEngine::launch_game()
                 }
                 spawn_generated_level(_elapsed, _clock);
             }
-            if (gameState.mode == LEVELS)
-                spawn_wave(_elapsed, wave);
             if (gameState.mode == ENDLESS)
                 spawn_infinite_wave(_elapsed, _clock, wave);
             if (gameState.mode == GENERATED) {
