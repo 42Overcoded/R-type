@@ -167,12 +167,12 @@ void gameEngine::shoot_enemy() {
                 }
             }
             if (tag[i]->tag == "wormHead") {
-                clock[i]->_time = clock[i]->_clock.getElapsedTime();
-                if (clock[i]->_time.asSeconds() > 1) {
+                clock[i]->__time = clock[i]->__clock.getElapsedTime();
+                if (clock[i]->__time.asSeconds() > 1) {
                     if (position[i]->x >= 1920) {
                         continue;
                     }
-                    clock[i]->_clock.restart();
+                    clock[i]->__clock.restart();
                     spawn_boss_bullet(i, 5);
                 }
             }
