@@ -67,6 +67,17 @@ void gameEngine::animate_enemy()
                 clock[i]->clock.restart();
             }
         }
+        if (tag[i]->tag == "tank") {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            if (clock[i]->time.asSeconds() > 1) {
+                state[i]->state += 1;
+                if (state[i]->state == 2) {
+                    state[i]->state = 0;
+                }
+                rect[i]->left = (rect[i]->width*state[i]->state);
+                clock[i]->clock.restart();
+            }
+        }
         if (tag[i]->tag == "enemyBoss") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
             if (clock[i]->time.asSeconds() > 0.2) {
@@ -104,10 +115,21 @@ void gameEngine::animate_enemy()
             clock[i]->time = clock[i]->clock.getElapsedTime();
             if (clock[i]->time.asSeconds() > 0.1) {
                 state[i]->state += 1;
-                if (state[i]->state == 4) {
+                if (state[i]->state >= 4) {
                     state[i]->state = 0;
                 }
-                rect[i]->left = rect[i]->baseLeft + (23*state[i]->state);
+                rect[i]->left = (23*state[i]->state);
+                clock[i]->clock.restart();
+            }
+        }
+        if (tag[i]->tag == "wormBody") {
+            clock[i]->time = clock[i]->clock.getElapsedTime();
+            if (clock[i]->time.asSeconds() > 0.2) {
+                state[i]->state += 1;
+                if (state[i]->state == 3) {
+                    state[i]->state = 0;
+                }
+                rect[i]->left = (33*state[i]->state);
                 clock[i]->clock.restart();
             }
         }

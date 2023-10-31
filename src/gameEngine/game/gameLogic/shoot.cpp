@@ -26,7 +26,7 @@ void gameEngine::shoot_system(sf::Time &elapsed)
             continue;
         }
         if (tag[i]->tag == "bullet") {
-            if (position[i]->x > 1900) {
+            if (position[i]->x > 1850) {
                 _registry.kill_entity(entity_t(i));
             }
         }
@@ -77,7 +77,7 @@ void gameEngine::load_shoot(sf::Time &elapsed)
         }
         if (tag[i]->tag == "fullbeambar") {
             if (health[i]->health <= 100) {
-                health[i]->health += 50 * elapsed.asSeconds();
+                health[i]->health += 100 * elapsed.asSeconds();
             }
             rect[i]->width = (health[i]->health / 100) * 220;
         }
@@ -122,7 +122,6 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
     }
 }
 
-
 void gameEngine::shoot_enemy() {
     auto &tag = _registry.get_components<Tag>();
     auto &clock = _registry.get_components<Clock>();
@@ -146,15 +145,35 @@ void gameEngine::shoot_enemy() {
                     spawn_bullet(i, 0);
                 }
             }
-        }
-        if (tag[i]->tag == "enemy 4") {
+            if (tag[i]->tag == "tank") {
             clock[i]->_time = clock[i]->_clock.getElapsedTime();
-            if (clock[i]->_time.asSeconds() > 1.5) {
-                if (position[i]->x >= 1920) {
-                    continue;
+                if (clock[i]->_time.asSeconds() > 1.5) {
+                    if (position[i]->x >= 1920) {
+                        continue;
+                    }
+                    clock[i]->_clock.restart();
+                    spawn_bullet(i, 4);
                 }
-                clock[i]->_clock.restart();
-                spawn_bullet(i, 1);
+            }
+            if (tag[i]->tag == "enemy 4") {
+                clock[i]->_time = clock[i]->_clock.getElapsedTime();
+                if (clock[i]->_time.asSeconds() > 1.5) {
+                    if (position[i]->x >= 1920) {
+                        continue;
+                    }
+                    clock[i]->_clock.restart();
+                    spawn_bullet(i, 1);
+                }
+            }
+            if (tag[i]->tag == "wormHead") {
+                clock[i]->_time = clock[i]->_clock.getElapsedTime();
+                if (clock[i]->_time.asSeconds() > 1) {
+                    if (position[i]->x >= 1920) {
+                        continue;
+                    }
+                    clock[i]->_clock.restart();
+                    spawn_boss_bullet(i, 5);
+                }
             }
         }
         if (tag[i]->tag == "tank") {
@@ -171,7 +190,7 @@ void gameEngine::shoot_enemy() {
             clock[i]->_time = clock[i]->_clock.getElapsedTime();
             clock[i]->__time = clock[i]->__clock.getElapsedTime();
             if (clock[i]->_time.asSeconds() > 0.1 && clock[i]->__time.asSeconds() > 1.4) {
-                if (state[i]->index == 5) {
+                if (state[i]->index == 10) {
                     state[i]->index = 0;
                     clock[i]->__clock.restart();
                     continue;
@@ -183,6 +202,16 @@ void gameEngine::shoot_enemy() {
                 clock[i]->_clock.restart();
                 spawn_boss_bullet(i, 2);
             }
+        }
+        if (tag[i]->tag=="starshipBoss") {
+            clock[i]->_time = clock[i]->_clock.getElapsedTime();
+                if (clock[i]->_time.asSeconds() > 1) {
+                    if (position[i]->x >= 1920) {
+                        continue;
+                    }
+                    clock[i]->_clock.restart();
+                    spawn_bullet(i, 6);
+                }
         }
         if (searchingHead[i] != std::nullopt) {
             if (searchingHead[i]->searching == false)

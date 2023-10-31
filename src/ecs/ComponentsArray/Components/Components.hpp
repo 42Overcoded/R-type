@@ -23,6 +23,10 @@
 struct Speed {
     float speedy = 0;
     float speedx = 0;
+    float baseSpeedy = 0;
+    float baseSpeedx = 0;
+    float varSpeedy = 0;
+    float varSpeedx = 0;
 };
 
 /**
@@ -196,7 +200,7 @@ struct Text {
  * 
  */
 struct Drawable {
-    bool drawable = false;
+    bool drawable = true;
 };
 
 /**

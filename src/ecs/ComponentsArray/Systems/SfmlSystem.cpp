@@ -39,15 +39,13 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture enemyBullet;
     sf::Texture enemyBlueBullet;
     sf::Texture enemyBoss;
-    sf::Texture tank;
-    sf::Texture sprinter;
-    sf::Texture wall;
-    sf::Texture wall2;
-    sf::Texture asteroid;
-    sf::Texture tankBullet;
+    sf::Texture enemyBossBullet;
     sf::Texture background;
     sf::Texture shield;
     sf::Texture menuButton;
+    sf::Texture tank;
+    sf::Texture sprinter;
+    sf::Texture tankBullet;
     sf::Texture playButton;
     sf::Texture blueBall;
     sf::Texture shootBoost;
@@ -114,10 +112,85 @@ void SfmlSystem::load_texture(registry &r)
         exit(84);
     if (!asteroid.loadFromFile("./assets/asteroid.png"))
         exit(84);
+    sf::Texture WormHead;
+    sf::Texture WormBody;
+    sf::Texture wormBullet;
+    sf::Texture starshipBoss;
+    sf::Texture starshipBossBullet;
+
+    if (!starshipBossBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
+        throw std::runtime_error("Cannot load starship boss bullet texture");
+    if (!starshipBoss.loadFromFile(PATH_TO_ASSETS + "starshipboss.png"))
+        throw std::runtime_error("Cannot load starship boss texture");
+    if (!wormBullet.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm bullet texture");
+    if (!WormHead.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm head texture");
+    if (!WormBody.loadFromFile(PATH_TO_ASSETS + "worm.png"))
+        throw std::runtime_error("Cannot load worm body texture");
+    if (!sprinter.loadFromFile(PATH_TO_ASSETS + "truck.png"))
+        throw std::runtime_error("Cannot load sprinter texture");
+    if (!tank.loadFromFile(PATH_TO_ASSETS + "tank.png"))
+        throw std::runtime_error("Cannot load tank texture");
+    if (!tankBullet.loadFromFile(PATH_TO_ASSETS + "blueBall.png"))
+        throw std::runtime_error("Cannot load tank bullet texture");
+    if (!Bomb.loadFromFile(PATH_TO_ASSETS + "bomb.png"))
+        throw std::runtime_error("Cannot load bomb texture");
+    if (!lifeBoost.loadFromFile(PATH_TO_ASSETS + "hearth.png"))
+        throw std::runtime_error("Cannot load life boost texture");
+    if (!ice.loadFromFile(PATH_TO_ASSETS + "ice.png"))
+        throw std::runtime_error("Cannot load ice texture");
+    if (!shootBoost.loadFromFile(PATH_TO_ASSETS + "star.png"))
+        throw std::runtime_error("Cannot load shoot boost texture");
+    if (!shield.loadFromFile(PATH_TO_ASSETS + "shield.png"))
+        throw std::runtime_error("Cannot load shield texture");
+    if  (!font.loadFromFile(PATH_TO_ASSETS + "GothamMedium.ttf"))
+        throw std::runtime_error("Cannot load font");
+    if (!button.loadFromFile(PATH_TO_ASSETS + "button.png"))
+        throw std::runtime_error("Cannot load button texture");
+    if (!menuButton.loadFromFile(PATH_TO_ASSETS + "lobby.png"))
+        throw std::runtime_error("Cannot load menu texture");
+    if (!playButton.loadFromFile(PATH_TO_ASSETS + "start.png"))
+        throw std::runtime_error("Cannot load play texture");
+    if (!background.loadFromFile(PATH_TO_ASSETS + "background.png"))
+        throw std::runtime_error("Cannot load background texture");
+    if (!enemyBoss.loadFromFile(PATH_TO_ASSETS + "enemyBoss.png"))
+        throw std::runtime_error("Cannot load enemy boss texture");
+    if (!enemyBlueBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
+        throw std::runtime_error("Cannot load enemy blue bullet texture");
+    if (!enemyFour.loadFromFile(PATH_TO_ASSETS + "enemyAlien.png"))
+        throw std::runtime_error("Cannot load enemy alien texture");
+    if (!enemyBullet.loadFromFile(PATH_TO_ASSETS + "enemyBullet.png"))
+        throw std::runtime_error("Cannot load enemy bullet texture");
+    if (!enemyThree.loadFromFile(PATH_TO_ASSETS + "enemyRobot.png"))
+        throw std::runtime_error("Cannot load enemy robot texture");
+    if  (!enemyTwo.loadFromFile(PATH_TO_ASSETS + "enemyScuttle.png"))
+        throw std::runtime_error("Cannot load enemy scuttle texture");
+    if (!enemyBossBullet.loadFromFile(PATH_TO_ASSETS + "enemyBoss.png"))
+        throw std::runtime_error("Cannot load enemy boss bullet texture");
+    if (!bullet.loadFromFile(PATH_TO_ASSETS + "playerBullet.png"))
+        throw std::runtime_error("Cannot load bullet texture");
+    if (!starship.loadFromFile(PATH_TO_ASSETS + "starship.png"))
+        throw std::runtime_error("Cannot load starship texture");
+    if (!enemy.loadFromFile(PATH_TO_ASSETS + "enemyStarship.png"))
+        throw std::runtime_error("Cannot load enemy texture");
+    if (!beambar.loadFromFile(PATH_TO_ASSETS + "beam.png"))
+        throw std::runtime_error("Cannot load beambar texture");
+    if (!explosion.loadFromFile(PATH_TO_ASSETS + "explosion.png"))
+        throw std::runtime_error("Cannot load explosion texture");
+
+    textures["starshipBossBulletTexture"] = starshipBossBullet;
+    textures["starshipBossTexture"] = starshipBoss;
+    textures["wormBulletTexture"] = wormBullet;
+    textures["wormHeadTexture"] = WormHead;
+    textures["wormBodyTexture"] = WormBody;
+    textures["tankTexture"] = tank;
+    textures["sprinterTexture"] = sprinter;
     textures["bombTexture"] = Bomb;
     textures["lifeBoostTexture"] = lifeBoost;
     textures["shootBoostTexture"] = shootBoost;
     textures["shieldTexture"] = shield;
+    textures["tankBulletTexture"] = tankBullet;
     textures["iceTexture"] = ice;
     textures["buttonTexture"] = button;
     textures["starshipTexture"] = starship;
@@ -140,8 +213,8 @@ void SfmlSystem::load_texture(registry &r)
     textures["enemyBulletTexture"] = enemyBullet;
     textures["blueBallTexture"] = blueBall;
     textures["enemyBlueBulletTexture"] = enemyBlueBullet;
-    textures["enemyBossBulletTexture"] = enemyBoss;
     textures["tankBulletTexture"] = tankBullet;
+    textures["enemyBossBulletTexture"] = enemyBossBullet;
     fonts["scoreFont"] = font;
     fonts["menuFont"] = font;
 }
@@ -285,7 +358,7 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
                 position[i]->x = 1500;
             }
         }
-        if (enemy[i] != std::nullopt && position[i] != std::nullopt) {
+        if (enemy[i] != std::nullopt && position[i] != std::nullopt && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
             if (position[i]->y < 0) {
                 position[i]->y = 0;
             }
@@ -308,12 +381,12 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (enemy[i] != std::nullopt && isFrozen == 1) {
+        if ((enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") && isFrozen == 1) {
             color[i]->r = 150;
             color[i]->g = 150;
             color[i]->b = 255;
             continue;
-        } else if (enemy[i] != std::nullopt) {
+        } else if (enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") {
             color[i]->b = 255;
             color[i]->r = 255;
             color[i]->g = 255;
@@ -553,7 +626,7 @@ void SfmlSystem::hitbox_system(registry &r)
                             r.kill_entity(entity_t(i));
                         }
                         if (state[i]->state == 1) {
-                            health[j]->health -= 5;
+                            health[j]->health -= 7;
                             r.kill_entity(entity_t(i));
                         }
                         if (state[i]->state == 2) {
@@ -575,9 +648,16 @@ void SfmlSystem::modify_pattern(registry &r)
 {
     auto &speed = r.get_components<Speed>();
     auto &pattern = r.get_components<Pattern>();
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
+    auto &clock = r.get_components<Clock>();
+    auto &state = r.get_components<State>();
+    auto &orientation = r.get_components<Orientation>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (speed[i] && pattern[i]) {
+            if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss")
+                continue;
             if (pattern[i]->pattern_length == 0)
                 continue;
             if (pattern[i]->pattern_index < pattern[i]->switch_index) {
@@ -589,6 +669,53 @@ void SfmlSystem::modify_pattern(registry &r)
                 speed[i]->speedx = pattern[i]->pattern[pattern[i]->pattern_type].speedx;
                 speed[i]->speedy = pattern[i]->pattern[pattern[i]->pattern_type].speedy;
             }
+        }
+    }
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss") {
+            clock[i]->_time = clock[i]->_clock.getElapsedTime();
+            // if (clock[i]->_time.asSeconds() > 0.1) {
+            //     state[i]->_state += 1;
+            //     float amplitude = 0.2;
+            //     float frequency = 10;
+            //     float varSpeedx = amplitude * sin(state[i]->_state * 2 * M_PI / frequency);
+            //     float varSpeedy = amplitude * cos(state[i]->_state * 2 * M_PI / frequency);
+            //     speed[i]->varSpeedx = varSpeedx * speed[i]->baseSpeedx;
+            //     speed[i]->varSpeedy = varSpeedy * speed[i]->baseSpeedy;
+            //     speed[i]->speedx = speed[i]->baseSpeedx + speed[i]->varSpeedx;
+            //     speed[i]->speedy = speed[i]->baseSpeedy + speed[i]->varSpeedy;
+            //     clock[i]->_clock.restart();
+            // }
+            if (position[i]->x < pattern[i]->pattern[pattern[i]->pattern_index].speedx + 10 &&
+                position[i]->x > pattern[i]->pattern[pattern[i]->pattern_index].speedx - 10 &&
+                position[i]->y < pattern[i]->pattern[pattern[i]->pattern_index].speedy + 10 &&
+                position[i]->y > pattern[i]->pattern[pattern[i]->pattern_index].speedy - 10) {
+                position[i]->x = pattern[i]->pattern[pattern[i]->pattern_index].speedx;
+                position[i]->y = pattern[i]->pattern[pattern[i]->pattern_index].speedy;
+                state[i]->_state = 0;
+                pattern[i]->pattern_index++;
+                if  (pattern[i]->pattern_index > pattern[i]->pattern_length) {
+                    pattern[i]->pattern_index = 0;
+                }
+                float x = pattern[i]->pattern[pattern[i]->pattern_index].speedx - position[i]->x;
+                float y = pattern[i]->pattern[pattern[i]->pattern_index].speedy - position[i]->y;
+                float length = sqrt(x * x + y * y);
+                speed[i]->speedx = (x / length) * 0.5;
+                speed[i]->speedy = (y / length) * 0.5;
+                speed[i]->baseSpeedx = speed[i]->speedx;
+                speed[i]->baseSpeedy = speed[i]->speedy;
+            }
+        }
+    }
+}
+
+void SfmlSystem::set_orientation(registry &r)
+{
+    auto &orientation = r.get_components<Orientation>();
+    auto &sprite = r.get_components<Sprite>();
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (orientation[i] != std::nullopt && sprite[i] != std::nullopt) {
+            sprite[i]->sprite.setRotation(orientation[i]->orientation);
         }
     }
 }

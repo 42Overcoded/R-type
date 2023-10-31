@@ -62,7 +62,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
                 position[i]->x = 1500;
             }
         }
-        if (enemy[i] != std::nullopt && position[i] != std::nullopt) {
+        if (enemy[i] != std::nullopt && position[i] != std::nullopt && tag[i]->tag != "wormBody" && tag[i]->tag != "wormHead") {
             if (position[i]->y < 0) {
                 position[i]->y = 0;
             }
@@ -85,7 +85,7 @@ void System::velocity_system(registry &r, sf::Time &elapsed)
         if (tag[i] == std::nullopt) {
             continue;
         }
-        if (enemy[i] != std::nullopt && isFrozen == 1) {
+        if ((enemy[i] != std::nullopt || tag[i]->groupTag == "enemyBullet") && isFrozen == 1) {
             color[i]->r = 50;
             color[i]->g = 50;
             color[i]->b = 255;
@@ -189,8 +189,11 @@ void System::modify_pattern(registry &r)
 {
     auto &speed = r.get_components<Speed>();
     auto &pattern = r.get_components<Pattern>();
+    auto &tag = r.get_components<Tag>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i]->tag == "WormHead" || tag[i]->tag == "WormBody")
+            continue;
         if (speed[i] && pattern[i]) {
             if (pattern[i]->pattern_length == 0)
                 continue;
