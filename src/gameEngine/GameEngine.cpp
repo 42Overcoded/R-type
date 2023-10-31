@@ -194,7 +194,7 @@ void gameEngine::launch_game()
         int alive    = 0;
 
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
-            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE || 
+            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE ||
             gameState.scene == GENERATE) {
             menu();
             _clock.restart();

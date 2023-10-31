@@ -591,7 +591,7 @@ void SfmlSystem::modify_pattern(registry &r)
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (speed[i] && pattern[i]) {
-            if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss")
+            if (!tag[i].has_value() || tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss")
                 continue;
             if (pattern[i]->pattern_length == 0)
                 continue;
@@ -607,7 +607,7 @@ void SfmlSystem::modify_pattern(registry &r)
         }
     }
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss") {
+        if (tag[i].has_value() && (tag[i]->tag == "wormHead" || tag[i]->tag == "wormBody" || tag[i]->tag == "starshipBoss")) {
             clock[i]->_time = clock[i]->_clock.getElapsedTime();
             // if (clock[i]->_time.asSeconds() > 0.1) {
             //     state[i]->_state += 1;

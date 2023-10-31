@@ -192,7 +192,7 @@ void System::modify_pattern(registry &r)
     auto &tag = r.get_components<Tag>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (tag[i]->tag == "WormHead" || tag[i]->tag == "WormBody")
+        if (!tag[i].has_value() || tag[i]->tag == "WormHead" || tag[i]->tag == "WormBody")
             continue;
         if (speed[i] && pattern[i]) {
             if (pattern[i]->pattern_length == 0)

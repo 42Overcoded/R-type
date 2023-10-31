@@ -386,7 +386,7 @@ void gameEngine::death_animation()
     int wormAlive = -1;
     for (size_t i = 0; i < _registry._entity_number; i++)
     {
-        if (tag[i]->tag == "wormBody") {
+        if (tag[i].has_value() && tag[i]->tag == "wormBody") {
             wormAlive = 0;
         }
     }

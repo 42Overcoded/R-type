@@ -90,10 +90,10 @@ void gameEngine::spawn_wave(sf::Time &elapsed, float &wave)
         //entity_t enemy = init_worm(7);
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i]->tag == "wormHead") {
+        if (tag[i].has_value() && tag[i]->tag == "wormHead") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
         }
-        if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clock[i]->time.asSeconds() > 0.18) {
+        if (tag[i].has_value() && tag[i]->tag == "wormHead" && state[i]->index < 20 && clock[i]->time.asSeconds() > 0.18) {
             state[i]->index++;
             init_worm(8);
             clock[i]->clock.restart();

@@ -212,7 +212,7 @@ void NetworkSystem::debugSpaceshipPosition(registry &reg)
     auto &tag = reg.get_components<Tag>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
-        if (position[i] != std::nullopt && tag[i]->tag == "starship") {
+        if (position[i] != std::nullopt && (tag[i].has_value() &&  tag[i]->tag == "starship")) {
             // if (network[i]->entityId == 0)
             //     continue;
             // std::cout << "Spaceship " << network[i]->entityId << " : " << position[i]->x << " " << position[i]->y << std::endl;
