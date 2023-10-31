@@ -238,9 +238,10 @@ void gameEngine::launch_game()
                     continue;
                 if (tag[i]->tag == "starship")
                     alive += 1;
-                if (health[i].has_value() &&  && health[i]->health <= 0 && tag[i]->tag == "starship")
+                if (health[i].has_value() && health[i]->health <= 0 && tag[i]->tag == "starship") {
                     _registry.kill_entity(entity_t(i));
                     continue;
+                }
                 if (tag[i]->tag == "wormHead")
                     clockk[i]->time = clockk[i]->clock.getElapsedTime();
                 if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clockk[i]->time.asSeconds() > 0.18)
