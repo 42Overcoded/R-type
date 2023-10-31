@@ -353,8 +353,8 @@
             "health": 20,
             "state": 0,
             "hitbox": {
-                "width": 302,
-                "height": 113
+                "width": 60,
+                "height": 60
             },
             "rect": {
                 "left": 0,
