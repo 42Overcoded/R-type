@@ -186,9 +186,10 @@ class gameEngine {
         void life_handler();
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
 
-        sf::Music musicMenu;
-        sf::Music musicGame;
-        sf::Music musicScore;
+        std::unordered_map<std::string, std::shared_ptr<sf::Music>> musics;
+        std::unordered_map<std::string, std::shared_ptr<sf::SoundBuffer>> soundBuffers;
+        std::unordered_map<std::string, std::shared_ptr<sf::Sound>> sounds;
+
     protected:
     private:
         Scene scene;

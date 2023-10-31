@@ -92,8 +92,7 @@ void gameEngine::launch_game() {
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
         _system.load_texture(_registry);
-        musicMenu.setLoop(true);
-        musicMenu.play();
+        musics["musicMenu"]->play();
     }
     register_component_to_game();
     scene = MENU;
@@ -127,9 +126,8 @@ void gameEngine::launch_game() {
             if (alive == 0) {
                 scene = END;
                 if (_type == CLIENT) {
-                    musicScore.stop();
-                    musicScore.setLoop(false);
-                    musicScore.play();
+                    musics["musicGame"]->stop();
+                    musics["musicScore"]->play();
                 }
             }
             clock_time();

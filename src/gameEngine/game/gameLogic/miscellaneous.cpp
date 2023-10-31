@@ -59,9 +59,8 @@ void gameEngine::menu()
                     mode = LEVELS;
                     scene = GAME;
                     if (_type == CLIENT) {
-                        musicGame.stop();
-                        musicGame.setLoop(false);
-                        musicGame.play();
+                        musics["musicMenu"]->stop();
+                        musics["musicGame"]->play();
                     }
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
@@ -78,9 +77,8 @@ void gameEngine::menu()
                     mode = ENDLESS;
                     scene = GAME;
                     if (_type == CLIENT) {
-                        musicGame.stop();
-                        musicGame.setLoop(false);
-                        musicGame.play();
+                        musics["musicMenu"]->stop();
+                        musics["musicGame"]->play();
                     }
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {

@@ -304,6 +304,7 @@ void gameEngine::death_animation()
     auto &clock = _registry.get_components<Clock>();
     auto &text = _registry.get_components<Text>();
     auto &rect = _registry.get_components<Rect>();
+    auto &player = _registry.get_components<Player>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
         if (tag[i] == std::nullopt)
@@ -340,6 +341,12 @@ void gameEngine::death_animation()
                     }
                 }
                 spawn_explosion(i);
+                if (tag[i]->tag == "enemy 1")
+                    sounds["soundExplosion"]->play();
+                if (tag[i]->tag == "enemy 2")
+                    sounds["soundExplosion2"]->play();
+                if (tag[i]->tag == "enemy 3")
+                    sounds["soundExplosion3"]->play();
             }
         }
     }
