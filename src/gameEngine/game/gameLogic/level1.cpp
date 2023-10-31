@@ -52,12 +52,15 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
         entity_t enemy = init_enemy(3, 3);
         position[enemy]->y = rand;
     }
+    // Truck
     for (int i = 0; i < n6; i++) {
         int rand = std::rand() % 700;
         auto &position = _registry.get_components<Position>();
         entity_t enemy = init_enemy(6, 7);
         position[enemy]->y = rand;
     }
+    // ==============================================================
+    // spikes
     for (int i = 0; i < n7; i++) {
         int rand = std::rand() % 2;
         auto &position = _registry.get_components<Position>();
@@ -74,6 +77,8 @@ void gameEngine::spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int 
         position[enemy]->y = 840;
         position[enemy]->x = x;
     }
+    // ===============================================================
+    // asteroid
     for (int i = 0; i < n9; i++) {
         int rand = std::rand() % 700;
         int x = (std::rand() % 100) * i + 1950;
