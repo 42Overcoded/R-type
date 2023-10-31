@@ -31,7 +31,6 @@ void gameEngine::shoot_system(sf::Time &elapsed)
                 continue;
             }
         }
-        std::cout << "hasvalue : " << std::boolalpha << tag[i].has_value() << std::endl;
         if (tag[i]->tag == "starship" && control[i].has_value()) {
             if (control[i]->shoot == true) {
                 load_shoot(elapsed);

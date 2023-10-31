@@ -345,6 +345,7 @@ void gameEngine::spawn_power_up(int i)
     _registry.add_component<Texture>(power, Texture());
     _registry.add_component<Speed>(power, Speed());
     _registry.add_component<Hitbox>(power, Hitbox());
+    _registry.add_component<Scale>(power, Scale());
 
     auto &state = _registry.get_components<State>();
     auto &drawable = _registry.get_components<Drawable>();
@@ -436,9 +437,8 @@ void gameEngine::death_animation()
         if (enemy[i].has_value()) {
             if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 for (size_t j = 0; j < _registry._entity_number; j++) {
-                    if (!tag[j].has_value())
-                        continue;
-                    if (tag[j]->tag == "score") {
+                    if (tag[j].has_value() && tag[j]->tag == "score")
+                    {
                         state[j]->state += enemy[i]->score;
                         text[j]->str = "Score : " + std::to_string(state[j]->state);
                     }

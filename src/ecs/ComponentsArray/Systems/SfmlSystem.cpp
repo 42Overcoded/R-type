@@ -438,10 +438,8 @@ void SfmlSystem::color_system(registry &r)
     auto &color = r.get_components<Color>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (!tag[i].has_value()) {
-            continue;
-        }
-        if (tag[i]->tag == "shield" && drawable[i]->drawable == false) {
+        if (tag[i].has_value() && drawable[i].has_value() && tag[i]->tag == "shield" && drawable[i]->drawable == false)
+        {
             clock[i]->time = clock[i]->clock.getElapsedTime();
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (!tag[j].has_value())
@@ -455,12 +453,13 @@ void SfmlSystem::color_system(registry &r)
                         color[j]->g = 255;
                         color[j]->b = 255;
                         r.kill_entity(entity_t(i));
-                        continue;
+                        break;
                     }
                 }
             }
         }
-        if (tag[i]->tag == "starship" && state[i]->state == 1) {
+        if (tag[i].has_value() && state[i].has_value() && tag[i]->tag == "starship" && state[i]->state == 1)
+        {
             if (clock[i]->__time.asSeconds() > 0 && clock[i]->__time.asSeconds() < 0.5)
                 color[i]->a = 128;
             if (clock[i]->__time.asSeconds() > 0.5 && clock[i]->__time.asSeconds() < 1)
@@ -503,10 +502,8 @@ void SfmlSystem::hitbox_system(registry &r)
         }
     }
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (!tag[i].has_value()) {
-            continue;
-        }
-        if (tag[i]->groupTag == "powerup") {
+        if (tag[i].has_value() && tag[i]->groupTag == "powerup")
+        {
             for (size_t j = 0; j < r._entity_number; j++) {
                 if (!tag[j].has_value() || !tag[i].has_value())
                     continue;
@@ -518,16 +515,16 @@ void SfmlSystem::hitbox_system(registry &r)
                             if (health[j]->health < 4)
                                 health[j]->health += 1;
                             r.kill_entity(entity_t(i));
-                            continue;
+                            break;
                         }
                         if (tag[i]->tag == "bombBoost") {
                             for (size_t k = 0; k < r._entity_number; k++) {
                                 if (enemy[k].has_value()) {
                                     health[k]->health -= 3;
-                                    r.kill_entity(entity_t(i));
-                                    continue;
                                 }
                             }
+                            r.kill_entity(entity_t(i));
+                            break;
                         }
                     }
                 }
@@ -535,11 +532,10 @@ void SfmlSystem::hitbox_system(registry &r)
         }
         if (enemy[i].has_value() || enemyBall[i].has_value()) {
             for (size_t j = 0; j < r._entity_number; j++) {
-                if (!tag[j].has_value() || !tag[i].has_value())
-                    continue;
-                if (tag[j]->tag == "starship") {
+                if (tag[j].has_value() && tag[j]->tag == "starship")
+                {
                     if (position[i].has_value() && hitbox[i].has_value() &&
-                        position[j].has_value() && hitbox[j].has_value() && health[i].has_value() &&
+                        position[j].has_value() && hitbox[j].has_value() &&
                         health[j].has_value() && state[j].has_value() &&
                         clock[j].has_value() &&
                         color[j].has_value() && position[i]->x + hitbox[i]->width > position[j]->x &&
@@ -549,26 +545,30 @@ void SfmlSystem::hitbox_system(registry &r)
                     {
                         if (color[j]->r == 255)
                             health[j]->health -= 1;
-                        health[i]->health -= 5;
+                        if (health[i].has_value())
+                            health[i]->health -= 5;
                         position[j]->x = 100;
                         position[j]->y = 500;
                         state[j]->state = 1;
                         clock[j]->__clock.restart();
-                        if (enemyBall[i].has_value()) {
-                            r.kill_entity(entity_t(i));
-                            continue;
-                        }
+                        r.kill_entity(entity_t(i));
                         break;
                     }
                 }
             }
         }
-        if (tag[i]->tag == "bullet") {
+        if (tag[i].has_value() && tag[i]->tag == "bullet")
+        {
             for (size_t j = 0; j < r._entity_number; j++) {
-                if (!tag[j].has_value() || !tag[i].has_value())
-                    continue;
                 if (enemy[j].has_value()) {
-                    if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
+                    if (position[i].has_value() && hitbox[i].has_value() &&
+                        position[j].has_value() && hitbox[j].has_value() &&
+                        health[j].has_value() && state[i].has_value() &&
+                        position[i]->x + hitbox[i]->width > position[j]->x &&
+                        position[i]->x < position[j]->x + hitbox[j]->width &&
+                        position[i]->y + hitbox[i]->height > position[j]->y &&
+                        position[i]->y < position[j]->y + hitbox[j]->height)
+                    {
                         if (!state[i].has_value() || !health[j].has_value())
                             continue;
                         if (state[i]->state == 0)
