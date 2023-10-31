@@ -86,14 +86,17 @@ void NetworkSystem::manageClientDenied(registry &reg, Packet<Flag> &packet)
 void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
 {
     SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
-    SparseArray<Control> &controllArr           = reg.get_components<Control>();
+    SparseArray<Control> &controlArr           = reg.get_components<Control>();
 
     std::cout << "Client assign ID" << std::endl;
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt && controllArr[i] != std::nullopt)
+        if (networkArr[i] != std::nullopt && controlArr[i] != std::nullopt)
         {
-            packet >> networkArr[i]->clientId;
+            uint32_t clientId;
+
+            packet >> clientId;
+            networkArr[i]->clientId = clientId;
         }
     }
 }

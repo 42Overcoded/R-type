@@ -68,6 +68,10 @@ public:
                 remoteEndpoint_ = remoteEndpoint;
                 socket_.connect(remoteEndpoint_);
                 std::cout << "Connected to client" << std::endl;
+                Packet<T> acceptPacket;
+                acceptPacket.header.flag = T::ClientAccepted;
+                SendPacket(acceptPacket);
+                std::cout << "accept client" << std::endl;
                 Packet<T> idPacket;
                 idPacket.header.flag = T::ClientAssignID;
                 idPacket << id_;
@@ -210,7 +214,7 @@ protected:
                             GetHeader();
                             return;
                         }
-                        if (recvBuffer_.header.flag == T::ClientAssignID)
+                        if (ownerType_ == Owner::Client && recvBuffer_.header.flag == T::ClientAccepted)
                         {
                             socket_.connect(remoteEndpoint_);
                         }

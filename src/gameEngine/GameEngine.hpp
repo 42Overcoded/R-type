@@ -216,7 +216,7 @@ class gameEngine {
         SfmlSystem _system;
         std::unique_ptr<Network::NetworkSystem> _networkSystem;
         Level_info _level_info;
-        
+
         //Network::NetworkSystem _networkSystem;
         registry _registry;
         unsigned int port_;
