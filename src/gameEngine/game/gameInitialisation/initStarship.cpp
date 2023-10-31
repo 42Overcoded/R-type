@@ -98,6 +98,8 @@ void gameEngine::init_load_shoot()
     _registry.add_component<Rect>(load_shoot, Rect());
     _registry.add_component<Scale>(load_shoot, Scale());
     _registry.add_component<State>(load_shoot, State());
+    _registry.add_component<Clock>(load_shoot, Clock());
+
 
     auto &tag = _registry.get_components<Tag>();
     auto &texture = _registry.get_components<Texture>();
