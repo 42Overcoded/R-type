@@ -325,6 +325,7 @@ void gameEngine::menu()
 
         }
         if (gameState.scene == OFFLINE) {
+            gameState.co = OFF;
             if (tag[i]->groupTag == "offline") {
                 drawable[i]->drawable = true;
             }
@@ -411,6 +412,7 @@ void gameEngine::menu()
             }
         }
         if (gameState.scene == ONLINE) {
+            gameState.co = ON;
             if (tag[i]->groupTag == "online") {
                 if (tag[i]->tag == "backbuttononline" || tag[i]->tag == "backonline" || tag[i]->tag == "playerConnected")
                     drawable[i]->drawable = true;
