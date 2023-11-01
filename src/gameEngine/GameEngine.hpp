@@ -72,6 +72,12 @@ class gameEngine {
          */
         void init_background(int i);
         /**
+         * @brief init the background to make parallax
+         * 
+         * @param i 
+         */
+        void init_star_parallax(int i);
+        /**
          * @brief init the beambar
          * 
          */

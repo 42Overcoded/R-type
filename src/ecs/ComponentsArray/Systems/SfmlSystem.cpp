@@ -59,6 +59,7 @@ void SfmlSystem::load_texture(registry &r)
     sf::Texture wormBullet;
     sf::Texture starshipBoss;
     sf::Texture starshipBossBullet;
+    sf::Texture star_parallax;
 
     if (!starshipBossBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
         throw std::runtime_error("Cannot load starship boss bullet texture");
@@ -120,6 +121,8 @@ void SfmlSystem::load_texture(registry &r)
         throw std::runtime_error("Cannot load beambar texture");
     if (!explosion.loadFromFile(PATH_TO_ASSETS + "explosion.png"))
         throw std::runtime_error("Cannot load explosion texture");
+    if (!star_parallax.loadFromFile(PATH_TO_ASSETS + "star_parallax.png"))
+        throw std::runtime_error("Cannot load star parallax texture");
 
     textures["starshipBossBulletTexture"] = starshipBossBullet;
     textures["starshipBossTexture"] = starshipBoss;
@@ -143,6 +146,7 @@ void SfmlSystem::load_texture(registry &r)
     textures["enemyAlienTexture"] = enemyFour;
     textures["enemyStarshipTexture"] = enemy;
     textures["backgroundTexture"] = background;
+    // textures["backgroundTexture"] = star_parallax;
     textures["loadShootTexture"] = bullet;
     textures["menuTexture"] = menuButton;
     textures["playTexture"] = playButton;
@@ -150,6 +154,7 @@ void SfmlSystem::load_texture(registry &r)
     textures["enemyBulletTexture"] = enemyBullet;
     textures["enemyBlueBulletTexture"] = enemyBlueBullet;
     textures["enemyBossBulletTexture"] = enemyBossBullet;
+    textures["starparallaxTexture"] = star_parallax;
     fonts["scoreFont"] = font;
     fonts["menuFont"] = font;
 }
@@ -159,6 +164,8 @@ void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
     auto &drawable = r.get_components<Drawable>();
     auto &text = r.get_components<Text>();
     auto &sprite = r.get_components<Sprite>();
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (drawable[i].has_value()) {
@@ -276,6 +283,12 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
         if (tag[i]->tag == "background") {
             if (position[i]->x <= -1920) {
                 position[i]->x = 1920;
+            }
+        }
+        if (tag[i]->tag == "star_parallax") {
+            if (position[i]->x <= -2500) {
+                position[i]->x = 2500;
+                position[i]->y = rand() % 1080;
             }
         }
         if (tag[i]->tag == "enemy 4") {
