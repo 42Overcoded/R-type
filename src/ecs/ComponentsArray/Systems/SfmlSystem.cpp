@@ -146,7 +146,6 @@ void SfmlSystem::load_texture(registry &r)
     textures["enemyAlienTexture"] = enemyFour;
     textures["enemyStarshipTexture"] = enemy;
     textures["backgroundTexture"] = background;
-    // textures["backgroundTexture"] = star_parallax;
     textures["loadShootTexture"] = bullet;
     textures["menuTexture"] = menuButton;
     textures["playTexture"] = playButton;
@@ -164,8 +163,6 @@ void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
     auto &drawable = r.get_components<Drawable>();
     auto &text = r.get_components<Text>();
     auto &sprite = r.get_components<Sprite>();
-    auto &tag = r.get_components<Tag>();
-    auto &position = r.get_components<Position>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
         if (drawable[i].has_value()) {
