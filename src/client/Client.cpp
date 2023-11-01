@@ -53,15 +53,15 @@ int main(int ac, char **av) {
     game.sounds.insert(std::make_pair("soundExplosion2", std::make_shared<sf::Sound>()));
     game.sounds.insert(std::make_pair("soundExplosion3", std::make_shared<sf::Sound>()));
 
-    game.musics["musicMenu"]->openFromFile("assets/R-Type (Arcade Soundtrack) 01 Title.mp3");
-    game.musics["musicGame"]->openFromFile("assets/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
-    game.musics["musicScore"]->openFromFile("assets/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
+    game.musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
+    game.musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
+    game.musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
 
-    game.soundBuffers["soundShoot"]->loadFromFile("assets/star wars blaster sound effect.mp3");
-    game.soundBuffers["soundPowerShoot"]->loadFromFile("assets/star wars dc 15s blaster rifle sound effect.mp3");
-    game.soundBuffers["soundExplosion"]->loadFromFile("assets/explosion sound.mp3");
-    game.soundBuffers["soundExplosion2"]->loadFromFile("assets/roblox rocket explosion sound.mp3");
-    game.soundBuffers["soundExplosion3"]->loadFromFile("assets/Geometry Dash Death Sound Effect.mp3");
+    game.soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
+    game.soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
+    game.soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
+    game.soundBuffers["soundExplosion2"]->loadFromFile("assets/musicAndSound/roblox rocket explosion sound.mp3");
+    game.soundBuffers["soundExplosion3"]->loadFromFile("assets/musicAndSound/Geometry Dash Death Sound Effect.mp3");
 
     game.sounds["soundShoot"]->setBuffer(*game.soundBuffers["soundShoot"]);
     game.sounds["soundPowerShoot"]->setBuffer(*game.soundBuffers["soundPowerShoot"]);
