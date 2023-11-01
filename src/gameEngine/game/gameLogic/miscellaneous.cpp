@@ -361,6 +361,10 @@ void gameEngine::menu()
                     click[i]->clicked = false;
                     gameState.mode = LEVELS_G;
                     gameState.scene = GAME;
+                    if (_type == CLIENT) {
+                        musics["musicMenu"]->stop();
+                        musics["musicGame"]->play();
+                    }
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
                         if (!tag[j].has_value())
@@ -377,6 +381,10 @@ void gameEngine::menu()
                     wave = 50;
                     gameState.mode = ENDLESS;
                     gameState.scene = GAME;
+                    if (_type == CLIENT) {
+                        musics["musicMenu"]->stop();
+                        musics["musicGame"]->play();
+                    }
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
                         if (!tag[j].has_value())
