@@ -187,11 +187,12 @@ void gameEngine::register_component_to_game()
 
 void gameEngine::launch_game()
 {
+    init_cheatCode();
     if (_type == CLIENT)
     {
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
-        _system.load_texture(_registry);
+        _system.load_texture(_registry, cheatCode);
         musics["musicMenu"]->play();
     }
     register_component_to_game();
