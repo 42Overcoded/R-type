@@ -75,7 +75,7 @@
             "hitboxwidth": 24,
             "hitboxheight": 24,
             "scale": 2,
-            "speed": -0.5
+            "speed": -1
         },
         {
             "tag": "wormBullet",

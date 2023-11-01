@@ -91,7 +91,7 @@ void NetworkSystem::manageClientAssignID(registry &reg, Packet<Flag> &packet)
     std::cout << "Client assign ID" << std::endl;
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt && controllArr[i] != std::nullopt)
+        if (networkArr[i].has_value() && controllArr[i].has_value())
         {
             packet >> networkArr[i]->clientId;
         }
@@ -105,7 +105,7 @@ void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt)
+        if (networkArr[i].has_value())
         {
         }
     }
@@ -118,7 +118,7 @@ void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt)
+        if (networkArr[i].has_value())
         {
         }
     }
@@ -131,7 +131,7 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt)
+        if (networkArr[i].has_value())
         {
         }
     }
@@ -144,7 +144,7 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt)
+        if (networkArr[i].has_value())
         {
             //TODO replace with true creator code
             if (networkArr[i]->entityId != 0)
@@ -166,7 +166,7 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt && positionArr[i] != std::nullopt)
+        if (networkArr[i].has_value() && positionArr[i].has_value())
         {
             uint32_t entityId;
 
@@ -191,7 +191,7 @@ void NetworkSystem::manageClientDestroyEntity(registry &reg, Packet<Flag> &packe
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt)
+        if (networkArr[i].has_value())
         {
         }
     }
@@ -205,16 +205,16 @@ void NetworkSystem::manageClientStartGame(registry &reg, Packet<Flag> &packet)
     size_t gameLauncherIndex = 0;
 
     for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
-        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+        if (gameLauncherArray[gameLauncherIndex].has_value())
             break;
     }
-    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+    if (!gameLauncherArray[gameLauncherIndex].has_value())
         throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
     for (size_t i = 0; i < reg._entity_number; i++)
     {
-        if (gameStateArr[i] != std::nullopt)
+        if (gameStateArr[i].has_value())
         {
             packet >> gameStateArr[i]->mode;
             gameLauncher.isGameLaunched = true;
@@ -229,7 +229,7 @@ void NetworkSystem::manageClientEndGame(registry &reg, Packet<Flag> &packet)
 
     for (size_t i = 0; i < reg._entity_number; i++)
     {
-        if (gameStateArr[i] != std::nullopt)
+        if (gameStateArr[i].has_value())
         {
             gameStateArr[i]->scene = Scene::END;
         }
@@ -262,7 +262,7 @@ void NetworkSystem::manageServerUpdateControls(registry &reg)
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i] != std::nullopt && controllArr[i] != std::nullopt)
+        if (networkArr[i].has_value() && controllArr[i].has_value())
         {
             Packet<Flag> packet;
             packet.header.flag = Flag::ServerUpdateControls;
@@ -285,10 +285,10 @@ void NetworkSystem::manageServerStartGame(registry &reg)
     size_t gameLauncherIndex = 0;
 
     for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
-        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+        if (gameLauncherArray[gameLauncherIndex].has_value())
             break;
     }
-    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+    if (!gameLauncherArray[gameLauncherIndex].has_value())
         throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
@@ -296,7 +296,7 @@ void NetworkSystem::manageServerStartGame(registry &reg)
         return;
     for (size_t i = 0; i < reg._entity_number; i++)
     {
-        if (gameStateArr[i] != std::nullopt)
+        if (gameStateArr[i].has_value())
         {
             if (gameStateArr[i]->scene == Scene::ONLINE) {
                 std::cout << "Send start game to server" << std::endl;

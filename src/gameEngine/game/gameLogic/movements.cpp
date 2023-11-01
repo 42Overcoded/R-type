@@ -14,7 +14,7 @@ void gameEngine::movement_system(registry &r)
     auto &rect = r.get_components<Rect>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
-        if (control[i] != std::nullopt && speed[i] != std::nullopt) {
+        if (control[i].has_value() && speed[i].has_value()) {
             speed[i]->speedx = 0.0f;
             speed[i]->speedy = 0.0f;
 

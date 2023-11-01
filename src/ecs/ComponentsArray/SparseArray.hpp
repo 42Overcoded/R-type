@@ -130,7 +130,7 @@ class SparseArray {
         {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
-            _data[pos] = std::nullopt;
+            _data[pos].reset();
         };
 
         /**
@@ -141,6 +141,8 @@ class SparseArray {
          */
         size_type get_index(const value_type &type) const
         {
+            if (!type.has_value())
+                return -1;
             for (size_t i = 0; i < _data.size(); i++) {
                 if (_data[i] == type)
                     return i;
