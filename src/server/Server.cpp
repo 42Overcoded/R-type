@@ -12,7 +12,7 @@ int main(int ac, char **av) {
     unsigned int portNumber = Network::DefaultPort;
 
     if (ac > 2) {
-        std::cerr << "Usage: ./r-type_server port" << std::endl;
+        std::cerr << "Usage: ./r-type_server [port]" << std::endl;
         return 84;
     } else if (ac == 2) {
         try {
