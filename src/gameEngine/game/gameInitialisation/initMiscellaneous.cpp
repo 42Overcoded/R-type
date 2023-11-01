@@ -300,34 +300,8 @@ void gameEngine::spawn_explosion(int i) {
     scale[explosion]->scale = boomJson["explosion"]["scale"];
 }
 
-void gameEngine::spawn_power_up(int i)
+void gameEngine::spawn_power_up(int i, int j)
 {
-    int j = -1;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> distribution(0, 1080);
-
-    if (bonus == false) {
-        return;
-    }
-    int random = distribution(gen);
-    if (random < 10) {
-        j = 0;
-    }
-    if (random > 12 && random < 20) {
-        j = 1;
-    }
-    if (random > 22 && random < 30) {
-        j = 2;
-    }
-    if (random > 36 && random < 40) {
-        j = 3;
-    }
-    if (random > 42 && random < 50) {
-        j = 4;
-    }
-    if (j == -1)
-        return;
     std::ifstream file(PATH_TO_JSON + "powerup.json");
     if (!file.is_open())
         throw std::runtime_error("Can't open " + PATH_TO_JSON + "powerup.json");
@@ -443,8 +417,45 @@ void gameEngine::death_animation()
                         text[j]->str = "Score : " + std::to_string(state[j]->state);
                     }
                 }
-                spawn_power_up(i);
-                spawn_explosion(i);
+                GameStateComponent &gameState = get_game_state();
+                auto &networkInfo = _registry.get_components<NetworkInfo>();
+                if (_type == SERVER || gameState.co == OFF) {
+                    spawn_explosion(i);
+                    networkInfo[0]->arg1.push_back(i);
+                    networkInfo[0]->spawn.push_back(9);
+                }
+                if (_type == SERVER || gameState.co == OFF) {
+                    int j = -1;
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::uniform_int_distribution<int> distribution(0, 1080);
+
+                    if (bonus == false) {
+                        return;
+                    }
+                    int random = distribution(gen);
+                    if (random < 10) {
+                        j = 0;
+                    }
+                    if (random > 12 && random < 20) {
+                        j = 1;
+                    }
+                    if (random > 22 && random < 30) {
+                        j = 2;
+                    }
+                    if (random > 36 && random < 40) {
+                        j = 3;
+                    }
+                    if (random > 42 && random < 50) {
+                        j = 4;
+                    }
+                    if (j != -1) {
+                        spawn_power_up(i, j);
+                        networkInfo[0]->arg1.push_back(i);
+                        networkInfo[0]->arg2.push_back(j);
+                        networkInfo[0]->spawn.push_back(10);
+                    }
+                }
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
                 continue;

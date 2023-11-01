@@ -15,6 +15,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <iostream>
+#include <vector>
 
 /**
  * @brief speed of the entity
@@ -27,6 +28,12 @@ struct Speed {
     float baseSpeedx = 0;
     float varSpeedy = 0;
     float varSpeedx = 0;
+};
+
+struct NetworkInfo {
+    std::vector<int> spawn;
+    std::vector<int> arg1;
+    std::vector<int> arg2;
 };
 
 /**
