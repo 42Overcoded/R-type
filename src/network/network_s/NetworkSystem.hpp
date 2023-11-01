@@ -12,6 +12,7 @@
 #include "../INetworkServer.hpp"
 #include "../Protocol.hpp"
 #include "../ecs/Registry.hpp"
+#include <unordered_map>
 
 namespace Network {
 
@@ -26,6 +27,8 @@ public:
     void Update(registry &reg);
 
 private:
+    void managePlayers(registry &reg);
+
     void manageInputs(registry &reg);
     void managePacketIn(registry &reg, std::shared_ptr<Connection<Flag>> client, Packet<Flag>& msg);
 
@@ -43,7 +46,9 @@ private:
     void manageClientEndGame(registry &reg);
 
     void debugSpaceshipPosition(registry &reg);
+    void OnClientDisconnect(std::shared_ptr<Connection<Flag>> client) override;
 private:
+    std::unordered_map<unsigned int, bool> players_;
 };
 
 };  // namespace Network

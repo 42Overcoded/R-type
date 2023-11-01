@@ -25,6 +25,7 @@ public:
 
 private:
     // Inputs
+    void managePlayerNbr(registry &reg);
     void manageInputs(registry &reg);
     void managePacketIn(registry &reg, Packet<Flag> &packet);
 
@@ -50,6 +51,7 @@ private:
 
 private:
     std::uint32_t clientId_ = 0;
+    std::uint32_t playersNbr_ = 0;
 };
 };  // namespace Nerwork
 
