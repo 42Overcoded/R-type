@@ -12,6 +12,8 @@
 #include <string>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "NetworkComponent.hpp"
+#include "Packet.hpp"
+#include "Protocol.hpp"
 #include "network_c/NetworkSystem.hpp"
 #include "../../gameEngine/Game.hpp"
 
@@ -26,14 +28,34 @@ NetworkSystem::~NetworkSystem()
 
 void NetworkSystem::Update(registry &reg)
 {
-    checkPlayers(reg);
+    managePlayers(reg);
     manageInputs(reg);
     manageOutputs(reg);
 }
 
-void NetworkSystem::checkPlayers(registry &reg) {
+void NetworkSystem::managePlayers(registry &reg) {
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
 
+    for (std::shared_ptr<Connection<Flag>> client : *clients_)
+    {
+        if (client->IsConnected() && players_.find(client->GetId()) == players_.end()) {
+            Packet<Flag> addPlayerPacket;
+
+            std::cout << "Add player " << client->GetId() << std::endl;
+            addPlayerPacket.header.flag = Flag::ClientAddPlayer;
+            addPlayerPacket << (uint32_t)client->GetId();
+            SendToAllClients(addPlayerPacket);
+            players_[client->GetId()] = true;
+        }
+        // else if (!client->IsConnected() && players_.find(client->GetId()) != players_.end()) {
+        //     Packet<Flag> removePlayerPacket;
+        //     std::cout << "Remove player " << client->GetId() << std::endl;
+        //     removePlayerPacket.header.flag = Flag::ClientRemovePlayer;
+        //     removePlayerPacket << (uint32_t)client->GetId();
+        //     SendToAllClients(removePlayerPacket);
+        //     players_.erase(client->GetId());
+        // }
+    }
     for (size_t i = 0; i < reg._entity_number; i++)
     {
         if (gameStateArr[i] != std::nullopt)
@@ -49,6 +71,10 @@ void NetworkSystem::checkPlayers(registry &reg) {
             return;
         }
     }
+}
+
+void NetworkSystem::OnClientDisconnect(std::shared_ptr<Connection<Flag>> client)
+{
 }
 
 void NetworkSystem::manageInputs(registry &reg)
