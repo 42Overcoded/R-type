@@ -24,6 +24,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Audio/Music.hpp>
 #include <nlohmann/json.hpp>
 
 void gameEngine::loadLevel(int level)
@@ -191,6 +192,7 @@ void gameEngine::launch_game()
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
         _system.load_texture(_registry);
+        musics["musicMenu"]->play();
     }
     register_component_to_game();
     sf::Time _elapsed;
@@ -227,7 +229,7 @@ void gameEngine::launch_game()
             gameState.scene == GENERATE) {
             menu();
             _clock.restart();
-            }
+        }
         if (gameState.scene == GAME)
         {
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
@@ -252,8 +254,13 @@ void gameEngine::launch_game()
                     this->_level_info.mob_alive += 1;
                 }
             }
-            if (alive == 0)
+            if (alive == 0) {
                 gameState.scene = END;
+                if (_type == CLIENT) {
+                    musics["musicGame"]->stop();
+                    musics["musicScore"]->play();
+                }
+            }
             clock_time();
             elapsed  = clock.getElapsedTime();
             _elapsed = _clock.getElapsedTime();
@@ -325,6 +332,7 @@ void gameEngine::launch_game()
         }
     }
 }
+
 
 sf::RenderWindow &gameEngine::get_window()
 {

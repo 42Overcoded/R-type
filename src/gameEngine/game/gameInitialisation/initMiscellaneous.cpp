@@ -383,6 +383,7 @@ void gameEngine::death_animation()
     auto &clock = _registry.get_components<Clock>();
     auto &text = _registry.get_components<Text>();
     auto &rect = _registry.get_components<Rect>();
+    auto &player = _registry.get_components<Player>();
 
     int wormAlive = -1;
     for (size_t i = 0; i < _registry._entity_number; i++)
@@ -445,6 +446,12 @@ void gameEngine::death_animation()
                 }
                 spawn_power_up(i);
                 spawn_explosion(i);
+                if (tag[i]->tag == "enemy 1")
+                    sounds["soundExplosion"]->play();
+                if (tag[i]->tag == "enemy 2")
+                    sounds["soundExplosion2"]->play();
+                if (tag[i]->tag == "enemy 3")
+                    sounds["soundExplosion3"]->play();
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
                 continue;

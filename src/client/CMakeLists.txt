@@ -101,7 +101,7 @@ include_directories(${nlohmann_json_SOURCE_DIR}/include)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../)
 add_executable(${PROJECT_NAME} ${EXEC_SRC} ${INCLUDES})
-target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json sfml-graphics sfml-window sfml-system Boost::asio Boost::filesystem Boost::property_tree)
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json sfml-graphics sfml-window sfml-system sfml-audio Boost::asio Boost::filesystem Boost::property_tree)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(BINARIES_DESTINATION "bin")
