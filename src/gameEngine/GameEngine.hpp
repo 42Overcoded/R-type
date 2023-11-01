@@ -103,21 +103,11 @@ class gameEngine {
          * @param elapsed 
          * @param wave 
          */
-        void spawn_wave(sf::Time &elapsed, float &wave);
         /**
          * @brief init the load shoot animation
          * 
          */
         void init_load_shoot();
-        /**
-         * @brief spawn the mobs the parametters given
-         * 
-         * @param n1 
-         * @param n2 
-         * @param n3 
-         * @param n4 
-         */
-        void spawn_mobs(int n1, int n2, int n3, int n4, int n5, int n6, int n7, int n8, int n9);
         /**
          * @brief spawn enemy bullet
          * 
@@ -194,13 +184,19 @@ class gameEngine {
         void init_game();
         void life_handler();
         entity_t init_worm(int i);
-        void spawn_power_up(int i);
+        void spawn_power_up(int i, int j);
+        void network_manager();
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
         std::string get_this_str(std::string tag, std::string default_str);
         std::vector<Generated> generateMap(int length, int difficulty, std::string seed_str);
         std::vector<Generated> loadMap(std::string path);
         void loadLevel(int level);
         void spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock);
+        std::unordered_map<std::string, std::shared_ptr<sf::Music>> musics;
+        std::unordered_map<std::string, std::shared_ptr<sf::SoundBuffer>> soundBuffers;
+        std::unordered_map<std::string, std::shared_ptr<sf::Sound>> sounds;
+        bool is_frozen();
+  
     protected:
     private:
         float wave;

@@ -1,4 +1,5 @@
 message("Config via package.txt")
+get_cmake_property(res VARIABLES)
 set(GLOBAL_INSTALL FALSE)
 set(PATH_ASSETS "/usr/games/rtype/assets/")
 set(PATH_JSON "/usr/games/rtype/configFiles/")
@@ -18,4 +19,5 @@ IF(CPACK_SYSTEM_NAME MATCHES "WIN32" OR CPACK_SYSTEM_NAME MATCHES "WIN64")
     set(PATH_JSON "\\..\\games\\rtype\\configFiles\\")
 ENDIF()
 
-configure_file(/home/viveli/Epitech/Delivery/Tek3/CPP/R-type/src/Path.hpp.in /home/viveli/Epitech/Delivery/Tek3/CPP/R-type/src/Path.hpp @ONLY)
+message("path:${CPACK_PROJECT_PATH_HPP_IN}")
+configure_file(${CPACK_PROJECT_PATH_HPP_IN} ${CPACK_PROJECT_PATH_HPP} @ONLY)

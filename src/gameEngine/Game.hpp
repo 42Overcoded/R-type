@@ -25,6 +25,11 @@ enum Mode {
 
 };
 
+enum Co {
+    OFF,
+    ON
+};
+
 enum Scene {
     MENU,
     ONLINE,
@@ -89,6 +94,7 @@ struct Level_info {
 struct GameStateComponent {
     Scene scene = MENU;
     Mode mode = NONE;
+    Co co = OFF;
 };
 
 #endif /* !GAME_HPP_ */

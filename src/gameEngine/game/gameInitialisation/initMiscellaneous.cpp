@@ -300,34 +300,8 @@ void gameEngine::spawn_explosion(int i) {
     scale[explosion]->scale = boomJson["explosion"]["scale"];
 }
 
-void gameEngine::spawn_power_up(int i)
+void gameEngine::spawn_power_up(int i, int j)
 {
-    int j = -1;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> distribution(0, 1080);
-
-    if (bonus == false) {
-        return;
-    }
-    int random = distribution(gen);
-    if (random < 10) {
-        j = 0;
-    }
-    if (random > 12 && random < 20) {
-        j = 1;
-    }
-    if (random > 22 && random < 30) {
-        j = 2;
-    }
-    if (random > 36 && random < 40) {
-        j = 3;
-    }
-    if (random > 42 && random < 50) {
-        j = 4;
-    }
-    if (j == -1)
-        return;
     std::ifstream file(PATH_TO_JSON + "powerup.json");
     if (!file.is_open())
         throw std::runtime_error("Can't open " + PATH_TO_JSON + "powerup.json");
@@ -345,6 +319,7 @@ void gameEngine::spawn_power_up(int i)
     _registry.add_component<Texture>(power, Texture());
     _registry.add_component<Speed>(power, Speed());
     _registry.add_component<Hitbox>(power, Hitbox());
+    _registry.add_component<Scale>(power, Scale());
 
     auto &state = _registry.get_components<State>();
     auto &drawable = _registry.get_components<Drawable>();
@@ -382,25 +357,27 @@ void gameEngine::death_animation()
     auto &clock = _registry.get_components<Clock>();
     auto &text = _registry.get_components<Text>();
     auto &rect = _registry.get_components<Rect>();
+    auto &player = _registry.get_components<Player>();
 
     int wormAlive = -1;
     for (size_t i = 0; i < _registry._entity_number; i++)
     {
-        if (tag[i]->tag == "wormBody") {
+        if (tag[i].has_value() && tag[i]->tag == "wormBody") {
             wormAlive = 0;
         }
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value() || !position[i].has_value())
             continue;
-        if (enemy[i] != std::nullopt) {
+        if (enemy[i].has_value()) {
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
+                continue;
             }
         }
         if (tag[i]->tag == "wormBody") {
-            if  (health[i] != std::nullopt) {
+            if  (health[i].has_value()) {
                 if (health[i]->health > 0) {
                     wormAlive += 1;
                 }
@@ -409,13 +386,17 @@ void gameEngine::death_animation()
         if (tag[i]->tag == "enemyBullet") {
             if (position[i]->x < -100) {
                 _registry.kill_entity(entity_t(i));
+                continue;
             }
         }
         if (tag[i]->tag == "explosion") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
             if (clock[i]->time.asSeconds() > 0.05) {
+                if (!state[i].has_value() || !rect[i].has_value() ||!clock[i].has_value())
+                    continue;
                 if (state[i]->state >= 6) {
                     _registry.kill_entity(entity_t(i));
+                    continue;
                 }
                 state[i]->state += 1;
                 rect[i]->left += 33;
@@ -428,31 +409,74 @@ void gameEngine::death_animation()
                 state[i]->state = 666;
             }
         }
-        if (enemy[i] != std::nullopt) {
+        if (enemy[i].has_value()) {
             if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 for (size_t j = 0; j < _registry._entity_number; j++) {
-                    if (tag[j] == std::nullopt)
-                        continue;
-                    if (tag[j]->tag == "score") {
+                    if (tag[j].has_value() && tag[j]->tag == "score")
+                    {
                         state[j]->state += enemy[i]->score;
                         text[j]->str = "Score : " + std::to_string(state[j]->state);
                     }
                 }
-                spawn_power_up(i);
-                spawn_explosion(i);
+                GameStateComponent &gameState = get_game_state();
+                auto &networkInfo = _registry.get_components<NetworkInfo>();
+                if (_type == SERVER || gameState.co == OFF) {
+                    spawn_explosion(i);
+                    networkInfo[0]->arg1.push_back(i);
+                    networkInfo[0]->spawn.push_back(9);
+                }
+                if (_type == SERVER || gameState.co == OFF) {
+                    int j = -1;
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::uniform_int_distribution<int> distribution(0, 1080);
+
+                    if (bonus == false) {
+                        return;
+                    }
+                    int random = distribution(gen);
+                    if (random < 10) {
+                        j = 0;
+                    }
+                    if (random > 12 && random < 20) {
+                        j = 1;
+                    }
+                    if (random > 22 && random < 30) {
+                        j = 2;
+                    }
+                    if (random > 36 && random < 40) {
+                        j = 3;
+                    }
+                    if (random > 42 && random < 50) {
+                        j = 4;
+                    }
+                    if (j != -1) {
+                        spawn_power_up(i, j);
+                        networkInfo[0]->arg1.push_back(i);
+                        networkInfo[0]->arg2.push_back(j);
+                        networkInfo[0]->spawn.push_back(10);
+                    }
+                }
+                if (tag[i]->tag == "enemy 1")
+                    sounds["soundExplosion"]->play();
+                if (tag[i]->tag == "enemy 2")
+                    sounds["soundExplosion2"]->play();
+                if (tag[i]->tag == "enemy 3")
+                    sounds["soundExplosion3"]->play();
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
+                continue;
             }
         }
     }
     if (wormAlive == 0) {
         for (size_t j = 0; j < _registry._entity_number; j++) {
-            if (tag[j] == std::nullopt)
+            if (!tag[j].has_value())
                 continue;
             if ((tag[j]->tag == "wormHead" || tag[j]->tag == "wormBody")) {
                 for (size_t k = 0; k < _registry._entity_number; k++)
                 {
-                    if (tag[k] == std::nullopt)
+                    if (!tag[k].has_value())
                         continue;
                     if (tag[k]->tag == "score") {
                         state[k]->state += enemy[j]->score;
@@ -461,6 +485,7 @@ void gameEngine::death_animation()
                 }
                 spawn_explosion(j);
                 _registry.kill_entity(entity_t(j));
+                continue;
             }
         }
     }

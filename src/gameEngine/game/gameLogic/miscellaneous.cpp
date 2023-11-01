@@ -34,7 +34,7 @@ std::string gameEngine::get_this_str(std::string stag, std::string default_str)
     auto &text = _registry.get_components<Text>();
 
     for (size_t i = 0; i < tag.size(); i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (tag[i]->tag == stag)
             return text[i]->str;
@@ -58,10 +58,10 @@ void gameEngine::menu()
     size_t gameLauncherIndex = 0;
 
     for (gameLauncherIndex = 0; gameLauncherIndex < _registry._entity_number; gameLauncherIndex++) {
-        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+        if (gameLauncherArray[gameLauncherIndex].has_value())
             break;
     }
-    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+    if (!gameLauncherArray[gameLauncherIndex].has_value())
         throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
@@ -71,7 +71,7 @@ void gameEngine::menu()
         gameLauncher.isGameLaunched = false;
         gameLauncher.isWaitingForServer = false;
         for (size_t i = 0; i < tag.size(); i++) {
-            if (tag[i] == std::nullopt)
+            if (!tag[i].has_value())
                 continue;
             if (tag[i]->groupTag == "online")
                 drawable[i]->drawable = false;
@@ -79,7 +79,7 @@ void gameEngine::menu()
         init_game();
     }
     for (size_t i = 0; i < tag.size(); i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (tag[i]->tag == "onlinebutton") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
@@ -153,7 +153,7 @@ void gameEngine::menu()
                 click[i]->clicked = false;
                 gameState.scene = OFFLINE;
                 for (size_t j = 0; j < tag.size(); j++) {
-                    if (tag[j] == std::nullopt)
+                    if (!tag[j].has_value())
                         continue;
                     if (tag[j]->groupTag == "offline")
                         drawable[j]->drawable = true;
@@ -203,7 +203,7 @@ void gameEngine::menu()
                 click[i]->clicked = false;
                 gameState.scene = ONLINE;
                 for (size_t j = 0; j < tag.size(); j++) {
-                    if (tag[j] == std::nullopt)
+                    if (!tag[j].has_value())
                         continue;
                     if (tag[j]->groupTag == "online")
                         drawable[j]->drawable = true;
@@ -218,7 +218,7 @@ void gameEngine::menu()
                     gameState.scene = OFFLINE;
                     click[i]->clicked = false;
                     for (size_t j = 0; j < tag.size(); j++) {
-                        if (tag[j] == std::nullopt)
+                        if (!tag[j].has_value())
                             continue;
                         if (tag[j]->groupTag == "offline")
                             drawable[j]->drawable = true;
@@ -311,7 +311,7 @@ void gameEngine::menu()
                     gameState.scene = GAME;
                     gameState.mode = GENERATED;
                     for (size_t j = 0; j < tag.size(); j++) {
-                        if (tag[j] == std::nullopt)
+                        if (!tag[j].has_value())
                                 continue;
                         if (tag[j]->groupTag == "generate") {
                             drawable[j]->drawable = false;
@@ -325,6 +325,7 @@ void gameEngine::menu()
 
         }
         if (gameState.scene == OFFLINE) {
+            gameState.co = OFF;
             if (tag[i]->groupTag == "offline") {
                 drawable[i]->drawable = true;
             }
@@ -332,7 +333,7 @@ void gameEngine::menu()
                 gameState.scene = OPTIONOFFLINE;
                 click[i]->clicked = false;
                 for (size_t j = 0; j < tag.size(); j++) {
-                    if (tag[j] == std::nullopt)
+                    if (!tag[j].has_value())
                         continue;
                     if (tag[j]->groupTag == "offline")
                         drawable[j]->drawable = false;
@@ -344,7 +345,7 @@ void gameEngine::menu()
                 gameState.scene = MENU;
                 click[i]->clicked = false;
                 for (size_t j = 0; j < tag.size(); j++) {
-                    if (tag[j] == std::nullopt)
+                    if (!tag[j].has_value())
                         continue;
                     if (tag[j]->tag == "offlinebutton") {
                         click[j]->clicked = false;
@@ -360,9 +361,13 @@ void gameEngine::menu()
                     click[i]->clicked = false;
                     gameState.mode = LEVELS_G;
                     gameState.scene = GAME;
+                    if (_type == CLIENT) {
+                        musics["musicMenu"]->stop();
+                        musics["musicGame"]->play();
+                    }
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
-                        if (tag[j] == std::nullopt)
+                        if (!tag[j].has_value())
                             continue;
                         if (tag[j]->groupTag == "offline")
                             drawable[j]->drawable = false;
@@ -376,9 +381,13 @@ void gameEngine::menu()
                     wave = 50;
                     gameState.mode = ENDLESS;
                     gameState.scene = GAME;
+                    if (_type == CLIENT) {
+                        musics["musicMenu"]->stop();
+                        musics["musicGame"]->play();
+                    }
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
-                        if (tag[j] == std::nullopt)
+                        if (!tag[j].has_value())
                             continue;
                         if (tag[j]->groupTag == "offline")
                             drawable[j]->drawable = false;
@@ -392,7 +401,7 @@ void gameEngine::menu()
                     click[i]->clicked = false;
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
-                        if (tag[j] == std::nullopt)
+                        if (!tag[j].has_value())
                             continue;
                         if (tag[j]->groupTag == "offline")
                             drawable[j]->drawable = false;
@@ -403,6 +412,7 @@ void gameEngine::menu()
             }
         }
         if (gameState.scene == ONLINE) {
+            gameState.co = ON;
             if (tag[i]->groupTag == "online") {
                 if (tag[i]->tag == "backbuttononline" || tag[i]->tag == "backonline" || tag[i]->tag == "playerConnected")
                     drawable[i]->drawable = true;
@@ -416,7 +426,7 @@ void gameEngine::menu()
                 gameState.scene = OPTIONONLINE;
                 click[i]->clicked = false;
                 for (size_t j = 0; j < tag.size(); j++) {
-                    if (tag[j] == std::nullopt)
+                    if (!tag[j].has_value())
                         continue;
                     if (tag[j]->groupTag == "online")
                         drawable[j]->drawable = false;
@@ -428,7 +438,7 @@ void gameEngine::menu()
                 gameState.scene = MENU;
                 click[i]->clicked = false;
                 for (size_t j = 0; j < tag.size(); j++) {
-                    if (tag[j] == std::nullopt)
+                    if (!tag[j].has_value())
                         continue;
                     if (tag[j]->tag == "onlinebutton") {
                         click[j]->clicked = false;
@@ -464,7 +474,7 @@ void gameEngine::menu()
                     gameState.scene = OFFLINE;
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
-                        if (tag[j] == std::nullopt)
+                        if (!tag[j].has_value())
                             continue;
                         if (tag[j]->tag == "onlinebutton") {
                             clock[j]->clock.restart();
@@ -482,7 +492,7 @@ void gameEngine::menu()
                     gameState.scene = ONLINE;
                     drawable[i]->drawable = false;
                     for (size_t j = 0; j < tag.size(); j++) {
-                        if (tag[j] == std::nullopt)
+                        if (!tag[j].has_value())
                             continue;
                         if (tag[j]->groupTag == "mainMenu")
                             drawable[j]->drawable = false;
@@ -493,9 +503,9 @@ void gameEngine::menu()
     }
     if (gameState.scene == END) {
         for (size_t i = 0; i < tag.size(); i++) {
-            if (tag[i] == std::nullopt)
+            if (!tag[i].has_value())
                 continue;
-            if (drawable[i] != std::nullopt) {
+            if (drawable[i].has_value()) {
                 if (tag[i]->tag == "score")
                     continue;
                 drawable[i]->drawable = false;
@@ -519,13 +529,13 @@ void gameEngine::life_handler()
     auto &drawable = _registry.get_components<Drawable>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (tag[i]->tag == "life") {
             for (size_t j = 0; j < _registry._entity_number; j++) {
-                if (tag[j] == std::nullopt)
+                if (!tag[j].has_value())
                     continue;
-                if (tag[j]->tag == "starship" && control[j] != std::nullopt) {
+                if (tag[j]->tag == "starship" && control[j].has_value()) {
                     if (health[j]->health <= state[i]->state + 1) {
                         drawable[i]->drawable = false;
                     } else {
@@ -544,7 +554,7 @@ void gameEngine::clock_time()
     auto &_drawable = _registry.get_components<Drawable>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (_tag[i] == std::nullopt)
+        if (!_tag[i].has_value())
             continue;
         if (_tag[i]->tag == "starship") {
             _clock[i]->time = _clock[i]->clock.getElapsedTime();
@@ -555,6 +565,7 @@ void gameEngine::clock_time()
             _clock[i]->time = _clock[i]->clock.getElapsedTime();
             if (_clock[i]->time.asSeconds() > 10) {
                 _registry.kill_entity(entity_t(i));
+                continue;
             }
         }
     }
