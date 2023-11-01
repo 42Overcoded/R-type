@@ -229,7 +229,7 @@ void gameEngine::launch_game()
             gameState.scene == GENERATE) {
             menu();
             _clock.restart();
-            }
+        }
         if (gameState.scene == GAME)
         {
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
@@ -254,7 +254,7 @@ void gameEngine::launch_game()
                     this->_level_info.mob_alive += 1;
                 }
             }
-            if (alive == 0)
+            if (alive == 0) {
                 gameState.scene = END;
                 if (_type == CLIENT) {
                     musics["musicGame"]->stop();
@@ -332,6 +332,7 @@ void gameEngine::launch_game()
         }
     }
 }
+
 
 sf::RenderWindow &gameEngine::get_window()
 {
