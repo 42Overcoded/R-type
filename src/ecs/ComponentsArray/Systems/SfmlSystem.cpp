@@ -158,23 +158,6 @@ void SfmlSystem::load_texture(registry &r, std::vector<keyCommands> cheatCode)
     lastKey = UNKNOWN;
     for (int i = 0; i < 15; i++)
         saveHitboxSpaceships.push_back(std::make_pair(0, 0));
-
-    // std::string test2 = "#";
-    // for (int i = 0; i < _cheatCode.size(); i++) {
-    //     if (_cheatCode[i] == UP)
-    //         test2 += " UP";
-    //     if (_cheatCode[i] == DOWN)
-    //         test2 += " DOWN";
-    //     if (_cheatCode[i] == LEFT)
-    //         test2 += " LEFT";
-    //     if (_cheatCode[i] == RIGHT)
-    //         test2 += " RIGHT";
-    //     if (_cheatCode[i] == SPACE)
-    //         test2 += " SPACE";
-    //     if (_cheatCode[i] == A)
-    //         test2 += " A";
-    // }
-    // std::cout << test2 << std::endl;
 }
 
 void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
@@ -359,8 +342,6 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
 
 void SfmlSystem::addKeyToKeyHistory(keyCommands keyCommand)
 {
-    std::string test = "";
-    std::string test2 = "";
     if (_cheatCode.size() > 0) {
         if (keyHistory.size() >= _cheatCode.size()) {
             for (int i = 0; i < keyHistory.size() - 1; i++) {
@@ -370,39 +351,7 @@ void SfmlSystem::addKeyToKeyHistory(keyCommands keyCommand)
         }
         keyHistory.push_back(keyCommand);
         lastKey = keyCommand;
-        for (int i = 0; i < keyHistory.size(); i++) {
-            if (keyHistory[i] == UP)
-                test += " UP";
-            if (keyHistory[i] == DOWN)
-                test += " DOWN";
-            if (keyHistory[i] == LEFT)
-                test += " LEFT";
-            if (keyHistory[i] == RIGHT)
-                test += " RIGHT";
-            if (keyHistory[i] == SPACE)
-                test += " SPACE";
-            if (keyHistory[i] == A)
-                test += " A";
-        }
-        std::cout << test << std::endl;
-        for (int i = 0; i < _cheatCode.size(); i++) {
-            if (_cheatCode[i] == UP)
-                test2 += " UP";
-            if (_cheatCode[i] == DOWN)
-                test2 += " DOWN";
-            if (_cheatCode[i] == LEFT)
-                test2 += " LEFT";
-            if (_cheatCode[i] == RIGHT)
-                test2 += " RIGHT";
-            if (_cheatCode[i] == SPACE)
-                test2 += " SPACE";
-            if (_cheatCode[i] == A)
-                test2 += " A";
-        }
-        std::cout << test2 << std::endl;
-        std::cout << std::endl;
-        // if (isCheatCodeEntered == true)
-        //     isCheatCodeEntered = false;
+
         if (keyHistory == _cheatCode)
             isCheatCodeEntered = true;
     }
@@ -446,41 +395,42 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
                 if (lastKey != UP)
                     addKeyToKeyHistory(UP);
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 control[i]->down = true;
                 if (lastKey != DOWN)
                     addKeyToKeyHistory(DOWN);
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 control[i]->left = true;
                 if (lastKey != LEFT)
                     addKeyToKeyHistory(LEFT);
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 control[i]->right = true;
                 if (lastKey != RIGHT)
                     addKeyToKeyHistory(RIGHT);
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                 control[i]->shoot = true;
                 if (lastKey != SPACE)
                     addKeyToKeyHistory(SPACE);
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
                 control[i]->shoot = true;
                 if (lastKey != A)
                     addKeyToKeyHistory(A);
-            } else {
-                lastKey = UNKNOWN;
             }
+            if (control[i]->up == false && control[i]->down == false && 
+                control[i]->left == false && control[i]->right == false && 
+                control[i]->shoot == false)
+                lastKey = UNKNOWN;
         }
         if (isCheatCodeEntered && player[i] != std::nullopt) {
-            if (hitbox[i]->width != 0) {
+            if (hitbox[i]->width >= 0) {
                 saveHitboxSpaceships[i].first = hitbox[i]->width;
                 saveHitboxSpaceships[i].second = hitbox[i]->height;
                 hitbox[i]->width = -10000;
                 hitbox[i]->height = -10000;
-                std::cout << "ici" << std::endl;
             } else {
                 hitbox[i]->width = saveHitboxSpaceships[i].first;
                 hitbox[i]->height = saveHitboxSpaceships[i].second;
