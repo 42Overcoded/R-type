@@ -24,6 +24,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Audio/Music.hpp>
 #include <nlohmann/json.hpp>
 
 void gameEngine::loadLevel(int level)
@@ -34,30 +35,57 @@ void gameEngine::loadLevel(int level)
     _level_info.mob_alive = 0;
     _level_info.is_boss_alive = false;
     _level_info.level_progress = 1920;
+
     _level_info._generated = loadMap(path[level]);
+}
+
+bool gameEngine::is_frozen()
+{
+    for (size_t i = 0; i < _registry._entity_number; i++) {
+        auto &tag = _registry.get_components<Tag>();
+        auto &drawable = _registry.get_components<Drawable>();
+        if (tag[i] == std::nullopt)
+            continue;
+        if (tag[i]->tag == "ice" && drawable[i]->drawable == false)
+            return true;
+    }
+    return false;
 }
 
 void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
 {
     int MAGIC_VALUE = 50; //The higher the value, the faster the enemies spawn
+    const int boss_worm_id = 7;
+
 
     if (_elapsed.asSeconds() > 0.1) {
+        if (is_frozen()) {
+            _clock.restart();
+            return;
+        }
         if (_level_info.mob_alive == 0)
             _level_info.is_boss_alive = false;
         if (this->_level_info.is_boss_alive)
             ;
         else if (this->_level_info._generated.size() > 0 && _level_info._generated[0].is_boss) {
             if (_level_info.mob_alive == 0) {
-                entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
-                auto &position = _registry.get_components<Position>();
-                if (position[enemy]->y == 0)
-                    position[enemy]->y = _level_info._generated[0].y;
-                _level_info._generated.erase(_level_info._generated.begin());
-                _level_info.mob_alive += 1;
-                _level_info.is_boss_alive = true;
+                if (_level_info._generated[0].id == boss_worm_id) {
+                    std::cout << "Magie noir du worm" << std::endl;
+                    entity_t enemy = init_worm(7);
+                    _level_info._generated.erase(_level_info._generated.begin());
+                    _level_info.mob_alive += 1;
+                    _level_info.is_boss_alive = true;
+                } else {
+                    entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                    auto &position = _registry.get_components<Position>();
+                    if (position[enemy]->y == 0)
+                        position[enemy]->y = _level_info._generated[0].y;
+                    _level_info._generated.erase(_level_info._generated.begin());
+                    _level_info.mob_alive += 1;
+                    _level_info.is_boss_alive = true;
+                }
             }
-        }
-        else {
+        } else {
             _level_info.level_progress += (MAGIC_VALUE * _elapsed.asSeconds());
             while (this->_level_info._generated.size() > 0 && _level_info.level_progress > _level_info._generated[0].x && _level_info._generated[0].is_boss == false) {
                 entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
@@ -86,7 +114,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
 
     for (int i = 0; i < _registry._entity_number; i++)
     {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (tag[i]->tag == "ice" && drawable[i]->drawable == false) {
             return;
@@ -164,6 +192,7 @@ void gameEngine::launch_game()
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
         _system.load_texture(_registry);
+        musics["musicMenu"]->play();
     }
     register_component_to_game();
     sf::Time _elapsed;
@@ -193,35 +222,46 @@ void gameEngine::launch_game()
         GameStateComponent &gameState = get_game_state();
         auto &health = _registry.get_components<Health>();
         auto &tag    = _registry.get_components<Tag>();
+        auto &clockk  = _registry.get_components<Clock>();
+        auto &state  = _registry.get_components<State>();
         int alive    = 0;
 
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
-            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE || 
+            gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE ||
             gameState.scene == GENERATE) {
             menu();
             _clock.restart();
-            }
+        }
         if (gameState.scene == GAME)
         {
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
                 continue;
             for (size_t i = 0; i < _registry._entity_number; i++)
             {
-                if (tag[i] == std::nullopt)
+                if (!tag[i].has_value())
                     continue;
                 if (tag[i]->tag == "starship")
-                {
                     alive += 1;
-                }
-                if (health[i] != std::nullopt && health[i]->health <= 0 &&
-                    tag[i]->tag == "starship")
-                {
+                if (health[i].has_value() && health[i]->health <= 0 && tag[i]->tag == "starship") {
                     _registry.kill_entity(entity_t(i));
+                    continue;
+                }
+                if (tag[i]->tag == "wormHead")
+                    clockk[i]->time = clockk[i]->clock.getElapsedTime();
+                if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clockk[i]->time.asSeconds() > 0.18)
+                {
+                    state[i]->index++;
+                    init_worm(8);
+                    clockk[i]->clock.restart();
+                    this->_level_info.mob_alive += 1;
                 }
             }
-            if (alive == 0)
-            {
+            if (alive == 0) {
                 gameState.scene = END;
+                if (_type == CLIENT) {
+                    musics["musicGame"]->stop();
+                    musics["musicScore"]->play();
+                }
             }
             clock_time();
             elapsed  = clock.getElapsedTime();
@@ -238,8 +278,6 @@ void gameEngine::launch_game()
                 }
                 spawn_generated_level(_elapsed, _clock);
             }
-            if (gameState.mode == LEVELS)
-                spawn_wave(_elapsed, wave);
             if (gameState.mode == ENDLESS)
                 spawn_infinite_wave(_elapsed, _clock, wave);
             if (gameState.mode == GENERATED) {
@@ -297,6 +335,7 @@ void gameEngine::launch_game()
     }
 }
 
+
 sf::RenderWindow &gameEngine::get_window()
 {
     return _window;
@@ -308,7 +347,7 @@ GameStateComponent &gameEngine::get_game_state()
 
     for (size_t i = 0; i < _registry._entity_number; i++)
     {
-        if (gameStateArray[i] != std::nullopt)
+        if (gameStateArray[i].has_value())
             return gameStateArray[i].value();
     }
     throw std::runtime_error("No game state found");

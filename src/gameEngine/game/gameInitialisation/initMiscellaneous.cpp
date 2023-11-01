@@ -345,6 +345,7 @@ void gameEngine::spawn_power_up(int i)
     _registry.add_component<Texture>(power, Texture());
     _registry.add_component<Speed>(power, Speed());
     _registry.add_component<Hitbox>(power, Hitbox());
+    _registry.add_component<Scale>(power, Scale());
 
     auto &state = _registry.get_components<State>();
     auto &drawable = _registry.get_components<Drawable>();
@@ -382,25 +383,27 @@ void gameEngine::death_animation()
     auto &clock = _registry.get_components<Clock>();
     auto &text = _registry.get_components<Text>();
     auto &rect = _registry.get_components<Rect>();
+    auto &player = _registry.get_components<Player>();
 
     int wormAlive = -1;
     for (size_t i = 0; i < _registry._entity_number; i++)
     {
-        if (tag[i]->tag == "wormBody") {
+        if (tag[i].has_value() && tag[i]->tag == "wormBody") {
             wormAlive = 0;
         }
     }
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value() || !position[i].has_value())
             continue;
-        if (enemy[i] != std::nullopt) {
+        if (enemy[i].has_value()) {
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
+                continue;
             }
         }
         if (tag[i]->tag == "wormBody") {
-            if  (health[i] != std::nullopt) {
+            if  (health[i].has_value()) {
                 if (health[i]->health > 0) {
                     wormAlive += 1;
                 }
@@ -409,13 +412,17 @@ void gameEngine::death_animation()
         if (tag[i]->tag == "enemyBullet") {
             if (position[i]->x < -100) {
                 _registry.kill_entity(entity_t(i));
+                continue;
             }
         }
         if (tag[i]->tag == "explosion") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
             if (clock[i]->time.asSeconds() > 0.05) {
+                if (!state[i].has_value() || !rect[i].has_value() ||!clock[i].has_value())
+                    continue;
                 if (state[i]->state >= 6) {
                     _registry.kill_entity(entity_t(i));
+                    continue;
                 }
                 state[i]->state += 1;
                 rect[i]->left += 33;
@@ -428,31 +435,37 @@ void gameEngine::death_animation()
                 state[i]->state = 666;
             }
         }
-        if (enemy[i] != std::nullopt) {
+        if (enemy[i].has_value()) {
             if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
                 for (size_t j = 0; j < _registry._entity_number; j++) {
-                    if (tag[j] == std::nullopt)
-                        continue;
-                    if (tag[j]->tag == "score") {
+                    if (tag[j].has_value() && tag[j]->tag == "score")
+                    {
                         state[j]->state += enemy[i]->score;
                         text[j]->str = "Score : " + std::to_string(state[j]->state);
                     }
                 }
                 spawn_power_up(i);
                 spawn_explosion(i);
+                if (tag[i]->tag == "enemy 1")
+                    sounds["soundExplosion"]->play();
+                if (tag[i]->tag == "enemy 2")
+                    sounds["soundExplosion2"]->play();
+                if (tag[i]->tag == "enemy 3")
+                    sounds["soundExplosion3"]->play();
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
+                continue;
             }
         }
     }
     if (wormAlive == 0) {
         for (size_t j = 0; j < _registry._entity_number; j++) {
-            if (tag[j] == std::nullopt)
+            if (!tag[j].has_value())
                 continue;
             if ((tag[j]->tag == "wormHead" || tag[j]->tag == "wormBody")) {
                 for (size_t k = 0; k < _registry._entity_number; k++)
                 {
-                    if (tag[k] == std::nullopt)
+                    if (!tag[k].has_value())
                         continue;
                     if (tag[k]->tag == "score") {
                         state[k]->state += enemy[j]->score;
@@ -461,6 +474,7 @@ void gameEngine::death_animation()
                 }
                 spawn_explosion(j);
                 _registry.kill_entity(entity_t(j));
+                continue;
             }
         }
     }

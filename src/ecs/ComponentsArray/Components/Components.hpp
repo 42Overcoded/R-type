@@ -14,6 +14,7 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Audio/Sound.hpp>
 #include <iostream>
 
 /**

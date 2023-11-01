@@ -19,7 +19,7 @@ void gameEngine::spawn_ally_bullet(int i)
     auto &_drawable = _registry.get_components<Drawable>();
     int j = 1;
     for (size_t k = 0; k < _registry._entity_number; k++) {
-        if (_tag[k] == std::nullopt)
+        if (!_tag[k].has_value())
             continue;
         if (_tag[k]->tag == "shootBoost" && _drawable[k]->drawable == false) {
             j = 3;
@@ -73,10 +73,10 @@ void gameEngine::spawn_ally_bullet(int i)
             orientation[bullet]->orientation = 0;
         }
         for (size_t i = 0; i < _registry._entity_number; i++) {
-            if (tag[i] == std::nullopt) {
+            if (!tag[i].has_value()) {
                 continue;
             }
-            if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
+            if (tag[i]->tag == "starship" && control[i].has_value()) {
                 position[bullet]->x = position[i]->x + 80;
                 position[bullet]->y = position[i]->y;
             }
@@ -88,7 +88,8 @@ void gameEngine::spawn_ally_bullet(int i)
                 rect[bullet]->height = starshipJson["bullet"]["rect"][0]["height"];
                 rect[bullet]->left = starshipJson["bullet"]["rect"][0]["left"];
                 rect[bullet]->top = starshipJson["bullet"]["rect"][0]["top"];
-                if (_health[i]->health > 30 && _health[i]->health < 85) {
+                sounds["soundShoot"]->play();
+            if (_health[i]->health > 30 && _health[i]->health < 85) {
                     state[bullet]->state = 1;
                     hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][1]["width"];
                     hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][1]["height"];
@@ -105,7 +106,8 @@ void gameEngine::spawn_ally_bullet(int i)
                     rect[bullet]->height = starshipJson["bullet"]["rect"][2]["height"];
                     rect[bullet]->left = starshipJson["bullet"]["rect"][2]["left"];
                     rect[bullet]->top = starshipJson["bullet"]["rect"][2]["top"];
-                }
+                    sounds["soundPowerShoot"]->play();
+            }
                 _health[i]->health = 0;
                 rect[i]->width = rect[i]->baseWidth;
             }
@@ -181,7 +183,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     rect[bullet]->height = bulletJson["bullet"][j]["rect"]["height"];
     if (tag[bullet]->tag == "wormBullet") {
         for (size_t j = 0; j < _registry._entity_number; j++) {
-            if (tag[j] == std::nullopt)
+            if (!tag[j].has_value())
                 continue;
             if (tag[j]->tag == "starship") {
                 float x = position[j]->x - position[i]->x;
@@ -208,7 +210,7 @@ void gameEngine::spawn_bullet(int i, int j)
     auto &_drawable = _registry.get_components<Drawable>();
 
     for (size_t k = 0; k < _registry._entity_number; k++) {
-        if (_tag[k] == std::nullopt)
+        if (!_tag[k].has_value())
             continue;
         if (_tag[k]->tag == "ice" && _drawable[k]->drawable == false) {
             return;
@@ -262,7 +264,7 @@ void gameEngine::spawn_bullet(int i, int j)
         searchingHead[bullet]->searching = true;
     if (tag[bullet]->tag == "enemyBullet" || tag[bullet]->tag == "starshipBossBullet") {
         for (size_t j = 0; j < _registry._entity_number; j++) {
-            if (tag[j] == std::nullopt)
+            if (!tag[j].has_value())
                 continue;
             if (tag[j]->tag == "starship") {
                 float x = position[j]->x - position[i]->x;

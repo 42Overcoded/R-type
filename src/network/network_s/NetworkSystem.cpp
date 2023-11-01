@@ -82,7 +82,7 @@ void NetworkSystem::manageServerUpdateControls(
     auto &controls = reg.get_components<Control>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
-        if (network[i]->clientId == client->GetId() && controls[i] != std::nullopt) {
+        if (network[i]->clientId == client->GetId() && controls[i].has_value()) {
             bool up, down, left, right, shoot;
 
             packet >> shoot >> right >> left >> down >> up;
@@ -104,10 +104,10 @@ void NetworkSystem::manageServerStartGame(registry &reg, std::shared_ptr<Connect
     size_t gameLauncherIndex = 0;
 
     for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
-        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+        if (gameLauncherArray[gameLauncherIndex].has_value())
             break;
     }
-    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+    if (!gameLauncherArray[gameLauncherIndex].has_value())
         throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
@@ -115,7 +115,7 @@ void NetworkSystem::manageServerStartGame(registry &reg, std::shared_ptr<Connect
         return;
     for (size_t i = 0; i < reg._entity_number; i++)
     {
-        if (gameStateArr[i] != std::nullopt)
+        if (gameStateArr[i].has_value())
         {
             gameLauncher.isGameLaunched = true;
             gameStateArr[i]->scene = Scene::GAME;
@@ -153,7 +153,7 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
     auto &position = reg.get_components<Position>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
-        if (network[i] != std::nullopt && position[i] != std::nullopt) {
+        if (network[i].has_value() && position[i].has_value()) {
             if (network[i]->entityId != 0)
                 continue;
             network[i]->entityId = ++lastEntityId_;
@@ -172,7 +172,7 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg)
     auto &position = reg.get_components<Position>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
-        if (network[i] != std::nullopt && position[i] != std::nullopt) {
+        if (network[i].has_value() && position[i].has_value()) {
             if (network[i]->entityId == 0)
                 continue;
             Packet<Flag> packet;
@@ -199,10 +199,10 @@ void NetworkSystem::manageClientEndGame(registry &reg)
     size_t gameLauncherIndex = 0;
 
     for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
-        if (gameLauncherArray[gameLauncherIndex] != std::nullopt)
+        if (gameLauncherArray[gameLauncherIndex].has_value())
             break;
     }
-    if (gameLauncherArray[gameLauncherIndex] == std::nullopt)
+    if (!gameLauncherArray[gameLauncherIndex].has_value())
         throw std::runtime_error("No game launcher component found");
     GameLauncher &gameLauncher = *gameLauncherArray[gameLauncherIndex];
 
@@ -210,7 +210,7 @@ void NetworkSystem::manageClientEndGame(registry &reg)
         return;
     for (size_t i = 0; i < reg._entity_number; i++)
     {
-        if (gameStateArr[i] != std::nullopt)
+        if (gameStateArr[i].has_value())
         {
             if (gameStateArr[i]->scene == Scene::END)
             {
@@ -232,7 +232,7 @@ void NetworkSystem::debugSpaceshipPosition(registry &reg)
     auto &tag = reg.get_components<Tag>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
-        if (position[i] != std::nullopt && tag[i]->tag == "starship") {
+        if (position[i].has_value() && (tag[i].has_value() &&  tag[i]->tag == "starship")) {
             // if (network[i]->entityId == 0)
             //     continue;
             // std::cout << "Spaceship " << network[i]->entityId << " : " << position[i]->x << " " << position[i]->y << std::endl;

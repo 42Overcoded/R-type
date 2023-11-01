@@ -22,15 +22,16 @@ void gameEngine::shoot_system(sf::Time &elapsed)
     auto &clock = _registry.get_components<Clock>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+        if (!tag[i].has_value()) {
             continue;
         }
         if (tag[i]->tag == "bullet") {
             if (position[i]->x > 1850) {
                 _registry.kill_entity(entity_t(i));
+                continue;
             }
         }
-        if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
+        if (tag[i]->tag == "starship" && control[i].has_value()) {
             if (control[i]->shoot == true) {
                 load_shoot(elapsed);
             } else {
@@ -53,13 +54,13 @@ void gameEngine::load_shoot(sf::Time &elapsed)
     auto &rect = _registry.get_components<Rect>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt) {
+        if (!tag[i].has_value()) {
             continue;
         }
-        if (tag[i]->tag == "starship" && control[i] != std::nullopt) {
+        if (tag[i]->tag == "starship" && control[i].has_value()) {
             control[i]->shoot = true;
             for (size_t j = 0; j < _registry._entity_number; j++) {
-                if (tag[j] == std::nullopt)
+                if (!tag[j].has_value())
                     continue;
                 if (tag[j]->tag == "load_shoot") {
                     clock[j]->time = clock[j]->clock.getElapsedTime();
@@ -94,7 +95,7 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
 
     bool is_return = false;
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (_tag[i] == std::nullopt) {
+        if (!_tag[i].has_value()) {
             continue;
         }
         if (_tag[i]->tag == "load_shoot") {
@@ -110,10 +111,10 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
     if (is_return == true)
         return;
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (_tag[i] == std::nullopt) {
+        if (!_tag[i].has_value()) {
             continue;
         }
-        if (_tag[i]->tag == "starship" && control[i] != std::nullopt) {
+        if (_tag[i]->tag == "starship" && control[i].has_value()) {
             if (clock[i]->_time.asSeconds() < 0.15)
                 return;
             spawn_ally_bullet(i);
@@ -132,9 +133,9 @@ void gameEngine::shoot_enemy() {
     auto &state = _registry.get_components<State>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
-        if (enemy[i] != std::nullopt) {
+        if (enemy[i].has_value()) {
             if (tag[i]->tag == "enemy 3") {
                 clock[i]->_time = clock[i]->_clock.getElapsedTime();
                 if (clock[i]->_time.asSeconds() > 3) {
@@ -166,12 +167,12 @@ void gameEngine::shoot_enemy() {
                 }
             }
             if (tag[i]->tag == "wormHead") {
-                clock[i]->_time = clock[i]->_clock.getElapsedTime();
-                if (clock[i]->_time.asSeconds() > 1) {
+                clock[i]->__time = clock[i]->__clock.getElapsedTime();
+                if (clock[i]->__time.asSeconds() > 1) {
                     if (position[i]->x >= 1920) {
                         continue;
                     }
-                    clock[i]->_clock.restart();
+                    clock[i]->__clock.restart();
                     spawn_boss_bullet(i, 5);
                 }
             }
@@ -203,11 +204,11 @@ void gameEngine::shoot_enemy() {
                     spawn_bullet(i, 6);
                 }
         }
-        if (searchingHead[i] != std::nullopt) {
+        if (searchingHead[i].has_value()) {
             if (searchingHead[i]->searching == false)
                 continue;
             for (size_t j = 0; j < _registry._entity_number; j++) {
-                if (tag[j] == std::nullopt)
+                if (!tag[j].has_value())
                     continue;
                 if (tag[j]->tag == "starship") {
                     float x = position[j]->x - position[i]->x;

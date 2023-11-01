@@ -21,7 +21,7 @@ void gameEngine::animate_enemy()
     auto &rect = _registry.get_components<Rect>();
 
     for (size_t i = 0; i < _registry._entity_number; i++) {
-        if (tag[i] == std::nullopt)
+        if (!tag[i].has_value())
             continue;
         if (tag[i]->tag == "enemy 1") {
             clock[i]->time = clock[i]->clock.getElapsedTime();
