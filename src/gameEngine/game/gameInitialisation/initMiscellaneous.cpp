@@ -179,6 +179,34 @@ void gameEngine::init_background(int i) {
     position[background]->x = i * width;
 }
 
+void gameEngine::init_star_parallax(int i) {
+    entity_t star_parallax = _registry.spawn_entity();
+
+    _registry.add_component<Position>(star_parallax, Position());
+    _registry.add_component<Sprite>(star_parallax, Sprite());
+    _registry.add_component<Drawable>(star_parallax, Drawable());
+    _registry.add_component<Tag>(star_parallax, Tag());
+    _registry.add_component<Speed>(star_parallax, Speed());
+    _registry.add_component<Texture>(star_parallax, Texture());
+
+    auto &tag = _registry.get_components<Tag>();
+    auto &sprite = _registry.get_components<Sprite>();
+    auto &position = _registry.get_components<Position>();
+    auto &speed = _registry.get_components<Speed>();
+    auto &texture = _registry.get_components<Texture>();
+    auto &drawable = _registry.get_components<Drawable>();
+
+    int width = 500;
+
+    drawable[star_parallax]->drawable = true;
+    texture[star_parallax]->textureTag = "starparallaxTexture";
+    speed[star_parallax]->speedx = -0.15;
+    tag[star_parallax]->tag = "star_parallax";
+    position[star_parallax]->x = i * width;
+    position[star_parallax]->y = rand() % 1080;
+    sprite[star_parallax]->sprite.setScale(0.5, 0.5);
+}
+
 void gameEngine::init_score() {
     std::ifstream file(PATH_TO_JSON + "score.json");
 
@@ -495,6 +523,8 @@ void gameEngine::init_game()
 {
     for (int i = 0; i < 2; i++)
         init_background(i);
+    for (int i = 0; i < 10; i++)
+        init_star_parallax(i);
     init_score();
     init_beambar();
     init_load_shoot();
