@@ -15,7 +15,7 @@
 #include "../../../gameEngine/Game.hpp"
 
 
-enum keyCommands {UP, DOWN, LEFT, RIGHT, SPACE, A};
+enum keyCommands {UNKNOWN, UP, DOWN, LEFT, RIGHT, SPACE, A};
 
 class SfmlSystem {
     public:
@@ -104,6 +104,7 @@ class SfmlSystem {
         std::unordered_map<std::string, sf::Texture> textures;
         std::vector<keyCommands> keyHistory;
         std::vector<keyCommands> _cheatCode;
+        keyCommands lastKey;
         bool isCheatCodeEntered;
         std::vector<std::pair<int, int>> saveHitboxSpaceships;
 };
