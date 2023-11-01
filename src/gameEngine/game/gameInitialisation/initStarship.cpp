@@ -8,12 +8,17 @@
 entity_t gameEngine::init_starship(int id, int i)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "starship.json");
     nlohmann::json starshipJson;
-    file >> starshipJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "starship.json");
+        file >> starshipJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[starship.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t starship = _registry.spawn_entity();
 
@@ -81,12 +86,17 @@ entity_t gameEngine::init_starship(int id, int i)
 void gameEngine::init_load_shoot()
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "starship.json");
     nlohmann::json starshipJson;
-    file >> starshipJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "starship.json");
+        file >> starshipJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[starship.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t load_shoot = _registry.spawn_entity();
 
@@ -126,12 +136,17 @@ void gameEngine::init_load_shoot()
 
 void gameEngine::init_life(int i) {
     std::ifstream file(PATH_TO_JSON + "life.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "life.json");
     nlohmann::json lifeJson;
-    file >> lifeJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "life.json");
+        file >> lifeJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[life.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t life = _registry.spawn_entity();
 

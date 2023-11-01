@@ -9,12 +9,17 @@
 void gameEngine::init_beambar()
 {
     std::ifstream file(PATH_TO_JSON + "bar.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "bar.json");
     nlohmann::json barJson;
-    file >> barJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "bar.json");
+        file >> barJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[bar.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t beambar = _registry.spawn_entity();
     entity_t fullbeambar = _registry.spawn_entity();
@@ -80,12 +85,17 @@ void gameEngine::init_beambar()
 void gameEngine::init_button(int i)
 {
     std::ifstream file(PATH_TO_JSON + "menu.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
     nlohmann::json menuJson;
-    file >> menuJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
+        file >> menuJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[menu.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     int buttonNbr = 0;
     if (i == -1) {
@@ -147,12 +157,17 @@ void gameEngine::init_button(int i)
 
 void gameEngine::init_background(int i) {
     std::ifstream file(PATH_TO_JSON + "background.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "background.json");
     nlohmann::json backJson;
-    file >> backJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "background.json");
+        file >> backJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[background.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t background = _registry.spawn_entity();
 
@@ -181,12 +196,17 @@ void gameEngine::init_background(int i) {
 
 void gameEngine::init_score() {
     std::ifstream file(PATH_TO_JSON + "score.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "score.json");
     nlohmann::json scoreJson;
-    file >> scoreJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "score.json");
+        file >> scoreJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[score.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t score = _registry.spawn_entity();
     _registry.add_component<Position>(score, Position());
@@ -216,12 +236,17 @@ void gameEngine::init_score() {
 void gameEngine::init_menu()
 {
     std::ifstream file(PATH_TO_JSON + "menu.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
     nlohmann::json menuJson;
-    file >> menuJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
+        file >> menuJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[menu.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t menu = _registry.spawn_entity();
     entity_t play = _registry.spawn_entity();
@@ -260,12 +285,17 @@ void gameEngine::init_menu()
 
 void gameEngine::spawn_explosion(int i) {
     std::ifstream file(PATH_TO_JSON + "explosion.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "explosion.json");
     nlohmann::json boomJson;
-    file >> boomJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "explosion.json");
+        file >> boomJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[explosion.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t explosion = _registry.spawn_entity();
     _registry.add_component<Position>(explosion, Position());
@@ -303,11 +333,17 @@ void gameEngine::spawn_explosion(int i) {
 void gameEngine::spawn_power_up(int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "powerup.json");
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "powerup.json");
     nlohmann::json powerJson;
-    file >> powerJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "powerup.json");
+        file >> powerJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[powerup.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t power = _registry.spawn_entity();
     _registry.add_component<Position>(power, Position());

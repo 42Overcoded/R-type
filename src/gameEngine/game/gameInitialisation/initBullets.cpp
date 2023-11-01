@@ -8,12 +8,17 @@
 void gameEngine::spawn_ally_bullet(int i)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Cannot open config/starship.json");
     nlohmann::json starshipJson;
-    file >> starshipJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Cannot open config/starship.json");
+        file >> starshipJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[starship.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     auto &_tag = _registry.get_components<Tag>();
     auto &_drawable = _registry.get_components<Drawable>();
@@ -118,12 +123,17 @@ void gameEngine::spawn_ally_bullet(int i)
 void gameEngine::spawn_boss_bullet(int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Cannot open config/bullet.json");
     nlohmann::json bulletJson;
-    file >> bulletJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Cannot open config/bullet.json");
+        file >> bulletJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[bullet.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -199,12 +209,17 @@ void gameEngine::spawn_boss_bullet(int i, int j)
 void gameEngine::spawn_bullet(int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Cannot open config/bullet.json");
     nlohmann::json bulletJson;
-    file >> bulletJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Cannot open config/bullet.json");
+        file >> bulletJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[bullet.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     auto &_tag = _registry.get_components<Tag>();
     auto &_drawable = _registry.get_components<Drawable>();

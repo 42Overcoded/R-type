@@ -7,12 +7,17 @@
 entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
 {
     std::ifstream file(PATH_TO_JSON + "enemies.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "enemies.json");
     nlohmann::json enemiesJson;
-    file >> enemiesJson;
-    file.close();
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "enemies.json");
+        file >> enemiesJson;
+        file.close();
+    } catch (std::exception &e) {
+        std::cerr << "[enemies.json] " << e.what() << std::endl;
+        exit(84);
+    }
 
     entity_t enemy = _registry.spawn_entity();
 
@@ -74,12 +79,17 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     }
 
     std::ifstream file2(PATH_TO_JSON + "pattern.json");
-
-    if (!file2.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "pattern.json");
     nlohmann::json patternsJson;
-    file2 >> patternsJson;
-    file2.close();
+
+    try {
+        if (!file2.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "pattern.json");
+        file2 >> patternsJson;
+        file2.close();
+    } catch (std::exception &e) {
+        std::cerr << "[pattern.json] " << e.what() << std::endl;
+        exit(84);
+    }
     std::vector<Speed> _pattern;
     for (size_t j = 0; j < patternsJson["patterns"][pattern_id]["pattern"].size(); j++) {
         Speed tmp;
