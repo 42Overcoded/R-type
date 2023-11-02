@@ -455,6 +455,8 @@ void SfmlSystem::color_system(registry &r)
                 if (!tag[j].has_value())
                     continue;
                 if (tag[j]->tag == "starship") {
+                    if (state[j]->id != state[i]->id)
+                        continue;
                     color[j]->r = 150;
                     color[j]->g = 150;
                     color[j]->b = 255;
@@ -520,6 +522,7 @@ void SfmlSystem::hitbox_system(registry &r)
                 if (tag[j]->tag == "starship") {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
                         drawable[i]->drawable = false;
+                        state[i]->id = state[j]->id;
                         clock[i]->clock.restart();
                         if (tag[i]->tag == "lifeBoost") {
                             if (health[j]->health < 4)

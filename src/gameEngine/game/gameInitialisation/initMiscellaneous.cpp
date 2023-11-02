@@ -3,10 +3,11 @@
 #include <optional>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "SFML/System/Clock.hpp"
+#include "../../../network/network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 #include <random>
 
-void gameEngine::init_beambar()
+void gameEngine::init_beambar(int id)
 {
     std::ifstream file(PATH_TO_JSON + "bar.json");
 
@@ -34,6 +35,8 @@ void gameEngine::init_beambar()
     _registry.add_component<Rect>(fullbeambar, Rect());
     _registry.add_component<Scale>(beambar, Scale());
     _registry.add_component<Scale>(fullbeambar, Scale());
+    _registry.add_component<State>(beambar, State());
+    _registry.add_component<State>(fullbeambar, State());
 
     auto &tag = _registry.get_components<Tag>();
     auto &texture = _registry.get_components<Texture>();
@@ -43,7 +46,9 @@ void gameEngine::init_beambar()
     auto &scale = _registry.get_components<Scale>();
     auto &rect = _registry.get_components<Rect>();
     auto &drawable = _registry.get_components<Drawable>();
+    auto &state = _registry.get_components<State>();
 
+    state[beambar]->id = id;
     drawable[beambar]->drawable = true;
     drawable[fullbeambar]->drawable = true;
     tag[beambar]->tag = barJson["beambar"]["tag"];
@@ -240,51 +245,6 @@ void gameEngine::init_score() {
     tag[score]->tag = "score";
     scale[score]->scale = scoreJson["score"]["scale"];
 }
-
-void gameEngine::init_menu()
-{
-    std::ifstream file(PATH_TO_JSON + "menu.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "menu.json");
-    nlohmann::json menuJson;
-    file >> menuJson;
-    file.close();
-
-    entity_t menu = _registry.spawn_entity();
-    entity_t play = _registry.spawn_entity();
-
-    _registry.add_component<Clock>(menu, Clock());
-    _registry.add_component<Position>(menu, Position());
-    _registry.add_component<Sprite>(menu, Sprite());
-    _registry.add_component<Drawable>(menu, Drawable());
-    _registry.add_component<Tag>(menu, Tag());
-    _registry.add_component<Texture>(menu, Texture());
-
-    _registry.add_component<Position>(play, Position());
-    _registry.add_component<Sprite>(play, Sprite());
-    _registry.add_component<Drawable>(play, Drawable());
-    _registry.add_component<Tag>(play, Tag());
-    _registry.add_component<Texture>(play, Texture());
-
-    auto &tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &drawable = _registry.get_components<Drawable>();
-
-    tag[menu]->tag = menuJson["menu"]["tag"];
-    texture[menu]->textureTag = menuJson["menu"]["textureTag"];
-    position[menu]->x = menuJson["menu"]["position"]["x"];
-    position[menu]->y = menuJson["menu"]["position"]["y"];
-    tag[play]->tag = menuJson["play"]["tag"];
-    texture[play]->textureTag = menuJson["play"]["textureTag"];
-    position[play]->x = menuJson["play"]["position"]["x"];
-    position[play]->y = menuJson["play"]["position"]["y"];
-    drawable[play]->drawable = false;
-    drawable[menu]->drawable = false;
-}
-
 
 void gameEngine::spawn_explosion(int i) {
     std::ifstream file(PATH_TO_JSON + "explosion.json");
@@ -526,10 +486,32 @@ void gameEngine::init_game()
     for (int i = 0; i < 10; i++)
         init_star_parallax(i);
     init_score();
-    init_beambar();
-    init_load_shoot();
-    for (int i = 0; i != 1; i++)
+    
+    GameStateComponent &state = get_game_state();
+    auto &gameState = _registry.get_components<GameStateComponent>();
+    auto &network = _registry.get_components<NetworkComponent>();
+    for (int i = 0; i < _registry._entity_number; i++) {
+        if (gameState[i].has_value() && network[i].has_value()) {
+            id = network[i]->clientId - 1;
+        }
+    }
+    auto &networkInfo = _registry.get_components<NetworkInfo>();
+    int nbPlayer = 0;
+    if (state.co == OFF) {
+        nbPlayer = 1;
+        id = 0;
+    } else {
+        nbPlayer = 3;
+    }
+    std::cout << "Id : " << id << std::endl;
+    for (int i = 0; i != nbPlayer; i++) {
+        if (_type == SERVER) {
+            id = 0;
+        }
         entity_t starship = init_starship(id, i);
-    for (int i = 0; i < 3; i++)
-        init_life(i);
+        init_beambar(id);
+        init_load_shoot(id);
+        for (int i = 0; i < 3; i++)
+            init_life(i, id);
+    }
 }
