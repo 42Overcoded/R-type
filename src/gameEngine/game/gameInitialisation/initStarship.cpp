@@ -56,6 +56,7 @@ entity_t gameEngine::init_starship(int id, int i)
     drawable[starship]->drawable = true;
     health[starship]->health = starshipJson["starship"][i]["health"];
     state[starship]->state = starshipJson["starship"][i]["state"];
+    state[starship]->id = id;
     hitbox[starship]->width = starshipJson["starship"][i]["hitbox"]["width"];
     hitbox[starship]->height = starshipJson["starship"][i]["hitbox"]["height"];
     tag[starship]->tag = starshipJson["starship"][i]["tag"];
@@ -78,7 +79,7 @@ entity_t gameEngine::init_starship(int id, int i)
 }
 
 
-void gameEngine::init_load_shoot()
+void gameEngine::init_load_shoot(int id)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
 
@@ -109,6 +110,7 @@ void gameEngine::init_load_shoot()
     auto &state = _registry.get_components<State>();
     auto &clock = _registry.get_components<Clock>();
 
+    state[load_shoot]->state = id;
     tag[load_shoot]->tag = starshipJson["load_shoot"]["tag"];
     texture[load_shoot]->textureTag = starshipJson["load_shoot"]["textureTag"];
     scale[load_shoot]->scale = starshipJson["load_shoot"]["scale"];
@@ -124,7 +126,7 @@ void gameEngine::init_load_shoot()
 }
 
 
-void gameEngine::init_life(int i) {
+void gameEngine::init_life(int i, int id) {
     std::ifstream file(PATH_TO_JSON + "life.json");
 
     if (!file.is_open())
@@ -154,6 +156,7 @@ void gameEngine::init_life(int i) {
     auto &control = _registry.get_components<Control>();
     auto &drawable = _registry.get_components<Drawable>();
 
+    state[life]->id = id;
     drawable[life]->drawable = true;
     int space = lifeJson["life"]["space"];
     state[life]->state = i;

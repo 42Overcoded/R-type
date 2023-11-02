@@ -81,7 +81,7 @@ class gameEngine {
          * @brief init the beambar
          * 
          */
-        void init_beambar();
+        void init_beambar(int i);
         /**
          * @brief game loop of the game and core of the game
          * 
@@ -97,7 +97,7 @@ class gameEngine {
          * 
          * @param i 
          */
-        void init_life(int i);
+        void init_life(int i, int id);
         /**
          * @brief init the score displayer
          * 
@@ -113,7 +113,7 @@ class gameEngine {
          * @brief init the load shoot animation
          * 
          */
-        void init_load_shoot();
+        void init_load_shoot(int i);
         /**
          * @brief spawn enemy bullet
          * 

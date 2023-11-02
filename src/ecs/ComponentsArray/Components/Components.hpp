@@ -54,6 +54,7 @@ struct State {
     int state = 0;
     int _state = 0;
     int index = 0;
+    int id = 0;
 };
 
 /**
