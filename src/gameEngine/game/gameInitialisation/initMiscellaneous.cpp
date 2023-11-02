@@ -505,9 +505,6 @@ void gameEngine::init_game()
     }
     std::cout << "Id : " << id << std::endl;
     for (int i = 1; i != nbPlayer + 1; i++) {
-        if (_type == SERVER) {
-            id = 0;
-        }
         entity_t starship = init_starship(id, i);
         init_beambar(id);
         init_load_shoot(id);
