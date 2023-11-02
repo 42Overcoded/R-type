@@ -167,6 +167,13 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
     std::cout << "Client create entity" << std::endl;
     SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
     SparseArray<Position> &positionArr        = reg.get_components<Position>();
+    uint32_t entityId;
+    uint32_t x;
+    uint32_t y;
+
+    packet >> y;
+    packet >> x;
+    packet >> entityId;
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
@@ -175,12 +182,6 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
             //TODO replace with true creator code
             if (networkArr[i]->entityId != 0)
                 continue;
-            uint32_t entityId;
-            uint32_t x;
-            uint32_t y;
-
-            packet >> y >> x;
-            packet >> entityId;
             networkArr[i]->entityId = entityId;
             std::cout << "create : id " << networkArr[i]->entityId << std::endl;
             return;
@@ -190,29 +191,30 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)
 {
-    std::cout << "Client update entity" << std::endl;
     SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
     SparseArray<Position> &positionArr        = reg.get_components<Position>();
+    uint32_t entityId;
+    uint32_t x;
+    uint32_t y;
 
-    for (size_t i = 0; i < networkArr.size(); i++)
+    packet >> y;
+    packet >> x;
+    packet >> entityId;
+
+    for (size_t i = 0; i < reg._entity_number; i++)
     {
         if (networkArr[i].has_value() && positionArr[i].has_value())
         {
-            uint32_t entityId;
-
-            packet >> entityId;
             if (networkArr[i]->entityId != 0 && networkArr[i]->entityId == entityId)
             {
-                uint32_t x;
-                uint32_t y;
-
-                packet >> y >> x;
                 positionArr[i]->x = x;
                 positionArr[i]->y = y;
                 std::cout << "update entity : " << networkArr[i]->entityId << " " << positionArr[i]->x << " " << positionArr[i]->y << std::endl;
+                return;
             }
         }
     }
+    std::cout << "Client update entity : not found" << std::endl;
 }
 
 void NetworkSystem::manageClientDestroyEntity(registry &reg, Packet<Flag> &packet)
