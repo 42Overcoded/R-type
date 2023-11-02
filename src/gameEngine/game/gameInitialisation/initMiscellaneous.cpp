@@ -486,7 +486,7 @@ void gameEngine::init_game()
     for (int i = 0; i < 10; i++)
         init_star_parallax(i);
     init_score();
-    
+
     GameStateComponent &state = get_game_state();
     auto &gameState = _registry.get_components<GameStateComponent>();
     auto &network = _registry.get_components<NetworkComponent>();
@@ -496,12 +496,15 @@ void gameEngine::init_game()
         }
     }
     auto &networkInfo = _registry.get_components<NetworkInfo>();
-    int nbPlayer = 0;
+    int nbPlayer= 1;
+    for (int i = 0; i < _registry._entity_number; i++) {
+        if (networkInfo[i].has_value()) {
+            nbPlayer = networkInfo[i]->playersNbr;
+        }
+    }
     if (state.co == OFF) {
         nbPlayer = 1;
         id = 1;
-    } else {
-        nbPlayer = 3;
     }
     std::cout << "Id : " << id << std::endl;
     for (int i = 1; i != nbPlayer + 1; i++) {

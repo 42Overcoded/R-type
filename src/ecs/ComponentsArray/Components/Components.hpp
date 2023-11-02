@@ -35,6 +35,7 @@ struct NetworkInfo {
     std::vector<int> spawn;
     std::vector<int> arg1;
     std::vector<int> arg2;
+    unsigned int playersNbr;
 };
 
 /**

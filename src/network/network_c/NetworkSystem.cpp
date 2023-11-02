@@ -47,6 +47,7 @@ void NetworkSystem::managePlayerNbr(registry &reg)
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
     SparseArray<Tag> &tagArr                      = reg.get_components<Tag>();
     SparseArray<Text> &textArr                    = reg.get_components<Text>();
+    SparseArray<NetworkInfo> &networkInfoArr      = reg.get_components<NetworkInfo>();
 
     for (size_t i = 0; i < reg._entity_number; i++)
     {
@@ -68,6 +69,10 @@ void NetworkSystem::managePlayerNbr(registry &reg)
                 std::string str = std::to_string(playersNbr_) + " / 4 Players connected";
                 textArr[i]->str = str;
             }
+        }
+        if (networkInfoArr[i].has_value())
+        {
+            networkInfoArr[i]->playersNbr = playersNbr_;
         }
     }
 }
@@ -161,19 +166,24 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
 {
     std::cout << "Client create entity" << std::endl;
     SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
+    SparseArray<Position> &positionArr        = reg.get_components<Position>();
 
     for (size_t i = 0; i < networkArr.size(); i++)
     {
-        if (networkArr[i].has_value())
+        if (networkArr[i].has_value() && positionArr[i].has_value())
         {
             //TODO replace with true creator code
             if (networkArr[i]->entityId != 0)
                 continue;
             uint32_t entityId;
+            uint32_t x;
+            uint32_t y;
 
-            // packet >> entityId;
-            // networkArr[i]->entityId = entityId;
-            // std::cout << "create : id " << networkArr[i]->entityId << std::endl;
+            packet >> y >> x;
+            packet >> entityId;
+            networkArr[i]->entityId = entityId;
+            std::cout << "create : id " << networkArr[i]->entityId << std::endl;
+            return;
         }
     }
 }
@@ -199,6 +209,7 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
                 packet >> y >> x;
                 positionArr[i]->x = x;
                 positionArr[i]->y = y;
+                std::cout << "update entity : " << networkArr[i]->entityId << " " << positionArr[i]->x << " " << positionArr[i]->y << std::endl;
             }
         }
     }
@@ -253,6 +264,7 @@ void NetworkSystem::manageClientEndGame(registry &reg, Packet<Flag> &packet)
         if (gameStateArr[i].has_value())
         {
             gameStateArr[i]->scene = Scene::END;
+            return;
         }
     }
 }

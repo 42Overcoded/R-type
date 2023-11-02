@@ -35,6 +35,7 @@ void NetworkSystem::Update(registry &reg)
 
 void NetworkSystem::managePlayers(registry &reg) {
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
+    SparseArray<NetworkInfo> &networkInfoArr = reg.get_components<NetworkInfo>();
 
     for (std::shared_ptr<Connection<Flag>> client : *clients_)
     {
@@ -58,7 +59,7 @@ void NetworkSystem::managePlayers(registry &reg) {
     }
     for (size_t i = 0; i < reg._entity_number; i++)
     {
-        if (gameStateArr[i] != std::nullopt)
+        if (gameStateArr[i].has_value())
         {
             if (gameStateArr[i]->scene == Scene::GAME)
             {
@@ -68,7 +69,11 @@ void NetworkSystem::managePlayers(registry &reg) {
                     gameStateArr[i]->scene = Scene::END;
                 }
             }
-            return;
+            continue;
+        }
+        if (networkInfoArr[i].has_value())
+        {
+            networkInfoArr[i]->playersNbr = players_.size();
         }
     }
 }
@@ -182,6 +187,7 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
         if (network[i].has_value() && position[i].has_value()) {
             if (network[i]->entityId != 0)
                 continue;
+            std::cout << "Create entity" << std::endl;
             network[i]->entityId = ++lastEntityId_;
             Packet<Flag> packet;
             packet.header.flag = Flag::ClientCreateEntity;
@@ -203,7 +209,7 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg)
                 continue;
             Packet<Flag> packet;
             packet.header.flag = Flag::ClientUpdateEntity;
-            packet << (uint32_t)network[i]->entityId << (uint32_t)position[i]->y << (uint32_t)position[i]->x;
+            packet << (uint32_t)network[i]->entityId << (uint32_t)position[i]->x << (uint32_t)position[i]->y;
             std::cout << "update : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
             SendToAllClients(packet);
         }
