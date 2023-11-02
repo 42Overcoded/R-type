@@ -149,7 +149,7 @@ void NetworkSystem::manageServerStartGame(registry &reg, std::shared_ptr<Connect
         if (gameStateArr[i].has_value())
         {
             gameLauncher.isGameLaunched = true;
-            gameStateArr[i]->scene = Scene::GAME;
+            // gameStateArr[i]->scene = Scene::GAME;
             packet >> gameStateArr[i]->mode;
 
             Packet<Flag> sendPacket;

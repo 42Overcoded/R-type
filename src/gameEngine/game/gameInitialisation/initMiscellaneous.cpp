@@ -507,6 +507,7 @@ void gameEngine::init_game()
         id = 1;
     }
     std::cout << "Id : " << id << std::endl;
+    std::cout << "NbPlayer : " << nbPlayer << std::endl;
     for (int i = 1; i != nbPlayer + 1; i++) {
         entity_t starship = init_starship(id, i);
         init_beambar(id);
