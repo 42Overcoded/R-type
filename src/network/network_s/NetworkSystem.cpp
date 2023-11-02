@@ -191,7 +191,9 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
             network[i]->entityId = ++lastEntityId_;
             Packet<Flag> packet;
             packet.header.flag = Flag::ClientCreateEntity;
-            packet << (uint32_t)network[i]->entityId << (uint32_t)position[i]->x << (uint32_t)position[i]->y;
+            packet << (uint32_t)network[i]->entityId;
+            packet << position[i]->x;
+            packet << position[i]->y;
             std::cout << "create : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
             SendToAllClients(packet);
         }
@@ -209,7 +211,9 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg)
                 continue;
             Packet<Flag> packet;
             packet.header.flag = Flag::ClientUpdateEntity;
-            packet << (uint32_t)network[i]->entityId << (uint32_t)position[i]->x << (uint32_t)position[i]->y;
+            packet << (uint32_t)network[i]->entityId;
+            packet << (float)position[i]->x;
+            packet << (float)position[i]->y;
             std::cout << "update : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
             SendToAllClients(packet);
         }

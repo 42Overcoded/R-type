@@ -81,7 +81,7 @@ void NetworkSystem::manageInputs(registry &reg)
 {
     if (IsConnected())
     {
-        if (!Incoming().IsEmpty())
+        for (int count = 0; !Incoming().IsEmpty() && count < 10; count++)
         {
             Packet packet = Incoming().PopFront().packet;
             managePacketIn(reg, packet);
@@ -164,17 +164,17 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet
 
 void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet)
 {
-    std::cout << "Client create entity" << std::endl;
     SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
     SparseArray<Position> &positionArr        = reg.get_components<Position>();
     uint32_t entityId;
-    uint32_t x;
-    uint32_t y;
+    float x;
+    float y;
 
     packet >> y;
     packet >> x;
     packet >> entityId;
 
+    std::cout << "client create entity : " << entityId << " " << x << " " << y << std::endl;
     for (size_t i = 0; i < networkArr.size(); i++)
     {
         if (networkArr[i].has_value() && positionArr[i].has_value())
@@ -194,13 +194,14 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
     SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
     SparseArray<Position> &positionArr        = reg.get_components<Position>();
     uint32_t entityId;
-    uint32_t x;
-    uint32_t y;
+    float x;
+    float y;
 
     packet >> y;
     packet >> x;
     packet >> entityId;
 
+    std::cout << "Client update entity : " << entityId << " " << x << " " << y << std::endl;
     for (size_t i = 0; i < reg._entity_number; i++)
     {
         if (networkArr[i].has_value() && positionArr[i].has_value())

@@ -484,6 +484,8 @@ void gameEngine::death_animation()
 
 void gameEngine::init_game()
 {
+    if (_type == SERVER)
+        sleep(1);
     for (int i = 0; i < 2; i++)
         init_background(i);
     for (int i = 0; i < 10; i++)
