@@ -32,8 +32,7 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<Texture>(starship, Texture());
     _registry.add_component<Rect>(starship, Rect());
     _registry.add_component<NetworkComponent>(starship, NetworkComponent());
-    if (id == i) {
-        std::cout << "control" << std::endl;
+    if (id == i || _type == SERVER) {
         _registry.add_component<Control>(starship, Control());
     }
     auto &clock = _registry.get_components<Clock>();

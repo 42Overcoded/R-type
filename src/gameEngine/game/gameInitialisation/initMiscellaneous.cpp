@@ -492,19 +492,19 @@ void gameEngine::init_game()
     auto &network = _registry.get_components<NetworkComponent>();
     for (int i = 0; i < _registry._entity_number; i++) {
         if (gameState[i].has_value() && network[i].has_value()) {
-            id = network[i]->clientId - 1;
+            id = network[i]->clientId;
         }
     }
     auto &networkInfo = _registry.get_components<NetworkInfo>();
     int nbPlayer = 0;
     if (state.co == OFF) {
         nbPlayer = 1;
-        id = 0;
+        id = 1;
     } else {
         nbPlayer = 3;
     }
     std::cout << "Id : " << id << std::endl;
-    for (int i = 0; i != nbPlayer; i++) {
+    for (int i = 1; i != nbPlayer + 1; i++) {
         if (_type == SERVER) {
             id = 0;
         }
