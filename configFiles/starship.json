@@ -2,6 +2,9 @@
 {
     "starship": [
         {
+
+        },
+        {
             "tag": "starship",
             "textureTag": "starshipTexture",
             "health": 4,
