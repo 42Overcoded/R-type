@@ -499,11 +499,12 @@ void gameEngine::init_game()
     int nbPlayer = 0;
     if (state.co == OFF) {
         nbPlayer = 1;
+        id = 0;
     } else {
-        nbPlayer = 1;
+        nbPlayer = 3;
     }
     std::cout << "Id : " << id << std::endl;
-    for (int i = 0; i != 3; i++) {
+    for (int i = 0; i != nbPlayer; i++) {
         if (_type == SERVER) {
             id = 0;
         }
