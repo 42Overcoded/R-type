@@ -445,12 +445,15 @@ void gameEngine::death_animation()
                         networkInfo[0]->spawn.push_back(10);
                     }
                 }
+
+                if (_type == CLIENT) {
                 if (tag[i]->tag == "enemy 1")
                     sounds["soundExplosion"]->play();
                 if (tag[i]->tag == "enemy 2")
                     sounds["soundExplosion2"]->play();
                 if (tag[i]->tag == "enemy 3")
                     sounds["soundExplosion3"]->play();
+                }
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
                 continue;
