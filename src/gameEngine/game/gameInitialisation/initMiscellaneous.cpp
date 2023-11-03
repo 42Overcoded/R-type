@@ -6,6 +6,8 @@
 #include "../../../network/network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 #include <random>
+#include <chrono>
+#include <thread>
 
 void gameEngine::init_beambar(int id)
 {
@@ -485,7 +487,7 @@ void gameEngine::death_animation()
 void gameEngine::init_game()
 {
     if (_type == SERVER)
-        sleep(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     for (int i = 0; i < 2; i++)
         init_background(i);
     for (int i = 0; i < 10; i++)
