@@ -472,13 +472,13 @@ void gameEngine::death_animation()
                         networkInfo[0]->spawn.push_back(10);
                     }
                 }
-                if (tag[i]->tag == "enemy 1")
+                if (_type == CLIENT && tag[i]->tag == "enemy 1")
                     sounds["soundExplosion"]->play();
-                if (tag[i]->tag == "enemy 2" || tag[i]->tag == "tank")
+                if (_type == CLIENT && (tag[i]->tag == "enemy 2" || tag[i]->tag == "tank"))
                     sounds["soundExplosion2"]->play();
-                if (tag[i]->tag == "enemy 3" || tag[i]->tag == "enemy 4")
+                if (_type == CLIENT && (tag[i]->tag == "enemy 3" || tag[i]->tag == "enemy 4"))
                     sounds["soundExplosion3"]->play();
-                if (tag[i]->tag == "enemyBoss" || tag[i]->tag == "starshipBoss") {
+                if (_type == CLIENT && (tag[i]->tag == "enemyBoss" || tag[i]->tag == "starshipBoss")) {
                     musics["musicBoss"]->stop();
                     musics["musicGame"]->play();
                 }
@@ -504,8 +504,10 @@ void gameEngine::death_animation()
                 }
                 spawn_explosion(j);
                 _registry.kill_entity(entity_t(j));
-                musics["musicBoss"]->stop();
-                musics["musicGame"]->play();
+                if (_type == CLIENT) {
+                    musics["musicBoss"]->stop();
+                    musics["musicGame"]->play();
+                }
                 continue;
             }
         }
