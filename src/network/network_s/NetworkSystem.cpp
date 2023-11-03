@@ -46,6 +46,7 @@ void NetworkSystem::managePlayers(registry &reg) {
             addPlayerPacket.header.flag = Flag::ClientAddPlayer;
             addPlayerPacket << (uint32_t)client->GetId();
             SendToAllClients(addPlayerPacket);
+            SendConnectedPlayers(client);
             players_[client->GetId()] = true;
         }
         // else if (!client->IsConnected() && players_.find(client->GetId()) != players_.end()) {
@@ -75,6 +76,22 @@ void NetworkSystem::managePlayers(registry &reg) {
         {
             networkInfoArr[i]->playersNbr = players_.size();
         }
+    }
+}
+
+/**
+ * @brief Send to the client a ClientAddPlayer packet for each connected players
+ * 
+ * @param client the client to send the packet
+ */
+void NetworkSystem::SendConnectedPlayers(std::shared_ptr<Connection<Flag>> client)
+{
+    for (auto &player : players_)
+    {
+        Packet<Flag> addPlayerPacket;
+        addPlayerPacket.header.flag = Flag::ClientAddPlayer;
+        addPlayerPacket << (uint32_t)player.first;
+        SendToClient(addPlayerPacket, client);
     }
 }
 

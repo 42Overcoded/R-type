@@ -152,13 +152,19 @@ void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 {
-    std::cout << "Client add player" << std::endl;
+    uint32_t clientId;
+
+    packet >> clientId;
+    std::cout << "Client add player : " << clientId << std::endl;
     playersNbr_++;
 }
 
 void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet)
 {
-    std::cout << "Client remove player" << std::endl;
+    uint32_t clientId;
+
+    packet >> clientId;
+    std::cout << "Client remove player : " << clientId << std::endl;
     playersNbr_--;
 }
 

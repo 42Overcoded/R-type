@@ -28,6 +28,7 @@ public:
 
 private:
     void managePlayers(registry &reg);
+    void SendConnectedPlayers(std::shared_ptr<Connection<Flag>> client);
 
     void manageInputs(registry &reg);
     void managePacketIn(registry &reg, std::shared_ptr<Connection<Flag>> client, Packet<Flag>& msg);
