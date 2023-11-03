@@ -6,6 +6,7 @@
 #include "../../../network/network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 #include <random>
+#include "../../../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include <chrono>
 #include <thread>
 
@@ -150,6 +151,32 @@ void gameEngine::init_button(int i)
     position[texte]->y = menuJson["button"][i]["positiontext"]["y"];
     drawable[texte]->drawable = menuJson["button"][i]["drawable"];
     drawable[button]->drawable = menuJson["button"][i]["drawable"];
+}
+
+void gameEngine::init_cheatCode(void)
+{
+    std::ifstream file(PATH_TO_JSON + "cheatCode.json");
+
+    if (!file.is_open())
+        throw std::runtime_error("Can't open " + PATH_TO_JSON + "cheatCode.json");
+    nlohmann::json cheatCodeJson;
+    file >> cheatCodeJson;
+    file.close();
+
+    for (int i = 0; i < cheatCodeJson["cheatCode"].size(); i++) {
+        if (cheatCodeJson["cheatCode"][i] == "up")
+            cheatCode.push_back(UP);
+        if (cheatCodeJson["cheatCode"][i] == "down")
+            cheatCode.push_back(DOWN);
+        if (cheatCodeJson["cheatCode"][i] == "left")
+            cheatCode.push_back(LEFT);
+        if (cheatCodeJson["cheatCode"][i] == "right")
+            cheatCode.push_back(RIGHT);
+        if (cheatCodeJson["cheatCode"][i] == "space")
+            cheatCode.push_back(SPACE);
+        if (cheatCodeJson["cheatCode"][i] == "a")
+            cheatCode.push_back(A);
+    }
 }
 
 void gameEngine::init_background(int i) {
@@ -447,14 +474,15 @@ void gameEngine::death_animation()
                         networkInfo[0]->spawn.push_back(10);
                     }
                 }
-
-                if (_type == CLIENT) {
-                    if (tag[i]->tag == "enemy 1")
-                        sounds["soundExplosion"]->play();
-                    if (tag[i]->tag == "enemy 2")
-                        sounds["soundExplosion2"]->play();
-                    if (tag[i]->tag == "enemy 3")
-                        sounds["soundExplosion3"]->play();
+                if (_type == CLIENT && tag[i]->tag == "enemy 1")
+                    sounds["soundExplosion"]->play();
+                if (_type == CLIENT && (tag[i]->tag == "enemy 2" || tag[i]->tag == "tank"))
+                    sounds["soundExplosion2"]->play();
+                if (_type == CLIENT && (tag[i]->tag == "enemy 3" || tag[i]->tag == "enemy 4"))
+                    sounds["soundExplosion3"]->play();
+                if (_type == CLIENT && (tag[i]->tag == "enemyBoss" || tag[i]->tag == "starshipBoss")) {
+                    musics["musicBoss"]->stop();
+                    musics["musicGame"]->play();
                 }
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
@@ -478,6 +506,10 @@ void gameEngine::death_animation()
                 }
                 spawn_explosion(j);
                 _registry.kill_entity(entity_t(j));
+                if (_type == CLIENT) {
+                    musics["musicBoss"]->stop();
+                    musics["musicGame"]->play();
+                }
                 continue;
             }
         }

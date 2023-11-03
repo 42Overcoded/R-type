@@ -88,7 +88,6 @@ void gameEngine::spawn_ally_bullet(int i)
                 rect[bullet]->height = starshipJson["bullet"]["rect"][0]["height"];
                 rect[bullet]->left = starshipJson["bullet"]["rect"][0]["left"];
                 rect[bullet]->top = starshipJson["bullet"]["rect"][0]["top"];
-
                 if (_type == CLIENT)
                     sounds["soundShoot"]->play();
                 if (_health[i]->health > 30 && _health[i]->health < 85) {

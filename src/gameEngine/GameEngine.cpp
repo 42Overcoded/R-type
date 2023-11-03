@@ -297,12 +297,13 @@ void gameEngine::network_manager()
 
 void gameEngine::launch_game()
 {
-
+    init_cheatCode();
+    load_musics_and_sounds();
     if (_type == CLIENT)
     {
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
-        _system.load_texture(_registry);
+        _system.load_texture(_registry, cheatCode);
         musics["musicMenu"]->play();
     }
     register_component_to_game();
@@ -467,4 +468,76 @@ GameStateComponent &gameEngine::get_game_state()
             return gameStateArray[i].value();
     }
     throw std::runtime_error("No game state found");
+}
+
+void gameEngine::load_musics_and_sounds(void)
+{
+        musics.insert(std::make_pair("musicMenu", nullptr));
+        musics.insert(std::make_pair("musicGame", nullptr));
+        musics.insert(std::make_pair("musicScore", nullptr));
+        musics.insert(std::make_pair("musicBoss", nullptr));
+    
+        soundBuffers.insert(std::make_pair("soundShoot", nullptr));
+        soundBuffers.insert(std::make_pair("soundPowerShoot", nullptr));
+        soundBuffers.insert(std::make_pair("soundExplosion", nullptr));
+        soundBuffers.insert(std::make_pair("soundExplosion2", nullptr));
+        soundBuffers.insert(std::make_pair("soundExplosion3", nullptr));
+    
+        sounds.insert(std::make_pair("soundShoot", nullptr));
+        sounds.insert(std::make_pair("soundPowerShoot", nullptr));
+        sounds.insert(std::make_pair("soundExplosion", nullptr));
+        sounds.insert(std::make_pair("soundExplosion2", nullptr));
+        sounds.insert(std::make_pair("soundExplosion3", nullptr));
+
+    if (_type == CLIENT) {
+        musics.at("musicMenu") = std::make_shared<sf::Music>();
+        musics.at("musicGame") = std::make_shared<sf::Music>();
+        musics.at("musicScore") = std::make_shared<sf::Music>();
+        musics.at("musicBoss") = std::make_shared<sf::Music>();
+    
+        soundBuffers.at("soundShoot") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("soundPowerShoot") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("soundExplosion") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("soundExplosion2") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("soundExplosion3") = std::make_shared<sf::SoundBuffer>();
+    
+        sounds.at("soundShoot") = std::make_shared<sf::Sound>();
+        sounds.at("soundPowerShoot") = std::make_shared<sf::Sound>();
+        sounds.at("soundExplosion") = std::make_shared<sf::Sound>();
+        sounds.at("soundExplosion2") = std::make_shared<sf::Sound>();
+        sounds.at("soundExplosion3") = std::make_shared<sf::Sound>();
+    
+        musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
+        musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
+        musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
+        musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
+    
+        soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
+        soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
+        soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
+        soundBuffers["soundExplosion2"]->loadFromFile("assets/musicAndSound/roblox rocket explosion sound.mp3");
+        soundBuffers["soundExplosion3"]->loadFromFile("assets/musicAndSound/Geometry Dash Death Sound Effect.mp3");
+
+        sounds["soundShoot"]->setBuffer(*soundBuffers["soundShoot"]);
+        sounds["soundPowerShoot"]->setBuffer(*soundBuffers["soundPowerShoot"]);
+        sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
+        sounds["soundExplosion2"]->setBuffer(*soundBuffers["soundExplosion2"]);
+        sounds["soundExplosion3"]->setBuffer(*soundBuffers["soundExplosion3"]);
+    
+        musics["musicMenu"]->setVolume(30);
+        musics["musicGame"]->setVolume(30);
+        musics["musicScore"]->setVolume(30);
+        musics["musicBoss"]->setVolume(30);
+    
+        sounds["soundShoot"]->setVolume(60);
+        sounds["soundPowerShoot"]->setVolume(60);
+        sounds["soundExplosion"]->setVolume(60);
+        sounds["soundExplosion2"]->setVolume(50);
+        sounds["soundExplosion3"]->setVolume(50);
+    
+        musics["musicMenu"]->setLoop(true);
+        musics["musicScore"]->setLoop(false);
+        musics["musicGame"]->setLoop(true);
+        musics["musicBoss"]->setLoop(true);
+    }
 }
