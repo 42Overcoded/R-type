@@ -51,6 +51,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
+    ../gameEngine/game/systems/GameSystems.hpp
     ../gameEngine/GameEngine.hpp
     ../gameEngine/Game.hpp
     ../network/Connection.hpp
@@ -79,6 +80,7 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/miscellaneous.cpp
     ../gameEngine/game/gameLogic/movements.cpp
     ../gameEngine/game/gameLogic/generateLevel.cpp
+    ../gameEngine/game/systems/GameSystems.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp

@@ -52,6 +52,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/ServerSystem.hpp
+    ../gameEngine/game/systems/GameSystems.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
     ../network/INetworkServer.hpp
@@ -76,6 +77,7 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/generateLevel.cpp
     ../gameEngine/game/gameLogic/shoot.cpp
     ../gameEngine/game/gameLogic/movements.cpp
+    ../gameEngine/game/systems/GameSystems.cpp
     ../gameEngine/game/gameInitialisation/initBullets.cpp
     ../gameEngine/game/gameInitialisation/initEnemy.cpp
     ../gameEngine/game/gameInitialisation/initMiscellaneous.cpp

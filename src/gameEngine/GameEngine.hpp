@@ -16,6 +16,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
+#include "game/systems/GameSystems.hpp"
 #include "../network_c/NetworkSystem.hpp"
 #include "../network_s/NetworkSystem.hpp"
 #include <unordered_map>
@@ -206,7 +207,7 @@ class gameEngine {
         std::unordered_map<std::string, std::shared_ptr<sf::Sound>> sounds;
         bool is_frozen();
         void Kill_entity(entity_t entity);
-  
+
     protected:
     private:
         float wave;
@@ -219,13 +220,11 @@ class gameEngine {
         sf::Clock clock;
         sf::Clock networkClock;
         sf::RenderWindow _window;
-        SfmlSystem _system;
+        SfmlSystem sfmlSystems_;
+        GameSystem gameSystems_;
         std::unique_ptr<Network::NetworkSystem> _networkSystem;
         Level_info _level_info;
-
         std::vector<keyCommands> cheatCode;
-
-        //Network::NetworkSystem _networkSystem;
         registry _registry;
         unsigned int port_;
         std::string ip_;
