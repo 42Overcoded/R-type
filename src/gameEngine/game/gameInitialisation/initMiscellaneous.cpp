@@ -364,7 +364,7 @@ void gameEngine::death_animation()
                 int found = 0;
                 for (size_t j = 0; j < _level_info.mobs_alive.size(); j++) {
                     if (_level_info.mobs_alive[j].first == i) {
-                        std::cout << "This guy went out of the screen : " << _level_info.mobs_alive[j].second.id << " : " << _level_info.mobs_alive[j].second.pattern << " : " << _level_info.mobs_alive[j].second.x << " : " << _level_info.mobs_alive[j].second.y << std::endl;
+                        std::cout << "This guy went out of the screen : entity : " << j << " " << _level_info.mobs_alive[j].second.id << " : " << _level_info.mobs_alive[j].second.pattern << " : " << _level_info.mobs_alive[j].second.x << " : " << _level_info.mobs_alive[j].second.y << std::endl;
                         _level_info.mobs_alive.erase(_level_info.mobs_alive.begin() + j);
                         found = 1;
                         break;
@@ -397,6 +397,18 @@ void gameEngine::death_animation()
                     continue;
                 if (state[i]->state >= 6) {
                     _registry.kill_entity(entity_t(i));
+                    int found = 0;
+                    for (size_t j = 0; j < _level_info.mobs_alive.size(); j++) {
+                        if (_level_info.mobs_alive[j].first == i) {
+                            std::cout << "This guy blown up : entity :" << i << " " << _level_info.mobs_alive[j].second.id << " : " << _level_info.mobs_alive[j].second.pattern << " : " << _level_info.mobs_alive[j].second.x << " : " << _level_info.mobs_alive[j].second.y << std::endl;
+                            _level_info.mobs_alive.erase(_level_info.mobs_alive.begin() + j);
+                            found = 1;
+                            break;
+                        }
+                    }
+                    if (found == 0) {
+                        std::cout << "Can't find entity blowing up :" << i << " in _level_info.mobs_alive" << std::endl;
+                    }
                     continue;
                 }
                 state[i]->state += 1;
@@ -469,6 +481,7 @@ void gameEngine::death_animation()
                 int found = 0;
                 for (size_t j = 0; j < _level_info.mobs_alive.size(); j++) {
                     if (_level_info.mobs_alive[j].first == i) {
+                        std::cout << "This guy got killed : entity :" << i << " " << _level_info.mobs_alive[j].second.id << " : " << _level_info.mobs_alive[j].second.pattern << " : " << _level_info.mobs_alive[j].second.x << " : " << _level_info.mobs_alive[j].second.y << std::endl;
                         _level_info.mobs_alive.erase(_level_info.mobs_alive.begin() + j);
                         found = 1;
                         break;
