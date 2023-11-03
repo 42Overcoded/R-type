@@ -27,7 +27,7 @@ void gameEngine::shoot_system(sf::Time &elapsed)
         }
         if (tag[i]->tag == "bullet") {
             if (position[i]->x > 1850) {
-                _registry.kill_entity(entity_t(i));
+                Kill_entity(entity_t(i));
                 continue;
             }
         }
