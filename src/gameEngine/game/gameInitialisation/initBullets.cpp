@@ -90,7 +90,8 @@ void gameEngine::spawn_ally_bullet(int i)
                 rect[bullet]->height = starshipJson["bullet"]["rect"][0]["height"];
                 rect[bullet]->left = starshipJson["bullet"]["rect"][0]["left"];
                 rect[bullet]->top = starshipJson["bullet"]["rect"][0]["top"];
-                sounds["soundShoot"]->play();
+                if (_type == CLIENT)
+                    sounds["soundShoot"]->play();
                 if (_health[i]->health > 30 && _health[i]->health < 85) {
                     state[bullet]->state = 1;
                     hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][1]["width"];
@@ -108,7 +109,8 @@ void gameEngine::spawn_ally_bullet(int i)
                     rect[bullet]->height = starshipJson["bullet"]["rect"][2]["height"];
                     rect[bullet]->left = starshipJson["bullet"]["rect"][2]["left"];
                     rect[bullet]->top = starshipJson["bullet"]["rect"][2]["top"];
-                    sounds["soundPowerShoot"]->play();
+                    if (_type == CLIENT)
+                        sounds["soundPowerShoot"]->play();
                 }
                 _health[i]->health = 0;
                 rect[i]->width = rect[i]->baseWidth;
