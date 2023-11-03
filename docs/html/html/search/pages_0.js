@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['components_20documentation_173',['Components documentation',['../md_ecs_components.html',1,'']]]
+  ['bosses_180',['bosses',['../md_bosses.html',1,'']]]
 ];

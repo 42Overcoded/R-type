@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['clock_93',['Clock',['../structClock.html',1,'']]],
-  ['control_94',['Control',['../structControl.html',1,'']]]
+  ['clock_100',['Clock',['../structClock.html',1,'']]],
+  ['control_101',['Control',['../structControl.html',1,'']]]
 ];
