@@ -57,8 +57,21 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
     int MAGIC_VALUE = 50; //The higher the value, the faster the enemies spawn
     const int boss_worm_id = 7;
 
-
     if (_elapsed.asSeconds() > 0.1) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {   //Debug and display the content of _level_info)
+        std::cout << "Level progress: " << _level_info.level_progress << std::endl;
+        std::cout << "Mob alive: " << _level_info.mob_alive << std::endl;
+        std::cout << "Is boss alive: " << _level_info.is_boss_alive << std::endl;
+        std::cout << "Generated size: " << _level_info._generated.size() << std::endl;
+        std::cout << "Generated content: " << std::endl;
+        for (auto &i : _level_info._generated) {
+            std::cout << "x: " << i.x << " y: " << i.y << " id: " << i.id << " pattern: " << i.pattern << " is_boss: " << i.is_boss << std::endl;
+        }
+        std::cout << "mob_alive" << std::endl;
+        for (auto &i : _level_info.mobs_alive) {
+            std::cout << "entity: " << i.first << " id: " << i.second.id << " pattern: " << i.second.pattern << "x: " << i.second.x << " y: " << i.second.y << std::endl;
+        }
+    }
         if (is_frozen()) {
             _clock.restart();
             return;
@@ -73,7 +86,8 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     GameStateComponent &gameState = get_game_state();
                     auto &networkInfo = _registry.get_components<NetworkInfo>();
                     if (_type == SERVER || gameState.co == OFF) {
-                            entity_t enemy = init_worm(7);
+                        entity_t enemy = init_worm(7);
+                        _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                         networkInfo[0]->spawn.push_back(8);
                     }
                     _level_info._generated.erase(_level_info._generated.begin());
@@ -84,6 +98,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     auto &networkInfo = _registry.get_components<NetworkInfo>();
                     if (_type == SERVER || gameState.co == OFF) {
                         entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                        _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                         networkInfo[0]->arg1.push_back(_level_info._generated[0].id);
                         networkInfo[0]->arg2.push_back(_level_info._generated[0].pattern);
                         networkInfo[0]->spawn.push_back(11);
@@ -103,6 +118,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                 auto &networkInfo = _registry.get_components<NetworkInfo>();
                 if (_type == SERVER || gameState.co == OFF) {
                     entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                    _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                     networkInfo[0]->arg1.push_back(_level_info._generated[0].id);
                     networkInfo[0]->arg2.push_back(_level_info._generated[0].pattern);
                     networkInfo[0]->spawn.push_back(11);
