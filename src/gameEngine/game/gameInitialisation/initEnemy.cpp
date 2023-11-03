@@ -109,8 +109,10 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     }
 
     if (tag[enemy]->tag ==  "enemyBoss" || tag[enemy]->tag == "wormHead" || tag[enemy]->tag == "starshipBoss") {
-        musics["musicGame"]->pause();
-        musics["musicBoss"]->play();
+        if (_type == CLIENT) {
+            musics["musicGame"]->pause();
+            musics["musicBoss"]->play();
+        }
     }
 
     return enemy;
