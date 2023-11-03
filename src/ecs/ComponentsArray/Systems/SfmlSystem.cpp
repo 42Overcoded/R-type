@@ -25,7 +25,7 @@
 #include <cmath>
 #include <vector>
 
-void SfmlSystem::load_texture(registry &r)
+void SfmlSystem::load_texture(registry &r, std::vector<keyCommands> cheatCode)
 {
     sf::Texture bullet;
     sf::Texture starship;
@@ -156,6 +156,12 @@ void SfmlSystem::load_texture(registry &r)
     textures["starparallaxTexture"] = star_parallax;
     fonts["scoreFont"] = font;
     fonts["menuFont"] = font;
+
+    isCheatCodeEntered = false;
+    _cheatCode = cheatCode;
+    lastKey = UNKNOWN;
+    for (int i = 0; i < 15; i++)
+        saveHitboxSpaceships.push_back(std::make_pair(0, 0));
 }
 
 void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
@@ -344,6 +350,23 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
     }
 }
 
+void SfmlSystem::addKeyToKeyHistory(keyCommands keyCommand)
+{
+    if (_cheatCode.size() > 0) {
+        if (keyHistory.size() >= _cheatCode.size()) {
+            for (int i = 0; i < keyHistory.size() - 1; i++) {
+                keyHistory[i] = keyHistory[i + 1];
+            }
+            keyHistory.pop_back();
+        }
+        keyHistory.push_back(keyCommand);
+        lastKey = keyCommand;
+
+        if (keyHistory == _cheatCode)
+            isCheatCodeEntered = true;
+    }
+}
+
 void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
 {
     auto &control = r.get_components<Control>();
@@ -357,6 +380,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
     auto &tag = r.get_components<Tag>();
     auto &clock = r.get_components<Clock>();
     auto &drawable = r.get_components<Drawable>();
+    auto &player = r.get_components<Player>();
     auto &gameStateArray = r.get_components<GameStateComponent>();
     size_t gameStateIndex = 0;
 
@@ -378,19 +402,50 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 control[i]->up = true;
+                if (lastKey != UP)
+                    addKeyToKeyHistory(UP);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                 control[i]->down = true;
+                if (lastKey != DOWN)
+                    addKeyToKeyHistory(DOWN);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
                 control[i]->left = true;
+                if (lastKey != LEFT)
+                    addKeyToKeyHistory(LEFT);
             }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
                 control[i]->right = true;
+                if (lastKey != RIGHT)
+                    addKeyToKeyHistory(RIGHT);
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
                 control[i]->shoot = true;
+                if (lastKey != SPACE)
+                    addKeyToKeyHistory(SPACE);
             }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+                control[i]->shoot = true;
+                if (lastKey != A)
+                    addKeyToKeyHistory(A);
+            }
+            if (control[i]->up == false && control[i]->down == false && 
+                control[i]->left == false && control[i]->right == false && 
+                control[i]->shoot == false)
+                lastKey = UNKNOWN;
+        }
+        if (isCheatCodeEntered && player[i] != std::nullopt) {
+            if (hitbox[i]->width >= 0) {
+                saveHitboxSpaceships[i].first = hitbox[i]->width;
+                saveHitboxSpaceships[i].second = hitbox[i]->height;
+                hitbox[i]->width = -10000;
+                hitbox[i]->height = -10000;
+            } else {
+                hitbox[i]->width = saveHitboxSpaceships[i].first;
+                hitbox[i]->height = saveHitboxSpaceships[i].second;
+            }
+            isCheatCodeEntered = false;
         }
     }
     for (size_t i = 0; i < r._entity_number; i++) {
@@ -415,7 +470,7 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
                 }
             }
         }
-    }
+    }   
 }
 
 void SfmlSystem::set_color(registry &r)

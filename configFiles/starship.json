@@ -1,6 +1,7 @@
 
 {
     "starship": [
+        {},
         {
             "tag": "starship",
             "textureTag": "starshipTexture",

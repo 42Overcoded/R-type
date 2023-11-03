@@ -14,6 +14,9 @@
 #include "SFML/System/Clock.hpp"
 #include "../../../gameEngine/Game.hpp"
 
+
+enum keyCommands {UNKNOWN, UP, DOWN, LEFT, RIGHT, SPACE, A};
+
 class SfmlSystem {
     public:
         SfmlSystem() = default;
@@ -89,15 +92,21 @@ class SfmlSystem {
          *
          * @param r
          */
-        void load_texture(registry &r);
+        void load_texture(registry &r, std::vector<keyCommands> cheatCode);
         void set_color(registry &r);
         void set_orientation(registry &r);
         void color_system(registry &r);
+        void addKeyToKeyHistory(keyCommands keyCommand);
         ~SfmlSystem() = default;
     protected:
     private:
         std::unordered_map<std::string, sf::Font> fonts;
         std::unordered_map<std::string, sf::Texture> textures;
+        std::vector<keyCommands> keyHistory;
+        std::vector<keyCommands> _cheatCode;
+        keyCommands lastKey;
+        bool isCheatCodeEntered;
+        std::vector<std::pair<int, int>> saveHitboxSpaceships;
 };
 
 #endif /* !SYSTEM_HPP_ */

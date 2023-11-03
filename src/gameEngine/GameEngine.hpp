@@ -22,6 +22,7 @@
 #include  <iostream>
 #include <memory>
 
+
 const int NUMBERS_OF_LEVELS = 3;
 
 class gameEngine {
@@ -187,6 +188,8 @@ class gameEngine {
          * 
          */
         void init_button(int i);
+        void init_cheatCode(void);
+        void load_musics_and_sounds(void);
         void init_game();
         void life_handler();
         entity_t init_worm(int i);
@@ -219,6 +222,8 @@ class gameEngine {
         SfmlSystem _system;
         std::unique_ptr<Network::NetworkSystem> _networkSystem;
         Level_info _level_info;
+
+        std::vector<keyCommands> cheatCode;
 
         //Network::NetworkSystem _networkSystem;
         registry _registry;
