@@ -87,11 +87,14 @@ void gameEngine::load_shoot(sf::Time &elapsed)
 
 void gameEngine::decharge_shoot(sf::Time &elapsed)
 {
+
+    GameStateComponent &gameState = get_game_state();
     auto &_tag = _registry.get_components<Tag>();
     auto &control = _registry.get_components<Control>();
     auto &clock = _registry.get_components<Clock>();
     auto &drawable = _registry.get_components<Drawable>();
     auto &health = _registry.get_components<Health>();
+    auto &networkInfo = _registry.get_components<NetworkInfo>();
 
     bool is_return = false;
     for (size_t i = 0; i < _registry._entity_number; i++) {
@@ -117,7 +120,12 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
         if (_tag[i]->tag == "starship" && control[i].has_value()) {
             if (clock[i]->_time.asSeconds() < 0.15)
                 return;
-            spawn_ally_bullet(i);
+            GameStateComponent &gameState = get_game_state();
+            if (_type == SERVER || gameState.co == OFF) {
+                spawn_ally_bullet(i);
+                networkInfo[0]->arg1.push_back(i);
+                networkInfo[0]->spawn.push_back(1);
+            }
             clock[i]->_clock.restart();
         }
     }
@@ -143,7 +151,13 @@ void gameEngine::shoot_enemy() {
                         continue;
                     }
                     clock[i]->_clock.restart();
-                    spawn_bullet(i, 0);
+                    GameStateComponent &gameState = get_game_state();
+                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    if (_type == SERVER || gameState.co == OFF) {
+                            spawn_bullet(i, 0);
+                        networkInfo[0]->arg1.push_back(i);
+                        networkInfo[0]->spawn.push_back(4);
+                    }
                 }
             }
             if (tag[i]->tag == "tank") {
@@ -153,7 +167,13 @@ void gameEngine::shoot_enemy() {
                         continue;
                     }
                     clock[i]->_clock.restart();
-                    spawn_bullet(i, 4);
+                    GameStateComponent &gameState = get_game_state();
+                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    if (_type == SERVER || gameState.co == OFF) {
+                            spawn_bullet(i, 4);
+                        networkInfo[0]->arg1.push_back(i);
+                        networkInfo[0]->spawn.push_back(5);
+                    }
                 }
             }
             if (tag[i]->tag == "enemy 4") {
@@ -163,7 +183,13 @@ void gameEngine::shoot_enemy() {
                         continue;
                     }
                     clock[i]->_clock.restart();
-                    spawn_bullet(i, 1);
+                    GameStateComponent &gameState = get_game_state();
+                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    if (_type == SERVER || gameState.co == OFF) {
+                            spawn_bullet(i, 1);
+                        networkInfo[0]->arg1.push_back(i);
+                        networkInfo[0]->spawn.push_back(6);
+                    }
                 }
             }
             if (tag[i]->tag == "wormHead") {
@@ -173,7 +199,13 @@ void gameEngine::shoot_enemy() {
                         continue;
                     }
                     clock[i]->__clock.restart();
-                    spawn_boss_bullet(i, 5);
+                    GameStateComponent &gameState = get_game_state();
+                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    if (_type == SERVER || gameState.co == OFF) {
+                            spawn_boss_bullet(i, 5);
+                        networkInfo[0]->arg1.push_back(i);
+                        networkInfo[0]->spawn.push_back(2);
+                    }
                 }
             }
         }
@@ -191,7 +223,13 @@ void gameEngine::shoot_enemy() {
                 }
                 state[i]->index += 1;
                 clock[i]->_clock.restart();
-                spawn_boss_bullet(i, 2);
+                GameStateComponent &gameState = get_game_state();
+                auto &networkInfo = _registry.get_components<NetworkInfo>();
+                if (_type == SERVER || gameState.co == OFF) {
+                        spawn_boss_bullet(i, 2);
+                    networkInfo[0]->arg1.push_back(i);
+                    networkInfo[0]->spawn.push_back(3);
+                }
             }
         }
         if (tag[i]->tag=="starshipBoss") {
@@ -201,7 +239,13 @@ void gameEngine::shoot_enemy() {
                         continue;
                     }
                     clock[i]->_clock.restart();
-                    spawn_bullet(i, 6);
+                    GameStateComponent &gameState = get_game_state();
+                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    if (_type == SERVER || gameState.co == OFF) {
+                            spawn_bullet(i, 6);
+                        networkInfo[0]->arg1.push_back(i);
+                        networkInfo[0]->spawn.push_back(7);
+                    }
                 }
         }
         if (searchingHead[i].has_value()) {

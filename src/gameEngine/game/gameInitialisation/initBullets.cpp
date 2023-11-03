@@ -53,6 +53,8 @@ void gameEngine::spawn_ally_bullet(int i)
         auto &scale = _registry.get_components<Scale>();
         auto &control = _registry.get_components<Control>();
 
+
+        //state[bullet]->id = id;    put the id of the starship who shooted this
         _drawable[bullet]->drawable = true;
         tag[bullet]->tag = starshipJson["bullet"]["tag"];
         texture[bullet]->textureTag = starshipJson["bullet"]["textureTag"];
@@ -76,11 +78,11 @@ void gameEngine::spawn_ally_bullet(int i)
             if (!tag[i].has_value()) {
                 continue;
             }
-            if (tag[i]->tag == "starship" && control[i].has_value()) {
+            if (tag[i]->tag == "starship" && state[i]->id == state[bullet]->id) {
                 position[bullet]->x = position[i]->x + 80;
                 position[bullet]->y = position[i]->y;
             }
-            if (tag[i]->tag == "fullbeambar") {
+            if (tag[i]->tag == "fullbeambar" && state[i]->id == state[bullet]->id) {
                 state[bullet]->state = 0;
                 hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][0]["width"];
                 hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][0]["height"];
@@ -89,7 +91,7 @@ void gameEngine::spawn_ally_bullet(int i)
                 rect[bullet]->left = starshipJson["bullet"]["rect"][0]["left"];
                 rect[bullet]->top = starshipJson["bullet"]["rect"][0]["top"];
                 sounds["soundShoot"]->play();
-            if (_health[i]->health > 30 && _health[i]->health < 85) {
+                if (_health[i]->health > 30 && _health[i]->health < 85) {
                     state[bullet]->state = 1;
                     hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][1]["width"];
                     hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][1]["height"];
@@ -107,7 +109,7 @@ void gameEngine::spawn_ally_bullet(int i)
                     rect[bullet]->left = starshipJson["bullet"]["rect"][2]["left"];
                     rect[bullet]->top = starshipJson["bullet"]["rect"][2]["top"];
                     sounds["soundPowerShoot"]->play();
-            }
+                }
                 _health[i]->health = 0;
                 rect[i]->width = rect[i]->baseWidth;
             }

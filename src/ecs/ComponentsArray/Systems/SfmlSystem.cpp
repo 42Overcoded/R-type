@@ -59,6 +59,7 @@ void SfmlSystem::load_texture(registry &r, std::vector<keyCommands> cheatCode)
     sf::Texture wormBullet;
     sf::Texture starshipBoss;
     sf::Texture starshipBossBullet;
+    sf::Texture star_parallax;
 
     if (!starshipBossBullet.loadFromFile(PATH_TO_ASSETS + "enemyBlueBullet.png"))
         throw std::runtime_error("Cannot load starship boss bullet texture");
@@ -120,6 +121,8 @@ void SfmlSystem::load_texture(registry &r, std::vector<keyCommands> cheatCode)
         throw std::runtime_error("Cannot load beambar texture");
     if (!explosion.loadFromFile(PATH_TO_ASSETS + "explosion.png"))
         throw std::runtime_error("Cannot load explosion texture");
+    if (!star_parallax.loadFromFile(PATH_TO_ASSETS + "star_parallax.png"))
+        throw std::runtime_error("Cannot load star parallax texture");
 
     textures["starshipBossBulletTexture"] = starshipBossBullet;
     textures["starshipBossTexture"] = starshipBoss;
@@ -150,6 +153,7 @@ void SfmlSystem::load_texture(registry &r, std::vector<keyCommands> cheatCode)
     textures["enemyBulletTexture"] = enemyBullet;
     textures["enemyBlueBulletTexture"] = enemyBlueBullet;
     textures["enemyBossBulletTexture"] = enemyBossBullet;
+    textures["starparallaxTexture"] = star_parallax;
     fonts["scoreFont"] = font;
     fonts["menuFont"] = font;
 
@@ -282,6 +286,12 @@ void SfmlSystem::velocity_system(registry &r, sf::Time &elapsed)
         if (tag[i]->tag == "background") {
             if (position[i]->x <= -1920) {
                 position[i]->x = 1920;
+            }
+        }
+        if (tag[i]->tag == "star_parallax") {
+            if (position[i]->x <= -2500) {
+                position[i]->x = 2500;
+                position[i]->y = rand() % 1080;
             }
         }
         if (tag[i]->tag == "enemy 4") {
@@ -500,6 +510,8 @@ void SfmlSystem::color_system(registry &r)
                 if (!tag[j].has_value())
                     continue;
                 if (tag[j]->tag == "starship") {
+                    if (state[j]->id != state[i]->id)
+                        continue;
                     color[j]->r = 150;
                     color[j]->g = 150;
                     color[j]->b = 255;
@@ -565,6 +577,7 @@ void SfmlSystem::hitbox_system(registry &r)
                 if (tag[j]->tag == "starship") {
                     if (position[i]->x + hitbox[i]->width > position[j]->x && position[i]->x < position[j]->x + hitbox[j]->width && position[i]->y + hitbox[i]->height > position[j]->y && position[i]->y < position[j]->y + hitbox[j]->height) {
                         drawable[i]->drawable = false;
+                        state[i]->id = state[j]->id;
                         clock[i]->clock.restart();
                         if (tag[i]->tag == "lifeBoost") {
                             if (health[j]->health < 4)

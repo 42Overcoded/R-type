@@ -87,7 +87,7 @@ private:
                 if (clients_ == nullptr)
                     throw std::runtime_error("clients_ is null");
                 std::cout << "New client created" << std::endl;
-                newClient->ConnectToClient(remoteEndpoint_, id_++);
+                newClient->ConnectToClient(remoteEndpoint_, ++id_);
                 clients_->push_back(newClient);
             }
             GetPacket();
@@ -149,10 +149,12 @@ public:
         {
             client->SendPacket(packet);
         }
-        else
+        else if (client && !client->IsConnected())
         {
+            std::cout << "client [" << client->GetId() << "] is not connected" << std::endl;
             OnClientDisconnect(client);
             clients_->erase(std::remove(clients_->begin(), clients_->end(), client), clients_->end());
+            std::cout << "client ownership : " << client.use_count() << std::endl;
         }
     };
 

@@ -73,10 +73,16 @@ class gameEngine {
          */
         void init_background(int i);
         /**
+         * @brief init the background to make parallax
+         * 
+         * @param i 
+         */
+        void init_star_parallax(int i);
+        /**
          * @brief init the beambar
          * 
          */
-        void init_beambar();
+        void init_beambar(int i);
         /**
          * @brief game loop of the game and core of the game
          * 
@@ -92,7 +98,7 @@ class gameEngine {
          * 
          * @param i 
          */
-        void init_life(int i);
+        void init_life(int i, int id);
         /**
          * @brief init the score displayer
          * 
@@ -104,21 +110,11 @@ class gameEngine {
          * @param elapsed 
          * @param wave 
          */
-        void spawn_wave(sf::Time &elapsed, float &wave);
         /**
          * @brief init the load shoot animation
          * 
          */
-        void init_load_shoot();
-        /**
-         * @brief spawn the mobs the parametters given
-         * 
-         * @param n1 
-         * @param n2 
-         * @param n3 
-         * @param n4 
-         */
-        void spawn_mobs(int n1, int n2, int n3, int n4);
+        void init_load_shoot(int i);
         /**
          * @brief spawn enemy bullet
          * 
@@ -197,7 +193,8 @@ class gameEngine {
         void init_game();
         void life_handler();
         entity_t init_worm(int i);
-        void spawn_power_up(int i);
+        void spawn_power_up(int i, int j);
+        void network_manager();
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
         std::string get_this_str(std::string tag, std::string default_str);
         std::vector<Generated> generateMap(int length, int difficulty, std::string seed_str);

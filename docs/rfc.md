@@ -38,6 +38,7 @@ Distribution of this memo is unlimited.
     - [ClientDestroyEntity](#clientdestroyentity)
     - [ClientStartGame](#clientstartgame)
     - [ClientEndGame](#clientendgame)
+  - [Connection](#connection)
 
 ## Introduction
 
@@ -150,6 +151,8 @@ The following commands are available in the GTP protocol.
 - Size : 0x00
 - Payload : None
 
+- Response : ClientSendPing
+
 Description : This command is used to check if the server is still alive.
 
 ### ServerConnect
@@ -163,13 +166,17 @@ Description : This command is used to check if the server is still alive.
 - Response : ClientAssignID
 
 Description : This command is used to connect to the server.
+When the server accept the connection, it will open a new connection on a separate port.
+Then it will send a ClientAccepted command to confirm the connection.
+Then it will send a ClientAssignID command to assign an ID to the client.
+When the server deny the connection, it will send a ClientDenied command.
 
 ### ServerUpdateControls
 
 - Origin : Client
 - Flag : 0x02
 - Size : 0x05 (bool * 5)
-- Payload : [bool, bool, bool, bool, bool]
+- Payload : [bool, bool, bool, bool, bool] (Up, Down, Left, Right, Shoot)
 
 Description : This command is used to update the controls of the player.
 
@@ -178,7 +185,7 @@ Description : This command is used to update the controls of the player.
 - Origin : Client
 - Flag : 0x03
 - Size : 0x04 (uint_32_t)
-- Payload : [uint32_t]
+- Payload : [uint32_t] (Game Type)
 
 Description : This command is used to start the game. The payload describe the type of game.
 
@@ -190,6 +197,7 @@ Description : This command is used to start the game. The payload describe the t
 - Payload : None
 
 Description : This command is used to confirm the connection to the server.
+It is usually followed by a ClientAssignID command.
 
 ### ClientDenied
 
@@ -205,7 +213,7 @@ Description : This command is used to deny the connection to the server.
 - Origin : Server
 - Flag : 0x06
 - Size : 0x04 (uint32_t)
-- Payload : [uint32_t]
+- Payload : [uint32_t] (Client ID)
 
 Description : This command is used to assign an ID to the client.
 
@@ -223,7 +231,7 @@ Description : This command is used to check if the client is still alive. (Respo
 - Origin : Server
 - Flag : 0x08
 - Size : 0x04 (uint32_t)
-- Payload : [uint32_t]
+- Payload : [uint32_t] (Player ID)
 
 Description : This command is used to add a player to the game.
 
@@ -232,7 +240,7 @@ Description : This command is used to add a player to the game.
 - Origin : Server
 - Flag : 0x09
 - Size : 0x04 (uint32_t)
-- Payload : [uint32_t]
+- Payload : [uint32_t] (Player ID)
 
 Description : This command is used to remove a player from the game.
 
@@ -240,8 +248,8 @@ Description : This command is used to remove a player from the game.
 
 - Origin : Server
 - Flag : 0x0A
-- Size : 0x0C (uint32_t * 3)
-- Payload : [uint32_t, uint32_t, uint32_t]
+- Size : 0x14 (uint32_t * 5)
+- Payload : [uint32_t, uint32_t, uint32_t, uint32_t, uint32_t] (Entity ID, Entity Type, Entity Owner, Position X, Position Y)
 
 Description : This command is used to create an entity in the game.
 
@@ -250,7 +258,7 @@ Description : This command is used to create an entity in the game.
 - Origin : Server
 - Flag : 0x0B
 - Size : 0x0C (uint32_t * 3)
-- Payload : [uint32_t, uint32_t, uint32_t]
+- Payload : [uint32_t, uint32_t, uint32_t] (Entity ID, Position X, Position Y)
 
 Description : This command is used to update an entity in the game.
 
@@ -259,7 +267,7 @@ Description : This command is used to update an entity in the game.
 - Origin : Server
 - Flag : 0x0C
 - Size : 0x04 (uint32_t)
-- Payload : [uint32_t]
+- Payload : [uint32_t] (Entity ID)
 
 Description : This command is used to destroy an entity in the game.
 
@@ -268,7 +276,7 @@ Description : This command is used to destroy an entity in the game.
 - Origin : Server
 - Flag : 0x0D
 - Size : 0x04 (uint32_t)
-- Payload : [uint32_t]
+- Payload : [uint32_t] (Game Type)
 
 Description : This command is used to start the game.
 
@@ -280,3 +288,31 @@ Description : This command is used to start the game.
 - Payload : None
 
 Description : This command is used to end the game.
+
+## Connection
+
+The connection is established by the client.
+The client send a ServerConnect command to the server and open its UDP socket to new connections.
+The Server create a new connection on a separate port and send a ClientAccepted command to the client.
+Then it send a ClientAssignID command to assign an ID to the client.
+
+If the server deny the connection, it will send a ClientDenied command.
+
+```txt
+/--------------------------------------\
+|     Client       |      Server       |
+|------------------|-------------------|
+|                  |                   |
+| ServerConnect    |                   |
+|----------------->|[Create new socket]|
+|[Allow incoming   |                   |
+|connection]       |                   |
+|                  |  ClientAccepted   |
+|[Connect to       |<------------------|
+|incoming]         |                   |
+|                  |  ClientAssignID   |
+|                  |<------------------|
+|                  |                   |
+|                  |                   |
+\--------------------------------------/
+```
