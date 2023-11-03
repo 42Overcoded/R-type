@@ -51,8 +51,6 @@ void gameEngine::spawn_ally_bullet(int i)
         auto &_drawable = _registry.get_components<Drawable>();
         auto &texture = _registry.get_components<Texture>();
         auto &scale = _registry.get_components<Scale>();
-        auto &control = _registry.get_components<Control>();
-
 
         //state[bullet]->id = id;    put the id of the starship who shooted this
         _drawable[bullet]->drawable = true;
@@ -78,11 +76,11 @@ void gameEngine::spawn_ally_bullet(int i)
             if (!tag[i].has_value()) {
                 continue;
             }
-            if (tag[i]->tag == "starship" && state[i]->id == state[bullet]->id) {
+            if (tag[i]->tag == "starship") {
                 position[bullet]->x = position[i]->x + 80;
                 position[bullet]->y = position[i]->y;
             }
-            if (tag[i]->tag == "fullbeambar" && state[i]->id == state[bullet]->id) {
+            if (tag[i]->tag == "fullbeambar") {
                 state[bullet]->state = 0;
                 hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][0]["width"];
                 hitbox[bullet]->height = starshipJson["bullet"]["hitbox"][0]["height"];

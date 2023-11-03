@@ -7,6 +7,8 @@
 #include <nlohmann/json.hpp>
 #include <random>
 #include "../../../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
+#include <chrono>
+#include <thread>
 
 void gameEngine::init_beambar(int id)
 {
@@ -516,33 +518,36 @@ void gameEngine::death_animation()
 
 void gameEngine::init_game()
 {
+    if (_type == SERVER)
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     for (int i = 0; i < 2; i++)
         init_background(i);
     for (int i = 0; i < 10; i++)
         init_star_parallax(i);
     init_score();
-    
+
     GameStateComponent &state = get_game_state();
     auto &gameState = _registry.get_components<GameStateComponent>();
     auto &network = _registry.get_components<NetworkComponent>();
     for (int i = 0; i < _registry._entity_number; i++) {
         if (gameState[i].has_value() && network[i].has_value()) {
-            id = network[i]->clientId - 1;
+            id = network[i]->clientId;
         }
     }
     auto &networkInfo = _registry.get_components<NetworkInfo>();
-    int nbPlayer = 0;
+    int nbPlayer= 1;
+    for (int i = 0; i < _registry._entity_number; i++) {
+        if (networkInfo[i].has_value()) {
+            nbPlayer = networkInfo[i]->playersNbr;
+        }
+    }
     if (state.co == OFF) {
         nbPlayer = 1;
-        id = 0;
-    } else {
-        nbPlayer = 3;
+        id = 1;
     }
     std::cout << "Id : " << id << std::endl;
-    for (int i = 0; i != nbPlayer; i++) {
-        if (_type == SERVER) {
-            id = 0;
-        }
+    std::cout << "NbPlayer : " << nbPlayer << std::endl;
+    for (int i = 1; i != nbPlayer + 1; i++) {
         entity_t starship = init_starship(id, i);
         init_beambar(id);
         init_load_shoot(id);

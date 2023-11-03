@@ -32,8 +32,7 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<Texture>(starship, Texture());
     _registry.add_component<Rect>(starship, Rect());
     _registry.add_component<NetworkComponent>(starship, NetworkComponent());
-    if (id == i) {
-        std::cout << "control" << std::endl;
+    if (id == i || _type == SERVER) {
         _registry.add_component<Control>(starship, Control());
     }
     auto &clock = _registry.get_components<Clock>();
@@ -49,6 +48,7 @@ entity_t gameEngine::init_starship(int id, int i)
     auto &rect = _registry.get_components<Rect>();
     auto &drawable = _registry.get_components<Drawable>();
     auto &color = _registry.get_components<Color>();
+    auto &network = _registry.get_components<NetworkComponent>();
 
     color[starship]->r = 255;
     color[starship]->g = 255;
@@ -57,7 +57,8 @@ entity_t gameEngine::init_starship(int id, int i)
     drawable[starship]->drawable = true;
     health[starship]->health = starshipJson["starship"][i]["health"];
     state[starship]->state = starshipJson["starship"][i]["state"];
-    state[starship]->id = id;
+    network[starship]->clientId = i;
+    state[starship]->id = i;
     hitbox[starship]->width = starshipJson["starship"][i]["hitbox"]["width"];
     hitbox[starship]->height = starshipJson["starship"][i]["hitbox"]["height"];
     tag[starship]->tag = starshipJson["starship"][i]["tag"];
@@ -78,7 +79,6 @@ entity_t gameEngine::init_starship(int id, int i)
     state[starship]->_state = i;
     return starship;
 }
-
 
 void gameEngine::init_load_shoot(int id)
 {

@@ -241,9 +241,11 @@ void gameEngine::network_manager()
         {
             for (size_t j = 0; j < networkInfo[i]->spawn.size(); j++) {
                 if (networkInfo[i]->spawn[0] == 1) {
+                    std::cout << "spawn ally bullet" << std::endl;
                     spawn_ally_bullet(networkInfo[i]->arg1[0]);
                     networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
                     networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
+                    std::cout << "ally bullet spawned" << std::endl;
                 }else if (networkInfo[i]->spawn[0] == 2) {
                     spawn_boss_bullet(networkInfo[i]->arg1[0], 5);
                     networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
@@ -394,8 +396,9 @@ void gameEngine::launch_game()
                 spawn_infinite_wave(_elapsed, _clock, wave);
             if (gameState.mode == GENERATED) {
                 spawn_generated_level(_elapsed, _clock);
-                if (_level_info.mob_alive == 0 && _level_info._generated.size() == 0)
+                if (_level_info.mob_alive == 0 && _level_info._generated.size() == 0) {
                     gameState.scene = END;
+                }
             }
             animate_enemy();
             shoot_system(elapsed);
