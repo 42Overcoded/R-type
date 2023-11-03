@@ -359,21 +359,7 @@ void gameEngine::death_animation()
             continue;
         if (enemy[i].has_value()) {
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
-                _registry.kill_entity(entity_t(i));
-                // Remove from _level_info.mobs_alive the entity with i as the first element, if it can't find it use std::cout << "Can't find entity in _level_info.mobs_alive" << std::endl;
-                int found = 0;
-                for (size_t j = 0; j < _level_info.mobs_alive.size(); j++) {
-                    if (_level_info.mobs_alive[j].first == i) {
-                        std::cout << "This guy went out of the screen : entity : " << j << " " << _level_info.mobs_alive[j].second.id << " : " << _level_info.mobs_alive[j].second.pattern << " : " << _level_info.mobs_alive[j].second.x << " : " << _level_info.mobs_alive[j].second.y << std::endl;
-                        _level_info.mobs_alive.erase(_level_info.mobs_alive.begin() + j);
-                        found = 1;
-                        break;
-                    }
-                }
-                if (found == 0) {
-                    std::cout << "Can't find entity :" << i << " in _level_info.mobs_alive" << std::endl;
-                }
-                _level_info.mob_alive -= 1;
+                Kill_entity(entity_t(i));
                 continue;
             }
         }
@@ -386,7 +372,7 @@ void gameEngine::death_animation()
         }
         if (tag[i]->tag == "enemyBullet") {
             if (position[i]->x < -100) {
-                _registry.kill_entity(entity_t(i));
+                Kill_entity(entity_t(i));
                 continue;
             }
         }
@@ -396,20 +382,7 @@ void gameEngine::death_animation()
                 if (!state[i].has_value() || !rect[i].has_value() ||!clock[i].has_value())
                     continue;
                 if (state[i]->state >= 6) {
-                    _registry.kill_entity(entity_t(i));
-                    int found = 0;
-                    for (size_t j = 0; j < _level_info.mobs_alive.size(); j++) {
-                        if (_level_info.mobs_alive[j].first == i) {
-                            std::cout << "This guy blown up : entity :" << i << " " << _level_info.mobs_alive[j].second.id << " : " << _level_info.mobs_alive[j].second.pattern << " : " << _level_info.mobs_alive[j].second.x << " : " << _level_info.mobs_alive[j].second.y << std::endl;
-                            _level_info.mobs_alive.erase(_level_info.mobs_alive.begin() + j);
-                            found = 1;
-                            break;
-                        }
-                    }
-                    if (found == 0) {
-                        std::cout << "Can't find entity blowing up :" << i << " in _level_info.mobs_alive" << std::endl;
-                    }
-                    continue;
+                    Kill_entity(entity_t(i));
                 }
                 state[i]->state += 1;
                 rect[i]->left += 33;
@@ -476,21 +449,7 @@ void gameEngine::death_animation()
                     sounds["soundExplosion2"]->play();
                 if (tag[i]->tag == "enemy 3")
                     sounds["soundExplosion3"]->play();
-                _registry.kill_entity(entity_t(i));
-                // Remove from _level_info.mobs_alive the entity with i as the first element, if it can't find it use std::cout << "Can't find entity in _level_info.mobs_alive" << std::endl;
-                int found = 0;
-                for (size_t j = 0; j < _level_info.mobs_alive.size(); j++) {
-                    if (_level_info.mobs_alive[j].first == i) {
-                        std::cout << "This guy got killed : entity :" << i << " " << _level_info.mobs_alive[j].second.id << " : " << _level_info.mobs_alive[j].second.pattern << " : " << _level_info.mobs_alive[j].second.x << " : " << _level_info.mobs_alive[j].second.y << std::endl;
-                        _level_info.mobs_alive.erase(_level_info.mobs_alive.begin() + j);
-                        found = 1;
-                        break;
-                    }
-                }
-                if (found == 0) {
-                    std::cout << "Can't find entity :" << i << " in _level_info.mobs_alive" << std::endl;
-                }
-                _level_info.mob_alive -= 1;
+                Kill_entity(entity_t(i));
                 continue;
             }
         }
@@ -510,7 +469,9 @@ void gameEngine::death_animation()
                     }
                 }
                 spawn_explosion(j);
-                _registry.kill_entity(entity_t(j));
+                Kill_entity(entity_t(j));
+                _level_info.is_boss_alive = false;
+                _level_info.mob_alive = 0;
                 continue;
             }
         }

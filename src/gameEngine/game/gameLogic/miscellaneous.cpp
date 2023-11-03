@@ -564,7 +564,7 @@ void gameEngine::clock_time()
         if (_tag[i]->tag == "shootBoost" && _drawable[i]->drawable == false) {
             _clock[i]->time = _clock[i]->clock.getElapsedTime();
             if (_clock[i]->time.asSeconds() > 10) {
-                _registry.kill_entity(entity_t(i));
+                Kill_entity(entity_t(i));
                 continue;
             }
         }

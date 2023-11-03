@@ -202,6 +202,7 @@ class gameEngine {
         std::unordered_map<std::string, std::shared_ptr<sf::SoundBuffer>> soundBuffers;
         std::unordered_map<std::string, std::shared_ptr<sf::Sound>> sounds;
         bool is_frozen();
+        void Kill_entity(entity_t entity);
   
     protected:
     private:

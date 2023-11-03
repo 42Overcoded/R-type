@@ -27,6 +27,18 @@
 #include <SFML/Audio/Music.hpp>
 #include <nlohmann/json.hpp>
 
+void gameEngine::Kill_entity(entity_t entity)
+{
+    _registry.kill_entity(entity);
+    for (size_t j = 0; j < _level_info.mobs_alive.size(); j++) {
+        if (_level_info.mobs_alive[j].first == entity) {
+            _level_info.mobs_alive.erase(_level_info.mobs_alive.begin() + j);
+            _level_info.mob_alive -= 1;
+            return;
+        }
+    }
+}
+
 void gameEngine::loadLevel(int level)
 {
     std::string path[] = { "assets/level1design.txt",
@@ -370,7 +382,7 @@ void gameEngine::launch_game()
                 if (tag[i]->tag == "starship")
                     alive += 1;
                 if (health[i].has_value() && health[i]->health <= 0 && tag[i]->tag == "starship") {
-                    _registry.kill_entity(entity_t(i));
+                    Kill_entity(entity_t(i));
                     continue;
                 }
                 if (tag[i]->tag == "wormHead")
