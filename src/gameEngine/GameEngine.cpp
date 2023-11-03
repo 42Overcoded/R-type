@@ -193,6 +193,7 @@ void gameEngine::launch_game()
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
         _system.load_texture(_registry, cheatCode);
+        load_musics_and_sounds();
         musics["musicMenu"]->play();
     }
     register_component_to_game();
@@ -350,4 +351,57 @@ GameStateComponent &gameEngine::get_game_state()
             return gameStateArray[i].value();
     }
     throw std::runtime_error("No game state found");
+}
+
+void gameEngine::load_musics_and_sounds(void)
+{
+    musics.insert(std::make_pair("musicMenu", std::make_shared<sf::Music>()));
+    musics.insert(std::make_pair("musicGame", std::make_shared<sf::Music>()));
+    musics.insert(std::make_pair("musicScore", std::make_shared<sf::Music>()));
+    musics.insert(std::make_pair("musicBoss", std::make_shared<sf::Music>()));
+
+    soundBuffers.insert(std::make_pair("soundShoot", std::make_shared<sf::SoundBuffer>()));
+    soundBuffers.insert(std::make_pair("soundPowerShoot", std::make_shared<sf::SoundBuffer>()));
+    soundBuffers.insert(std::make_pair("soundExplosion", std::make_shared<sf::SoundBuffer>()));
+    soundBuffers.insert(std::make_pair("soundExplosion2", std::make_shared<sf::SoundBuffer>()));
+    soundBuffers.insert(std::make_pair("soundExplosion3", std::make_shared<sf::SoundBuffer>()));
+
+    sounds.insert(std::make_pair("soundShoot", std::make_shared<sf::Sound>()));
+    sounds.insert(std::make_pair("soundPowerShoot", std::make_shared<sf::Sound>()));
+    sounds.insert(std::make_pair("soundExplosion", std::make_shared<sf::Sound>()));
+    sounds.insert(std::make_pair("soundExplosion2", std::make_shared<sf::Sound>()));
+    sounds.insert(std::make_pair("soundExplosion3", std::make_shared<sf::Sound>()));
+
+    musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
+    musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
+    musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
+    musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
+
+    soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
+    soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
+    soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
+    soundBuffers["soundExplosion2"]->loadFromFile("assets/musicAndSound/roblox rocket explosion sound.mp3");
+    soundBuffers["soundExplosion3"]->loadFromFile("assets/musicAndSound/Geometry Dash Death Sound Effect.mp3");
+
+    sounds["soundShoot"]->setBuffer(*soundBuffers["soundShoot"]);
+    sounds["soundPowerShoot"]->setBuffer(*soundBuffers["soundPowerShoot"]);
+    sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
+    sounds["soundExplosion2"]->setBuffer(*soundBuffers["soundExplosion2"]);
+    sounds["soundExplosion3"]->setBuffer(*soundBuffers["soundExplosion3"]);
+
+    musics["musicMenu"]->setVolume(30);
+    musics["musicGame"]->setVolume(30);
+    musics["musicScore"]->setVolume(30);
+    musics["musicBoss"]->setVolume(30);
+
+    sounds["soundShoot"]->setVolume(60);
+    sounds["soundPowerShoot"]->setVolume(60);
+    sounds["soundExplosion"]->setVolume(60);
+    sounds["soundExplosion2"]->setVolume(50);
+    sounds["soundExplosion3"]->setVolume(50);
+
+    musics["musicMenu"]->setLoop(true);
+    musics["musicScore"]->setLoop(false);
+    musics["musicGame"]->setLoop(true);
+    musics["musicBoss"]->setLoop(true);
 }

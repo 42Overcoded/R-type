@@ -475,10 +475,14 @@ void gameEngine::death_animation()
                 spawn_explosion(i);
                 if (tag[i]->tag == "enemy 1")
                     sounds["soundExplosion"]->play();
-                if (tag[i]->tag == "enemy 2")
+                if (tag[i]->tag == "enemy 2" || tag[i]->tag == "tank")
                     sounds["soundExplosion2"]->play();
-                if (tag[i]->tag == "enemy 3")
+                if (tag[i]->tag == "enemy 3" || tag[i]->tag == "enemy 4")
                     sounds["soundExplosion3"]->play();
+                if (tag[i]->tag == "enemyBoss" || tag[i]->tag == "starshipBoss") {
+                    musics["musicBoss"]->stop();
+                    musics["musicGame"]->play();
+                }
                 _registry.kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
                 continue;
@@ -501,6 +505,8 @@ void gameEngine::death_animation()
                 }
                 spawn_explosion(j);
                 _registry.kill_entity(entity_t(j));
+                musics["musicBoss"]->stop();
+                musics["musicGame"]->play();
                 continue;
             }
         }

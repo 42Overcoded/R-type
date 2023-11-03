@@ -193,6 +193,7 @@ class gameEngine {
          */
         void init_button(int i);
         void init_cheatCode(void);
+        void load_musics_and_sounds(void);
         void init_game();
         void life_handler();
         entity_t init_worm(int i);

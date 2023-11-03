@@ -108,6 +108,11 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
         speed[enemy]->baseSpeedy = speed[enemy]->speedy;
     }
 
+    if (tag[enemy]->tag ==  "enemyBoss" || tag[enemy]->tag == "wormHead" || tag[enemy]->tag == "starshipBoss") {
+        musics["musicGame"]->pause();
+        musics["musicBoss"]->play();
+    }
+
     return enemy;
 }
 
