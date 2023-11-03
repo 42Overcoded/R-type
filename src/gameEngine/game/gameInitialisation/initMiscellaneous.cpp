@@ -388,7 +388,7 @@ void gameEngine::death_animation()
             continue;
         if (enemy[i].has_value()) {
             if (position[i]->x < -500 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
-                kill_entity(entity_t(i));
+                Kill_entity(entity_t(i));
                 continue;
             }
         }
