@@ -82,6 +82,7 @@ struct Level_info {
     int mob_alive;
     bool is_boss_alive;
     float level_progress;
+    std::vector<std::pair<std::size_t, Generated>> mobs_alive;
 
     Level_info() {
         mob_alive = 0;

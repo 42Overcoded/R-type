@@ -388,8 +388,7 @@ void gameEngine::death_animation()
             continue;
         if (enemy[i].has_value()) {
             if (position[i]->x < -100 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
-                _registry.kill_entity(entity_t(i));
-                _level_info.mob_alive -= 1;
+                Kill_entity(entity_t(i));
                 continue;
             }
         }
@@ -402,7 +401,7 @@ void gameEngine::death_animation()
         }
         if (tag[i]->tag == "enemyBullet") {
             if (position[i]->x < -100) {
-                _registry.kill_entity(entity_t(i));
+                Kill_entity(entity_t(i));
                 continue;
             }
         }
@@ -412,8 +411,7 @@ void gameEngine::death_animation()
                 if (!state[i].has_value() || !rect[i].has_value() ||!clock[i].has_value())
                     continue;
                 if (state[i]->state >= 6) {
-                    _registry.kill_entity(entity_t(i));
-                    continue;
+                    Kill_entity(entity_t(i));
                 }
                 state[i]->state += 1;
                 rect[i]->left += 33;
@@ -484,8 +482,9 @@ void gameEngine::death_animation()
                     musics["musicBoss"]->stop();
                     musics["musicGame"]->play();
                 }
-                _registry.kill_entity(entity_t(i));
+                Kill_entity(entity_t(i));
                 _level_info.mob_alive -= 1;
+
                 continue;
             }
         }
@@ -505,7 +504,9 @@ void gameEngine::death_animation()
                     }
                 }
                 spawn_explosion(j);
-                _registry.kill_entity(entity_t(j));
+                Kill_entity(entity_t(j));
+                _level_info.is_boss_alive = false;
+                _level_info.mob_alive = 0;
                 if (_type == CLIENT) {
                     musics["musicBoss"]->stop();
                     musics["musicGame"]->play();
