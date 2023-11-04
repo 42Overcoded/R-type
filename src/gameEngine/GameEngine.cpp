@@ -41,9 +41,14 @@ void gameEngine::Kill_entity(entity_t entity)
 
 void gameEngine::loadLevel(int level)
 {
-    std::string path[] = { "assets/level1design.txt",
-                           "assets/level2design.txt",
-                           "assets/level3design.txt"};
+    std::vector<std::string> path = { PATH_TO_ASSETS + "level1design.txt", PATH_TO_ASSETS + "level2design.txt",
+        PATH_TO_ASSETS + "level3design.txt"};
+
+    if (level > path.size())
+    {
+        std::cerr << "ERROR level higher than defined levels paths" << std::endl;
+        exit(84);
+    }
     _level_info.mob_alive = 0;
     _level_info.is_boss_alive = false;
     _level_info.level_progress = 1920;
