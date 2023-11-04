@@ -106,7 +106,6 @@ class SfmlSystem {
         std::vector<keyCommands> _cheatCode;
         keyCommands lastKey;
         bool isCheatCodeEntered;
-        //std::vector<std::pair<int, int>> saveHitboxSpaceships;
         std::unordered_map<int, std::pair<int, int>> saveHitboxSpaceships;
 };
 
