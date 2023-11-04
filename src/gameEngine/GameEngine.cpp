@@ -157,7 +157,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
             return;
         }
     }
-    if (_elapsed.asSeconds() > 0.1 / (difficulty /2)) {
+    if (_elapsed.asSeconds() > 0.1 / (difficulty / 2)) {
         wave += 0.05;
         int rand       = distribution2(generator);
         float randomNb = distribution(generator);
@@ -298,8 +298,8 @@ void gameEngine::spawnManager(void)
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 11) {
                     entity_t enemy = init_enemy(entity.entityId, entity.arg1, entity.arg2, entity.x, entity.y);
-                    auto &position = _registry.get_components<Position>();
                     if (gameState.mode == GENERATED) {
+                        auto &position = _registry.get_components<Position>();
                         if (position[enemy]->y == 0)
                             position[enemy]->y = _level_info._generated[0].y;
                         _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
@@ -331,7 +331,7 @@ void gameEngine::launch_game()
     sf::Clock _clock;
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    wave = 0;
+    wave = 50;
     id   = 0;
     int level = 0;
 

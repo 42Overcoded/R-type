@@ -145,8 +145,8 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
-                              << std::endl;
+                    // std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
+                    //           << std::endl;
                     if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
                         packetsOutQueue_.Front().body.size() > 0)
                     {
@@ -207,7 +207,7 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Get Packet: size = " << recvBuffer_.header.size << std::endl;
+                    // std::cout << "Get Packet: size = " << recvBuffer_.header.size << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
                         if (recvBuffer_.header.size > MaxPacketSize) {

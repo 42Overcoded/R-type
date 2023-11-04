@@ -213,7 +213,6 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
     packet >> x;
     packet >> entityId;
 
-    std::cout << "Client update entity : " << entityId << " " << x << " " << y << std::endl;
     for (size_t i = 0; i < reg._entity_number; i++)
     {
         if (networkArr[i].has_value() && positionArr[i].has_value())

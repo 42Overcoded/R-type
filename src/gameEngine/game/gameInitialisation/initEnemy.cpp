@@ -17,7 +17,7 @@ entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id,
 
     entity_t enemy = _registry.spawn_entity();
 
-    _registry.add_component<Position>(enemy, Position{.x = x, .y = y});
+    _registry.add_component<Position>(enemy, Position());
     _registry.add_component<Speed>(enemy, Speed());
     _registry.add_component<Sprite>(enemy, Sprite());
     _registry.add_component<Drawable>(enemy, Drawable());
@@ -98,7 +98,7 @@ entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id,
 
     position[enemy]->x = enemiesJson["enemies"][enemy_id]["position"]["x"];
     position[enemy]->y = enemiesJson["enemies"][enemy_id]["position"]["y"];
-
+    position[enemy]->y = y;
 
     if(enemy_id == 9){
         float x = pattern[enemy]->pattern[pattern[enemy]->pattern_index].speedx - position[enemy]->x;
