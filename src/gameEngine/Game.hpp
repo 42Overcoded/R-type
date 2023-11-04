@@ -70,8 +70,8 @@ struct Generated {
         this->y = y;
         this->is_boss = is_boss;
     }
-    int id;
-    int pattern;
+    unsigned int id;
+    unsigned int pattern;
     int x;
     int y;
     bool is_boss;

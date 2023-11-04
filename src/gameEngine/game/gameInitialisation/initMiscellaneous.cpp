@@ -383,7 +383,7 @@ void gameEngine::death_animation()
             wormAlive = 0;
         }
     }
-    for (size_t i = 0; i < _registry._entity_number; i++) {
+    for (unsigned int i = 0; i < _registry._entity_number; i++) {
         if (!tag[i].has_value() || !position[i].has_value())
             continue;
         if (enemy[i].has_value()) {
@@ -426,7 +426,7 @@ void gameEngine::death_animation()
         }
         if (enemy[i].has_value()) {
             if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
-                for (size_t j = 0; j < _registry._entity_number; j++) {
+                for (unsigned int j = 0; j < _registry._entity_number; j++) {
                     if (tag[j].has_value() && tag[j]->tag == "score")
                     {
                         state[j]->state += enemy[i]->score;
@@ -434,14 +434,13 @@ void gameEngine::death_animation()
                     }
                 }
                 GameStateComponent &gameState = get_game_state();
-                auto &networkInfo = _registry.get_components<NetworkInfo>();
+                auto &spawner = _registry.get_components<Spawner>();
                 if (_type == SERVER || gameState.co == OFF) {
                     spawn_explosion(i);
-                    networkInfo[0]->arg1.push_back(i);
-                    networkInfo[0]->spawn.push_back(9);
+                    spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 9, .arg1 = i});
                 }
                 if (_type == SERVER || gameState.co == OFF) {
-                    int j = -1;
+                    unsigned int j = -1;
                     std::random_device rd;
                     std::mt19937 gen(rd());
                     std::uniform_int_distribution<int> distribution(0, 1080);
@@ -467,9 +466,7 @@ void gameEngine::death_animation()
                     }
                     if (j != -1) {
                         spawn_power_up(i, j);
-                        networkInfo[0]->arg1.push_back(i);
-                        networkInfo[0]->arg2.push_back(j);
-                        networkInfo[0]->spawn.push_back(10);
+                        spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 10, .arg1 = i, .arg2 = j});
                     }
                 }
                 if (_type == CLIENT && tag[i]->tag == "enemy 1")
@@ -535,11 +532,11 @@ void gameEngine::init_game()
             id = network[i]->clientId;
         }
     }
-    auto &networkInfo = _registry.get_components<NetworkInfo>();
+    auto &spawner = _registry.get_components<Spawner>();
     int nbPlayer= 1;
     for (int i = 0; i < _registry._entity_number; i++) {
-        if (networkInfo[i].has_value()) {
-            nbPlayer = networkInfo[i]->playersNbr;
+        if (spawner[i].has_value()) {
+            nbPlayer = spawner[i]->playersNbr;
         }
     }
     if (state.co == OFF) {

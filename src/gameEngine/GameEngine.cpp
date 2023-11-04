@@ -100,7 +100,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     if (_type == SERVER || gameState.co == OFF) {
                         entity_t enemy = init_worm(7);
                         _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
-                        spawner[0]->spawn.push_back(8);
+                        spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 8});
                     }
                     _level_info._generated.erase(_level_info._generated.begin());
                     _level_info.mob_alive += 1;
@@ -111,9 +111,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     if (_type == SERVER || gameState.co == OFF) {
                         entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
                         _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
-                        spawner[0]->arg1.push_back(_level_info._generated[0].id);
-                        spawner[0]->arg2.push_back(_level_info._generated[0].pattern);
-                        spawner[0]->spawn.push_back(11);
+                        spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = _level_info._generated[0].id, .arg2 = _level_info._generated[0].pattern});
                         auto &position = _registry.get_components<Position>();
                         if (position[enemy]->y == 0)
                             position[enemy]->y = _level_info._generated[0].y;
@@ -133,9 +131,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                 if (_type == SERVER || gameState.co == OFF) {
                     entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
                     _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
-                    spawner[0]->arg1.push_back(_level_info._generated[0].id);
-                    spawner[0]->arg2.push_back(_level_info._generated[0].pattern);
-                    spawner[0]->spawn.push_back(11);
+                    spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = _level_info._generated[0].id, .arg2 = _level_info._generated[0].pattern});
                     auto &position = _registry.get_components<Position>();
                     if (position[enemy]->y == 0)
                         position[enemy]->y = _level_info._generated[0].y;
@@ -181,9 +177,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
                 entity_t enemy     = init_enemy(0, 0);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
-                spawner[0]->arg1.push_back(0);
-                spawner[0]->arg2.push_back(0);
-                spawner[0]->spawn.push_back(11);
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 0, .arg2 = 0});
             }
         }
         if (randomNb / 10 < wave)
@@ -194,9 +188,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
                 entity_t enemy     = init_enemy(1, 1);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
-                spawner[0]->arg1.push_back(1);
-                spawner[0]->arg2.push_back(1);
-                spawner[0]->spawn.push_back(11);
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 1, .arg2 = 1});
             }
         }
         if (randomNb < wave)
@@ -207,9 +199,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
                 entity_t enemy     = init_enemy(2, 2);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
-                spawner[0]->arg1.push_back(2);
-                spawner[0]->arg2.push_back(2);
-                spawner[0]->spawn.push_back(11);
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 2, .arg2 = 2});
             }
         }
         if (randomNb * 3 < wave)
@@ -223,9 +213,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
                 entity_t enemy     = init_enemy(6, 6);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
-                spawner[0]->arg1.push_back(6);
-                spawner[0]->arg2.push_back(6);
-                spawner[0]->spawn.push_back(11);
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 6, .arg2 = 6});
             }
         }
         if (randomNb * 5 < wave)
@@ -236,9 +224,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
                 entity_t enemy     = init_enemy(3, 3);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
-                spawner[0]->arg1.push_back(3);
-                spawner[0]->arg2.push_back(3);
-                spawner[0]->spawn.push_back(11);
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 3, .arg2 = 3});
             }
         }
         _clock.restart();
@@ -278,63 +264,53 @@ void gameEngine::register_component_to_game()
     _registry.register_component<Spawner>();
 };
 
-void gameEngine::network_manager()
+void gameEngine::spawnManager(void)
 {
     auto &spawner = _registry.get_components<Spawner>();
     for (size_t i = 0; i < _registry._entity_number; i++)
     {
         if (spawner[i].has_value())
         {
-            for (size_t j = 0; j < spawner[i]->spawn.size(); j++) {
-                if (spawner[i]->spawn[0] == 1) {
+            while (spawner[i]->entitiesToSpawn.empty() == false) {
+                EntitySpawnDescriptor entity = spawner[i]->entitiesToSpawn.front();
+
+                if (entity.entityType == 1) {
                     std::cout << "spawn ally bullet" << std::endl;
-                    spawn_ally_bullet(spawner[i]->arg1[0]);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                    std::cout << "ally bullet spawned" << std::endl;
-                }else if (spawner[i]->spawn[0] == 2) {
-                    spawn_boss_bullet(spawner[i]->arg1[0], 5);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 3) {
-                    spawn_boss_bullet(spawner[i]->arg1[0], 2);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 4) {
-                    spawn_bullet(spawner[i]->arg1[0], 0);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 5) {
-                    spawn_bullet(spawner[i]->arg1[0], 4);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 6) {
-                    spawn_bullet(spawner[i]->arg1[0], 1);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 7) {
-                    spawn_bullet(spawner[i]->arg1[0], 6);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 8) {
+                    spawn_ally_bullet(entity.arg1);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 2) {
+                    spawn_boss_bullet(entity.arg1, 5);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 3) {
+                    spawn_boss_bullet(entity.arg1, 2);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 4) {
+                    spawn_bullet(entity.arg1, 0);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 5) {
+                    spawn_bullet(entity.arg1, 4);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 6) {
+                    spawn_bullet(entity.arg1, 1);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 7) {
+                    spawn_bullet(entity.arg1, 6);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 8) {
                     init_worm(7);
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 9) {
-                    spawn_explosion(spawner[i]->arg1[0]);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 10) {
-                    spawn_power_up(spawner[i]->arg1[0], spawner[i]->arg2[0]);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->arg2.erase(spawner[i]->arg2.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
-                }else if (spawner[i]->spawn[0] == 11) {
-                    init_enemy(spawner[i]->arg1[0], spawner[i]->arg2[0]);
-                    spawner[i]->arg1.erase(spawner[i]->arg1.begin());
-                    spawner[i]->arg2.erase(spawner[i]->arg2.begin());
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 9) {
+                    spawn_explosion(entity.arg1);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 10) {
+                    spawn_power_up(entity.arg1, entity.arg2);
+                    spawner[i]->entitiesToSpawn.pop();
+                }else if (entity.entityType == 11) {
+                    init_enemy(entity.arg1, entity.arg2);
+                    spawner[i]->entitiesToSpawn.pop();
                 } else {
-                    spawner[i]->spawn.erase(spawner[i]->spawn.begin());
+                    spawner[i]->entitiesToSpawn.pop();
+                    std::cerr << "entityType [" << entity.entityType << "] not found" << std::endl;
                 }
             }
         }
@@ -467,7 +443,7 @@ void gameEngine::launch_game()
                 }
             }
             if (gameState.co == ON)
-                network_manager();
+                spawnManager();
             sfmlSystems_.control_system(_registry, _window);
             sfmlSystems_.set_color(_registry);
             _window.clear(sf::Color::Black);
@@ -522,14 +498,14 @@ void gameEngine::load_musics_and_sounds(void)
         musics.insert(std::make_pair("musicGame", nullptr));
         musics.insert(std::make_pair("musicScore", nullptr));
         musics.insert(std::make_pair("musicBoss", nullptr));
-    
+
         soundBuffers.insert(std::make_pair("soundShoot", nullptr));
         soundBuffers.insert(std::make_pair("soundPowerShoot", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion2", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion3", nullptr));
         soundBuffers.insert(std::make_pair("truck", nullptr));
-    
+
         sounds.insert(std::make_pair("truck", nullptr));
         sounds.insert(std::make_pair("soundShoot", nullptr));
         sounds.insert(std::make_pair("soundPowerShoot", nullptr));
@@ -542,26 +518,26 @@ void gameEngine::load_musics_and_sounds(void)
         musics.at("musicGame") = std::make_shared<sf::Music>();
         musics.at("musicScore") = std::make_shared<sf::Music>();
         musics.at("musicBoss") = std::make_shared<sf::Music>();
-    
+
         soundBuffers.at("truck") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundPowerShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion2") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion3") = std::make_shared<sf::SoundBuffer>();
-    
+
         sounds.at("truck") = std::make_shared<sf::Sound>();
         sounds.at("soundShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundPowerShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion2") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion3") = std::make_shared<sf::Sound>();
-    
+
         musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
         musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
         musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
         musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
-    
+
         soundBuffers["truck"]->loadFromFile("assets/musicAndSound/ALLEZ_MARCEL.mp3");
         soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
         soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
@@ -575,19 +551,19 @@ void gameEngine::load_musics_and_sounds(void)
         sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
         sounds["soundExplosion2"]->setBuffer(*soundBuffers["soundExplosion2"]);
         sounds["soundExplosion3"]->setBuffer(*soundBuffers["soundExplosion3"]);
-    
+
         musics["musicMenu"]->setVolume(30);
         musics["musicGame"]->setVolume(30);
         musics["musicScore"]->setVolume(30);
         musics["musicBoss"]->setVolume(30);
-    
+
         sounds["truck"]->setVolume(100);
         sounds["soundShoot"]->setVolume(60);
         sounds["soundPowerShoot"]->setVolume(60);
         sounds["soundExplosion"]->setVolume(60);
         sounds["soundExplosion2"]->setVolume(50);
         sounds["soundExplosion3"]->setVolume(50);
-    
+
         musics["musicMenu"]->setLoop(true);
         musics["musicScore"]->setLoop(false);
         musics["musicGame"]->setLoop(true);

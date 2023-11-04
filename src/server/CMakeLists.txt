@@ -51,7 +51,6 @@ set(INCLUDES
     ../ecs/Registry.hpp
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
-    ../ecs/ComponentsArray/Systems/ServerSystem.hpp
     ../gameEngine/game/systems/GameSystems.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
@@ -83,7 +82,6 @@ set(EXEC_SRC
     ../gameEngine/game/gameInitialisation/initMiscellaneous.cpp
     ../gameEngine/game/gameInitialisation/initStarship.cpp
     ../ecs/Registry.cpp
-    ../ecs/ComponentsArray/Systems/ServerSystem.cpp
     ../network/network_s/NetworkSystem.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp

@@ -195,18 +195,19 @@ class gameEngine {
         void life_handler();
         entity_t init_worm(int i);
         void spawn_power_up(int i, int j);
-        void network_manager();
+        void spawnManager(void);
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
         std::string get_this_str(std::string tag, std::string default_str);
         std::vector<Generated> generateMap(int length, int difficulty, std::string seed_str);
         std::vector<Generated> loadMap(std::string path);
         void loadLevel(int level);
         void spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock);
+        bool is_frozen();
+        void Kill_entity(entity_t entity);
+
         std::unordered_map<std::string, std::shared_ptr<sf::Music>> musics;
         std::unordered_map<std::string, std::shared_ptr<sf::SoundBuffer>> soundBuffers;
         std::unordered_map<std::string, std::shared_ptr<sf::Sound>> sounds;
-        bool is_frozen();
-        void Kill_entity(entity_t entity);
 
     protected:
     private:

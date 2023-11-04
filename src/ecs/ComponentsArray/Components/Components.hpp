@@ -38,11 +38,13 @@ struct Speed {
  *
  */
 struct EntitySpawnDescriptor {
-    uint32_t entityId;
-    uint32_t clientId;
-    uint32_t entityType;
-    float x;
-    float y;
+    uint32_t entityId = 0;
+    uint32_t clientId = 0;
+    uint32_t entityType = 0;
+    uint32_t arg1 = 0;
+    uint32_t arg2 = 0;
+    float x = 0;
+    float y = 0;
 };
 
 /**
