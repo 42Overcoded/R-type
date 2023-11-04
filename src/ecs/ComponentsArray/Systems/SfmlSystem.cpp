@@ -160,8 +160,6 @@ void SfmlSystem::load_texture(registry &r, std::vector<keyCommands> cheatCode)
     isCheatCodeEntered = false;
     _cheatCode = cheatCode;
     lastKey = UNKNOWN;
-    for (int i = 0; i < 15; i++)
-        saveHitboxSpaceships.push_back(std::make_pair(0, 0));
 }
 
 void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
@@ -437,13 +435,13 @@ void SfmlSystem::control_system(registry &r, sf::RenderWindow &_window)
         }
         if (isCheatCodeEntered && player[i] != std::nullopt) {
             if (hitbox[i]->width >= 0) {
-                saveHitboxSpaceships[i].first = hitbox[i]->width;
-                saveHitboxSpaceships[i].second = hitbox[i]->height;
+                saveHitboxSpaceships.insert(std::make_pair(i, std::make_pair(hitbox[i]->width, hitbox[i]->height)));
                 hitbox[i]->width = -10000;
                 hitbox[i]->height = -10000;
             } else {
                 hitbox[i]->width = saveHitboxSpaceships[i].first;
                 hitbox[i]->height = saveHitboxSpaceships[i].second;
+                saveHitboxSpaceships.erase(i);
             }
             isCheatCodeEntered = false;
         }
