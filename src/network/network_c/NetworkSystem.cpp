@@ -17,6 +17,7 @@
 #include "NetworkComponent.hpp"
 #include "Registry.hpp"
 #include "SparseArray.hpp"
+#include <sys/types.h>
 
 namespace Network {
 NetworkSystem::NetworkSystem(unsigned int serverPort, std::string serverIp) : INetworkClient()
@@ -170,29 +171,30 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet
 
 void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
-    SparseArray<Position> &positionArr        = reg.get_components<Position>();
+    SparseArray<Spawner> &spawnerArr = reg.get_components<Spawner>();
+    unsigned int spawnerIndex        = 0;
     uint32_t entityId;
-    float x;
-    float y;
+    uint32_t entityType;
+    uint32_t clientId;
+    uint32_t arg1;
+    uint32_t arg2;
 
-    packet >> y;
-    packet >> x;
+    for (spawnerIndex = 0; spawnerIndex < reg._entity_number; spawnerIndex++)
+    {
+        if (spawnerArr[spawnerIndex].has_value())
+            break;
+    }
+    if (!spawnerArr[spawnerIndex].has_value())
+        throw std::runtime_error("No spawner component found");
+    packet >> arg2;
+    packet >> arg1;
+    packet >> clientId;
+    packet >> entityType;
     packet >> entityId;
 
-    std::cout << "client create entity : " << entityId << " " << x << " " << y << std::endl;
-    for (size_t i = 0; i < networkArr.size(); i++)
-    {
-        if (networkArr[i].has_value() && positionArr[i].has_value())
-        {
-            //TODO replace with true creator code
-            if (networkArr[i]->entityId != 0)
-                continue;
-            networkArr[i]->entityId = entityId;
-            std::cout << "create : id " << networkArr[i]->entityId << std::endl;
-            return;
-        }
-    }
+    spawnerArr[spawnerIndex]->spawningEntities.push({entityId, clientId, entityType, arg1, arg2, 0, 0});
+    std::cout << "create entity : " << entityId << " " << entityType << " " << clientId << " " << arg1 << " "
+              << arg2 << std::endl;
 }
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)

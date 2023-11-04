@@ -53,6 +53,7 @@ struct EntitySpawnDescriptor {
  */
 struct Spawner {
     std::queue<EntitySpawnDescriptor> entitiesToSpawn;
+    std::queue<EntitySpawnDescriptor> spawningEntities;
     unsigned int playersNbr;
 };
 

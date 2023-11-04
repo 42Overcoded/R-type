@@ -210,21 +210,21 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
     }
     if (!spawnerArr[spawnerIndex].has_value())
         throw std::runtime_error("No network info component found");
+    while (spawnerArr[spawnerIndex]->entitiesToSpawn.empty() == false) {
+        EntitySpawnDescriptor entity = spawnerArr[spawnerIndex]->entitiesToSpawn.front();
+        spawnerArr[spawnerIndex]->entitiesToSpawn.pop();
+        Packet<Flag> packet;
 
-    for (unsigned int i = 0; i < network.size(); i++) {
-        if (network[i].has_value() && position[i].has_value()) {
-            if (network[i]->entityId != 0)
-                continue;
-            std::cout << "Create entity" << std::endl;
-            network[i]->entityId = ++lastEntityId_;
-            Packet<Flag> packet;
-            packet.header.flag = Flag::ClientCreateEntity;
-            packet << (uint32_t)network[i]->entityId;
-            packet << position[i]->x;
-            packet << position[i]->y;
-            std::cout << "create : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
-            SendToAllClients(packet);
-        }
+        entity.entityId = ++lastEntityId_;
+        packet.header.flag = Flag::ClientCreateEntity;
+        packet << (uint32_t)entity.entityId;
+        packet << (uint32_t)entity.clientId;
+        packet << (uint32_t)entity.entityType;
+        packet << (uint32_t)entity.arg1;
+        packet << (uint32_t)entity.arg2;
+        std::cout << "create : id " << entity.entityId << " type " << entity.entityType << " arg1 " << entity.arg1 << " arg2 " << entity.arg2 << std::endl;
+        SendToAllClients(packet);
+        spawnerArr[spawnerIndex]->spawningEntities.push(entity);
     }
 }
 
