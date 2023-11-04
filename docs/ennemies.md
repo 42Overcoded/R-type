@@ -336,4 +336,13 @@ La destruction du Starship Boss rapporte 5000 points.
    - Point 6: x = 1800, y = 800
    - Point 7: x = 1400, y = 100
    - Point 8: x = 900, y = 300
-  
+  **Points de vie :** 500
+- **État :** 0
+- **Boîte de détection (hitbox) :** Largeur de 90, hauteur de 90
+- **Rectangle de rendu :** 
+   - Gauche : 0
+   - Haut : 0
+   - Largeur : 33
+   - Hauteur : 33
+- **Échelle :** 3
+- **Position initiale :** x = 2000, y = 400
