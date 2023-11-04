@@ -83,7 +83,7 @@ struct Level_info {
     bool is_boss_alive = false;
     float level_progress = 1920;
     std::vector<std::pair<std::size_t, Generated>> mobs_alive;
-    int _current_level;
+    int _current_level = 0;
 };
 
 struct GameStateComponent {
