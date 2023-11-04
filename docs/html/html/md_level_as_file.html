@@ -68,29 +68,29 @@ $(function() {
 <div class="title">Level Format </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md35"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md39"></a>
 Level location</h1>
 <p>Currently, all levels we made manually are stored in the '/assets/' folder. The level name is the same as the file name. They are named as follow: 'level1design.txt', level2design.txt' and level3design.txt'.</p>
-<h1><a class="anchor" id="autotoc_md36"></a>
+<h1><a class="anchor" id="autotoc_md40"></a>
 Level format</h1>
 <p>Each level is a text file, each line represents an enemy or obstacle. It is composed of 4 numbers separated by a space.</p>
-<h2><a class="anchor" id="autotoc_md37"></a>
+<h2><a class="anchor" id="autotoc_md41"></a>
 Example</h2>
 <div class="fragment"><div class="line">an example would be : &#39;1 2 2000 4&#39;</div>
 </div><!-- fragment --><p> Where 1 is an id, 2 is an id, 2000 is a position and 4 is a position. </p>
-<h3><a class="anchor" id="autotoc_md38"></a>
+<h3><a class="anchor" id="autotoc_md42"></a>
 Enemy / Obstacle id</h3>
 <p>The first number is the id of the enemy / obstacle, as defined in the enemy.json file. located in configFiles/enemy.json</p>
-<h3><a class="anchor" id="autotoc_md39"></a>
+<h3><a class="anchor" id="autotoc_md43"></a>
 Movement pattern id</h3>
 <p>The second number is the id of the movement pattern of this entity, as defined in the movement.json file. located in configFiles/movement.json</p>
-<h3><a class="anchor" id="autotoc_md40"></a>
+<h3><a class="anchor" id="autotoc_md44"></a>
 Position</h3>
 <p>The third number represent the x position of the entity thus at which point in the level it will appear. It is important to note that the x position should always be greater than 1920 which is the width of most screens. It is also recommended to order the entities by x position, in the level file, so we can easily see the order in which they will appear. //This is not mandatory but it is recommended.\</p>
-<h3><a class="anchor" id="autotoc_md41"></a>
+<h3><a class="anchor" id="autotoc_md45"></a>
 Position</h3>
 <p>The fourth number is the y position of the entity, in the case of some entities for example the boss, the y position is not used. in those case we use the position y in the enemy.json of the corresponding entity.</p>
-<h1><a class="anchor" id="autotoc_md42"></a>
+<h1><a class="anchor" id="autotoc_md46"></a>
 Generated levels example</h1>
 <div class="fragment"><div class="line">1 1 2000 400</div>
 <div class="line">2 2 2120 500</div>
@@ -101,7 +101,7 @@ Generated levels example</h1>
 <div class="line">3 3 3500 200</div>
 <div class="line">3 3 3500 700</div>
 <div class="line">4 4 3600 0</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md43"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md47"></a>
 Note</h2>
 <p>The level above would be a really simple level with really low amount of enemies. It is just an example to show how the level file should be formatted. </p>
 </div></div><!-- contents -->

@@ -1,0 +1,58 @@
+\hypertarget{md_gamecontent_autotoc_md24}{}\doxysection{How to add an enemy\+:}\label{md_gamecontent_autotoc_md24}
+in the \textquotesingle{}config\+Files/enemies.\+json\textquotesingle{} you can create an enemy by adding a tag, an hitbox, a sprite, a speed, a health and more ..., you can also add a pattern to make the enemy move in a specific way.\hypertarget{md_gamecontent_autotoc_md25}{}\doxysubsection{Example\+:}\label{md_gamecontent_autotoc_md25}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    "{}enemy"{}: [}
+\DoxyCodeLine{        \{}
+\DoxyCodeLine{            "{}tag"{}: "{}enemy1"{},}
+\DoxyCodeLine{            "{}hitbox"{}: \{}
+\DoxyCodeLine{                "{}width"{}: 0,}
+\DoxyCodeLine{                "{}height"{}: 0}
+\DoxyCodeLine{            \},}
+\DoxyCodeLine{            "{}sprite"{}: \{}
+\DoxyCodeLine{                "{}path"{}: "{}assets/sprites/enemy1.png"{},}
+\DoxyCodeLine{                "{}width"{}: 0,}
+\DoxyCodeLine{                "{}height"{}: 0}
+\DoxyCodeLine{            \},}
+\DoxyCodeLine{            "{}position"{}: \{}
+\DoxyCodeLine{                "{}x"{}: 0,}
+\DoxyCodeLine{                "{}y"{}: 0}
+\DoxyCodeLine{            \},}
+\DoxyCodeLine{            "{}speed"{}: 0,}
+\DoxyCodeLine{            "{}health"{}: 0,}
+\DoxyCodeLine{            "{}pattern"{}: }
+\DoxyCodeLine{            [}
+\DoxyCodeLine{                \{}
+\DoxyCodeLine{                    "{}x"{}: 0,}
+\DoxyCodeLine{                    "{}y"{}: 0}
+\DoxyCodeLine{                \},}
+\DoxyCodeLine{                \{}
+\DoxyCodeLine{                    "{}y"{}: 0,}
+\DoxyCodeLine{                    "{}x"{}: 0}
+\DoxyCodeLine{                \},}
+\DoxyCodeLine{            ]}
+\DoxyCodeLine{        \}}
+\DoxyCodeLine{    ]}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+if you want the enemy to shoot, go to the \textquotesingle{}config\+Files/bullet.\+json\textquotesingle{} and add a projectile with a tag, a hitbox, a sprite, a speed and more ...
+
+to animate the enemy, go to the animate\+\_\+enemy function in the \textquotesingle{}src/game\+Engine/game/game\+Logic/animation\textquotesingle{} and add a case with the tag of your enemy and the animation you want to play. the code will handle the rest.\hypertarget{md_gamecontent_autotoc_md26}{}\doxysection{To add miscellaneous content\+:}\label{md_gamecontent_autotoc_md26}
+to add miscellaneous content, go to the \textquotesingle{}config\+Files/miscellaneous.\+json\textquotesingle{}, for example if you want to add a background, you can add a tag, a sprite, a speed to make parralaax, add anything you want. after you have to initialize your entities with the json you can open a json and access to the data like this\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{std::ifstream file(PATH\_TO\_JSON);}
+\DoxyCodeLine{\textcolor{keywordflow}{if} (!file.is\_open())}
+\DoxyCodeLine{    \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"{}Cannot open config/starship.json"{}});}
+\DoxyCodeLine{nlohmann::json Json;}
+\DoxyCodeLine{file >> Json;}
+\DoxyCodeLine{file.close();}
+\DoxyCodeLine{data = Json[\textcolor{stringliteral}{"{}bullet"{}}][\textcolor{stringliteral}{"{}speed"{}}];}
+
+\end{DoxyCode}
+ 
