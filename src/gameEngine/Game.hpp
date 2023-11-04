@@ -79,18 +79,11 @@ struct Generated {
 
 struct Level_info {
     std::vector<Generated> _generated;
-    int mob_alive;
-    bool is_boss_alive;
-    float level_progress;
+    int mob_alive = 0;
+    bool is_boss_alive = false;
+    float level_progress = 1920;
     std::vector<std::pair<std::size_t, Generated>> mobs_alive;
     int _current_level;
-
-    Level_info() {
-        mob_alive = 0;
-        is_boss_alive = false;
-        level_progress = 1920;
-    }
-
 };
 
 struct GameStateComponent {
