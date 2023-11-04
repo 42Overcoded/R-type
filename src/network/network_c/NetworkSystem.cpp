@@ -178,6 +178,8 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
     uint32_t clientId;
     uint32_t arg1;
     uint32_t arg2;
+    float x;
+    float y;
 
     for (spawnerIndex = 0; spawnerIndex < reg._entity_number; spawnerIndex++)
     {
@@ -186,15 +188,17 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
     }
     if (!spawnerArr[spawnerIndex].has_value())
         throw std::runtime_error("No spawner component found");
+    packet >> y;
+    packet >> x;
     packet >> arg2;
     packet >> arg1;
     packet >> entityType;
     packet >> clientId;
     packet >> entityId;
 
-    spawnerArr[spawnerIndex]->spawningEntities.push({entityId, clientId, entityType, arg1, arg2, 0, 0});
+    spawnerArr[spawnerIndex]->spawningEntities.push({entityId, clientId, entityType, arg1, arg2, x, y});
     std::cout << "create entity : " << entityId << " " << entityType << " " << clientId << " " << arg1 << " "
-              << arg2 << std::endl;
+              << arg2  << " " << x << " " << y << std::endl;
 }
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)

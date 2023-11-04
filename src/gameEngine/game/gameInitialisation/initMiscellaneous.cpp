@@ -275,7 +275,7 @@ void gameEngine::init_score() {
     scale[score]->scale = scoreJson["score"]["scale"];
 }
 
-void gameEngine::spawn_explosion(uint32_t entityId, int i) {
+entity_t gameEngine::spawn_explosion(uint32_t entityId, int i, float x, float y) {
     std::ifstream file(PATH_TO_JSON + "explosion.json");
 
     if (!file.is_open())
@@ -285,7 +285,7 @@ void gameEngine::spawn_explosion(uint32_t entityId, int i) {
     file.close();
 
     entity_t explosion = _registry.spawn_entity();
-    _registry.add_component<Position>(explosion, Position());
+    _registry.add_component<Position>(explosion, Position{.x = x, .y = y});
     _registry.add_component<Sprite>(explosion, Sprite());
     _registry.add_component<Drawable>(explosion, Drawable());
     _registry.add_component<Tag>(explosion, Tag());
@@ -316,9 +316,10 @@ void gameEngine::spawn_explosion(uint32_t entityId, int i) {
     rect[explosion]->width = boomJson["explosion"]["rect"]["width"];
     rect[explosion]->height = boomJson["explosion"]["rect"]["height"];
     scale[explosion]->scale = boomJson["explosion"]["scale"];
+    return explosion;
 }
 
-void gameEngine::spawn_power_up(uint32_t entityId, int i, int j)
+void gameEngine::spawn_power_up(uint32_t entityId, int i, int j, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "powerup.json");
     if (!file.is_open())
@@ -328,7 +329,7 @@ void gameEngine::spawn_power_up(uint32_t entityId, int i, int j)
     file.close();
 
     entity_t power = _registry.spawn_entity();
-    _registry.add_component<Position>(power, Position());
+    _registry.add_component<Position>(power, Position{.x = x, .y = y});
     _registry.add_component<Sprite>(power, Sprite());
     _registry.add_component<Drawable>(power, Drawable());
     _registry.add_component<Tag>(power, Tag());
@@ -438,7 +439,7 @@ void gameEngine::death_animation()
                 GameStateComponent &gameState = get_game_state();
                 auto &spawner = _registry.get_components<Spawner>();
                 if (_type == SERVER || gameState.co == OFF) {
-                    spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 9, .arg1 = i});
+                    spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 9, .arg1 = i, .x = position[i]->x, .y = position[i]->y});
                 }
                 if (_type == SERVER || gameState.co == OFF) {
                     unsigned int j = -1;
@@ -487,7 +488,7 @@ void gameEngine::death_animation()
         }
     }
     if (wormAlive == 0) {
-        for (size_t j = 0; j < _registry._entity_number; j++) {
+        for (unsigned int j = 0; j < _registry._entity_number; j++) {
             if (!tag[j].has_value())
                 continue;
             if ((tag[j]->tag == "wormHead" || tag[j]->tag == "wormBody")) {
@@ -500,7 +501,8 @@ void gameEngine::death_animation()
                         text[k]->str = "Score : " + std::to_string(state[k]->state);
                     }
                 }
-                spawn_explosion(0, j);
+                SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 8, .arg1 = j, .x = position[j]->x, .y = position[j]->y});
                 Kill_entity(entity_t(j));
                 _level_info.is_boss_alive = false;
                 _level_info.mob_alive = 0;
@@ -546,7 +548,7 @@ void gameEngine::init_game()
     for (int i = 1; i != nbPlayer + 1; i++) {
         entity_t starship = init_starship(id, i);
         init_beambar(id);
-        init_load_shoot(0, id);
+        init_load_shoot(id);
         for (int i = 0; i < 3; i++)
             init_life(i, id);
     }

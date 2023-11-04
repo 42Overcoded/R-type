@@ -7,7 +7,7 @@
 #include <nlohmann/json.hpp>
 #include <random>
 
-void gameEngine::spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i)
+void gameEngine::spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
 
@@ -34,7 +34,7 @@ void gameEngine::spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i)
         _registry.add_component<Sprite>(bullet, Sprite());
         _registry.add_component<Drawable>(bullet, Drawable());
         _registry.add_component<Hitbox>(bullet, Hitbox());
-        _registry.add_component<Position>(bullet, Position());
+        _registry.add_component<Position>(bullet, Position{.x = x, .y = y});
         _registry.add_component<Rect>(bullet, Rect());
         _registry.add_component<Texture>(bullet, Texture());
         _registry.add_component<Scale>(bullet, Scale());
@@ -119,7 +119,7 @@ void gameEngine::spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i)
     }
 }
 
-void gameEngine::spawn_boss_bullet(uint32_t entityId, int i, int j)
+void gameEngine::spawn_boss_bullet(uint32_t entityId, int i, int j, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
 
@@ -142,7 +142,7 @@ void gameEngine::spawn_boss_bullet(uint32_t entityId, int i, int j)
     _registry.add_component<Sprite>(bullet, Sprite());
     _registry.add_component<Drawable>(bullet, Drawable());
     _registry.add_component<Hitbox>(bullet, Hitbox());
-    _registry.add_component<Position>(bullet, Position());
+    _registry.add_component<Position>(bullet, Position{.x = x, .y = y});
     _registry.add_component<EnemyBall>(bullet, EnemyBall());
     _registry.add_component<Texture>(bullet, Texture());
     _registry.add_component<Scale>(bullet, Scale());
@@ -201,7 +201,7 @@ void gameEngine::spawn_boss_bullet(uint32_t entityId, int i, int j)
     }
 }
 
-void gameEngine::spawn_bullet(uint32_t entityId, int i, int j)
+void gameEngine::spawn_bullet(uint32_t entityId, int i, int j, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
 
@@ -228,7 +228,7 @@ void gameEngine::spawn_bullet(uint32_t entityId, int i, int j)
     _registry.add_component<Sprite>(bullet, Sprite());
     _registry.add_component<Drawable>(bullet, Drawable());
     _registry.add_component<Hitbox>(bullet, Hitbox());
-    _registry.add_component<Position>(bullet, Position());
+    _registry.add_component<Position>(bullet, Position{.x = x, .y = y});
     _registry.add_component<EnemyBall>(bullet, EnemyBall());
     _registry.add_component<Texture>(bullet, Texture());
     _registry.add_component<Scale>(bullet, Scale());

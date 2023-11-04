@@ -81,7 +81,7 @@ entity_t gameEngine::init_starship(int id, int i)
     return starship;
 }
 
-void gameEngine::init_load_shoot(uint32_t entityId, int id)
+void gameEngine::init_load_shoot(int id)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
 
@@ -102,8 +102,6 @@ void gameEngine::init_load_shoot(uint32_t entityId, int id)
     _registry.add_component<Scale>(load_shoot, Scale());
     _registry.add_component<State>(load_shoot, State());
     _registry.add_component<Clock>(load_shoot, Clock());
-    _registry.add_component<NetworkComponent>(load_shoot, NetworkComponent{.entityId = entityId});
-
 
     auto &tag = _registry.get_components<Tag>();
     auto &texture = _registry.get_components<Texture>();

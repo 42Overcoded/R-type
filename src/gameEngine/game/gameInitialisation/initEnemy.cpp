@@ -5,7 +5,7 @@
 #include "network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 
-entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id)
+entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "enemies.json");
 
@@ -17,7 +17,7 @@ entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id)
 
     entity_t enemy = _registry.spawn_entity();
 
-    _registry.add_component<Position>(enemy, Position());
+    _registry.add_component<Position>(enemy, Position{.x = x, .y = y});
     _registry.add_component<Speed>(enemy, Speed());
     _registry.add_component<Sprite>(enemy, Sprite());
     _registry.add_component<Drawable>(enemy, Drawable());
@@ -120,7 +120,7 @@ entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id)
     return enemy;
 }
 
-entity_t gameEngine::init_worm(uint32_t entityId, int id)
+entity_t gameEngine::init_worm(uint32_t entityId, int id, float x, float y)
 {
     std::ifstream file("configFiles/enemies.json");
 
@@ -132,7 +132,7 @@ entity_t gameEngine::init_worm(uint32_t entityId, int id)
 
     entity_t worm = _registry.spawn_entity();
 
-    _registry.add_component<Position>(worm, Position());
+    _registry.add_component<Position>(worm, Position{.x = x, .y = y});
     _registry.add_component<Speed>(worm, Speed());
     _registry.add_component<Sprite>(worm, Sprite());
     _registry.add_component<Drawable>(worm, Drawable());
@@ -204,11 +204,11 @@ entity_t gameEngine::init_worm(uint32_t entityId, int id)
         tmp.speedy = enemiesJson["enemies"][8]["pattern"][i]["y"];
         pattern[worm]->pattern.push_back(tmp);
     }
-    float x = pattern[worm]->pattern[pattern[worm]->pattern_index].speedx - position[worm]->x;
-    float y = pattern[worm]->pattern[pattern[worm]->pattern_index].speedy - position[worm]->y;
-    float length = sqrt(x * x + y * y);
-    speed[worm]->speedx = (x / length) * 0.5;
-    speed[worm]->speedy = (y / length) * 0.5;
+    float x_ = pattern[worm]->pattern[pattern[worm]->pattern_index].speedx - position[worm]->x;
+    float y_ = pattern[worm]->pattern[pattern[worm]->pattern_index].speedy - position[worm]->y;
+    float length = sqrt(x_ * x_ + y_ * y_);
+    speed[worm]->speedx = (x_ / length) * 0.5;
+    speed[worm]->speedy = (y_ / length) * 0.5;
     speed[worm]->baseSpeedx = speed[worm]->speedx;
     speed[worm]->baseSpeedy = speed[worm]->speedy;
     return worm;

@@ -56,7 +56,7 @@ class gameEngine {
          * @param y Coordinate y
          * @return entity_t 
          */
-        entity_t init_enemy(uint32_t entityId, int enemy_id, int comportment_id);
+        entity_t init_enemy(uint32_t entityId, int enemy_id, int comportment_id, float x, float y);
         /**
          * @brief menu of the game / pause scene / end scene / lobby
          * 
@@ -115,17 +115,17 @@ class gameEngine {
          * @brief init the load shoot animation
          * 
          */
-        void init_load_shoot(uint32_t entityId, int i);
+        void init_load_shoot(int i);
         /**
          * @brief spawn enemy bullet
          * 
          */
-        void spawn_bullet(uint32_t entityId, int i, int j);
+        void spawn_bullet(uint32_t entityId, int i, int j, float x, float y);
         /**
          * @brief spawn boss bullet
          * 
          */
-        void spawn_boss_bullet(uint32_t entityId, int i, int j);
+        void spawn_boss_bullet(uint32_t entityId, int i, int j, float x, float y);
         void shoot_enemy();
         /**
          * @brief decharge the shoot of the starship and reset the beambar
@@ -144,13 +144,13 @@ class gameEngine {
          * 
          * @param i 
          */
-        void spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i);
+        void spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i, float x, float y);
         /**
          * @brief spawn the explosion animation after the death of the enemy
          * 
          * @param i 
          */
-        void spawn_explosion(uint32_t entityId, int i);
+        entity_t spawn_explosion(uint32_t entityId, int i, float x, float y);
         /**
          * @brief animate the explosion
          * 
@@ -193,8 +193,8 @@ class gameEngine {
         void load_musics_and_sounds(void);
         void init_game();
         void life_handler();
-        entity_t init_worm(uint32_t entityId, int i);
-        void spawn_power_up(uint32_t entityId, int i, int j);
+        entity_t init_worm(uint32_t entityId, int i, float x, float y);
+        void spawn_power_up(uint32_t entityId, int i, int j, float x, float y);
         void spawnManager(void);
         void spawn_infinite_wave(sf::Time &elapsed, sf::Clock &clock, float &wave);
         std::string get_this_str(std::string tag, std::string default_str);

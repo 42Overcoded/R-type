@@ -221,6 +221,8 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
         packet << (uint32_t)entity.entityType;
         packet << (uint32_t)entity.arg1;
         packet << (uint32_t)entity.arg2;
+        packet << (float)entity.x;
+        packet << (float)entity.y;
         std::cout << "create : id " << entity.entityId << " type " << entity.entityType << " arg1 " << entity.arg1 << " arg2 " << entity.arg2 << std::endl;
         SendToAllClients(packet);
         spawnerArr[spawnerIndex]->spawningEntities.push(entity);
