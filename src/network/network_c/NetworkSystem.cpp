@@ -47,7 +47,7 @@ void NetworkSystem::managePlayerNbr(registry &reg)
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
     SparseArray<Tag> &tagArr                      = reg.get_components<Tag>();
     SparseArray<Text> &textArr                    = reg.get_components<Text>();
-    SparseArray<NetworkInfo> &networkInfoArr      = reg.get_components<NetworkInfo>();
+    SparseArray<Spawner> &spawnerArr      = reg.get_components<Spawner>();
 
     for (size_t i = 0; i < reg._entity_number; i++)
     {
@@ -70,9 +70,9 @@ void NetworkSystem::managePlayerNbr(registry &reg)
                 textArr[i]->str = str;
             }
         }
-        if (networkInfoArr[i].has_value())
+        if (spawnerArr[i].has_value())
         {
-            networkInfoArr[i]->playersNbr = playersNbr_;
+            spawnerArr[i]->playersNbr = playersNbr_;
         }
     }
 }

@@ -14,13 +14,15 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include <SFML/Audio/Sound.hpp>
+#include <sys/types.h>
+#include <cstdint>
 #include <iostream>
 #include <vector>
+#include <queue>
 
 /**
  * @brief speed of the entity
- * 
+ *
  */
 struct Speed {
     float speedy = 0;
@@ -31,16 +33,30 @@ struct Speed {
     float varSpeedx = 0;
 };
 
-struct NetworkInfo {
-    std::vector<int> spawn;
-    std::vector<int> arg1;
-    std::vector<int> arg2;
+/**
+ * @brief A container fore the entity to spawn
+ *
+ */
+struct EntitySpawnDescriptor {
+    uint32_t entityId;
+    uint32_t clientId;
+    uint32_t entityType;
+    float x;
+    float y;
+};
+
+/**
+ * @brief The spawner component storing the entities to spawn
+ *
+ */
+struct Spawner {
+    std::queue<EntitySpawnDescriptor> entitiesToSpawn;
     unsigned int playersNbr;
 };
 
 /**
- * @brief textureTag is the key of the texture you can acces it by given the key to the texture map 
- * 
+ * @brief textureTag is the key of the texture you can acces it by given the key to the texture map
+ *
  */
 struct Texture {
     std::string textureTag;
@@ -49,7 +65,7 @@ struct Texture {
 
 /**
  * @brief State of the entity mostly used to animate entities
- * 
+ *
  */
 struct State {
     int state = 0;
@@ -60,7 +76,7 @@ struct State {
 
 /**
  * @brief Scale of the entity
- * 
+ *
  */
 struct Scale {
     float scale = 1;
@@ -68,7 +84,7 @@ struct Scale {
 
 /**
  * @brief Rect of the entity
- * 
+ *
  */
 struct Rect {
     int left;
@@ -83,7 +99,7 @@ struct Rect {
 
 /**
  * @brief Clocks of the entity
- * 
+ *
  */
 struct Clock {
     sf::Time time;
@@ -96,7 +112,7 @@ struct Clock {
 
 /**
  * @brief Position of the entity
- * 
+ *
  */
 struct Position {
     float x = 0.0f;
@@ -105,7 +121,7 @@ struct Position {
 
 /**
  * @brief EnemyBall is a tag to know if the entity is an enemy ball
- * 
+ *
  */
 struct EnemyBall {
     bool enemyball = true;
@@ -113,7 +129,7 @@ struct EnemyBall {
 
 /**
  * @brief SearchingHead is a tag to know if the entity is a searching head
- * 
+ *
  */
 struct SearchingHead {
     bool searching = false;
@@ -121,7 +137,7 @@ struct SearchingHead {
 
 /**
  * @brief Sprite of the entity
- * 
+ *
  */
 struct Sprite {
     sf::Sprite sprite;
@@ -129,7 +145,7 @@ struct Sprite {
 
 /**
  * @brief Player is a tag to know if the entity is a player
- * 
+ *
  */
 struct Player {
     int id;
@@ -141,7 +157,7 @@ struct isClick {
 
 /**
  * @brief Enemy is a tag to know if the entity is an enemy and the score it gives when killed
- * 
+ *
  */
 struct Enemy {
     int score;
@@ -149,7 +165,7 @@ struct Enemy {
 
 /**
  * @brief Bullet is a tag to know if the entity is a bullet
- * 
+ *
  */
 struct Bullet {
     int id;
@@ -168,7 +184,7 @@ struct Orientation {
 
 /**
  * @brief Tag to know the type of the entity
- * 
+ *
  */
 struct Tag {
     std::string tag;
@@ -177,7 +193,7 @@ struct Tag {
 
 /**
  * @brief Health of the entity
- * 
+ *
  */
 struct Health {
     float health;
@@ -185,7 +201,7 @@ struct Health {
 
 /**
  * @brief Damage of the entity
- * 
+ *
  */
 struct Damage {
     int damage;
@@ -197,7 +213,7 @@ struct Score {
 
 /**
  * @brief text of the entity
- * 
+ *
  */
 struct Text {
     sf::Text text;
@@ -207,7 +223,7 @@ struct Text {
 
 /**
  * @brief drawable is a tag to know if the entity is drawable
- * 
+ *
  */
 struct Drawable {
     bool drawable = true;
@@ -215,7 +231,7 @@ struct Drawable {
 
 /**
  * @brief Control of the entity to know which key is pressed
- * 
+ *
  */
 struct Control {
     bool up = false;
@@ -227,7 +243,7 @@ struct Control {
 
 /**
  * @brief Pattern of the entity
- * 
+ *
  */
 struct Pattern {
     std::vector<Speed> pattern;
@@ -240,7 +256,7 @@ struct Pattern {
 
 /**
  * @brief Hitbox of the entity
- * 
+ *
  */
 struct Hitbox {
     int width;

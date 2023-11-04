@@ -6,6 +6,7 @@
 */
 
 #include "NetworkSystem.hpp"
+#include <cstddef>
 #include <iostream>
 #include <memory>
 #include <optional>
@@ -14,6 +15,7 @@
 #include "NetworkComponent.hpp"
 #include "Packet.hpp"
 #include "Protocol.hpp"
+#include "network_c/NetworkComponent.hpp"
 #include "network_c/NetworkSystem.hpp"
 #include "../../gameEngine/Game.hpp"
 
@@ -35,7 +37,7 @@ void NetworkSystem::Update(registry &reg)
 
 void NetworkSystem::managePlayers(registry &reg) {
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
-    SparseArray<NetworkInfo> &networkInfoArr = reg.get_components<NetworkInfo>();
+    SparseArray<Spawner> &spawnerArr = reg.get_components<Spawner>();
 
     for (std::shared_ptr<Connection<Flag>> client : *clients_)
     {
@@ -72,9 +74,9 @@ void NetworkSystem::managePlayers(registry &reg) {
             }
             continue;
         }
-        if (networkInfoArr[i].has_value())
+        if (spawnerArr[i].has_value())
         {
-            networkInfoArr[i]->playersNbr = players_.size();
+            spawnerArr[i]->playersNbr = players_.size();
         }
     }
 }
@@ -197,8 +199,17 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg)
 
 void NetworkSystem::manageClientCreateEntity(registry &reg)
 {
-    auto &network = reg.get_components<NetworkComponent>();
-    auto &position = reg.get_components<Position>();
+    SparseArray<NetworkComponent> &network = reg.get_components<NetworkComponent>();
+    SparseArray<Position> &position = reg.get_components<Position>();
+    SparseArray<Spawner> &spawnerArr = reg.get_components<Spawner>();
+    size_t spawnerIndex = 0;
+
+    for (spawnerIndex = 0; spawnerIndex < reg._entity_number; spawnerIndex++) {
+        if (spawnerArr[spawnerIndex].has_value())
+            break;
+    }
+    if (!spawnerArr[spawnerIndex].has_value())
+        throw std::runtime_error("No network info component found");
 
     for (unsigned int i = 0; i < network.size(); i++) {
         if (network[i].has_value() && position[i].has_value()) {

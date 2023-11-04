@@ -249,7 +249,7 @@ Description : This command is used to remove a player from the game.
 - Origin : Server
 - Flag : 0x0A
 - Size : 0x14 (uint32_t * 5)
-- Payload : [uint32_t, uint32_t, uint32_t, uint32_t, uint32_t] (Entity ID, Entity Type, Entity Owner, Position X, Position Y)
+- Payload : [uint32_t, uint32_t, uint32_t, uint32_t, uint32_t] (Entity ID, Entity Owner, Entity Type, Arg1, Arg2)
 
 Description : This command is used to create an entity in the game.
 
