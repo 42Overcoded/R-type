@@ -188,8 +188,8 @@ void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet
         throw std::runtime_error("No spawner component found");
     packet >> arg2;
     packet >> arg1;
-    packet >> clientId;
     packet >> entityType;
+    packet >> clientId;
     packet >> entityId;
 
     spawnerArr[spawnerIndex]->spawningEntities.push({entityId, clientId, entityType, arg1, arg2, 0, 0});

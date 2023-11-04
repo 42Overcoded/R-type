@@ -98,7 +98,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     GameStateComponent &gameState = get_game_state();
                     auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                        entity_t enemy = init_worm(7);
+                        entity_t enemy = init_worm(0, 7);
                         _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                         spawner[0]->spawningEntities.push(EntitySpawnDescriptor{.entityType = 8});
                     }
@@ -109,7 +109,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     GameStateComponent &gameState = get_game_state();
                     auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                        entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                        entity_t enemy = init_enemy(0, _level_info._generated[0].id, _level_info._generated[0].pattern);
                         _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                         spawner[0]->spawningEntities.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = _level_info._generated[0].id, .arg2 = _level_info._generated[0].pattern});
                         auto &position = _registry.get_components<Position>();
@@ -129,7 +129,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                 if (_type == CLIENT && _level_info._generated[0].id == 6)
                     sounds["truck"]->play();
                 if (_type == SERVER || gameState.co == OFF) {
-                    entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                    entity_t enemy = init_enemy(0, _level_info._generated[0].id, _level_info._generated[0].pattern);
                     _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                     spawner[0]->spawningEntities.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = _level_info._generated[0].id, .arg2 = _level_info._generated[0].pattern});
                     auto &position = _registry.get_components<Position>();
@@ -174,7 +174,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
             GameStateComponent &gameState = get_game_state();
             auto &spawner = _registry.get_components<Spawner>();
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(0, 0);
+                entity_t enemy     = init_enemy(0, 0, 0);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
                 spawner[0]->spawningEntities.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 0, .arg2 = 0});
@@ -185,7 +185,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
             GameStateComponent &gameState = get_game_state();
             auto &spawner = _registry.get_components<Spawner>();
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(1, 1);
+                entity_t enemy     = init_enemy(0, 1, 1);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
                 spawner[0]->spawningEntities.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 1, .arg2 = 1});
@@ -196,7 +196,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
             GameStateComponent &gameState = get_game_state();
             auto &spawner = _registry.get_components<Spawner>();
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(2, 2);
+                entity_t enemy     = init_enemy(0, 2, 2);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
                 spawner[0]->spawningEntities.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 2, .arg2 = 2});
@@ -210,7 +210,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
                 sounds["truck"]->play();
             }
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(6, 6);
+                entity_t enemy     = init_enemy(0, 6, 6);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
                 spawner[0]->spawningEntities.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 6, .arg2 = 6});
@@ -221,7 +221,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
             GameStateComponent &gameState = get_game_state();
             auto &spawner = _registry.get_components<Spawner>();
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(3, 3);
+                entity_t enemy     = init_enemy(0, 3, 3);
                 auto &position     = _registry.get_components<Position>();
                 position[enemy]->y = std::rand() % 950;
                 spawner[0]->spawningEntities.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 3, .arg2 = 3});
@@ -285,37 +285,37 @@ void gameEngine::spawnManager(void)
 
                 if (entity.entityType == 1) {
                     std::cout << "spawn ally bullet" << std::endl;
-                    spawn_ally_bullet(entity.arg1);
+                    spawn_ally_bullet(entity.entityId, entity.arg1);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 2) {
-                    spawn_boss_bullet(entity.arg1, 5);
+                    spawn_boss_bullet(entity.entityId, entity.arg1, 5);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 3) {
-                    spawn_boss_bullet(entity.arg1, 2);
+                    spawn_boss_bullet(entity.entityId, entity.arg1, 2);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 4) {
-                    spawn_bullet(entity.arg1, 0);
+                    spawn_bullet(entity.entityId, entity.arg1, 0);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 5) {
-                    spawn_bullet(entity.arg1, 4);
+                    spawn_bullet(entity.entityId, entity.arg1, 4);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 6) {
-                    spawn_bullet(entity.arg1, 1);
+                    spawn_bullet(entity.entityId, entity.arg1, 1);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 7) {
-                    spawn_bullet(entity.arg1, 6);
+                    spawn_bullet(entity.entityId, entity.arg1, 6);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 8) {
-                    init_worm(7);
+                    init_worm(entity.entityId, 7);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 9) {
-                    spawn_explosion(entity.arg1);
+                    spawn_explosion(entity.entityId, entity.arg1);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 10) {
-                    spawn_power_up(entity.arg1, entity.arg2);
+                    spawn_power_up(entity.entityId, entity.arg1, entity.arg2);
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 11) {
-                    init_enemy(entity.arg1, entity.arg2);
+                    init_enemy(entity.entityId, entity.arg1, entity.arg2);
                     spawner[i]->spawningEntities.pop();
                 } else {
                     spawner[i]->spawningEntities.pop();
@@ -396,7 +396,7 @@ void gameEngine::launch_game()
                 if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clockk[i]->time.asSeconds() > 0.18)
                 {
                     state[i]->index++;
-                    init_worm(8);
+                    init_worm(0, 8);
                     clockk[i]->clock.restart();
                     this->_level_info.mob_alive += 1;
                 }

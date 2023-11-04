@@ -2,10 +2,11 @@
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
+#include "network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 #include <random>
 
-void gameEngine::spawn_ally_bullet(int i)
+void gameEngine::spawn_ally_bullet(uint32_t entityId, int i)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
 
@@ -38,6 +39,7 @@ void gameEngine::spawn_ally_bullet(int i)
         _registry.add_component<Scale>(bullet, Scale());
         _registry.add_component<State>(bullet, State());
         _registry.add_component<Orientation>(bullet, Orientation());
+        _registry.add_component<NetworkComponent>(bullet, NetworkComponent{.entityId = entityId});
 
         auto &orientation = _registry.get_components<Orientation>();
         auto &tag = _registry.get_components<Tag>();
@@ -117,7 +119,7 @@ void gameEngine::spawn_ally_bullet(int i)
     }
 }
 
-void gameEngine::spawn_boss_bullet(int i, int j)
+void gameEngine::spawn_boss_bullet(uint32_t entityId, int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
 
@@ -146,6 +148,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     _registry.add_component<Scale>(bullet, Scale());
     _registry.add_component<Color>(bullet, Color());
     _registry.add_component<Rect>(bullet, Rect());
+    _registry.add_component<NetworkComponent>(bullet, NetworkComponent{.entityId = entityId});
 
     auto &drawable = _registry.get_components<Drawable>();
     auto &tag = _registry.get_components<Tag>();
@@ -198,7 +201,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     }
 }
 
-void gameEngine::spawn_bullet(int i, int j)
+void gameEngine::spawn_bullet(uint32_t entityId, int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
 
@@ -231,6 +234,7 @@ void gameEngine::spawn_bullet(int i, int j)
     _registry.add_component<Scale>(bullet, Scale());
     _registry.add_component<SearchingHead>(bullet, SearchingHead());
     _registry.add_component<Color>(bullet, Color());
+    _registry.add_component<NetworkComponent>(bullet, NetworkComponent{.entityId = entityId});
 
     auto &color = _registry.get_components<Color>();
     auto &tag = _registry.get_components<Tag>();

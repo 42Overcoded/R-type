@@ -275,7 +275,7 @@ void gameEngine::init_score() {
     scale[score]->scale = scoreJson["score"]["scale"];
 }
 
-void gameEngine::spawn_explosion(int i) {
+void gameEngine::spawn_explosion(uint32_t entityId, int i) {
     std::ifstream file(PATH_TO_JSON + "explosion.json");
 
     if (!file.is_open())
@@ -294,6 +294,7 @@ void gameEngine::spawn_explosion(int i) {
     _registry.add_component<Texture>(explosion, Texture());
     _registry.add_component<Rect>(explosion, Rect());
     _registry.add_component<Scale>(explosion, Scale());
+    _registry.add_component<NetworkComponent>(explosion, NetworkComponent{.entityId = entityId});
 
     auto &state = _registry.get_components<State>();
     auto &drawable = _registry.get_components<Drawable>();
@@ -317,7 +318,7 @@ void gameEngine::spawn_explosion(int i) {
     scale[explosion]->scale = boomJson["explosion"]["scale"];
 }
 
-void gameEngine::spawn_power_up(int i, int j)
+void gameEngine::spawn_power_up(uint32_t entityId, int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "powerup.json");
     if (!file.is_open())
@@ -337,6 +338,7 @@ void gameEngine::spawn_power_up(int i, int j)
     _registry.add_component<Speed>(power, Speed());
     _registry.add_component<Hitbox>(power, Hitbox());
     _registry.add_component<Scale>(power, Scale());
+    _registry.add_component<NetworkComponent>(power, NetworkComponent{.entityId = entityId});
 
     auto &state = _registry.get_components<State>();
     auto &drawable = _registry.get_components<Drawable>();
@@ -436,7 +438,7 @@ void gameEngine::death_animation()
                 GameStateComponent &gameState = get_game_state();
                 auto &spawner = _registry.get_components<Spawner>();
                 if (_type == SERVER || gameState.co == OFF) {
-                    spawn_explosion(i);
+                    spawn_explosion(0, i);
                     spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 9, .arg1 = i});
                 }
                 if (_type == SERVER || gameState.co == OFF) {
@@ -465,7 +467,7 @@ void gameEngine::death_animation()
                         j = 4;
                     }
                     if (j != -1) {
-                        spawn_power_up(i, j);
+                        spawn_power_up(0, i, j);
                         spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 10, .arg1 = i, .arg2 = j});
                     }
                 }
@@ -500,7 +502,7 @@ void gameEngine::death_animation()
                         text[k]->str = "Score : " + std::to_string(state[k]->state);
                     }
                 }
-                spawn_explosion(j);
+                spawn_explosion(0, j);
                 Kill_entity(entity_t(j));
                 _level_info.is_boss_alive = false;
                 _level_info.mob_alive = 0;
@@ -548,7 +550,7 @@ void gameEngine::init_game()
     for (int i = 1; i != nbPlayer + 1; i++) {
         entity_t starship = init_starship(id, i);
         init_beambar(id);
-        init_load_shoot(id);
+        init_load_shoot(0, id);
         for (int i = 0; i < 3; i++)
             init_life(i, id);
     }

@@ -2,9 +2,10 @@
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
+#include "network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 
-entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
+entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id)
 {
     std::ifstream file(PATH_TO_JSON + "enemies.json");
 
@@ -31,6 +32,7 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     _registry.add_component<Texture>(enemy, Texture());
     _registry.add_component<Scale>(enemy, Scale());
     _registry.add_component<Color>(enemy, Color());
+    _registry.add_component<NetworkComponent>(enemy, NetworkComponent{.entityId = entityId});
 
     auto &color = _registry.get_components<Color>();
     auto &tag = _registry.get_components<Tag>();
@@ -118,7 +120,7 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     return enemy;
 }
 
-entity_t gameEngine::init_worm(int id)
+entity_t gameEngine::init_worm(uint32_t entityId, int id)
 {
     std::ifstream file("configFiles/enemies.json");
 
@@ -146,6 +148,7 @@ entity_t gameEngine::init_worm(int id)
     _registry.add_component<Scale>(worm, Scale());
     _registry.add_component<Color>(worm, Color());
     _registry.add_component<Orientation>(worm, Orientation());
+    _registry.add_component<NetworkComponent>(worm, NetworkComponent{.entityId = entityId});
 
     auto &color = _registry.get_components<Color>();
     auto &__tag = _registry.get_components<Tag>();
