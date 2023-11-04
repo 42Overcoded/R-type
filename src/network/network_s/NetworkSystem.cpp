@@ -212,7 +212,6 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
         throw std::runtime_error("No network info component found");
     while (spawnerArr[spawnerIndex]->entitiesToSpawn.empty() == false) {
         EntitySpawnDescriptor entity = spawnerArr[spawnerIndex]->entitiesToSpawn.front();
-        spawnerArr[spawnerIndex]->entitiesToSpawn.pop();
         Packet<Flag> packet;
 
         entity.entityId = ++lastEntityId_;
@@ -225,6 +224,7 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
         std::cout << "create : id " << entity.entityId << " type " << entity.entityType << " arg1 " << entity.arg1 << " arg2 " << entity.arg2 << std::endl;
         SendToAllClients(packet);
         spawnerArr[spawnerIndex]->spawningEntities.push(entity);
+        spawnerArr[spawnerIndex]->entitiesToSpawn.pop();
     }
 }
 

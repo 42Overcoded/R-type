@@ -438,7 +438,6 @@ void gameEngine::death_animation()
                 GameStateComponent &gameState = get_game_state();
                 auto &spawner = _registry.get_components<Spawner>();
                 if (_type == SERVER || gameState.co == OFF) {
-                    spawn_explosion(0, i);
                     spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 9, .arg1 = i});
                 }
                 if (_type == SERVER || gameState.co == OFF) {
@@ -467,7 +466,6 @@ void gameEngine::death_animation()
                         j = 4;
                     }
                     if (j != -1) {
-                        spawn_power_up(0, i, j);
                         spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 10, .arg1 = i, .arg2 = j});
                     }
                 }

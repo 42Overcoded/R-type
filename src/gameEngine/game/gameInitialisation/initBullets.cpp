@@ -1,4 +1,5 @@
 #include "../../GameEngine.hpp"
+#include <cstdint>
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
@@ -6,7 +7,7 @@
 #include <nlohmann/json.hpp>
 #include <random>
 
-void gameEngine::spawn_ally_bullet(uint32_t entityId, int i)
+void gameEngine::spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
 
@@ -39,7 +40,7 @@ void gameEngine::spawn_ally_bullet(uint32_t entityId, int i)
         _registry.add_component<Scale>(bullet, Scale());
         _registry.add_component<State>(bullet, State());
         _registry.add_component<Orientation>(bullet, Orientation());
-        _registry.add_component<NetworkComponent>(bullet, NetworkComponent{.entityId = entityId});
+        _registry.add_component<NetworkComponent>(bullet, NetworkComponent{.clientId = clientId, .entityId = entityId});
 
         auto &orientation = _registry.get_components<Orientation>();
         auto &tag = _registry.get_components<Tag>();
@@ -54,7 +55,6 @@ void gameEngine::spawn_ally_bullet(uint32_t entityId, int i)
         auto &texture = _registry.get_components<Texture>();
         auto &scale = _registry.get_components<Scale>();
 
-        //state[bullet]->id = id;    put the id of the starship who shooted this
         _drawable[bullet]->drawable = true;
         tag[bullet]->tag = starshipJson["bullet"]["tag"];
         texture[bullet]->textureTag = starshipJson["bullet"]["textureTag"];

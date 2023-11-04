@@ -122,7 +122,6 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
                 return;
             GameStateComponent &gameState = get_game_state();
             if (_type == SERVER || gameState.co == OFF) {
-                spawn_ally_bullet(0, i);
                 spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 1, .arg1 = i});
             }
             clock[i]->_clock.restart();
@@ -153,7 +152,6 @@ void gameEngine::shoot_enemy() {
                     GameStateComponent &gameState = get_game_state();
                     auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                            spawn_bullet(0, i, 0);
                         spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 4, .arg1 = i});
                     }
                 }
@@ -168,7 +166,6 @@ void gameEngine::shoot_enemy() {
                     GameStateComponent &gameState = get_game_state();
                     auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                            spawn_bullet(0, i, 4);
                         spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 4, .arg1 = i});
                     }
                 }
@@ -183,7 +180,6 @@ void gameEngine::shoot_enemy() {
                     GameStateComponent &gameState = get_game_state();
                     auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                            spawn_bullet(0, i, 1);
                         spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 6, .arg1 = i});
                     }
                 }
@@ -198,7 +194,6 @@ void gameEngine::shoot_enemy() {
                     GameStateComponent &gameState = get_game_state();
                     auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                            spawn_boss_bullet(0, i, 5);
                         spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 2, .arg1 = i});
                     }
                 }
@@ -221,7 +216,6 @@ void gameEngine::shoot_enemy() {
                 GameStateComponent &gameState = get_game_state();
                 auto &spawner = _registry.get_components<Spawner>();
                 if (_type == SERVER || gameState.co == OFF) {
-                    spawn_boss_bullet(0, i, 2);
                     spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 3, .arg1 = i});
                 }
             }
@@ -236,7 +230,6 @@ void gameEngine::shoot_enemy() {
                     GameStateComponent &gameState = get_game_state();
                     auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                            spawn_bullet(0, i, 6);
                         spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 7, .arg1 = i});
                     }
                 }

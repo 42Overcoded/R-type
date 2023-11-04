@@ -144,7 +144,7 @@ class gameEngine {
          * 
          * @param i 
          */
-        void spawn_ally_bullet(uint32_t entityId, int i);
+        void spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i);
         /**
          * @brief spawn the explosion animation after the death of the enemy
          * 
