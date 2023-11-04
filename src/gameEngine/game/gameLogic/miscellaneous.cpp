@@ -454,7 +454,7 @@ void gameEngine::menu()
                 gameLauncher.isRequestingGame = true;
             }
             if (tag[i]->tag == "adventurebuttononline" && click[i]->clicked == true) {
-                gameState.mode = LEVELS;
+                gameState.mode = LEVELS_G;
                 gameLauncher.isRequestingGame = true;
             }
             if (tag[i]->tag == "1v1buttononline" && click[i]->clicked == true) {
