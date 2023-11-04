@@ -520,8 +520,6 @@ void gameEngine::init_game()
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     for (int i = 0; i < 2; i++)
         init_background(i);
-    for (int i = 0; i < 10; i++)
-        init_star_parallax(i);
     init_score();
 
     GameStateComponent &state = get_game_state();

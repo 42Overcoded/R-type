@@ -169,8 +169,19 @@ void SfmlSystem::draw_system(registry &r, sf::RenderWindow &window)
     auto &drawable = r.get_components<Drawable>();
     auto &text = r.get_components<Text>();
     auto &sprite = r.get_components<Sprite>();
+    auto &tag = r.get_components<Tag>();
 
     for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i].has_value()) {
+            if (tag[i]->tag == "background")
+                window.draw(sprite[i]->sprite);
+        }
+    }
+    for (size_t i = 0; i < r._entity_number; i++) {
+        if (tag[i].has_value()) {
+            if (tag[i]->tag == "background")
+                continue;
+        }
         if (drawable[i].has_value()) {
             if (sprite[i].has_value() && drawable[i]->drawable == true)
                 window.draw(sprite[i]->sprite);

@@ -503,18 +503,16 @@ void gameEngine::menu()
     }
     if (gameState.scene == END) {
         _level_info._current_level = 0;
-
+        gameState.scene = MENU;
         for (size_t i = 0; i < tag.size(); i++) {
             if (!tag[i].has_value())
                 continue;
-            if (drawable[i].has_value()) {
-                if (tag[i]->tag == "score")
-                    continue;
-                drawable[i]->drawable = false;
-            }
-            if (tag[i]->tag == "score") {
-                position[i]->x = 800;
-                position[i]->y = 400;
+            if (tag[i]->groupTag == "mainMenu" || tag[i]->groupTag == "offline" || tag[i]->groupTag == "online" || tag[i]->groupTag == "optionoffline" || tag[i]->groupTag == "optiononline" || tag[i]->groupTag == "generate") {
+                if (tag[i]->groupTag == "mainMenu") {
+                    drawable[i]->drawable = true;
+                }
+            } else {
+                _registry.kill_entity(entity_t(i));
             }
         }
     }
