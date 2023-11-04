@@ -415,8 +415,8 @@ void gameEngine::launch_game()
             gameSystems_.modify_pattern(_registry);
             if (gameState.mode == LEVELS_G) {
                 if (_level_info.mob_alive == 0 && _level_info._generated.size() == 0) {
-                    if (level < NUMBERS_OF_LEVELS)
-                        loadLevel(level++);
+                    if (_level_info._current_level < NUMBERS_OF_LEVELS)
+                        loadLevel(_level_info._current_level++);
                     else {
                         gameState.scene = END;
                     }
