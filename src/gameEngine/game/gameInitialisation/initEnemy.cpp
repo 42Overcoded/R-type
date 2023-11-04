@@ -1,10 +1,20 @@
-#include "../../GameEngine.hpp"
+/*
+** EPITECH PROJECT, 2023
+** R-type
+** File description:
+** initEnemy
+*/
+
+#include "../systems/GameSystems.hpp"
+#include "../../../Path.hpp"
+#include "../../Game.hpp"
+#include <fstream>
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
 
-entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
+entity_t GameSystem::init_enemy(registry &r, int enemy_id, int pattern_id)
 {
     std::ifstream file(PATH_TO_JSON + "enemies.json");
 
@@ -14,38 +24,38 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     file >> enemiesJson;
     file.close();
 
-    entity_t enemy = _registry.spawn_entity();
+    entity_t enemy = r.spawn_entity();
 
-    _registry.add_component<Position>(enemy, Position());
-    _registry.add_component<Speed>(enemy, Speed());
-    _registry.add_component<Sprite>(enemy, Sprite());
-    _registry.add_component<Drawable>(enemy, Drawable());
-    _registry.add_component<Enemy>(enemy, Enemy());
-    _registry.add_component<Pattern>(enemy, Pattern());
-    _registry.add_component<Health>(enemy, Health());
-    _registry.add_component<Hitbox>(enemy, Hitbox());
-    _registry.add_component<Tag>(enemy, Tag());
-    _registry.add_component<Clock>(enemy, Clock());
-    _registry.add_component<State>(enemy, State());
-    _registry.add_component<Rect>(enemy, Rect());
-    _registry.add_component<Texture>(enemy, Texture());
-    _registry.add_component<Scale>(enemy, Scale());
-    _registry.add_component<Color>(enemy, Color());
+    r.add_component<Position>(enemy, Position());
+    r.add_component<Speed>(enemy, Speed());
+    r.add_component<Sprite>(enemy, Sprite());
+    r.add_component<Drawable>(enemy, Drawable());
+    r.add_component<Enemy>(enemy, Enemy());
+    r.add_component<Pattern>(enemy, Pattern());
+    r.add_component<Health>(enemy, Health());
+    r.add_component<Hitbox>(enemy, Hitbox());
+    r.add_component<Tag>(enemy, Tag());
+    r.add_component<Clock>(enemy, Clock());
+    r.add_component<State>(enemy, State());
+    r.add_component<Rect>(enemy, Rect());
+    r.add_component<Texture>(enemy, Texture());
+    r.add_component<Scale>(enemy, Scale());
+    r.add_component<Color>(enemy, Color());
 
-    auto &color = _registry.get_components<Color>();
-    auto &tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &health = _registry.get_components<Health>();
-    auto &hitbox = _registry.get_components<Hitbox>();
-    auto &state = _registry.get_components<State>();
-    auto &enemy_ = _registry.get_components<Enemy>();
-    auto &position = _registry.get_components<Position>();
-    auto &pattern = _registry.get_components<Pattern>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &rect = _registry.get_components<Rect>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &speed = _registry.get_components<Speed>();
-    auto &drawable = _registry.get_components<Drawable>();
+    auto &color = r.get_components<Color>();
+    auto &tag = r.get_components<Tag>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &health = r.get_components<Health>();
+    auto &hitbox = r.get_components<Hitbox>();
+    auto &state = r.get_components<State>();
+    auto &enemy_ = r.get_components<Enemy>();
+    auto &position = r.get_components<Position>();
+    auto &pattern = r.get_components<Pattern>();
+    auto &texture = r.get_components<Texture>();
+    auto &rect = r.get_components<Rect>();
+    auto &scale = r.get_components<Scale>();
+    auto &speed = r.get_components<Speed>();
+    auto &drawable = r.get_components<Drawable>();
 
     drawable[enemy]->drawable = true;
     color[enemy]->r = 255;
@@ -118,7 +128,7 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     return enemy;
 }
 
-entity_t gameEngine::init_worm(int id)
+entity_t GameSystem::init_worm(registry &r, int id)
 {
     std::ifstream file("configFiles/enemies.json");
 
@@ -128,40 +138,40 @@ entity_t gameEngine::init_worm(int id)
     file >> enemiesJson;
     file.close();
 
-    entity_t worm = _registry.spawn_entity();
+    entity_t worm = r.spawn_entity();
 
-    _registry.add_component<Position>(worm, Position());
-    _registry.add_component<Speed>(worm, Speed());
-    _registry.add_component<Sprite>(worm, Sprite());
-    _registry.add_component<Drawable>(worm, Drawable());
-    _registry.add_component<Enemy>(worm, Enemy());
-    _registry.add_component<Pattern>(worm, Pattern());
-    _registry.add_component<Health>(worm, Health());
-    _registry.add_component<Hitbox>(worm, Hitbox());
-    _registry.add_component<Tag>(worm, Tag());
-    _registry.add_component<Clock>(worm, Clock());
-    _registry.add_component<State>(worm, State());
-    _registry.add_component<Rect>(worm, Rect());
-    _registry.add_component<Texture>(worm, Texture());
-    _registry.add_component<Scale>(worm, Scale());
-    _registry.add_component<Color>(worm, Color());
-    _registry.add_component<Orientation>(worm, Orientation());
+    r.add_component<Position>(worm, Position());
+    r.add_component<Speed>(worm, Speed());
+    r.add_component<Sprite>(worm, Sprite());
+    r.add_component<Drawable>(worm, Drawable());
+    r.add_component<Enemy>(worm, Enemy());
+    r.add_component<Pattern>(worm, Pattern());
+    r.add_component<Health>(worm, Health());
+    r.add_component<Hitbox>(worm, Hitbox());
+    r.add_component<Tag>(worm, Tag());
+    r.add_component<Clock>(worm, Clock());
+    r.add_component<State>(worm, State());
+    r.add_component<Rect>(worm, Rect());
+    r.add_component<Texture>(worm, Texture());
+    r.add_component<Scale>(worm, Scale());
+    r.add_component<Color>(worm, Color());
+    r.add_component<Orientation>(worm, Orientation());
 
-    auto &color = _registry.get_components<Color>();
-    auto &__tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &health = _registry.get_components<Health>();
-    auto &hitbox = _registry.get_components<Hitbox>();
-    auto &state = _registry.get_components<State>();
-    auto &enemy_ = _registry.get_components<Enemy>();
-    auto &position = _registry.get_components<Position>();
-    auto &pattern = _registry.get_components<Pattern>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &rect = _registry.get_components<Rect>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &speed = _registry.get_components<Speed>();
-    auto &drawable = _registry.get_components<Drawable>();
-    auto &orientation = _registry.get_components<Orientation>();
+    auto &color = r.get_components<Color>();
+    auto &__tag = r.get_components<Tag>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &health = r.get_components<Health>();
+    auto &hitbox = r.get_components<Hitbox>();
+    auto &state = r.get_components<State>();
+    auto &enemy_ = r.get_components<Enemy>();
+    auto &position = r.get_components<Position>();
+    auto &pattern = r.get_components<Pattern>();
+    auto &texture = r.get_components<Texture>();
+    auto &rect = r.get_components<Rect>();
+    auto &scale = r.get_components<Scale>();
+    auto &speed = r.get_components<Speed>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &orientation = r.get_components<Orientation>();
 
     orientation[worm]->orientation = 0;
     drawable[worm]->drawable = true;

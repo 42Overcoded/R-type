@@ -129,7 +129,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                 GameStateComponent &gameState = get_game_state();
                 auto &spawner = _registry.get_components<Spawner>();
                 if (_type == CLIENT && _level_info._generated[0].id == 6)
-                    sounds["truck"]->play();
+                    gameSystems_.sounds["truck"]->play();
                 if (_type == SERVER || gameState.co == OFF) {
                     entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
                     _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
@@ -217,7 +217,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
             GameStateComponent &gameState = get_game_state();
             auto &spawner = _registry.get_components<Spawner>();
             if (_type == CLIENT) {
-                sounds["truck"]->play();
+                gameSystems_.sounds["truck"]->play();
             }
             if (_type == SERVER || gameState.co == OFF) {
                 entity_t enemy     = init_enemy(6, 6);
@@ -343,16 +343,26 @@ void gameEngine::network_manager()
 
 void gameEngine::launch_game()
 {
+    register_component_to_game();
+    entity_t networkManager = _registry.spawn_entity();
+    _registry.add_component<Spawner>(networkManager, Spawner{});
+    entity_t gameManagerEntity = _registry.spawn_entity();
+    _registry.add_component<GameStateComponent>(
+        gameManagerEntity, GameStateComponent{Scene::MENU, Mode::NONE, Co::OFF, _type});
+    _registry.add_component<GameLauncher>(
+    gameManagerEntity, GameLauncher{});
+    _registry.add_component<NetworkComponent>(
+        gameManagerEntity, NetworkComponent{});
+
     init_cheatCode();
-    load_musics_and_sounds();
+    gameSystems_.load_musics_and_sounds(_registry);
     if (_type == CLIENT)
     {
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
         sfmlSystems_.load_texture(_registry, cheatCode);
-        musics["musicMenu"]->play();
+        gameSystems_.musics["musicMenu"]->play();
     }
-    register_component_to_game();
     sf::Time _elapsed;
     sf::Clock _clock;
 
@@ -361,15 +371,6 @@ void gameEngine::launch_game()
     id   = 0;
     int level = 0;
 
-    entity_t networkManager = _registry.spawn_entity();
-    _registry.add_component<Spawner>(networkManager, Spawner{});
-    entity_t gameManagerEntity = _registry.spawn_entity();
-    _registry.add_component<GameStateComponent>(
-        gameManagerEntity, GameStateComponent{Scene::MENU, Mode::NONE});
-    _registry.add_component<GameLauncher>(
-    gameManagerEntity, GameLauncher{});
-    _registry.add_component<NetworkComponent>(
-        gameManagerEntity, NetworkComponent{});
     init_button(-1);
     if (_type == SERVER)
     {
@@ -419,8 +420,8 @@ void gameEngine::launch_game()
             if (alive == 0) {
                 gameState.scene = END;
                 if (_type == CLIENT) {
-                    musics["musicGame"]->stop();
-                    musics["musicScore"]->play();
+                    gameSystems_.musics["musicGame"]->stop();
+                    gameSystems_.musics["musicScore"]->play();
                 }
             }
             clock_time();
@@ -516,81 +517,3 @@ GameStateComponent &gameEngine::get_game_state()
     throw std::runtime_error("No game state found");
 }
 
-void gameEngine::load_musics_and_sounds(void)
-{
-        musics.insert(std::make_pair("musicMenu", nullptr));
-        musics.insert(std::make_pair("musicGame", nullptr));
-        musics.insert(std::make_pair("musicScore", nullptr));
-        musics.insert(std::make_pair("musicBoss", nullptr));
-    
-        soundBuffers.insert(std::make_pair("soundShoot", nullptr));
-        soundBuffers.insert(std::make_pair("soundPowerShoot", nullptr));
-        soundBuffers.insert(std::make_pair("soundExplosion", nullptr));
-        soundBuffers.insert(std::make_pair("soundExplosion2", nullptr));
-        soundBuffers.insert(std::make_pair("soundExplosion3", nullptr));
-        soundBuffers.insert(std::make_pair("truck", nullptr));
-    
-        sounds.insert(std::make_pair("truck", nullptr));
-        sounds.insert(std::make_pair("soundShoot", nullptr));
-        sounds.insert(std::make_pair("soundPowerShoot", nullptr));
-        sounds.insert(std::make_pair("soundExplosion", nullptr));
-        sounds.insert(std::make_pair("soundExplosion2", nullptr));
-        sounds.insert(std::make_pair("soundExplosion3", nullptr));
-
-    if (_type == CLIENT) {
-        musics.at("musicMenu") = std::make_shared<sf::Music>();
-        musics.at("musicGame") = std::make_shared<sf::Music>();
-        musics.at("musicScore") = std::make_shared<sf::Music>();
-        musics.at("musicBoss") = std::make_shared<sf::Music>();
-    
-        soundBuffers.at("truck") = std::make_shared<sf::SoundBuffer>();
-        soundBuffers.at("soundShoot") = std::make_shared<sf::SoundBuffer>();
-        soundBuffers.at("soundPowerShoot") = std::make_shared<sf::SoundBuffer>();
-        soundBuffers.at("soundExplosion") = std::make_shared<sf::SoundBuffer>();
-        soundBuffers.at("soundExplosion2") = std::make_shared<sf::SoundBuffer>();
-        soundBuffers.at("soundExplosion3") = std::make_shared<sf::SoundBuffer>();
-    
-        sounds.at("truck") = std::make_shared<sf::Sound>();
-        sounds.at("soundShoot") = std::make_shared<sf::Sound>();
-        sounds.at("soundPowerShoot") = std::make_shared<sf::Sound>();
-        sounds.at("soundExplosion") = std::make_shared<sf::Sound>();
-        sounds.at("soundExplosion2") = std::make_shared<sf::Sound>();
-        sounds.at("soundExplosion3") = std::make_shared<sf::Sound>();
-    
-        musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
-        musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
-        musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
-        musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
-    
-        soundBuffers["truck"]->loadFromFile("assets/musicAndSound/ALLEZ_MARCEL.mp3");
-        soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
-        soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
-        soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
-        soundBuffers["soundExplosion2"]->loadFromFile("assets/musicAndSound/roblox rocket explosion sound.mp3");
-        soundBuffers["soundExplosion3"]->loadFromFile("assets/musicAndSound/Geometry Dash Death Sound Effect.mp3");
-
-        sounds["truck"]->setBuffer(*soundBuffers["truck"]);
-        sounds["soundShoot"]->setBuffer(*soundBuffers["soundShoot"]);
-        sounds["soundPowerShoot"]->setBuffer(*soundBuffers["soundPowerShoot"]);
-        sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
-        sounds["soundExplosion2"]->setBuffer(*soundBuffers["soundExplosion2"]);
-        sounds["soundExplosion3"]->setBuffer(*soundBuffers["soundExplosion3"]);
-    
-        musics["musicMenu"]->setVolume(30);
-        musics["musicGame"]->setVolume(30);
-        musics["musicScore"]->setVolume(30);
-        musics["musicBoss"]->setVolume(30);
-    
-        sounds["truck"]->setVolume(100);
-        sounds["soundShoot"]->setVolume(60);
-        sounds["soundPowerShoot"]->setVolume(60);
-        sounds["soundExplosion"]->setVolume(60);
-        sounds["soundExplosion2"]->setVolume(50);
-        sounds["soundExplosion3"]->setVolume(50);
-    
-        musics["musicMenu"]->setLoop(true);
-        musics["musicScore"]->setLoop(false);
-        musics["musicGame"]->setLoop(true);
-        musics["musicBoss"]->setLoop(true);
-    }
-}

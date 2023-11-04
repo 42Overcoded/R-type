@@ -1,12 +1,26 @@
-#include "../../GameEngine.hpp"
+#include "../systems/GameSystems.hpp"
+#include "../../../Path.hpp"
+#include "../../Game.hpp"
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
-#include <nlohmann/json.hpp>
 #include <random>
 
-void gameEngine::spawn_ally_bullet(int i)
+
+void GameSystem::spawn_ally_bullet(registry &r)
 {
+    SparseArray<GameStateComponent> &gameState = r.get_components<GameStateComponent>();
+    ClientType _type = UNDEFINED;
+
+    for (size_t gameStateIndex = 0; gameStateIndex < r._entity_number; gameStateIndex++) {
+        if (gameState[gameStateIndex].has_value()) {
+            _type = gameState[gameStateIndex]->type;
+            break;
+        }
+    }
+
     std::ifstream file(PATH_TO_JSON + "starship.json");
 
     if (!file.is_open())
@@ -15,10 +29,10 @@ void gameEngine::spawn_ally_bullet(int i)
     file >> starshipJson;
     file.close();
 
-    auto &_tag = _registry.get_components<Tag>();
-    auto &_drawable = _registry.get_components<Drawable>();
+    auto &_tag = r.get_components<Tag>();
+    auto &_drawable = r.get_components<Drawable>();
     int j = 1;
-    for (size_t k = 0; k < _registry._entity_number; k++) {
+    for (size_t k = 0; k < r._entity_number; k++) {
         if (!_tag[k].has_value())
             continue;
         if (_tag[k]->tag == "shootBoost" && _drawable[k]->drawable == false) {
@@ -26,31 +40,31 @@ void gameEngine::spawn_ally_bullet(int i)
         }
     }
     for (int id = 0; id != j; id++) {
-        entity_t bullet = _registry.spawn_entity();
-        _registry.add_component<Speed>(bullet, Speed());
-        _registry.add_component<Tag>(bullet, Tag());
-        _registry.add_component<Sprite>(bullet, Sprite());
-        _registry.add_component<Drawable>(bullet, Drawable());
-        _registry.add_component<Hitbox>(bullet, Hitbox());
-        _registry.add_component<Position>(bullet, Position());
-        _registry.add_component<Rect>(bullet, Rect());
-        _registry.add_component<Texture>(bullet, Texture());
-        _registry.add_component<Scale>(bullet, Scale());
-        _registry.add_component<State>(bullet, State());
-        _registry.add_component<Orientation>(bullet, Orientation());
+        entity_t bullet = r.spawn_entity();
+        r.add_component<Speed>(bullet, Speed());
+        r.add_component<Tag>(bullet, Tag());
+        r.add_component<Sprite>(bullet, Sprite());
+        r.add_component<Drawable>(bullet, Drawable());
+        r.add_component<Hitbox>(bullet, Hitbox());
+        r.add_component<Position>(bullet, Position());
+        r.add_component<Rect>(bullet, Rect());
+        r.add_component<Texture>(bullet, Texture());
+        r.add_component<Scale>(bullet, Scale());
+        r.add_component<State>(bullet, State());
+        r.add_component<Orientation>(bullet, Orientation());
 
-        auto &orientation = _registry.get_components<Orientation>();
-        auto &tag = _registry.get_components<Tag>();
-        auto &speed = _registry.get_components<Speed>();
-        auto &sprite = _registry.get_components<Sprite>();
-        auto &position = _registry.get_components<Position>();
-        auto &hitbox = _registry.get_components<Hitbox>();
-        auto &state = _registry.get_components<State>();
-        auto &_health = _registry.get_components<Health>();
-        auto &rect = _registry.get_components<Rect>();
-        auto &_drawable = _registry.get_components<Drawable>();
-        auto &texture = _registry.get_components<Texture>();
-        auto &scale = _registry.get_components<Scale>();
+        auto &orientation = r.get_components<Orientation>();
+        auto &tag = r.get_components<Tag>();
+        auto &speed = r.get_components<Speed>();
+        auto &sprite = r.get_components<Sprite>();
+        auto &position = r.get_components<Position>();
+        auto &hitbox = r.get_components<Hitbox>();
+        auto &state = r.get_components<State>();
+        auto &_health = r.get_components<Health>();
+        auto &rect = r.get_components<Rect>();
+        auto &_drawable = r.get_components<Drawable>();
+        auto &texture = r.get_components<Texture>();
+        auto &scale = r.get_components<Scale>();
 
         //state[bullet]->id = id;    put the id of the starship who shooted this
         _drawable[bullet]->drawable = true;
@@ -72,7 +86,7 @@ void gameEngine::spawn_ally_bullet(int i)
         if (id == 0) {
             orientation[bullet]->orientation = 0;
         }
-        for (size_t i = 0; i < _registry._entity_number; i++) {
+        for (size_t i = 0; i < r._entity_number; i++) {
             if (!tag[i].has_value()) {
                 continue;
             }
@@ -88,7 +102,7 @@ void gameEngine::spawn_ally_bullet(int i)
                 rect[bullet]->height = starshipJson["bullet"]["rect"][0]["height"];
                 rect[bullet]->left = starshipJson["bullet"]["rect"][0]["left"];
                 rect[bullet]->top = starshipJson["bullet"]["rect"][0]["top"];
-                if (_type == CLIENT)
+                if (_type == ClientType::CLIENT)
                     sounds["soundShoot"]->play();
                 if (_health[i]->health > 30 && _health[i]->health < 85) {
                     state[bullet]->state = 1;
@@ -107,7 +121,7 @@ void gameEngine::spawn_ally_bullet(int i)
                     rect[bullet]->height = starshipJson["bullet"]["rect"][2]["height"];
                     rect[bullet]->left = starshipJson["bullet"]["rect"][2]["left"];
                     rect[bullet]->top = starshipJson["bullet"]["rect"][2]["top"];
-                    if (_type == CLIENT)
+                    if (_type == ClientType::CLIENT)
                         sounds["soundPowerShoot"]->play();
                 }
                 _health[i]->health = 0;
@@ -117,7 +131,7 @@ void gameEngine::spawn_ally_bullet(int i)
     }
 }
 
-void gameEngine::spawn_boss_bullet(int i, int j)
+void GameSystem::spawn_boss_bullet(registry &r, int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
 
@@ -134,30 +148,30 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     int random = distribution(gen);
     float random_speed = random / 100.0;
 
-    entity_t bullet = _registry.spawn_entity();
-    _registry.add_component<Speed>(bullet, Speed());
-    _registry.add_component<Tag>(bullet, Tag());
-    _registry.add_component<Sprite>(bullet, Sprite());
-    _registry.add_component<Drawable>(bullet, Drawable());
-    _registry.add_component<Hitbox>(bullet, Hitbox());
-    _registry.add_component<Position>(bullet, Position());
-    _registry.add_component<EnemyBall>(bullet, EnemyBall());
-    _registry.add_component<Texture>(bullet, Texture());
-    _registry.add_component<Scale>(bullet, Scale());
-    _registry.add_component<Color>(bullet, Color());
-    _registry.add_component<Rect>(bullet, Rect());
+    entity_t bullet = r.spawn_entity();
+    r.add_component<Speed>(bullet, Speed());
+    r.add_component<Tag>(bullet, Tag());
+    r.add_component<Sprite>(bullet, Sprite());
+    r.add_component<Drawable>(bullet, Drawable());
+    r.add_component<Hitbox>(bullet, Hitbox());
+    r.add_component<Position>(bullet, Position());
+    r.add_component<EnemyBall>(bullet, EnemyBall());
+    r.add_component<Texture>(bullet, Texture());
+    r.add_component<Scale>(bullet, Scale());
+    r.add_component<Color>(bullet, Color());
+    r.add_component<Rect>(bullet, Rect());
 
-    auto &drawable = _registry.get_components<Drawable>();
-    auto &tag = _registry.get_components<Tag>();
-    auto &speed = _registry.get_components<Speed>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &hitbox = _registry.get_components<Hitbox>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &rect = _registry.get_components<Rect>();
-    auto &color = _registry.get_components<Color>();
-    auto &state = _registry.get_components<State>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &tag = r.get_components<Tag>();
+    auto &speed = r.get_components<Speed>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &hitbox = r.get_components<Hitbox>();
+    auto &texture = r.get_components<Texture>();
+    auto &scale = r.get_components<Scale>();
+    auto &rect = r.get_components<Rect>();
+    auto &color = r.get_components<Color>();
+    auto &state = r.get_components<State>();
 
     state[bullet]->state = 0;
     color[bullet]->r = 255;
@@ -184,7 +198,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     rect[bullet]->width = bulletJson["bullet"][j]["rect"]["width"];
     rect[bullet]->height = bulletJson["bullet"][j]["rect"]["height"];
     if (tag[bullet]->tag == "wormBullet") {
-        for (size_t j = 0; j < _registry._entity_number; j++) {
+        for (size_t j = 0; j < r._entity_number; j++) {
             if (!tag[j].has_value())
                 continue;
             if (tag[j]->tag == "starship") {
@@ -198,7 +212,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     }
 }
 
-void gameEngine::spawn_bullet(int i, int j)
+void GameSystem::spawn_bullet(registry &r, int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
 
@@ -208,40 +222,40 @@ void gameEngine::spawn_bullet(int i, int j)
     file >> bulletJson;
     file.close();
 
-    auto &_tag = _registry.get_components<Tag>();
-    auto &_drawable = _registry.get_components<Drawable>();
+    auto &_tag = r.get_components<Tag>();
+    auto &_drawable = r.get_components<Drawable>();
 
-    for (size_t k = 0; k < _registry._entity_number; k++) {
+    for (size_t k = 0; k < r._entity_number; k++) {
         if (!_tag[k].has_value())
             continue;
         if (_tag[k]->tag == "ice" && _drawable[k]->drawable == false) {
             return;
         }
     }
-    entity_t bullet = _registry.spawn_entity();
+    entity_t bullet = r.spawn_entity();
 
-    _registry.add_component<Speed>(bullet, Speed());
-    _registry.add_component<Tag>(bullet, Tag());
-    _registry.add_component<Sprite>(bullet, Sprite());
-    _registry.add_component<Drawable>(bullet, Drawable());
-    _registry.add_component<Hitbox>(bullet, Hitbox());
-    _registry.add_component<Position>(bullet, Position());
-    _registry.add_component<EnemyBall>(bullet, EnemyBall());
-    _registry.add_component<Texture>(bullet, Texture());
-    _registry.add_component<Scale>(bullet, Scale());
-    _registry.add_component<SearchingHead>(bullet, SearchingHead());
-    _registry.add_component<Color>(bullet, Color());
+    r.add_component<Speed>(bullet, Speed());
+    r.add_component<Tag>(bullet, Tag());
+    r.add_component<Sprite>(bullet, Sprite());
+    r.add_component<Drawable>(bullet, Drawable());
+    r.add_component<Hitbox>(bullet, Hitbox());
+    r.add_component<Position>(bullet, Position());
+    r.add_component<EnemyBall>(bullet, EnemyBall());
+    r.add_component<Texture>(bullet, Texture());
+    r.add_component<Scale>(bullet, Scale());
+    r.add_component<SearchingHead>(bullet, SearchingHead());
+    r.add_component<Color>(bullet, Color());
 
-    auto &color = _registry.get_components<Color>();
-    auto &tag = _registry.get_components<Tag>();
-    auto &speed = _registry.get_components<Speed>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &hitbox = _registry.get_components<Hitbox>();
-    auto &drawable = _registry.get_components<Drawable>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &searchingHead = _registry.get_components<SearchingHead>();
+    auto &color = r.get_components<Color>();
+    auto &tag = r.get_components<Tag>();
+    auto &speed = r.get_components<Speed>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &hitbox = r.get_components<Hitbox>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &texture = r.get_components<Texture>();
+    auto &scale = r.get_components<Scale>();
+    auto &searchingHead = r.get_components<SearchingHead>();
 
     drawable[bullet]->drawable = true;
     color[bullet]->r = 255;
@@ -265,7 +279,7 @@ void gameEngine::spawn_bullet(int i, int j)
     if (tag[bullet]->tag == "enemyBlueBullet")
         searchingHead[bullet]->searching = true;
     if (tag[bullet]->tag == "enemyBullet" || tag[bullet]->tag == "starshipBossBullet") {
-        for (size_t j = 0; j < _registry._entity_number; j++) {
+        for (size_t j = 0; j < r._entity_number; j++) {
             if (!tag[j].has_value())
                 continue;
             if (tag[j]->tag == "starship") {

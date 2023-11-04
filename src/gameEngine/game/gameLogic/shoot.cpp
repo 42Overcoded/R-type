@@ -94,7 +94,7 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
     auto &clock = _registry.get_components<Clock>();
     auto &drawable = _registry.get_components<Drawable>();
     auto &health = _registry.get_components<Health>();
-    auto &networkInfo = _registry.get_components<NetworkInfo>();
+    auto &spawner = _registry.get_components<Spawner>();
 
     bool is_return = false;
     for (size_t i = 0; i < _registry._entity_number; i++) {
@@ -123,8 +123,8 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
             GameStateComponent &gameState = get_game_state();
             if (_type == SERVER || gameState.co == OFF) {
                 spawn_ally_bullet(i);
-                networkInfo[0]->arg1.push_back(i);
-                networkInfo[0]->spawn.push_back(1);
+                spawner[0]->arg1.push_back(i);
+                spawner[0]->spawn.push_back(1);
             }
             clock[i]->_clock.restart();
         }
@@ -152,11 +152,11 @@ void gameEngine::shoot_enemy() {
                     }
                     clock[i]->_clock.restart();
                     GameStateComponent &gameState = get_game_state();
-                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
                             spawn_bullet(i, 0);
-                        networkInfo[0]->arg1.push_back(i);
-                        networkInfo[0]->spawn.push_back(4);
+                        spawner[0]->arg1.push_back(i);
+                        spawner[0]->spawn.push_back(4);
                     }
                 }
             }
@@ -168,11 +168,11 @@ void gameEngine::shoot_enemy() {
                     }
                     clock[i]->_clock.restart();
                     GameStateComponent &gameState = get_game_state();
-                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
                             spawn_bullet(i, 4);
-                        networkInfo[0]->arg1.push_back(i);
-                        networkInfo[0]->spawn.push_back(5);
+                        spawner[0]->arg1.push_back(i);
+                        spawner[0]->spawn.push_back(5);
                     }
                 }
             }
@@ -184,11 +184,11 @@ void gameEngine::shoot_enemy() {
                     }
                     clock[i]->_clock.restart();
                     GameStateComponent &gameState = get_game_state();
-                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
                             spawn_bullet(i, 1);
-                        networkInfo[0]->arg1.push_back(i);
-                        networkInfo[0]->spawn.push_back(6);
+                        spawner[0]->arg1.push_back(i);
+                        spawner[0]->spawn.push_back(6);
                     }
                 }
             }
@@ -200,11 +200,11 @@ void gameEngine::shoot_enemy() {
                     }
                     clock[i]->__clock.restart();
                     GameStateComponent &gameState = get_game_state();
-                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
                             spawn_boss_bullet(i, 5);
-                        networkInfo[0]->arg1.push_back(i);
-                        networkInfo[0]->spawn.push_back(2);
+                        spawner[0]->arg1.push_back(i);
+                        spawner[0]->spawn.push_back(2);
                     }
                 }
             }
@@ -224,11 +224,11 @@ void gameEngine::shoot_enemy() {
                 state[i]->index += 1;
                 clock[i]->_clock.restart();
                 GameStateComponent &gameState = get_game_state();
-                auto &networkInfo = _registry.get_components<NetworkInfo>();
+                auto &spawner = _registry.get_components<Spawner>();
                 if (_type == SERVER || gameState.co == OFF) {
                         spawn_boss_bullet(i, 2);
-                    networkInfo[0]->arg1.push_back(i);
-                    networkInfo[0]->spawn.push_back(3);
+                    spawner[0]->arg1.push_back(i);
+                    spawner[0]->spawn.push_back(3);
                 }
             }
         }
@@ -240,11 +240,11 @@ void gameEngine::shoot_enemy() {
                     }
                     clock[i]->_clock.restart();
                     GameStateComponent &gameState = get_game_state();
-                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
                             spawn_bullet(i, 6);
-                        networkInfo[0]->arg1.push_back(i);
-                        networkInfo[0]->spawn.push_back(7);
+                        spawner[0]->arg1.push_back(i);
+                        spawner[0]->spawn.push_back(7);
                     }
                 }
         }

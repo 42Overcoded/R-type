@@ -11,7 +11,8 @@
 
 enum ClientType {
     SERVER,
-    CLIENT
+    CLIENT,
+    UNDEFINED
 };
 
 enum Mode {
@@ -96,6 +97,7 @@ struct GameStateComponent {
     Scene scene = MENU;
     Mode mode = NONE;
     Co co = OFF;
+    ClientType type = UNDEFINED;
 };
 
 #endif /* !GAME_HPP_ */

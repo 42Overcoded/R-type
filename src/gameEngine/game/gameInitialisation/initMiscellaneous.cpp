@@ -1,4 +1,7 @@
-#include "../../GameEngine.hpp"
+#include "../systems/GameSystems.hpp"
+#include "../../../Path.hpp"
+#include "../../Game.hpp"
+#include <fstream>
 #include <iostream>
 #include <optional>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
@@ -10,7 +13,7 @@
 #include <chrono>
 #include <thread>
 
-void gameEngine::init_beambar(int id)
+void GameSystem::init_beambar(registry &r, int id)
 {
     std::ifstream file(PATH_TO_JSON + "bar.json");
 
@@ -20,36 +23,36 @@ void gameEngine::init_beambar(int id)
     file >> barJson;
     file.close();
 
-    entity_t beambar = _registry.spawn_entity();
-    entity_t fullbeambar = _registry.spawn_entity();
+    entity_t beambar = r.spawn_entity();
+    entity_t fullbeambar = r.spawn_entity();
 
-    _registry.add_component<Position>(beambar, Position());
-    _registry.add_component<Position>(fullbeambar, Position());
-    _registry.add_component<Sprite>(beambar, Sprite());
-    _registry.add_component<Sprite>(fullbeambar, Sprite());
-    _registry.add_component<Drawable>(beambar, Drawable());
-    _registry.add_component<Drawable>(fullbeambar, Drawable());
-    _registry.add_component<Tag>(beambar, Tag());
-    _registry.add_component<Tag>(fullbeambar, Tag());
-    _registry.add_component<Health>(fullbeambar, Health());
-    _registry.add_component<Texture>(beambar, Texture());
-    _registry.add_component<Texture>(fullbeambar, Texture());
-    _registry.add_component<Rect>(beambar, Rect());
-    _registry.add_component<Rect>(fullbeambar, Rect());
-    _registry.add_component<Scale>(beambar, Scale());
-    _registry.add_component<Scale>(fullbeambar, Scale());
-    _registry.add_component<State>(beambar, State());
-    _registry.add_component<State>(fullbeambar, State());
+    r.add_component<Position>(beambar, Position());
+    r.add_component<Position>(fullbeambar, Position());
+    r.add_component<Sprite>(beambar, Sprite());
+    r.add_component<Sprite>(fullbeambar, Sprite());
+    r.add_component<Drawable>(beambar, Drawable());
+    r.add_component<Drawable>(fullbeambar, Drawable());
+    r.add_component<Tag>(beambar, Tag());
+    r.add_component<Tag>(fullbeambar, Tag());
+    r.add_component<Health>(fullbeambar, Health());
+    r.add_component<Texture>(beambar, Texture());
+    r.add_component<Texture>(fullbeambar, Texture());
+    r.add_component<Rect>(beambar, Rect());
+    r.add_component<Rect>(fullbeambar, Rect());
+    r.add_component<Scale>(beambar, Scale());
+    r.add_component<Scale>(fullbeambar, Scale());
+    r.add_component<State>(beambar, State());
+    r.add_component<State>(fullbeambar, State());
 
-    auto &tag = _registry.get_components<Tag>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &health = _registry.get_components<Health>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &rect = _registry.get_components<Rect>();
-    auto &drawable = _registry.get_components<Drawable>();
-    auto &state = _registry.get_components<State>();
+    auto &tag = r.get_components<Tag>();
+    auto &texture = r.get_components<Texture>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &health = r.get_components<Health>();
+    auto &scale = r.get_components<Scale>();
+    auto &rect = r.get_components<Rect>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &state = r.get_components<State>();
 
     state[beambar]->id = id;
     drawable[beambar]->drawable = true;
@@ -85,7 +88,7 @@ void gameEngine::init_beambar(int id)
     rect[fullbeambar]->height = barJson["fullbeambar"]["rect"]["height"];
 }
 
-void gameEngine::init_button(int i)
+void GameSystem::init_button(registry &r, int i)
 {
     std::ifstream file(PATH_TO_JSON + "menu.json");
 
@@ -103,35 +106,35 @@ void gameEngine::init_button(int i)
         return;
     }
 
-    entity_t button = _registry.spawn_entity();
-    entity_t texte = _registry.spawn_entity();
+    entity_t button = r.spawn_entity();
+    entity_t texte = r.spawn_entity();
 
-    _registry.add_component<Clock>(button, Clock());
-    _registry.add_component<Position>(button, Position());
-    _registry.add_component<Sprite>(button, Sprite());
-    _registry.add_component<Drawable>(button, Drawable());
-    _registry.add_component<Tag>(button, Tag());
-    _registry.add_component<Texture>(button, Texture());
-    _registry.add_component<Scale>(button, Scale());
-    _registry.add_component<isClick>(button, isClick());
-    _registry.add_component<Hitbox>(button, Hitbox());
+    r.add_component<Clock>(button, Clock());
+    r.add_component<Position>(button, Position());
+    r.add_component<Sprite>(button, Sprite());
+    r.add_component<Drawable>(button, Drawable());
+    r.add_component<Tag>(button, Tag());
+    r.add_component<Texture>(button, Texture());
+    r.add_component<Scale>(button, Scale());
+    r.add_component<isClick>(button, isClick());
+    r.add_component<Hitbox>(button, Hitbox());
 
-    _registry.add_component<Position>(texte, Position());
-    _registry.add_component<Text>(texte, Text());
-    _registry.add_component<Drawable>(texte, Drawable());
-    _registry.add_component<Tag>(texte, Tag());
-    _registry.add_component<State>(texte, State());
-    _registry.add_component<Scale>(texte, Scale());
+    r.add_component<Position>(texte, Position());
+    r.add_component<Text>(texte, Text());
+    r.add_component<Drawable>(texte, Drawable());
+    r.add_component<Tag>(texte, Tag());
+    r.add_component<State>(texte, State());
+    r.add_component<Scale>(texte, Scale());
 
-    auto &tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &drawable = _registry.get_components<Drawable>();
-    auto &text = _registry.get_components<Text>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &click = _registry.get_components<isClick>();
-    auto &hitbox = _registry.get_components<Hitbox>();
+    auto &tag = r.get_components<Tag>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &texture = r.get_components<Texture>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &text = r.get_components<Text>();
+    auto &scale = r.get_components<Scale>();
+    auto &click = r.get_components<isClick>();
+    auto &hitbox = r.get_components<Hitbox>();
 
     click[button]->clicked = false;
     hitbox[button]->width = menuJson["button"][i]["hitbox"]["width"];
@@ -153,7 +156,7 @@ void gameEngine::init_button(int i)
     drawable[button]->drawable = menuJson["button"][i]["drawable"];
 }
 
-void gameEngine::init_cheatCode(void)
+void GameSystem::init_cheatCode(registry &r)
 {
     std::ifstream file(PATH_TO_JSON + "cheatCode.json");
 
@@ -179,7 +182,7 @@ void gameEngine::init_cheatCode(void)
     }
 }
 
-void gameEngine::init_background(int i) {
+void GameSystem::init_background(registry &r, int i) {
     std::ifstream file(PATH_TO_JSON + "background.json");
 
     if (!file.is_open())
@@ -188,21 +191,21 @@ void gameEngine::init_background(int i) {
     file >> backJson;
     file.close();
 
-    entity_t background = _registry.spawn_entity();
+    entity_t background = r.spawn_entity();
 
-    _registry.add_component<Position>(background, Position());
-    _registry.add_component<Sprite>(background, Sprite());
-    _registry.add_component<Drawable>(background, Drawable());
-    _registry.add_component<Tag>(background, Tag());
-    _registry.add_component<Speed>(background, Speed());
-    _registry.add_component<Texture>(background, Texture());
+    r.add_component<Position>(background, Position());
+    r.add_component<Sprite>(background, Sprite());
+    r.add_component<Drawable>(background, Drawable());
+    r.add_component<Tag>(background, Tag());
+    r.add_component<Speed>(background, Speed());
+    r.add_component<Texture>(background, Texture());
 
-    auto &tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &speed = _registry.get_components<Speed>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &drawable = _registry.get_components<Drawable>();
+    auto &tag = r.get_components<Tag>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &speed = r.get_components<Speed>();
+    auto &texture = r.get_components<Texture>();
+    auto &drawable = r.get_components<Drawable>();
 
     int width = backJson["background"]["width"];
 
@@ -213,22 +216,22 @@ void gameEngine::init_background(int i) {
     position[background]->x = i * width;
 }
 
-void gameEngine::init_star_parallax(int i) {
-    entity_t star_parallax = _registry.spawn_entity();
+void GameSystem::init_star_parallax(registry &r, int i) {
+    entity_t star_parallax = r.spawn_entity();
 
-    _registry.add_component<Position>(star_parallax, Position());
-    _registry.add_component<Sprite>(star_parallax, Sprite());
-    _registry.add_component<Drawable>(star_parallax, Drawable());
-    _registry.add_component<Tag>(star_parallax, Tag());
-    _registry.add_component<Speed>(star_parallax, Speed());
-    _registry.add_component<Texture>(star_parallax, Texture());
+    r.add_component<Position>(star_parallax, Position());
+    r.add_component<Sprite>(star_parallax, Sprite());
+    r.add_component<Drawable>(star_parallax, Drawable());
+    r.add_component<Tag>(star_parallax, Tag());
+    r.add_component<Speed>(star_parallax, Speed());
+    r.add_component<Texture>(star_parallax, Texture());
 
-    auto &tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &speed = _registry.get_components<Speed>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &drawable = _registry.get_components<Drawable>();
+    auto &tag = r.get_components<Tag>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &speed = r.get_components<Speed>();
+    auto &texture = r.get_components<Texture>();
+    auto &drawable = r.get_components<Drawable>();
 
     int width = 500;
 
@@ -241,7 +244,7 @@ void gameEngine::init_star_parallax(int i) {
     sprite[star_parallax]->sprite.setScale(0.5, 0.5);
 }
 
-void gameEngine::init_score() {
+void GameSystem::init_score(registry &r) {
     std::ifstream file(PATH_TO_JSON + "score.json");
 
     if (!file.is_open())
@@ -250,20 +253,20 @@ void gameEngine::init_score() {
     file >> scoreJson;
     file.close();
 
-    entity_t score = _registry.spawn_entity();
-    _registry.add_component<Position>(score, Position());
-    _registry.add_component<Text>(score, Text());
-    _registry.add_component<Drawable>(score, Drawable());
-    _registry.add_component<Tag>(score, Tag());
-    _registry.add_component<State>(score, State());
-    _registry.add_component<Scale>(score, Scale());
+    entity_t score = r.spawn_entity();
+    r.add_component<Position>(score, Position());
+    r.add_component<Text>(score, Text());
+    r.add_component<Drawable>(score, Drawable());
+    r.add_component<Tag>(score, Tag());
+    r.add_component<State>(score, State());
+    r.add_component<Scale>(score, Scale());
 
-    auto &tag = _registry.get_components<Tag>();
-    auto &text = _registry.get_components<Text>();
-    auto &position = _registry.get_components<Position>();
-    auto &state = _registry.get_components<State>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &drawable = _registry.get_components<Drawable>();
+    auto &tag = r.get_components<Tag>();
+    auto &text = r.get_components<Text>();
+    auto &position = r.get_components<Position>();
+    auto &state = r.get_components<State>();
+    auto &scale = r.get_components<Scale>();
+    auto &drawable = r.get_components<Drawable>();
 
     drawable[score]->drawable = true;
     text[score]->str = scoreJson["score"]["str"];
@@ -275,7 +278,7 @@ void gameEngine::init_score() {
     scale[score]->scale = scoreJson["score"]["scale"];
 }
 
-void gameEngine::spawn_explosion(int i) {
+void GameSystem::spawn_explosion(registry &r, int i) {
     std::ifstream file(PATH_TO_JSON + "explosion.json");
 
     if (!file.is_open())
@@ -284,25 +287,25 @@ void gameEngine::spawn_explosion(int i) {
     file >> boomJson;
     file.close();
 
-    entity_t explosion = _registry.spawn_entity();
-    _registry.add_component<Position>(explosion, Position());
-    _registry.add_component<Sprite>(explosion, Sprite());
-    _registry.add_component<Drawable>(explosion, Drawable());
-    _registry.add_component<Tag>(explosion, Tag());
-    _registry.add_component<State>(explosion, State());
-    _registry.add_component<Clock>(explosion, Clock());
-    _registry.add_component<Texture>(explosion, Texture());
-    _registry.add_component<Rect>(explosion, Rect());
-    _registry.add_component<Scale>(explosion, Scale());
+    entity_t explosion = r.spawn_entity();
+    r.add_component<Position>(explosion, Position());
+    r.add_component<Sprite>(explosion, Sprite());
+    r.add_component<Drawable>(explosion, Drawable());
+    r.add_component<Tag>(explosion, Tag());
+    r.add_component<State>(explosion, State());
+    r.add_component<Clock>(explosion, Clock());
+    r.add_component<Texture>(explosion, Texture());
+    r.add_component<Rect>(explosion, Rect());
+    r.add_component<Scale>(explosion, Scale());
 
-    auto &state = _registry.get_components<State>();
-    auto &drawable = _registry.get_components<Drawable>();
-    auto &tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &rect = _registry.get_components<Rect>();
-    auto &scale = _registry.get_components<Scale>();
+    auto &state = r.get_components<State>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &tag = r.get_components<Tag>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &texture = r.get_components<Texture>();
+    auto &rect = r.get_components<Rect>();
+    auto &scale = r.get_components<Scale>();
 
     state[explosion]->state = boomJson["explosion"]["state"];
     position[explosion]->x = position[i]->x;
@@ -317,7 +320,7 @@ void gameEngine::spawn_explosion(int i) {
     scale[explosion]->scale = boomJson["explosion"]["scale"];
 }
 
-void gameEngine::spawn_power_up(int i, int j)
+void GameSystem::spawn_power_up(registry &r, int i, int j)
 {
     std::ifstream file(PATH_TO_JSON + "powerup.json");
     if (!file.is_open())
@@ -326,28 +329,28 @@ void gameEngine::spawn_power_up(int i, int j)
     file >> powerJson;
     file.close();
 
-    entity_t power = _registry.spawn_entity();
-    _registry.add_component<Position>(power, Position());
-    _registry.add_component<Sprite>(power, Sprite());
-    _registry.add_component<Drawable>(power, Drawable());
-    _registry.add_component<Tag>(power, Tag());
-    _registry.add_component<State>(power, State());
-    _registry.add_component<Clock>(power, Clock());
-    _registry.add_component<Texture>(power, Texture());
-    _registry.add_component<Speed>(power, Speed());
-    _registry.add_component<Hitbox>(power, Hitbox());
-    _registry.add_component<Scale>(power, Scale());
+    entity_t power = r.spawn_entity();
+    r.add_component<Position>(power, Position());
+    r.add_component<Sprite>(power, Sprite());
+    r.add_component<Drawable>(power, Drawable());
+    r.add_component<Tag>(power, Tag());
+    r.add_component<State>(power, State());
+    r.add_component<Clock>(power, Clock());
+    r.add_component<Texture>(power, Texture());
+    r.add_component<Speed>(power, Speed());
+    r.add_component<Hitbox>(power, Hitbox());
+    r.add_component<Scale>(power, Scale());
 
-    auto &state = _registry.get_components<State>();
-    auto &drawable = _registry.get_components<Drawable>();
-    auto &tag = _registry.get_components<Tag>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &position = _registry.get_components<Position>();
-    auto &texture = _registry.get_components<Texture>();
-    auto &rect = _registry.get_components<Rect>();
-    auto &scale = _registry.get_components<Scale>();
-    auto &speed = _registry.get_components<Speed>();
-    auto &hitbox = _registry.get_components<Hitbox>();
+    auto &state = r.get_components<State>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &tag = r.get_components<Tag>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &position = r.get_components<Position>();
+    auto &texture = r.get_components<Texture>();
+    auto &rect = r.get_components<Rect>();
+    auto &scale = r.get_components<Scale>();
+    auto &speed = r.get_components<Speed>();
+    auto &hitbox = r.get_components<Hitbox>();
 
     state[power]->state = 0;
     drawable[power]->drawable = true;
@@ -362,28 +365,28 @@ void gameEngine::spawn_power_up(int i, int j)
     speed[power]->speedx = powerJson["powerup"][j]["speed"];
 }
 
-void gameEngine::death_animation()
+void GameSystem::death_animation(registry &r)
 {
-    auto &drawable = _registry.get_components<Drawable>();
-    auto &sprite = _registry.get_components<Sprite>();
-    auto &tag = _registry.get_components<Tag>();
-    auto &position = _registry.get_components<Position>();
-    auto &health = _registry.get_components<Health>();
-    auto &state = _registry.get_components<State>();
-    auto &enemy = _registry.get_components<Enemy>();
-    auto &clock = _registry.get_components<Clock>();
-    auto &text = _registry.get_components<Text>();
-    auto &rect = _registry.get_components<Rect>();
-    auto &player = _registry.get_components<Player>();
+    auto &drawable = r.get_components<Drawable>();
+    auto &sprite = r.get_components<Sprite>();
+    auto &tag = r.get_components<Tag>();
+    auto &position = r.get_components<Position>();
+    auto &health = r.get_components<Health>();
+    auto &state = r.get_components<State>();
+    auto &enemy = r.get_components<Enemy>();
+    auto &clock = r.get_components<Clock>();
+    auto &text = r.get_components<Text>();
+    auto &rect = r.get_components<Rect>();
+    auto &player = r.get_components<Player>();
 
     int wormAlive = -1;
-    for (size_t i = 0; i < _registry._entity_number; i++)
+    for (size_t i = 0; i < r._entity_number; i++)
     {
         if (tag[i].has_value() && tag[i]->tag == "wormBody") {
             wormAlive = 0;
         }
     }
-    for (size_t i = 0; i < _registry._entity_number; i++) {
+    for (size_t i = 0; i < r._entity_number; i++) {
         if (!tag[i].has_value() || !position[i].has_value())
             continue;
         if (enemy[i].has_value()) {
@@ -426,7 +429,7 @@ void gameEngine::death_animation()
         }
         if (enemy[i].has_value()) {
             if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
-                for (size_t j = 0; j < _registry._entity_number; j++) {
+                for (size_t j = 0; j < r._entity_number; j++) {
                     if (tag[j].has_value() && tag[j]->tag == "score")
                     {
                         state[j]->state += enemy[i]->score;
@@ -434,11 +437,11 @@ void gameEngine::death_animation()
                     }
                 }
                 GameStateComponent &gameState = get_game_state();
-                auto &networkInfo = _registry.get_components<NetworkInfo>();
+                auto &spawner = r.get_components<Spawner>();
                 if (_type == SERVER || gameState.co == OFF) {
                     spawn_explosion(i);
-                    networkInfo[0]->arg1.push_back(i);
-                    networkInfo[0]->spawn.push_back(9);
+                    spawner[0]->arg1.push_back(i);
+                    spawner[0]->spawn.push_back(9);
                 }
                 if (_type == SERVER || gameState.co == OFF) {
                     int j = -1;
@@ -467,9 +470,9 @@ void gameEngine::death_animation()
                     }
                     if (j != -1) {
                         spawn_power_up(i, j);
-                        networkInfo[0]->arg1.push_back(i);
-                        networkInfo[0]->arg2.push_back(j);
-                        networkInfo[0]->spawn.push_back(10);
+                        spawner[0]->arg1.push_back(i);
+                        spawner[0]->arg2.push_back(j);
+                        spawner[0]->spawn.push_back(10);
                     }
                 }
                 if (_type == CLIENT && tag[i]->tag == "enemy 1")
@@ -490,11 +493,11 @@ void gameEngine::death_animation()
         }
     }
     if (wormAlive == 0) {
-        for (size_t j = 0; j < _registry._entity_number; j++) {
+        for (size_t j = 0; j < r._entity_number; j++) {
             if (!tag[j].has_value())
                 continue;
             if ((tag[j]->tag == "wormHead" || tag[j]->tag == "wormBody")) {
-                for (size_t k = 0; k < _registry._entity_number; k++)
+                for (size_t k = 0; k < r._entity_number; k++)
                 {
                     if (!tag[k].has_value())
                         continue;
@@ -517,7 +520,7 @@ void gameEngine::death_animation()
     }
 }
 
-void gameEngine::init_game()
+void GameSystem::init_game(registry &r)
 {
     if (_type == SERVER)
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -528,18 +531,18 @@ void gameEngine::init_game()
     init_score();
 
     GameStateComponent &state = get_game_state();
-    auto &gameState = _registry.get_components<GameStateComponent>();
-    auto &network = _registry.get_components<NetworkComponent>();
-    for (int i = 0; i < _registry._entity_number; i++) {
+    auto &gameState = r.get_components<GameStateComponent>();
+    auto &network = r.get_components<NetworkComponent>();
+    for (int i = 0; i < r._entity_number; i++) {
         if (gameState[i].has_value() && network[i].has_value()) {
             id = network[i]->clientId;
         }
     }
-    auto &networkInfo = _registry.get_components<NetworkInfo>();
+    auto &spawner = r.get_components<Spawner>();
     int nbPlayer= 1;
-    for (int i = 0; i < _registry._entity_number; i++) {
-        if (networkInfo[i].has_value()) {
-            nbPlayer = networkInfo[i]->playersNbr;
+    for (int i = 0; i < r._entity_number; i++) {
+        if (spawner[i].has_value()) {
+            nbPlayer = spawner[i]->playersNbr;
         }
     }
     if (state.co == OFF) {
