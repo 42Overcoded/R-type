@@ -30,12 +30,13 @@ int main(int ac, char **av) {
             std::cerr << "Error: port must be a number" << std::endl;
             return 84;
         }
-        serverIp = av[2];
+        serverIp = std::string(av[2]);
     } else {
         std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
     }
-    registry r;
-    gameEngine game(r, CLIENT, serverPort, serverIp);
+    std::cout << "Client starting" << std::endl;
+    gameEngine game(ClientType::CLIENT, serverPort, serverIp);
+    std::cout << "Client launched" << std::endl;
     game.launch_game();
 
     return 0;
