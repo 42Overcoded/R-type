@@ -11,6 +11,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <utility>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "NetworkComponent.hpp"
 #include "Packet.hpp"
@@ -88,7 +89,7 @@ void NetworkSystem::managePlayers(registry &reg) {
  */
 void NetworkSystem::SendConnectedPlayers(std::shared_ptr<Connection<Flag>> client)
 {
-    for (auto &player : players_)
+    for (std::pair<const unsigned int, bool> &player : players_)
     {
         Packet<Flag> addPlayerPacket;
         addPlayerPacket.header.flag = Flag::ClientAddPlayer;
@@ -128,8 +129,8 @@ void NetworkSystem::managePacketIn(
 void NetworkSystem::manageServerUpdateControls(
     registry &reg, std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
 {
-    auto &network = reg.get_components<NetworkComponent>();
-    auto &controls = reg.get_components<Control>();
+    SparseArray<NetworkComponent> &network = reg.get_components<NetworkComponent>();
+    SparseArray<Control> &controls = reg.get_components<Control>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
         if (network[i]->clientId == client->GetId() && controls[i].has_value()) {
@@ -148,11 +149,11 @@ void NetworkSystem::manageServerUpdateControls(
 
 void NetworkSystem::manageServerStartGame(registry &reg, std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
 {
-    std::cout << "Start game from client " << client->GetId() << std::endl;
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
-    auto &gameLauncherArray = reg.get_components<GameLauncher>();
+    SparseArray<GameLauncher> &gameLauncherArray = reg.get_components<GameLauncher>();
     size_t gameLauncherIndex = 0;
 
+    std::cout << "Start game from client " << client->GetId() << std::endl;
     for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
         if (gameLauncherArray[gameLauncherIndex].has_value())
             break;
@@ -232,10 +233,10 @@ void NetworkSystem::manageClientCreateEntity(registry &reg)
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg)
 {
-    auto &network = reg.get_components<NetworkComponent>();
-    auto &position = reg.get_components<Position>();
+    SparseArray<NetworkComponent> &network = reg.get_components<NetworkComponent>();
+    SparseArray<Position> &position = reg.get_components<Position>();
 
-    for (unsigned int i = 0; i < network.size(); i++) {
+    for (unsigned int i = 0; i < reg._entity_number; i++) {
         if (network[i].has_value() && position[i].has_value()) {
             if (network[i]->entityId == 0)
                 continue;
@@ -261,7 +262,7 @@ void NetworkSystem::manageClientStartGame(registry &reg)
 void NetworkSystem::manageClientEndGame(registry &reg)
 {
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
-    auto &gameLauncherArray = reg.get_components<GameLauncher>();
+    SparseArray<GameLauncher> &gameLauncherArray = reg.get_components<GameLauncher>();
     size_t gameLauncherIndex = 0;
 
     for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
@@ -293,9 +294,9 @@ void NetworkSystem::manageClientEndGame(registry &reg)
 
 void NetworkSystem::debugSpaceshipPosition(registry &reg)
 {
-    auto &network = reg.get_components<NetworkComponent>();
-    auto &position = reg.get_components<Position>();
-    auto &tag = reg.get_components<Tag>();
+    SparseArray<NetworkComponent> &network = reg.get_components<NetworkComponent>();
+    SparseArray<Position> &position = reg.get_components<Position>();
+    SparseArray<Tag> &tag = reg.get_components<Tag>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
         if (position[i].has_value() && (tag[i].has_value() &&  tag[i]->tag == "starship")) {
