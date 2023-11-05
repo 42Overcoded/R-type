@@ -70,8 +70,8 @@ struct Generated {
         this->y = y;
         this->is_boss = is_boss;
     }
-    int id;
-    int pattern;
+    unsigned int id;
+    unsigned int pattern;
     int x;
     int y;
     bool is_boss;
@@ -79,9 +79,9 @@ struct Generated {
 
 struct Level_info {
     std::vector<Generated> _generated;
-    int mob_alive;
-    bool is_boss_alive;
-    float level_progress;
+    int mob_alive = 0;
+    bool is_boss_alive = false;
+    float level_progress = 1920;
     std::vector<std::pair<std::size_t, Generated>> mobs_alive;
     int _level;
     float total_elapsed_time;
@@ -93,7 +93,7 @@ struct Level_info {
         total_elapsed_time = 0;
         _level = 0;
     }
-
+    int _current_level = 0;
 };
 
 struct GameStateComponent {

@@ -17,6 +17,7 @@
 #include "NetworkComponent.hpp"
 #include "Registry.hpp"
 #include "SparseArray.hpp"
+#include <sys/types.h>
 
 namespace Network {
 NetworkSystem::NetworkSystem(unsigned int serverPort, std::string serverIp) : INetworkClient()
@@ -47,7 +48,7 @@ void NetworkSystem::managePlayerNbr(registry &reg)
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
     SparseArray<Tag> &tagArr                      = reg.get_components<Tag>();
     SparseArray<Text> &textArr                    = reg.get_components<Text>();
-    SparseArray<NetworkInfo> &networkInfoArr      = reg.get_components<NetworkInfo>();
+    SparseArray<Spawner> &spawnerArr      = reg.get_components<Spawner>();
 
     for (size_t i = 0; i < reg._entity_number; i++)
     {
@@ -70,9 +71,9 @@ void NetworkSystem::managePlayerNbr(registry &reg)
                 textArr[i]->str = str;
             }
         }
-        if (networkInfoArr[i].has_value())
+        if (spawnerArr[i].has_value())
         {
-            networkInfoArr[i]->playersNbr = playersNbr_;
+            spawnerArr[i]->playersNbr = playersNbr_;
         }
     }
 }
@@ -152,41 +153,52 @@ void NetworkSystem::manageClientSendPing(registry &reg, Packet<Flag> &packet)
 
 void NetworkSystem::manageClientAddPlayer(registry &reg, Packet<Flag> &packet)
 {
-    std::cout << "Client add player" << std::endl;
+    uint32_t clientId;
+
+    packet >> clientId;
+    std::cout << "Client add player : " << clientId << std::endl;
     playersNbr_++;
 }
 
 void NetworkSystem::manageClientRemovePlayer(registry &reg, Packet<Flag> &packet)
 {
-    std::cout << "Client remove player" << std::endl;
+    uint32_t clientId;
+
+    packet >> clientId;
+    std::cout << "Client remove player : " << clientId << std::endl;
     playersNbr_--;
 }
 
 void NetworkSystem::manageClientCreateEntity(registry &reg, Packet<Flag> &packet)
 {
-    SparseArray<NetworkComponent> &networkArr = reg.get_components<NetworkComponent>();
-    SparseArray<Position> &positionArr        = reg.get_components<Position>();
+    SparseArray<Spawner> &spawnerArr = reg.get_components<Spawner>();
+    unsigned int spawnerIndex        = 0;
     uint32_t entityId;
+    uint32_t entityType;
+    uint32_t clientId;
+    uint32_t arg1;
+    uint32_t arg2;
     float x;
     float y;
 
+    for (spawnerIndex = 0; spawnerIndex < reg._entity_number; spawnerIndex++)
+    {
+        if (spawnerArr[spawnerIndex].has_value())
+            break;
+    }
+    if (!spawnerArr[spawnerIndex].has_value())
+        throw std::runtime_error("No spawner component found");
     packet >> y;
     packet >> x;
+    packet >> arg2;
+    packet >> arg1;
+    packet >> entityType;
+    packet >> clientId;
     packet >> entityId;
 
-    std::cout << "client create entity : " << entityId << " " << x << " " << y << std::endl;
-    for (size_t i = 0; i < networkArr.size(); i++)
-    {
-        if (networkArr[i].has_value() && positionArr[i].has_value())
-        {
-            //TODO replace with true creator code
-            if (networkArr[i]->entityId != 0)
-                continue;
-            networkArr[i]->entityId = entityId;
-            std::cout << "create : id " << networkArr[i]->entityId << std::endl;
-            return;
-        }
-    }
+    spawnerArr[spawnerIndex]->spawningEntities.push({entityId, clientId, entityType, arg1, arg2, x, y});
+    std::cout << "create entity : " << entityId << " " << entityType << " " << clientId << " " << arg1 << " "
+              << arg2  << " " << x << " " << y << std::endl;
 }
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet)
@@ -201,7 +213,6 @@ void NetworkSystem::manageClientUpdateEntity(registry &reg, Packet<Flag> &packet
     packet >> x;
     packet >> entityId;
 
-    std::cout << "Client update entity : " << entityId << " " << x << " " << y << std::endl;
     for (size_t i = 0; i < reg._entity_number; i++)
     {
         if (networkArr[i].has_value() && positionArr[i].has_value())

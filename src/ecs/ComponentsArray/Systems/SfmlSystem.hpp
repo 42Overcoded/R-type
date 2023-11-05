@@ -34,12 +34,6 @@ class SfmlSystem {
          */
         void scale_system(registry &r);
         /**
-         * @brief modify the pattern of the entities
-         *
-         * @param r
-         */
-        void modify_pattern(registry &r);
-        /**
          * @brief position all the entities
          *
          * @param r
@@ -75,18 +69,6 @@ class SfmlSystem {
          * @param r
          */
         void control_system(registry &r, sf::RenderWindow &window);
-        /**
-         * @brief calculate the velocity of the entities
-         *
-         * @param r
-         */
-        void velocity_system(registry &r, sf::Time &elapsed);
-        /**
-         * @brief detect the collision between the entities
-         *
-         * @param r
-         */
-        void hitbox_system(registry &r);
         /**
          * @brief load the texture of the entities and put it in a map to not reload it when it's already loaded
          *

@@ -1,11 +1,13 @@
 #include "../../GameEngine.hpp"
+#include <cstdint>
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
+#include "network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 #include <random>
 
-void gameEngine::spawn_ally_bullet(int i)
+void gameEngine::spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
 
@@ -32,12 +34,13 @@ void gameEngine::spawn_ally_bullet(int i)
         _registry.add_component<Sprite>(bullet, Sprite());
         _registry.add_component<Drawable>(bullet, Drawable());
         _registry.add_component<Hitbox>(bullet, Hitbox());
-        _registry.add_component<Position>(bullet, Position());
+        _registry.add_component<Position>(bullet, Position{.x = x, .y = y});
         _registry.add_component<Rect>(bullet, Rect());
         _registry.add_component<Texture>(bullet, Texture());
         _registry.add_component<Scale>(bullet, Scale());
         _registry.add_component<State>(bullet, State());
         _registry.add_component<Orientation>(bullet, Orientation());
+        _registry.add_component<NetworkComponent>(bullet, NetworkComponent{.clientId = clientId, .entityId = entityId});
 
         auto &orientation = _registry.get_components<Orientation>();
         auto &tag = _registry.get_components<Tag>();
@@ -52,7 +55,6 @@ void gameEngine::spawn_ally_bullet(int i)
         auto &texture = _registry.get_components<Texture>();
         auto &scale = _registry.get_components<Scale>();
 
-        //state[bullet]->id = id;    put the id of the starship who shooted this
         _drawable[bullet]->drawable = true;
         tag[bullet]->tag = starshipJson["bullet"]["tag"];
         texture[bullet]->textureTag = starshipJson["bullet"]["textureTag"];
@@ -117,7 +119,7 @@ void gameEngine::spawn_ally_bullet(int i)
     }
 }
 
-void gameEngine::spawn_boss_bullet(int i, int j)
+void gameEngine::spawn_boss_bullet(uint32_t entityId, int i, int j, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
 
@@ -140,12 +142,13 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     _registry.add_component<Sprite>(bullet, Sprite());
     _registry.add_component<Drawable>(bullet, Drawable());
     _registry.add_component<Hitbox>(bullet, Hitbox());
-    _registry.add_component<Position>(bullet, Position());
+    _registry.add_component<Position>(bullet, Position{.x = x, .y = y});
     _registry.add_component<EnemyBall>(bullet, EnemyBall());
     _registry.add_component<Texture>(bullet, Texture());
     _registry.add_component<Scale>(bullet, Scale());
     _registry.add_component<Color>(bullet, Color());
     _registry.add_component<Rect>(bullet, Rect());
+    _registry.add_component<NetworkComponent>(bullet, NetworkComponent{.entityId = entityId});
 
     auto &drawable = _registry.get_components<Drawable>();
     auto &tag = _registry.get_components<Tag>();
@@ -198,7 +201,7 @@ void gameEngine::spawn_boss_bullet(int i, int j)
     }
 }
 
-void gameEngine::spawn_bullet(int i, int j)
+void gameEngine::spawn_bullet(uint32_t entityId, int i, int j, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "bullet.json");
 
@@ -225,12 +228,13 @@ void gameEngine::spawn_bullet(int i, int j)
     _registry.add_component<Sprite>(bullet, Sprite());
     _registry.add_component<Drawable>(bullet, Drawable());
     _registry.add_component<Hitbox>(bullet, Hitbox());
-    _registry.add_component<Position>(bullet, Position());
+    _registry.add_component<Position>(bullet, Position{.x = x, .y = y});
     _registry.add_component<EnemyBall>(bullet, EnemyBall());
     _registry.add_component<Texture>(bullet, Texture());
     _registry.add_component<Scale>(bullet, Scale());
     _registry.add_component<SearchingHead>(bullet, SearchingHead());
     _registry.add_component<Color>(bullet, Color());
+    _registry.add_component<NetworkComponent>(bullet, NetworkComponent{.entityId = entityId});
 
     auto &color = _registry.get_components<Color>();
     auto &tag = _registry.get_components<Tag>();

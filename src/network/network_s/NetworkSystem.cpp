@@ -6,14 +6,17 @@
 */
 
 #include "NetworkSystem.hpp"
+#include <cstddef>
 #include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
+#include <utility>
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "NetworkComponent.hpp"
 #include "Packet.hpp"
 #include "Protocol.hpp"
+#include "network_c/NetworkComponent.hpp"
 #include "network_c/NetworkSystem.hpp"
 #include "../../gameEngine/Game.hpp"
 
@@ -35,7 +38,7 @@ void NetworkSystem::Update(registry &reg)
 
 void NetworkSystem::managePlayers(registry &reg) {
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
-    SparseArray<NetworkInfo> &networkInfoArr = reg.get_components<NetworkInfo>();
+    SparseArray<Spawner> &spawnerArr = reg.get_components<Spawner>();
 
     for (std::shared_ptr<Connection<Flag>> client : *clients_)
     {
@@ -46,6 +49,7 @@ void NetworkSystem::managePlayers(registry &reg) {
             addPlayerPacket.header.flag = Flag::ClientAddPlayer;
             addPlayerPacket << (uint32_t)client->GetId();
             SendToAllClients(addPlayerPacket);
+            SendConnectedPlayers(client);
             players_[client->GetId()] = true;
         }
         // else if (!client->IsConnected() && players_.find(client->GetId()) != players_.end()) {
@@ -71,10 +75,26 @@ void NetworkSystem::managePlayers(registry &reg) {
             }
             continue;
         }
-        if (networkInfoArr[i].has_value())
+        if (spawnerArr[i].has_value())
         {
-            networkInfoArr[i]->playersNbr = players_.size();
+            spawnerArr[i]->playersNbr = players_.size();
         }
+    }
+}
+
+/**
+ * @brief Send to the client a ClientAddPlayer packet for each connected players
+ * 
+ * @param client the client to send the packet
+ */
+void NetworkSystem::SendConnectedPlayers(std::shared_ptr<Connection<Flag>> client)
+{
+    for (std::pair<const unsigned int, bool> &player : players_)
+    {
+        Packet<Flag> addPlayerPacket;
+        addPlayerPacket.header.flag = Flag::ClientAddPlayer;
+        addPlayerPacket << (uint32_t)player.first;
+        SendToClient(addPlayerPacket, client);
     }
 }
 
@@ -109,8 +129,8 @@ void NetworkSystem::managePacketIn(
 void NetworkSystem::manageServerUpdateControls(
     registry &reg, std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
 {
-    auto &network = reg.get_components<NetworkComponent>();
-    auto &controls = reg.get_components<Control>();
+    SparseArray<NetworkComponent> &network = reg.get_components<NetworkComponent>();
+    SparseArray<Control> &controls = reg.get_components<Control>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
         if (network[i]->clientId == client->GetId() && controls[i].has_value()) {
@@ -129,11 +149,11 @@ void NetworkSystem::manageServerUpdateControls(
 
 void NetworkSystem::manageServerStartGame(registry &reg, std::shared_ptr<Connection<Flag>> client, Packet<Flag> &packet)
 {
-    std::cout << "Start game from client " << client->GetId() << std::endl;
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
-    auto &gameLauncherArray = reg.get_components<GameLauncher>();
+    SparseArray<GameLauncher> &gameLauncherArray = reg.get_components<GameLauncher>();
     size_t gameLauncherIndex = 0;
 
+    std::cout << "Start game from client " << client->GetId() << std::endl;
     for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
         if (gameLauncherArray[gameLauncherIndex].has_value())
             break;
@@ -180,32 +200,43 @@ void NetworkSystem::manageClientRemovePlayer(registry &reg)
 
 void NetworkSystem::manageClientCreateEntity(registry &reg)
 {
-    auto &network = reg.get_components<NetworkComponent>();
-    auto &position = reg.get_components<Position>();
+    SparseArray<NetworkComponent> &network = reg.get_components<NetworkComponent>();
+    SparseArray<Position> &position = reg.get_components<Position>();
+    SparseArray<Spawner> &spawnerArr = reg.get_components<Spawner>();
+    size_t spawnerIndex = 0;
 
-    for (unsigned int i = 0; i < network.size(); i++) {
-        if (network[i].has_value() && position[i].has_value()) {
-            if (network[i]->entityId != 0)
-                continue;
-            std::cout << "Create entity" << std::endl;
-            network[i]->entityId = ++lastEntityId_;
-            Packet<Flag> packet;
-            packet.header.flag = Flag::ClientCreateEntity;
-            packet << (uint32_t)network[i]->entityId;
-            packet << position[i]->x;
-            packet << position[i]->y;
-            std::cout << "create : id " << network[i]->entityId << " pos " << position[i]->x << " " << position[i]->y << std::endl;
-            SendToAllClients(packet);
-        }
+    for (spawnerIndex = 0; spawnerIndex < reg._entity_number; spawnerIndex++) {
+        if (spawnerArr[spawnerIndex].has_value())
+            break;
+    }
+    if (!spawnerArr[spawnerIndex].has_value())
+        throw std::runtime_error("No network info component found");
+    while (spawnerArr[spawnerIndex]->entitiesToSpawn.empty() == false) {
+        EntitySpawnDescriptor entity = spawnerArr[spawnerIndex]->entitiesToSpawn.front();
+        Packet<Flag> packet;
+
+        entity.entityId = ++lastEntityId_;
+        packet.header.flag = Flag::ClientCreateEntity;
+        packet << (uint32_t)entity.entityId;
+        packet << (uint32_t)entity.clientId;
+        packet << (uint32_t)entity.entityType;
+        packet << (uint32_t)entity.arg1;
+        packet << (uint32_t)entity.arg2;
+        packet << (float)entity.x;
+        packet << (float)entity.y;
+        std::cout << "create : id " << entity.entityId << " type " << entity.entityType << " arg1 " << entity.arg1 << " arg2 " << entity.arg2 << std::endl;
+        SendToAllClients(packet);
+        spawnerArr[spawnerIndex]->spawningEntities.push(entity);
+        spawnerArr[spawnerIndex]->entitiesToSpawn.pop();
     }
 }
 
 void NetworkSystem::manageClientUpdateEntity(registry &reg)
 {
-    auto &network = reg.get_components<NetworkComponent>();
-    auto &position = reg.get_components<Position>();
+    SparseArray<NetworkComponent> &network = reg.get_components<NetworkComponent>();
+    SparseArray<Position> &position = reg.get_components<Position>();
 
-    for (unsigned int i = 0; i < network.size(); i++) {
+    for (unsigned int i = 0; i < reg._entity_number; i++) {
         if (network[i].has_value() && position[i].has_value()) {
             if (network[i]->entityId == 0)
                 continue;
@@ -231,7 +262,7 @@ void NetworkSystem::manageClientStartGame(registry &reg)
 void NetworkSystem::manageClientEndGame(registry &reg)
 {
     SparseArray<GameStateComponent> &gameStateArr = reg.get_components<GameStateComponent>();
-    auto &gameLauncherArray = reg.get_components<GameLauncher>();
+    SparseArray<GameLauncher> &gameLauncherArray = reg.get_components<GameLauncher>();
     size_t gameLauncherIndex = 0;
 
     for (gameLauncherIndex = 0; gameLauncherIndex < reg._entity_number; gameLauncherIndex++) {
@@ -263,9 +294,9 @@ void NetworkSystem::manageClientEndGame(registry &reg)
 
 void NetworkSystem::debugSpaceshipPosition(registry &reg)
 {
-    auto &network = reg.get_components<NetworkComponent>();
-    auto &position = reg.get_components<Position>();
-    auto &tag = reg.get_components<Tag>();
+    SparseArray<NetworkComponent> &network = reg.get_components<NetworkComponent>();
+    SparseArray<Position> &position = reg.get_components<Position>();
+    SparseArray<Tag> &tag = reg.get_components<Tag>();
 
     for (unsigned int i = 0; i < network.size(); i++) {
         if (position[i].has_value() && (tag[i].has_value() &&  tag[i]->tag == "starship")) {

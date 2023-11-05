@@ -454,7 +454,7 @@ void gameEngine::menu()
                 gameLauncher.isRequestingGame = true;
             }
             if (tag[i]->tag == "adventurebuttononline" && click[i]->clicked == true) {
-                gameState.mode = LEVELS;
+                gameState.mode = LEVELS_G;
                 gameLauncher.isRequestingGame = true;
             }
             if (tag[i]->tag == "1v1buttononline" && click[i]->clicked == true) {
@@ -503,17 +503,19 @@ void gameEngine::menu()
     }
     if (gameState.scene == END) {
         this->_level_info._level = 0;
+        gameState.scene = MENU;
+        if (gameState.scene == MENU && _networkSystem != nullptr) {
+            _networkSystem.reset();
+        }
         for (size_t i = 0; i < tag.size(); i++) {
             if (!tag[i].has_value())
                 continue;
-            if (drawable[i].has_value()) {
-                if (tag[i]->tag == "score")
-                    continue;
-                drawable[i]->drawable = false;
-            }
-            if (tag[i]->tag == "score") {
-                position[i]->x = 800;
-                position[i]->y = 400;
+            if (tag[i]->groupTag == "mainMenu" || tag[i]->groupTag == "offline" || tag[i]->groupTag == "online" || tag[i]->groupTag == "optionoffline" || tag[i]->groupTag == "optiononline" || tag[i]->groupTag == "generate") {
+                if (tag[i]->groupTag == "mainMenu") {
+                    drawable[i]->drawable = true;
+                }
+            } else {
+                _registry.kill_entity(entity_t(i));
             }
         }
     }

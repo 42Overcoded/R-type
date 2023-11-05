@@ -43,7 +43,7 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "D
     FetchContent_MakeAvailable(Boost)
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
@@ -51,6 +51,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
+    ../gameEngine/game/systems/GameSystems.hpp
     ../gameEngine/GameEngine.hpp
     ../gameEngine/Game.hpp
     ../network/Connection.hpp
@@ -79,6 +80,7 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/miscellaneous.cpp
     ../gameEngine/game/gameLogic/movements.cpp
     ../gameEngine/game/gameLogic/generateLevel.cpp
+    ../gameEngine/game/systems/GameSystems.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp

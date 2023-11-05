@@ -2,9 +2,10 @@
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
+#include "network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 
-entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
+entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "enemies.json");
 
@@ -31,6 +32,7 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     _registry.add_component<Texture>(enemy, Texture());
     _registry.add_component<Scale>(enemy, Scale());
     _registry.add_component<Color>(enemy, Color());
+    _registry.add_component<NetworkComponent>(enemy, NetworkComponent{.entityId = entityId});
 
     auto &color = _registry.get_components<Color>();
     auto &tag = _registry.get_components<Tag>();
@@ -96,7 +98,7 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
 
     position[enemy]->x = enemiesJson["enemies"][enemy_id]["position"]["x"];
     position[enemy]->y = enemiesJson["enemies"][enemy_id]["position"]["y"];
-
+    position[enemy]->y = y;
 
     if(enemy_id == 9){
         float x = pattern[enemy]->pattern[pattern[enemy]->pattern_index].speedx - position[enemy]->x;
@@ -118,7 +120,7 @@ entity_t gameEngine::init_enemy(int enemy_id, int pattern_id)
     return enemy;
 }
 
-entity_t gameEngine::init_worm(int id)
+entity_t gameEngine::init_worm(uint32_t entityId, int id, float x, float y)
 {
     std::ifstream file("configFiles/enemies.json");
 
@@ -130,7 +132,7 @@ entity_t gameEngine::init_worm(int id)
 
     entity_t worm = _registry.spawn_entity();
 
-    _registry.add_component<Position>(worm, Position());
+    _registry.add_component<Position>(worm, Position{.x = x, .y = y});
     _registry.add_component<Speed>(worm, Speed());
     _registry.add_component<Sprite>(worm, Sprite());
     _registry.add_component<Drawable>(worm, Drawable());
@@ -146,6 +148,7 @@ entity_t gameEngine::init_worm(int id)
     _registry.add_component<Scale>(worm, Scale());
     _registry.add_component<Color>(worm, Color());
     _registry.add_component<Orientation>(worm, Orientation());
+    _registry.add_component<NetworkComponent>(worm, NetworkComponent{.entityId = entityId});
 
     auto &color = _registry.get_components<Color>();
     auto &__tag = _registry.get_components<Tag>();
@@ -201,11 +204,11 @@ entity_t gameEngine::init_worm(int id)
         tmp.speedy = enemiesJson["enemies"][8]["pattern"][i]["y"];
         pattern[worm]->pattern.push_back(tmp);
     }
-    float x = pattern[worm]->pattern[pattern[worm]->pattern_index].speedx - position[worm]->x;
-    float y = pattern[worm]->pattern[pattern[worm]->pattern_index].speedy - position[worm]->y;
-    float length = sqrt(x * x + y * y);
-    speed[worm]->speedx = (x / length) * 0.5;
-    speed[worm]->speedy = (y / length) * 0.5;
+    float x_ = pattern[worm]->pattern[pattern[worm]->pattern_index].speedx - position[worm]->x;
+    float y_ = pattern[worm]->pattern[pattern[worm]->pattern_index].speedy - position[worm]->y;
+    float length = sqrt(x_ * x_ + y_ * y_);
+    speed[worm]->speedx = (x_ / length) * 0.5;
+    speed[worm]->speedy = (y_ / length) * 0.5;
     speed[worm]->baseSpeedx = speed[worm]->speedx;
     speed[worm]->baseSpeedy = speed[worm]->speedy;
     return worm;
