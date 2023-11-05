@@ -1,18 +1,878 @@
 {
-    "menu": {
-        "tag": "menu",
-        "textureTag": "menuTexture",
-        "position": {
-            "x": 660,
-            "y": 440
+    "button": [
+        {
+            "drawable": true,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "grouptag": "mainMenu",
+            "tag": "offlinebutton",
+            "texttag": "offlinetext",
+            "positiontext": {
+                "x": 1220,
+                "y": 475
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Offline",
+            "textscale": 1.5,
+            "scale": 1,
+            "position": {
+                "x": 1060,
+                "y": 440
+            }
+        },
+        {
+            "grouptag": "mainMenu",
+            "drawable": true,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "onlinebutton",
+            "texttag": "onlinetext",
+            "positiontext": {
+                "x": 540,
+                "y": 475
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Online",
+            "textscale": 1.5,
+            "scale": 1,
+            "position": {
+                "x": 360,
+                "y": 440
+            }
+        },
+        {
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "grouptag": "offline",
+            "tag": "endlessbutton",
+            "texttag": "endlesstext",
+            "positiontext": {
+                "x": 1220,
+                "y": 475
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Endless",
+            "textscale": 1.5,
+            "scale": 1,
+            "position": {
+                "x": 1060,
+                "y": 440
+            }
+        },
+        {
+            "drawable": false,
+            "hitbox": {
+            "width": 500,
+            "height": 125
+            },
+            "grouptag": "offline",
+            "tag": "generatebutton",
+            "texttag": "generatetext",
+            "positiontext": {
+                "x": 850,
+                "y": 630
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Generate",
+            "textscale": 1.5,
+            "scale": 1,
+            "position": {
+                "x": 700,
+                "y": 600
+            }
+        },
+        {
+            "grouptag": "offline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "adventurebutton",
+            "texttag": "adventuretext",
+            "positiontext": {
+                "x": 500,
+                "y": 475
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Adventure",
+            "textscale": 1.5,
+            "scale": 1,
+            "position": {
+                "x": 360,
+                "y": 440
+            }
+        },
+        {
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "grouptag": "online",
+            "tag": "endlessbuttononline",
+            "texttag": "endlesstext",
+            "positiontext": {
+                "x": 1220,
+                "y": 475
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Endless",
+            "textscale": 1.5,
+            "scale": 1,
+            "position": {
+                "x": 1060,
+                "y": 440
+            }
+        },
+        {
+            "grouptag": "online",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "adventurebuttononline",
+            "texttag": "adventuretext",
+            "positiontext": {
+                "x": 500,
+                "y": 475
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Adventure",
+            "textscale": 1.5,
+            "scale": 1,
+            "position": {
+                "x": 360,
+                "y": 440
+            }
+        },
+        {
+            "grouptag": "online",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "backbuttononline",
+            "texttag": "backonline",
+            "positiontext": {
+                "x": 940,
+                "y": 860
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Back",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 840,
+                "y": 840
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "backbuttongenerate",
+            "texttag": "backbuttongeneratetext",
+            "positiontext": {
+                "x": 890,
+                "y": 860
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Back",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 840,
+                "y": 840
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "generatediffmoins",
+            "texttag": "generatediffmoinstext",
+            "positiontext": {
+                "x": 500,
+                "y": 220
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Difficulty -",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 450,
+                "y": 200
+            }
+        }, 
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "generatediffplus",
+            "texttag": "generatediffplustext",
+            "positiontext": {
+                "x": 1000,
+                "y": 220
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Difficulty +",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 950,
+                "y": 200
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "difficulty",
+            "texttag": "difficultytext",
+            "positiontext": {
+                "x": 750,
+                "y": 220
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "5",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 700,
+                "y": 200
+            }
+        }, 
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "generatelenmoins",
+            "texttag": "generatelenmoinstext",
+            "positiontext": {
+                "x": 500,
+                "y": 420
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Level length -",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 450,
+                "y": 400
+            }
+        }, 
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "generatelenplus",
+            "texttag": "generatelenplustext",
+            "positiontext": {
+                "x": 1000,
+                "y": 420
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Level length +",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 950,
+                "y": 400
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "length",
+            "texttag": "lengthtext",
+            "positiontext": {
+                "x": 750,
+                "y": 420
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "5000",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 700,
+                "y": 400
+            }
+        }, 
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "seedinfo",
+            "texttag": "seedinfotext",
+            "positiontext": {
+                "x": 500,
+                "y": 620
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Seed:",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 450,
+                "y": 600
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "seedinput",
+            "texttag": "seedinputtext",
+            "positiontext": {
+                "x": 750,
+                "y": 620
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 700,
+                "y": 600
+            }
+        },
+        {
+            "grouptag": "generate",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "GenerateLevel",
+            "texttag": "GenerateLevelText",
+            "positiontext": {
+                "x": 750,
+                "y": 720
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Generate Level !",
+            "textscale": 1.25,
+            "scale": 1,
+            "position": {
+                "x": 700,
+                "y": 700
+            }
+        },
+        {
+            "grouptag": "offline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "backbuttonoffline",
+            "texttag": "back",
+            "positiontext": {
+                "x": 940,
+                "y": 860
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Back",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 840,
+                "y": 840
+            }
+        },
+        {
+            "grouptag": "online",
+            "drawable": false,
+            "hitbox": {
+                "width": 0,
+                "height": 0
+            },
+            "tag": "NONE",
+            "texttag": "playerConnected",
+            "positiontext": {
+                "x": 640,
+                "y": 50
+            },
+            "textureTag": "",
+            "fontTag": "menuFont",
+            "text": "0/4 Players connected",
+            "textscale": 2,
+            "scale": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        {
+            "grouptag": "online",
+            "drawable": false,
+            "hitbox": {
+                "width": 0,
+                "height": 0
+            },
+            "tag": "NONE",
+            "texttag": "waitingPlayer",
+            "positiontext": {
+                "x": 480,
+                "y": 450
+            },
+            "textureTag": "",
+            "fontTag": "menuFont",
+            "text": "Waiting for gamemaster to select a mode...",
+            "textscale": 1.5,
+            "scale": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        {
+            "grouptag": "online",
+            "drawable": false,
+            "hitbox": {
+                "width": 0,
+                "height": 0
+            },
+            "tag": "NONE",
+            "texttag": "waitingPlayer",
+            "positiontext": {
+                "x": 480,
+                "y": 450
+            },
+            "textureTag": "",
+            "fontTag": "menuFont",
+            "text": "Waiting for gamemaster to select a mode...",
+            "textscale": 1.5,
+            "scale": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        {
+            "grouptag": "online",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "optionbutton",
+            "texttag": "optiontext",
+            "positiontext": {
+                "x": 1680,
+                "y": 70
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Options",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 1600,
+                "y": 50
+            }
+        },
+        {
+            "grouptag": "offline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "optionbuttonoff",
+            "texttag": "optiontextoff",
+            "positiontext": {
+                "x": 1680,
+                "y": 70
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Options",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 1600,
+                "y": 50
+            }
+        },
+        {
+            "grouptag": "optiononline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "backbuttonoptonline",
+            "texttag": "backoptonline",
+            "positiontext": {
+                "x": 940,
+                "y": 860
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Back",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 840,
+                "y": 840
+            }
+        },
+        {
+            "grouptag": "optionoffline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "backbuttonoptoffline",
+            "texttag": "backoptoffline",
+            "positiontext": {
+                "x": 940,
+                "y": 860
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "Back",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 840,
+                "y": 840
+            }
+        },
+        {
+            "grouptag": "optionoffline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "+diffoptoffline",
+            "texttag": "diff",
+            "positiontext": {
+                "x": 1450,
+                "y": 660
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": ">",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 1330,
+                "y": 640
+            }
+        },
+        {
+            "grouptag": "optionoffline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "-diffoptoffline",
+            "texttag": "diff",
+            "positiontext": {
+                "x": 460,
+                "y": 660
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "<",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 340,
+                "y": 640
+            }
+        },
+        {
+            "grouptag": "optionoffline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "+poweroptoffline",
+            "texttag": "power",
+            "positiontext": {
+                "x": 1450,
+                "y": 260
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": ">",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 1330,
+                "y": 240
+            }
+        },
+        {
+            "grouptag": "optionoffline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "-poweroptoffline",
+            "texttag": "power",
+            "positiontext": {
+                "x": 460,
+                "y": 260
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "<",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 340,
+                "y": 240
+            }
+        },
+        {
+            "grouptag": "optionoffline",
+            "drawable": false,
+            "hitbox": {
+                "width": 0,
+                "height": 0
+            },
+            "tag": "NONE",
+            "texttag": "powerupoffline",
+            "positiontext": {
+                "x": 840,
+                "y": 260
+            },
+            "textureTag": "",
+            "fontTag": "menuFont",
+            "text": "Powerup: Yes",
+            "textscale": 1,
+            "scale": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        {
+            "grouptag": "optionoffline",
+            "drawable": false,
+            "hitbox": {
+                "width": 0,
+                "height": 0
+            },
+            "tag": "NONE",
+            "texttag": "diffoffline",
+            "positiontext": {
+                "x": 840,
+                "y": 660
+            },
+            "textureTag": "",
+            "fontTag": "menuFont",
+            "text": "Difficulty: Easy",
+            "textscale": 1,
+            "scale": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        {
+            "grouptag": "optiononline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "+diffoptonline",
+            "texttag": "diff",
+            "positiontext": {
+                "x": 1450,
+                "y": 660
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": ">",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 1330,
+                "y": 640
+            }
+        },
+        {
+            "grouptag": "optiononline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "-diffoptonline",
+            "texttag": "diff",
+            "positiontext": {
+                "x": 460,
+                "y": 660
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "<",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 340,
+                "y": 640
+            }
+        },
+        {
+            "grouptag": "optiononline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "+poweroptonline",
+            "texttag": "power",
+            "positiontext": {
+                "x": 1450,
+                "y": 260
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": ">",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 1330,
+                "y": 240
+            }
+        },
+        {
+            "grouptag": "optiononline",
+            "drawable": false,
+            "hitbox": {
+                "width": 500,
+                "height": 125
+            },
+            "tag": "-poweroptonline",
+            "texttag": "power",
+            "positiontext": {
+                "x": 460,
+                "y": 260
+            },
+            "textureTag": "buttonTexture",
+            "fontTag": "menuFont",
+            "text": "<",
+            "textscale": 0.75,
+            "scale": 0.5,
+            "position": {
+                "x": 340,
+                "y": 240
+            }
+        },
+        {
+            "grouptag": "optiononline",
+            "drawable": false,
+            "hitbox": {
+                "width": 0,
+                "height": 0
+            },
+            "tag": "NONE",
+            "texttag": "poweruponline",
+            "positiontext": {
+                "x": 840,
+                "y": 260
+            },
+            "textureTag": "",
+            "fontTag": "menuFont",
+            "text": "Powerup: Yes",
+            "textscale": 1,
+            "scale": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            }
+        },
+        {
+            "grouptag": "optiononline",
+            "drawable": false,
+            "hitbox": {
+                "width": 0,
+                "height": 0
+            },
+            "tag": "NONE",
+            "texttag": "diffonline",
+            "positiontext": {
+                "x": 840,
+                "y": 660
+            },
+            "textureTag": "",
+            "fontTag": "menuFont",
+            "text": "Difficulty: Easy",
+            "textscale": 1,
+            "scale": 0,
+            "position": {
+                "x": 0,
+                "y": 0
+            }
         }
-    },
-    "play": {
-        "tag": "play",
-        "textureTag": "playTexture",
-        "position": {
-            "x": 660,
-            "y": 440
-        }
-    }
+    ]
 }

@@ -1,0 +1,12 @@
+{
+    "index": [
+        {
+            "ennemies": [0, 1, 2],
+            "elite": [3],
+            "bosses": [4],
+            "pattern": [0, 1, 2],
+            "elite_pattern": [3],
+            "bosses_pattern": [4]
+        }
+    ]
+}

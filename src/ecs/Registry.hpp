@@ -34,6 +34,8 @@ class entity_t {
 
 class registry {
     public:
+        registry() = default;
+        ~registry() = default;
         /**
          * @brief return entity(size_t) need to use it when you want to create an entity,
          * everything must be an entity (missile, player, shoots ...)

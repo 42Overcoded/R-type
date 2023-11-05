@@ -12,8 +12,8 @@
 
 struct NetworkComponent
 {
-    uint32_t clientId;
-    uint32_t entityId;
+    uint32_t clientId = 0;
+    uint32_t entityId = 0;
 };
 
 

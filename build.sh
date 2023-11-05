@@ -6,9 +6,10 @@
 ##
 
 PACK=False
+DEBUG=False
 
-SHORT=p,h
-LONG=pack,help
+SHORT=p,h,d
+LONG=pack,help,debug
 OPTS=$(getopt -a -n build --options $SHORT --longoptions $LONG -- "$@")
 
 eval set -- "$OPTS"
@@ -22,8 +23,13 @@ do
         shift
       ;;
     -h | --help)
-      "Usage: $0 [-p|--pack]"
-      exit 84
+      echo "Usage: $0 [-p|--pack]"
+      exit 0
+      ;;
+    -d | --debug)
+      echo "Debug mode enabled"
+      DEBUG=True
+      shift
       ;;
     --)
       shift;
@@ -31,15 +37,22 @@ do
       ;;
     *)
       echo "Unexpected option: $1"
+      exit 84
       ;;
   esac
 done
 
+original_dir=${PWD}
+
 mkdir build > /dev/null 2>&1
 cd build > /dev/null 2>&1
-cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . -j
-if [ $PACK = True ]; then
-    cpack -C CPackConfig.cmake
+if [ $DEBUG = True ]; then
+  cmake .. -DCMAKE_BUILD_TYPE=Debug
+else
+  cmake .. -DCMAKE_BUILD_TYPE=Release
 fi
-cd - > /dev/null 2>&1
+cmake --build . -j 7
+if [ $PACK = True ]; then
+  cpack -C CPackConfig.cmake
+fi
+cd $original_dir > /dev/null 2>&1
