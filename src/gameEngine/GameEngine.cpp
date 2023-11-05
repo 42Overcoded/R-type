@@ -129,8 +129,6 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
             while (this->_level_info._generated.size() > 0 && _level_info.level_progress > _level_info._generated[0].x && _level_info._generated[0].is_boss == false) {
                 GameStateComponent &gameState = get_game_state();
                 auto &spawner = _registry.get_components<Spawner>();
-                if (_type == CLIENT && _level_info._generated[0].id == 6)
-                    sounds["truck"]->play();
                 if (_type == SERVER || gameState.co == OFF) {
                     spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = _level_info._generated[0].id, .arg2 = _level_info._generated[0].pattern});
                 }
@@ -198,9 +196,6 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
         {
             GameStateComponent &gameState = get_game_state();
             SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
-            if (_type == CLIENT) {
-                sounds["truck"]->play();
-            }
             if (_type == SERVER || gameState.co == OFF) {
                 float randomPos = (std::rand() + 1) % 950;
                 spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 6, .arg2 = 6, .y = randomPos});
@@ -448,8 +443,8 @@ void gameEngine::launch_game()
             shoot_system(elapsed);
             movement_system(_registry);
             gameSystems_.velocity_system(_registry, elapsed);
-            sfmlSystems_.color_system(_registry);
-            gameSystems_.hitbox_system(_registry);
+            sfmlSystems_.color_system(_registry, _type, sounds);
+            gameSystems_.hitbox_system(_registry, _type, sounds);
             death_animation();
             shoot_enemy();
             life_handler();
@@ -510,14 +505,24 @@ void gameEngine::load_musics_and_sounds(void)
         soundBuffers.insert(std::make_pair("soundExplosion", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion2", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion3", nullptr));
-        soundBuffers.insert(std::make_pair("truck", nullptr));
+        soundBuffers.insert(std::make_pair("AllerMarcel", nullptr));
+        soundBuffers.insert(std::make_pair("freezeBoost", nullptr));
+        soundBuffers.insert(std::make_pair("bombBoost", nullptr));
+        soundBuffers.insert(std::make_pair("endBoost", nullptr));
+        soundBuffers.insert(std::make_pair("lifeBoost", nullptr));
+        soundBuffers.insert(std::make_pair("shootBoost", nullptr));
 
-        sounds.insert(std::make_pair("truck", nullptr));
         sounds.insert(std::make_pair("soundShoot", nullptr));
         sounds.insert(std::make_pair("soundPowerShoot", nullptr));
         sounds.insert(std::make_pair("soundExplosion", nullptr));
         sounds.insert(std::make_pair("soundExplosion2", nullptr));
         sounds.insert(std::make_pair("soundExplosion3", nullptr));
+        sounds.insert(std::make_pair("AllerMarcel", nullptr));
+        sounds.insert(std::make_pair("freezeBoost", nullptr));
+        sounds.insert(std::make_pair("bombBoost", nullptr));
+        sounds.insert(std::make_pair("endBoost", nullptr));
+        sounds.insert(std::make_pair("lifeBoost", nullptr));
+        sounds.insert(std::make_pair("shootBoost", nullptr));
 
     if (_type == CLIENT) {
         musics.at("musicMenu") = std::make_shared<sf::Music>();
@@ -525,50 +530,75 @@ void gameEngine::load_musics_and_sounds(void)
         musics.at("musicScore") = std::make_shared<sf::Music>();
         musics.at("musicBoss") = std::make_shared<sf::Music>();
 
-        soundBuffers.at("truck") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundPowerShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion2") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion3") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("AllerMarcel") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("freezeBoost") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("bombBoost") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("endBoost") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("lifeBoost") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("shootBoost") = std::make_shared<sf::SoundBuffer>();
 
-        sounds.at("truck") = std::make_shared<sf::Sound>();
         sounds.at("soundShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundPowerShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion2") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion3") = std::make_shared<sf::Sound>();
+        sounds.at("AllerMarcel") = std::make_shared<sf::Sound>();
+        sounds.at("freezeBoost") = std::make_shared<sf::Sound>();
+        sounds.at("bombBoost") = std::make_shared<sf::Sound>();
+        sounds.at("endBoost") = std::make_shared<sf::Sound>();
+        sounds.at("lifeBoost") = std::make_shared<sf::Sound>();
+        sounds.at("shootBoost") = std::make_shared<sf::Sound>();
 
         musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
         musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
         musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
         musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
 
-        soundBuffers["truck"]->loadFromFile("assets/musicAndSound/ALLEZ_MARCEL.mp3");
         soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
         soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
         soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
         soundBuffers["soundExplosion2"]->loadFromFile("assets/musicAndSound/roblox rocket explosion sound.mp3");
         soundBuffers["soundExplosion3"]->loadFromFile("assets/musicAndSound/Geometry Dash Death Sound Effect.mp3");
+        soundBuffers["AllerMarcel"]->loadFromFile("assets/musicAndSound/1Aller Marcel !!! (mp3cut.net)(1).mp3");
+        soundBuffers["freezeBoost"]->loadFromFile("assets/musicAndSound/Slow Motion Sound Effect.mp3");
+        soundBuffers["bombBoost"]->loadFromFile("assets/musicAndSound/Bass whoosh Sound Effect.mp3");
+        soundBuffers["endBoost"]->loadFromFile("assets/musicAndSound/Power Down Sound - New Super Mario Bros Wii.mp3");
+        soundBuffers["lifeBoost"]->loadFromFile("assets/musicAndSound/half_life_med.mp3");
+        soundBuffers["shootBoost"]->loadFromFile("assets/musicAndSound/Team_Fortress_2_SFX_-_Server_Join_Equip_Weapon_V1.mp3");
 
-        sounds["truck"]->setBuffer(*soundBuffers["truck"]);
         sounds["soundShoot"]->setBuffer(*soundBuffers["soundShoot"]);
         sounds["soundPowerShoot"]->setBuffer(*soundBuffers["soundPowerShoot"]);
         sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
         sounds["soundExplosion2"]->setBuffer(*soundBuffers["soundExplosion2"]);
         sounds["soundExplosion3"]->setBuffer(*soundBuffers["soundExplosion3"]);
+        sounds["AllerMarcel"]->setBuffer(*soundBuffers["AllerMarcel"]);
+        sounds["freezeBoost"]->setBuffer(*soundBuffers["freezeBoost"]);
+        sounds["bombBoost"]->setBuffer(*soundBuffers["bombBoost"]);
+        sounds["endBoost"]->setBuffer(*soundBuffers["endBoost"]);
+        sounds["lifeBoost"]->setBuffer(*soundBuffers["lifeBoost"]);
+        sounds["shootBoost"]->setBuffer(*soundBuffers["shootBoost"]);
 
-        musics["musicMenu"]->setVolume(30);
-        musics["musicGame"]->setVolume(30);
-        musics["musicScore"]->setVolume(30);
-        musics["musicBoss"]->setVolume(30);
+        musics["musicMenu"]->setVolume(25);
+        musics["musicGame"]->setVolume(25);
+        musics["musicScore"]->setVolume(20);
+        musics["musicBoss"]->setVolume(25);
 
-        sounds["truck"]->setVolume(100);
-        sounds["soundShoot"]->setVolume(60);
+        sounds["soundShoot"]->setVolume(50);
         sounds["soundPowerShoot"]->setVolume(60);
-        sounds["soundExplosion"]->setVolume(60);
-        sounds["soundExplosion2"]->setVolume(50);
-        sounds["soundExplosion3"]->setVolume(50);
+        sounds["soundExplosion"]->setVolume(40);
+        sounds["soundExplosion2"]->setVolume(30);
+        sounds["soundExplosion3"]->setVolume(40);
+        sounds["AllerMarcel"]->setVolume(50);
+        sounds["freezeBoost"]->setVolume(85);
+        sounds["bombBoost"]->setVolume(85);
+        sounds["endBoost"]->setVolume(85);
+        sounds["lifeBoost"]->setVolume(50);
+        sounds["shootBoost"]->setVolume(85);
 
         musics["musicMenu"]->setLoop(true);
         musics["musicScore"]->setLoop(false);

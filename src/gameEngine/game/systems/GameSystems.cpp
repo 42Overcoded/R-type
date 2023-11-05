@@ -106,7 +106,7 @@ void GameSystem::velocity_system(registry &r, sf::Time &elapsed)
     }
 }
 
-void GameSystem::hitbox_system(registry &r)
+void GameSystem::hitbox_system(registry &r, ClientType _type, std::unordered_map<std::string, std::shared_ptr<sf::Sound>> &sounds)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -144,6 +144,8 @@ void GameSystem::hitbox_system(registry &r)
                         if (tag[i]->tag == "lifeBoost") {
                             if (health[j]->health < 4)
                                 health[j]->health += 1;
+                            if (_type == CLIENT)
+                                    sounds["lifeBoost"]->play();
                             r.kill_entity(entity_t(i));
                             break;
                         }
@@ -154,7 +156,18 @@ void GameSystem::hitbox_system(registry &r)
                                 }
                             }
                             r.kill_entity(entity_t(i));
+                            if (_type == CLIENT)
+                                sounds["bombBoost"]->play();
                             break;
+                        }
+                        if (tag[i]->tag == "ice") {
+                            if (_type == CLIENT)
+                                sounds["freezeBoost"]->play();
+                        }
+                        if (tag[i]->tag == "shootBoost" || tag[i]->tag == "shield") {
+                            if (_type == CLIENT) {
+                                sounds["shootBoost"]->play();
+                            }
                         }
                     }
                 }

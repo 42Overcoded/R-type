@@ -568,6 +568,8 @@ void gameEngine::clock_time()
             _clock[i]->time = _clock[i]->clock.getElapsedTime();
             if (_clock[i]->time.asSeconds() > 10) {
                 Kill_entity(entity_t(i));
+                if (_type == CLIENT)
+                    sounds["endBoost"]->play();
                 continue;
             }
         }

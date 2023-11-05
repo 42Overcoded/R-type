@@ -12,6 +12,7 @@
 #include "../../Registry.hpp"
 #include "SFML/Graphics/Rect.hpp"
 #include "SFML/System/Clock.hpp"
+#include <SFML/Audio.hpp>
 #include "../../../gameEngine/Game.hpp"
 
 
@@ -77,7 +78,7 @@ class SfmlSystem {
         void load_texture(registry &r, std::vector<keyCommands> cheatCode);
         void set_color(registry &r);
         void set_orientation(registry &r);
-        void color_system(registry &r);
+        void color_system(registry &r, ClientType _type, std::unordered_map<std::string, std::shared_ptr<sf::Sound>> &sounds);
         void addKeyToKeyHistory(keyCommands keyCommand);
         ~SfmlSystem() = default;
     protected:
@@ -88,7 +89,7 @@ class SfmlSystem {
         std::vector<keyCommands> _cheatCode;
         keyCommands lastKey;
         bool isCheatCodeEntered;
-        std::vector<std::pair<int, int>> saveHitboxSpaceships;
+        std::unordered_map<int, std::pair<int, int>> saveHitboxSpaceships;
 };
 
 #endif /* !SYSTEM_HPP_ */

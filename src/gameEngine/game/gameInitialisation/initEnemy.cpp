@@ -110,11 +110,13 @@ entity_t gameEngine::init_enemy(uint32_t entityId, int enemy_id, int pattern_id,
         speed[enemy]->baseSpeedy = speed[enemy]->speedy;
     }
 
-    if (tag[enemy]->tag ==  "enemyBoss" || tag[enemy]->tag == "wormHead" || tag[enemy]->tag == "starshipBoss") {
-        if (_type == CLIENT) {
+    if (_type == CLIENT) {
+        if (tag[enemy]->tag ==  "enemyBoss" || tag[enemy]->tag == "wormHead" || tag[enemy]->tag == "starshipBoss") {
             musics["musicGame"]->pause();
             musics["musicBoss"]->play();
         }
+        else if (tag[enemy]->tag == "sprinter")
+            sounds["AllerMarcel"]->play();
     }
 
     return enemy;
@@ -211,5 +213,9 @@ entity_t gameEngine::init_worm(uint32_t entityId, int id, float x, float y)
     speed[worm]->speedy = (y_ / length) * 0.5;
     speed[worm]->baseSpeedx = speed[worm]->speedx;
     speed[worm]->baseSpeedy = speed[worm]->speedy;
+    if (_type == CLIENT) {
+        musics["musicGame"]->pause();
+        musics["musicBoss"]->play();
+    }
     return worm;
 }

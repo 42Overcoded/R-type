@@ -10,6 +10,8 @@
 
 #include <cstddef>
 #include "../../../ecs/Registry.hpp"
+#include <SFML/Audio.hpp>
+#include "../../../gameEngine/Game.hpp"
 
 class GameSystem {
     public:
@@ -35,7 +37,7 @@ class GameSystem {
          *
          * @param r
          */
-        void hitbox_system(registry &r);
+        void hitbox_system(registry &r, ClientType _type, std::unordered_map<std::string, std::shared_ptr<sf::Sound>> &sounds);
     protected:
     private:
 };

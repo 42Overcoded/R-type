@@ -483,7 +483,8 @@ void gameEngine::death_animation()
                     sounds["soundExplosion2"]->play();
                 if (_type == CLIENT && (tag[i]->tag == "enemy 3" || tag[i]->tag == "enemy 4"))
                     sounds["soundExplosion3"]->play();
-                if (_type == CLIENT && (tag[i]->tag == "enemyBoss" || tag[i]->tag == "starshipBoss")) {
+                if (_type == CLIENT && 
+                    (tag[i]->tag == "enemyBoss" || tag[i]->tag == "starshipBoss" || tag[i]->tag == "wormHead")) {
                     musics["musicBoss"]->stop();
                     musics["musicGame"]->play();
                 }
