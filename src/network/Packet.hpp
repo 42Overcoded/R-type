@@ -39,8 +39,8 @@ struct PacketHeader
 template <typename T>
 struct Packet
 {
-    PacketHeader<T> header{};
-    std::vector<uint8_t> body;
+    PacketHeader<T> header;
+    std::vector<uint8_t> body = {};
 
     /**
      * @brief Get the size of the entire packet in bytes

@@ -6,13 +6,13 @@
 */
 #include <iostream>
 #include "../network/Protocol.hpp"
-#include "gameEngine/GameEngineServer.hpp"
+#include "../gameEngine/GameEngine.hpp"
 
 int main(int ac, char **av) {
     unsigned int portNumber = Network::DefaultPort;
 
     if (ac > 2) {
-        std::cerr << "Usage: ./r-type_server port" << std::endl;
+        std::cerr << "Usage: ./r-type_server [port]" << std::endl;
         return 84;
     } else if (ac == 2) {
         try {
@@ -24,8 +24,7 @@ int main(int ac, char **av) {
     } else {
         std::cout << "No port specified, using default port: " << Network::DefaultPort << std::endl;
     }
-    registry r;
-    gameEngine game(r, 4242);
+    gameEngine game(SERVER, portNumber, "localhost");
     game.launch_game();
     return 0;
 }

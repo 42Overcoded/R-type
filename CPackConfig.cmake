@@ -1,0 +1,23 @@
+message("Config via package.txt")
+get_cmake_property(res VARIABLES)
+set(GLOBAL_INSTALL FALSE)
+set(PATH_ASSETS "/usr/games/rtype/assets/")
+set(PATH_JSON "/usr/games/rtype/configFiles/")
+
+IF(CPACK_GENERATOR MATCHES "DEB" OR CPACK_GENERATOR MATCHES "RPM")
+    set(GLOBAL_INSTALL TRUE)
+    set(PATH_ASSETS "/usr/games/rtype/assets/")
+    set(PATH_JSON "/usr/games/rtype/configFiles/")
+ELSE()
+    set(PATH_ASSETS "/../games/rtype/assets/")
+    set(PATH_JSON "/../games/rtype/configFiles/")
+    set(CPACK_PACKAGING_INSTALL_PREFIX "")
+ENDIF()
+
+IF(CPACK_SYSTEM_NAME MATCHES "WIN32" OR CPACK_SYSTEM_NAME MATCHES "WIN64")
+    set(PATH_ASSETS "\\..\\games\\rtype\\assets\\")
+    set(PATH_JSON "\\..\\games\\rtype\\configFiles\\")
+ENDIF()
+
+message("path:${CPACK_PROJECT_PATH_HPP_IN}")
+configure_file(${CPACK_PROJECT_PATH_HPP_IN} ${CPACK_PROJECT_PATH_HPP} @ONLY)

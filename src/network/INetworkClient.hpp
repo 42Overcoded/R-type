@@ -37,7 +37,13 @@ public:
         {
             boost::asio::ip::udp::resolver resolver(ioContext_);
             boost::asio::ip::udp::resolver::results_type endpoints = resolver.resolve(serverIp, std::to_string(serverPort));
-            connection_ = std::make_unique<Connection<T>>(Connection<T>::Owner::Client, ioContext_, boost::asio::ip::udp::socket(ioContext_), packetsInQueue_);
+            try {
+                connection_ = std::make_unique<Connection<T>>(Connection<T>::Owner::Client, ioContext_, boost::asio::ip::udp::socket(ioContext_), packetsInQueue_);
+            } catch (const std::exception &e) {
+                std::cerr << "Error while binding port" <<std::endl;
+                std::cerr << e.what() << std::endl;
+                exit(84);
+            }
             connection_->ConnectToServer(endpoints);
             threadContext_ = std::thread([this]() { ioContext_.run(); });
         }
