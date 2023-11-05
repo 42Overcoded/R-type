@@ -180,11 +180,9 @@ void gameEngine::init_cheatCode(void)
 }
 
 void gameEngine::init_background(int i) {
-    std::cout << "first" << std::endl;
     std::ifstream file(PATH_TO_JSON + "background.json");
     nlohmann::json backJson;
 
-    std::cout << "before json" << std::endl;
     try {
         if (!file.is_open())
             throw std::runtime_error("Can't open " + PATH_TO_JSON + "background.json");
@@ -195,7 +193,6 @@ void gameEngine::init_background(int i) {
     }
     file.close();
 
-    std::cout << "init background 1" << std::endl;
     entity_t background = _registry.spawn_entity();
 
     _registry.add_component<Position>(background, Position());
@@ -211,7 +208,6 @@ void gameEngine::init_background(int i) {
     auto &speed = _registry.get_components<Speed>();
     auto &texture = _registry.get_components<Texture>();
     auto &drawable = _registry.get_components<Drawable>();
-    std::cout << "init background 2" << std::endl;
     float width = backJson["background"]["width"];
 
     drawable[background]->drawable = true;
@@ -219,7 +215,6 @@ void gameEngine::init_background(int i) {
     speed[background]->speedx = backJson["background"]["speedx"];
     tag[background]->tag = backJson["background"]["tag"];
     position[background]->x = i * width;
-    std::cout << "init background 3" << std::endl;
 }
 
 void gameEngine::init_star_parallax(int i) {
@@ -531,19 +526,13 @@ void gameEngine::death_animation()
 
 void gameEngine::init_game()
 {
-    std::cout << "init game" << std::endl;
     if (_type == SERVER)
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    std::cout << "sleeped" << std::endl;
     for (int i = 0; i < 2; i++) {
-        std::cout << "for i : " << i << std::endl;
         init_background(i);
-        std::cout << "init background" << std::endl;
     }
-    std::cout << "end of for" << std::endl;
     init_score();
 
-    std::cout << "init game 2" << std::endl;
     GameStateComponent &state = get_game_state();
     auto &gameState = _registry.get_components<GameStateComponent>();
     auto &network = _registry.get_components<NetworkComponent>();
@@ -552,7 +541,6 @@ void gameEngine::init_game()
             id = network[i]->clientId;
         }
     }
-    std::cout << "init game 3" << std::endl;
     auto &spawner = _registry.get_components<Spawner>();
     int nbPlayer= 1;
     for (int i = 0; i < _registry._entity_number; i++) {
@@ -564,7 +552,6 @@ void gameEngine::init_game()
         nbPlayer = 1;
         id = 1;
     }
-    std::cout << "init game 4" << std::endl;
     std::cout << "Id : " << id << std::endl;
     std::cout << "NbPlayer : " << nbPlayer << std::endl;
     for (unsigned int i = 1; i != nbPlayer + 1; i++) {

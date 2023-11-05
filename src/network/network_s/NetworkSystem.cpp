@@ -220,24 +220,19 @@ void ServerNetworkSystem::manageClientCreateEntity(registry &reg)
         Packet<Flag> packet;
 
         if (entity.entityType == 12) {
-            std::cout << "1" << std::endl;
             for (auto &client : *clients_) {
-                std::cout << "2" << std::endl;
                 if (assignedClientIds_.empty()) {
                     entity.clientId = client->GetId();
                     assignedClientIds_.push_back(client->GetId());
                     break;
                 }
-                std::cout << "3" << std::endl;
                 if (std::find(assignedClientIds_.begin(), assignedClientIds_.end(), client->GetId()) == assignedClientIds_.end()) {
                     entity.clientId = client->GetId();
                     assignedClientIds_.push_back(client->GetId());
                     break;
                 }
-                std::cout << "4" << std::endl;
             }
         }
-        std::cout << "5" << std::endl;
         entity.entityId = ++lastEntityId_;
         packet.header.flag = Flag::ClientCreateEntity;
         packet << (uint32_t)entity.entityId;
