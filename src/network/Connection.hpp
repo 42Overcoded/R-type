@@ -179,20 +179,14 @@ protected:
                         if (ownerType_ == Owner::Client &&
                             packetsOutQueue_.Front().header.flag == T::ServerConnect)
                         {
-                            socket_.async_connect(boost::asio::ip::udp::endpoint(), [this](std::error_code ec) {
-                                if (!ec)
-                                {
-                                    std::cout << "Connection opened for server" << std::endl;
-                                    isConnected = true;
-                                    GetHeader();
-                                }
-                                else
-                                {
-                                    std::cerr << "[" << id_ << "] Connect to server fail. (" << ec.message()
-                                              << ")" << std::endl;
-                                    socket_.close();
-                                }
-                            });
+                            unsigned int port = socket_.local_endpoint().port();
+                            std::cout << "port: " << port << std::endl;
+                            socket_.close();
+                            socket_.open(boost::asio::ip::udp::v4());
+                            socket_.bind(boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
+                            std::cout << "Connection opened for server" << std::endl;
+                            isConnected = true;
+                            GetHeader();
                         }
                         packetsOutQueue_.PopFront();
                         if (!packetsOutQueue_.IsEmpty())
