@@ -83,17 +83,20 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
         for (auto &i : _level_info.mobs_alive) {
             std::cout << "entity: " << i.first << " id: " << i.second.id << " pattern: " << i.second.pattern << "x: " << i.second.x << " y: " << i.second.y << std::endl;
         }
+        std::cout << "total_elapsed_time: " << _level_info.total_elapsed_time << std::endl;
     }
         if (is_frozen()) {
             _clock.restart();
             return;
         }
-        if (_level_info.mob_alive == 0)
+        if (_level_info.mob_alive <= 0)
             _level_info.is_boss_alive = false;
         if (this->_level_info.is_boss_alive)
             ;
-        else if (this->_level_info._generated.size() > 0 && _level_info._generated[0].is_boss) {
-            if (_level_info.mob_alive == 0) {
+        else if (this->_level_info._generated.size() > 0 && _level_info._generated[0].is_boss) { //Boss spawn
+            _level_info.total_elapsed_time += _elapsed.asSeconds();
+            if (_level_info.mob_alive <= 0 || _level_info.total_elapsed_time > 25) {
+                _level_info.total_elapsed_time = 0;
                 if (_level_info._generated[0].id == boss_worm_id) {
                     GameStateComponent &gameState = get_game_state();
                     auto &networkInfo = _registry.get_components<NetworkInfo>();
@@ -123,7 +126,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     _level_info.is_boss_alive = true;
                 }
             }
-        } else {
+        } else { //Normal spawn
             _level_info.level_progress += (MAGIC_VALUE * _elapsed.asSeconds());
             while (this->_level_info._generated.size() > 0 && _level_info.level_progress > _level_info._generated[0].x && _level_info._generated[0].is_boss == false) {
                 GameStateComponent &gameState = get_game_state();
@@ -430,8 +433,8 @@ void gameEngine::launch_game()
             _system.modify_pattern(_registry);
             if (gameState.mode == LEVELS_G) {
                 if (_level_info.mob_alive == 0 && _level_info._generated.size() == 0) {
-                    if (level < NUMBERS_OF_LEVELS)
-                        loadLevel(level++);
+                    if (_level_info._level < NUMBERS_OF_LEVELS)
+                        loadLevel(_level_info._level++);
                     else {
                         gameState.scene = END;
                     }

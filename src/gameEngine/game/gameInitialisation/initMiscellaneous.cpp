@@ -483,8 +483,6 @@ void gameEngine::death_animation()
                     musics["musicGame"]->play();
                 }
                 Kill_entity(entity_t(i));
-                _level_info.mob_alive -= 1;
-
                 continue;
             }
         }

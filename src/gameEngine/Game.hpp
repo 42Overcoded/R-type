@@ -83,11 +83,15 @@ struct Level_info {
     bool is_boss_alive;
     float level_progress;
     std::vector<std::pair<std::size_t, Generated>> mobs_alive;
+    int _level;
+    float total_elapsed_time;
 
     Level_info() {
         mob_alive = 0;
         is_boss_alive = false;
         level_progress = 1920;
+        total_elapsed_time = 0;
+        _level = 0;
     }
 
 };
