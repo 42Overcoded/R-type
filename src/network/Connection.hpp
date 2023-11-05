@@ -16,6 +16,7 @@
 #include <iostream>
 #include "Packet.hpp"
 #include "PacketsQueue.hpp"
+#include "Protocol.hpp"
 #include "boost/asio/io_context.hpp"
 #include "boost/asio/ip/udp.hpp"
 #include "boost/asio/write.hpp"
@@ -47,6 +48,7 @@ public:
     }
     virtual ~Connection()
     {
+        Disconnect();
     }
 
 public:
@@ -54,23 +56,39 @@ public:
     {
         return id_;
     }
+
     void ConnectToClient(boost::asio::ip::udp::endpoint remoteEndpoint, uint32_t uid = 0)
     {
         if (ownerType_ == Owner::Server)
         {
-            if (socket_.is_open() && !IsConnected_)
+            if (socket_.is_open() && !isConnected)
             {
                 std::cout << "Connecting to client" << std::endl;
-                id_ = uid;
+                id_             = uid;
                 remoteEndpoint_ = remoteEndpoint;
-                socket_.connect(remoteEndpoint_);
-                std::cout << "Connected to client" << std::endl;
-                Packet<T> idPacket;
-                idPacket.header.flag = T::ClientAssignID;
-                idPacket << id_;
-                SendPacket(idPacket);
-                std::cout << "assign client" << std::endl;
-                GetHeader();
+                socket_.async_connect(remoteEndpoint_, [this](std::error_code ec) {
+                    if (!ec)
+                    {
+                        std::cout << "Connected to client" << std::endl;
+                        Packet<T> acceptPacket;
+                        acceptPacket.header.flag = T::ClientAccepted;
+                        SendPacket(acceptPacket);
+                        std::cout << "accept client" << std::endl;
+                        Packet<T> idPacket;
+                        idPacket.header.flag = T::ClientAssignID;
+                        idPacket << id_;
+                        SendPacket(idPacket);
+                        std::cout << "assign client" << std::endl;
+                        isConnected = true;
+                        GetHeader();
+                    }
+                    else
+                    {
+                        std::cerr << "[" << id_ << "] Connect to client fail. (" << ec.message()
+                                  << ")" << std::endl;
+                        socket_.close();
+                    }
+                });
             }
         }
         else
@@ -81,38 +99,52 @@ public:
 
     void ConnectToServer(boost::asio::ip::udp::resolver::results_type &endpoints)
     {
-        if (ownerType_ == Owner::Client && !IsConnected_)
+        if (ownerType_ == Owner::Client && !isConnected)
         {
             std::cout << "Connecting to server" << std::endl;
             remoteEndpoint_ = *endpoints.begin();
             socket_.open(remoteEndpoint_.protocol());
-            socket_.connect(remoteEndpoint_);
-            Packet<T> packet;
-            packet.header.flag = T::ServerConnect;
-            SendPacket(packet);
-            std::cout << "Connect to server" << std::endl;
-            GetHeader();
+            socket_.async_connect(remoteEndpoint_, [this](std::error_code ec) {
+                if (!ec)
+                {
+                    Packet<T> packet;
+                    packet.header.flag = T::ServerConnect;
+                    SendPacket(packet);
+                }
+                else
+                {
+                    std::cerr << "[" << id_ << "] Connect to server fail. (" << ec.message()
+                              << ")" << std::endl;
+                    socket_.close();
+                }
+            });
         }
         else
         {
             std::cerr << "Can't connect server to server" << std::endl;
         }
     }
+
     void Disconnect()
     {
         if (IsConnected())
         {
-            boost::asio::post(ioContext_, [this]() { socket_.close(); });
+            boost::asio::post(ioContext_, [this]() {
+                if (socket_.is_open())
+                    socket_.close();
+            });
+            isConnected = false;
         }
     }
+
     bool IsConnected() const
     {
-        return socket_.is_open();
+        return socket_.is_open() && isConnected;
     }
 
     bool SendPacket(const Packet<T> &packet)
     {
-        if (IsConnected())
+        if (socket_.is_open())
         {
             boost::asio::post(ioContext_, [this, packet]() {
                 bool isWritingPacket = !packetsOutQueue_.IsEmpty();
@@ -135,12 +167,41 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    if (packetsOutQueue_.Front().body.size() > 0)
+                    // std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
+                    //           << std::endl;
+                    if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
+                        packetsOutQueue_.Front().body.size() > 0)
                     {
                         SendBody();
-                    }
-                    else
-                    {
+                    } else {
+                        if (ownerType_ == Owner::Client &&
+                            packetsOutQueue_.Front().header.flag == T::ServerConnect)
+                        {
+                            unsigned int port = socket_.local_endpoint().port();
+                            if ((socket_.local_endpoint().address().to_string() == "127.0.0.1")) {
+                                socket_.async_connect(boost::asio::ip::udp::endpoint(), [this](std::error_code ec) {
+                                    if (!ec)
+                                    {
+                                        std::cout << "Connection opened for server" << std::endl;
+                                        isConnected = true;
+                                        GetHeader();
+                                    }
+                                    else
+                                    {
+                                        std::cerr << "[" << id_ << "] Connect to server fail. (" << ec.message()
+                                                << ")" << std::endl;
+                                        socket_.close();
+                                    }
+                                });
+                            } else {
+                                socket_.close();
+                                socket_.open(boost::asio::ip::udp::v4());
+                                socket_.bind(boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
+                                std::cout << "Connection opened for server" << std::endl;
+                                isConnected = true;
+                                GetHeader();
+                            }
+                        }
                         packetsOutQueue_.PopFront();
                         if (!packetsOutQueue_.IsEmpty())
                         {
@@ -150,7 +211,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Send Header Fail.\n";
+                    std::cerr << "[" << id_ << "] Send Header Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -172,7 +234,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Send Body Fail.\n";
+                    std::cerr << "[" << id_ << "] Send Body Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -185,9 +248,22 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
+                    // std::cout << "Get Packet: size = " << recvBuffer_.header.size << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
-                        recvBuffer_.body.resize(recvBuffer_.header.size);
+                        if (recvBuffer_.header.size > MaxPacketSize)
+                        {
+                            std::cerr << "Packet size is too big" << std::endl;
+                            recvBuffer_.header.size = 0;
+                            GetHeader();
+                            return;
+                        }
+                        if (ownerType_ == Owner::Client &&
+                            recvBuffer_.header.flag == T::ClientAccepted)
+                        {
+                            socket_.connect(remoteEndpoint_);
+                        }
+                        recvBuffer_.body.resize(recvBuffer_.header.size - sizeof(PacketHeader<T>));
                         GetBody();
                     }
                     else
@@ -197,7 +273,9 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Get Header Fail.\n";
+                    std::cerr << "remote endpoint: " << remoteEndpoint_.address().to_string() << " port " << remoteEndpoint_.port() << std::endl;
+                    std::cerr << "[" << id_ << "] Get Header Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -206,7 +284,7 @@ protected:
     void GetBody()
     {
         socket_.async_receive_from(
-            boost::asio::buffer(recvBuffer_.body.data(), recvBuffer_.body.size()), remoteEndpoint_,
+            boost::asio::buffer(recvBuffer_.body, recvBuffer_.body.size()), remoteEndpoint_,
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
@@ -214,7 +292,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Get Body Fail.\n";
+                    std::cerr << "[" << id_ << "] Get Body Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -224,14 +303,17 @@ protected:
     {
         if (ownerType_ == Owner::Server)
         {
+            Packet<T> packet;
+
             switch (recvBuffer_.header.flag)
             {
             case T::ServerGetPing:
                 std::cout << "Server Ping" << std::endl;
-                Packet<T> pingPacket;
-                pingPacket.header.flag = T::ClientSendPing;
-                SendPacket(pingPacket);
+                packet.header.flag = T::ClientSendPing;
+                SendPacket(packet);
                 return true;
+                ;
+            default: break;
             }
         }
         else
@@ -241,12 +323,14 @@ protected:
             case T::ClientAccepted:
                 std::cout << "Server Accept" << std::endl;
                 socket_.connect(remoteEndpoint_);
-                IsConnected_ = true;
-                return true;;
+                isConnected = true;
+                return true;
+                ;
             case T::ClientDenied:
                 std::cout << "Server Deny" << std::endl;
                 socket_.close();
-                return true;;
+                return true;
+                ;
             case T::ClientSendPing: std::cout << "Server Ping" << std::endl; break;
             default: break;
             }
@@ -258,6 +342,7 @@ protected:
     {
         if (ManageConnectionPacket())
         {
+            GetHeader();
             return;
         }
         if (ownerType_ == Owner::Server)
@@ -279,7 +364,7 @@ protected:
     Owner ownerType_ = Owner::Server;
     uint32_t id_     = 0;
     Packet<T> recvBuffer_;
-    bool IsConnected_ = false;
+    bool isConnected = false;
     boost::asio::ip::udp::endpoint remoteEndpoint_;
 };
 };  // namespace Network

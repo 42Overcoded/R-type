@@ -3,110 +3,76 @@
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classgameEngine_afffa535353f860428ad3249f66a46ccf}\label{classgameEngine_afffa535353f860428ad3249f66a46ccf}} 
-{\bfseries game\+Engine} (\mbox{\hyperlink{classregistry}{registry}} \&\mbox{\hyperlink{classregistry}{registry}})
+\mbox{\Hypertarget{classgameEngine_aa115c15d4906e11a8c75e59b5ef45190}\label{classgameEngine_aa115c15d4906e11a8c75e59b5ef45190}} 
+{\bfseries game\+Engine} (\mbox{\hyperlink{classregistry}{registry}} \&\mbox{\hyperlink{classregistry}{registry}}, unsigned int server\+Port, std\+::string server\+Ip)
 \item 
 \mbox{\Hypertarget{classgameEngine_a42692e58f2070e83e00b34731e5c6e33}\label{classgameEngine_a42692e58f2070e83e00b34731e5c6e33}} 
-void {\bfseries register\+\_\+component\+\_\+to\+\_\+game} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_aa69e89cbfd25a3af284bfa5184986c96}\label{classgameEngine_aa69e89cbfd25a3af284bfa5184986c96}} 
-sf\+::\+Render\+Window \& {\bfseries get\+\_\+window} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_a49cda2faa076e4ca4976b20d5e5db0f4}\label{classgameEngine_a49cda2faa076e4ca4976b20d5e5db0f4}} 
-\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} {\bfseries init\+\_\+starship} (int id, int i)
-\item 
-\mbox{\Hypertarget{classgameEngine_a97ed4d10551f85401445be8a32848fec}\label{classgameEngine_a97ed4d10551f85401445be8a32848fec}} 
-\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} {\bfseries init\+\_\+enemy} (int i)
-\item 
-\mbox{\Hypertarget{classgameEngine_ad54d8e5a11e26de47082b239dab0825d}\label{classgameEngine_ad54d8e5a11e26de47082b239dab0825d}} 
-\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} {\bfseries init\+\_\+enemy\+\_\+2} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_abe0cb70c9d823aef643cb0110a267d8f}\label{classgameEngine_abe0cb70c9d823aef643cb0110a267d8f}} 
-\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} {\bfseries init\+\_\+enemy\+\_\+3} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_a4f9f2c874d76c6e12959a5eb1045e0cb}\label{classgameEngine_a4f9f2c874d76c6e12959a5eb1045e0cb}} 
-\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} {\bfseries init\+\_\+enemy\+\_\+4} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_a505c11c8f41917dc66c4f9dbf8dfe08f}\label{classgameEngine_a505c11c8f41917dc66c4f9dbf8dfe08f}} 
-\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} {\bfseries init\+\_\+boss} ()
-\item 
+void \mbox{\hyperlink{classgameEngine_a42692e58f2070e83e00b34731e5c6e33}{register\+\_\+component\+\_\+to\+\_\+game}} ()
+\begin{DoxyCompactList}\small\item\em register all component to the game \end{DoxyCompactList}\item 
+sf\+::\+Render\+Window \& \mbox{\hyperlink{classgameEngine_aa69e89cbfd25a3af284bfa5184986c96}{get\+\_\+window}} ()
+\begin{DoxyCompactList}\small\item\em return the window \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} \mbox{\hyperlink{classgameEngine_a49cda2faa076e4ca4976b20d5e5db0f4}{init\+\_\+starship}} (int id, int i)
+\begin{DoxyCompactList}\small\item\em init the starships values according to the ecs \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classentity__t}{entity\+\_\+t}} \mbox{\hyperlink{classgameEngine_a97ed4d10551f85401445be8a32848fec}{init\+\_\+enemy}} (int i)
+\begin{DoxyCompactList}\small\item\em init the enemies values according to the ecs \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classgameEngine_af8774c92709ae3c1718b5d3c070af37a}{menu}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em menu of the game / pause scene / end scene / lobby \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a0dfd77b3d9d8701b64f53cc20211818b}\label{classgameEngine_a0dfd77b3d9d8701b64f53cc20211818b}} 
-void {\bfseries spawn\+\_\+enemy} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_aa508d26a1d5d613a7e9f45d28b4cfe57}\label{classgameEngine_aa508d26a1d5d613a7e9f45d28b4cfe57}} 
-void {\bfseries init\+\_\+background} (int i)
-\item 
-\mbox{\Hypertarget{classgameEngine_ab7b740f292ac14c31e6dca2455161277}\label{classgameEngine_ab7b740f292ac14c31e6dca2455161277}} 
-void {\bfseries init\+\_\+texture} ()
-\item 
+void \mbox{\hyperlink{classgameEngine_a0dfd77b3d9d8701b64f53cc20211818b}{spawn\+\_\+enemy}} ()
+\begin{DoxyCompactList}\small\item\em spawn the enemies according to the wave \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_aa508d26a1d5d613a7e9f45d28b4cfe57}{init\+\_\+background}} (int i)
+\begin{DoxyCompactList}\small\item\em init the background to make parallax \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a56220d8d90ae523c9713665e69db4595}\label{classgameEngine_a56220d8d90ae523c9713665e69db4595}} 
-void {\bfseries init\+\_\+beambar} ()
-\item 
+void \mbox{\hyperlink{classgameEngine_a56220d8d90ae523c9713665e69db4595}{init\+\_\+beambar}} ()
+\begin{DoxyCompactList}\small\item\em init the beambar \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a322f98d04b9db41f3e68b09bbd5b7d8a}\label{classgameEngine_a322f98d04b9db41f3e68b09bbd5b7d8a}} 
-void {\bfseries launch\+\_\+game} ()
-\item 
+void \mbox{\hyperlink{classgameEngine_a322f98d04b9db41f3e68b09bbd5b7d8a}{launch\+\_\+game}} ()
+\begin{DoxyCompactList}\small\item\em game loop of the game and core of the game \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a3308e045cd74554b1944ed07cb189cb6}\label{classgameEngine_a3308e045cd74554b1944ed07cb189cb6}} 
-void {\bfseries init\+\_\+menu} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_ab960e4fc95fbfd728e1873ccd0aa9e12}\label{classgameEngine_ab960e4fc95fbfd728e1873ccd0aa9e12}} 
-void {\bfseries init\+\_\+life} (int i)
-\item 
-\mbox{\Hypertarget{classgameEngine_a955037002481efaee4e50d0c8cb76da8}\label{classgameEngine_a955037002481efaee4e50d0c8cb76da8}} 
-void {\bfseries init\+\_\+parallax} (int i)
-\item 
+void \mbox{\hyperlink{classgameEngine_a3308e045cd74554b1944ed07cb189cb6}{init\+\_\+menu}} ()
+\begin{DoxyCompactList}\small\item\em init the menu \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_ab960e4fc95fbfd728e1873ccd0aa9e12}{init\+\_\+life}} (int i)
+\begin{DoxyCompactList}\small\item\em init the life displayer of the starship \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a9ca999c341393c01320d4af075e85a6f}\label{classgameEngine_a9ca999c341393c01320d4af075e85a6f}} 
-void {\bfseries init\+\_\+score} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_ac415b00dc61edcb74bd064b250c93337}\label{classgameEngine_ac415b00dc61edcb74bd064b250c93337}} 
-void {\bfseries spawn\+\_\+wave} (sf\+::\+Time \&elapsed, int \&wave)
-\item 
-\mbox{\Hypertarget{classgameEngine_a9b81424cd3c7a1a9f0fc93a2b859c3e9}\label{classgameEngine_a9b81424cd3c7a1a9f0fc93a2b859c3e9}} 
-void {\bfseries modify\+\_\+pattern} (\mbox{\hyperlink{classregistry}{registry}} \&r)
-\item 
+void \mbox{\hyperlink{classgameEngine_a9ca999c341393c01320d4af075e85a6f}{init\+\_\+score}} ()
+\begin{DoxyCompactList}\small\item\em init the score displayer \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_ac415b00dc61edcb74bd064b250c93337}{spawn\+\_\+wave}} (sf\+::\+Time \&elapsed, int \&wave)
+\begin{DoxyCompactList}\small\item\em spawn the wave of enemies according to the time \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a47416311e728eebd767d257f1ceed8d7}\label{classgameEngine_a47416311e728eebd767d257f1ceed8d7}} 
-void {\bfseries init\+\_\+load\+\_\+shoot} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_a779d67a725b52e6a46d038077113da61}\label{classgameEngine_a779d67a725b52e6a46d038077113da61}} 
-void {\bfseries spawn\+\_\+mobs} (int n1, int n2, int n3, int n4)
-\item 
+void \mbox{\hyperlink{classgameEngine_a47416311e728eebd767d257f1ceed8d7}{init\+\_\+load\+\_\+shoot}} ()
+\begin{DoxyCompactList}\small\item\em init the load shoot animation \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_a779d67a725b52e6a46d038077113da61}{spawn\+\_\+mobs}} (int n1, int n2, int n3, int n4)
+\begin{DoxyCompactList}\small\item\em spawn the mobs the parametters given \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a50af4be2499c42c6768e91fe750f7969}\label{classgameEngine_a50af4be2499c42c6768e91fe750f7969}} 
-void {\bfseries spawn\+\_\+bullet} (int i, int j)
-\item 
+void \mbox{\hyperlink{classgameEngine_a50af4be2499c42c6768e91fe750f7969}{spawn\+\_\+bullet}} (int i, int j)
+\begin{DoxyCompactList}\small\item\em spawn enemy bullet \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a719e875533a8d8137c0dacb725f366fb}\label{classgameEngine_a719e875533a8d8137c0dacb725f366fb}} 
-void {\bfseries spawn\+\_\+boss\+\_\+bullet} (int i, int j)
-\item 
+void \mbox{\hyperlink{classgameEngine_a719e875533a8d8137c0dacb725f366fb}{spawn\+\_\+boss\+\_\+bullet}} (int i, int j)
+\begin{DoxyCompactList}\small\item\em spawn boss bullet \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_aad39cd070e1fe949d6acc0f7818e3541}\label{classgameEngine_aad39cd070e1fe949d6acc0f7818e3541}} 
 void {\bfseries shoot\+\_\+enemy} ()
 \item 
-\mbox{\Hypertarget{classgameEngine_a501c745f4d91d113bcc134733fed882e}\label{classgameEngine_a501c745f4d91d113bcc134733fed882e}} 
-void {\bfseries decharge\+\_\+shoot} (sf\+::\+Time \&elapsed)
-\item 
-\mbox{\Hypertarget{classgameEngine_a55eb7358164450632532d4a7a12538ca}\label{classgameEngine_a55eb7358164450632532d4a7a12538ca}} 
-void {\bfseries load\+\_\+shoot} (sf\+::\+Time \&elapsed)
-\item 
-\mbox{\Hypertarget{classgameEngine_add7e3a64cd7b1ffe9885ae321965d77e}\label{classgameEngine_add7e3a64cd7b1ffe9885ae321965d77e}} 
-void {\bfseries spawn\+\_\+ally\+\_\+bullet} (int i)
-\item 
-\mbox{\Hypertarget{classgameEngine_a8e1b33230e5f3454b1186b34d08a2297}\label{classgameEngine_a8e1b33230e5f3454b1186b34d08a2297}} 
-void {\bfseries spawn\+\_\+explosion} (int i)
-\item 
-\mbox{\Hypertarget{classgameEngine_a6a97fdffdbf2e513554ebf55e962c37d}\label{classgameEngine_a6a97fdffdbf2e513554ebf55e962c37d}} 
-void {\bfseries death\+\_\+animation} ()
-\item 
-\mbox{\Hypertarget{classgameEngine_ae6208616ce63b1d125d8d4fd63650a98}\label{classgameEngine_ae6208616ce63b1d125d8d4fd63650a98}} 
-void {\bfseries shoot\+\_\+system} (sf\+::\+Time \&elapsed)
-\item 
+void \mbox{\hyperlink{classgameEngine_a501c745f4d91d113bcc134733fed882e}{decharge\+\_\+shoot}} (sf\+::\+Time \&elapsed)
+\begin{DoxyCompactList}\small\item\em decharge the shoot of the starship and reset the beambar \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_a55eb7358164450632532d4a7a12538ca}{load\+\_\+shoot}} (sf\+::\+Time \&elapsed)
+\begin{DoxyCompactList}\small\item\em load the shoot of the starship \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_add7e3a64cd7b1ffe9885ae321965d77e}{spawn\+\_\+ally\+\_\+bullet}} (int i)
+\begin{DoxyCompactList}\small\item\em spawn the ally bullet when shoot decharge \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_a8e1b33230e5f3454b1186b34d08a2297}{spawn\+\_\+explosion}} (int i)
+\begin{DoxyCompactList}\small\item\em spawn the explosion animation after the death of the enemy \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_a6a97fdffdbf2e513554ebf55e962c37d}{death\+\_\+animation}} ()
+\begin{DoxyCompactList}\small\item\em animate the explosion \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classgameEngine_ae6208616ce63b1d125d8d4fd63650a98}{shoot\+\_\+system}} (sf\+::\+Time \&elapsed)
+\begin{DoxyCompactList}\small\item\em handle the shoot of the starship \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_aaef83ebea7313ac59ec6eb44d8b7483c}\label{classgameEngine_aaef83ebea7313ac59ec6eb44d8b7483c}} 
-void {\bfseries animate\+\_\+enemy} ()
-\item 
+void \mbox{\hyperlink{classgameEngine_aaef83ebea7313ac59ec6eb44d8b7483c}{animate\+\_\+enemy}} ()
+\begin{DoxyCompactList}\small\item\em animate the enemies \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a6751c0ddea5d20b32220ad3c13a68c24}\label{classgameEngine_a6751c0ddea5d20b32220ad3c13a68c24}} 
-void {\bfseries clock\+\_\+time} ()
-\item 
+void \mbox{\hyperlink{classgameEngine_a6751c0ddea5d20b32220ad3c13a68c24}{clock\+\_\+time}} ()
+\begin{DoxyCompactList}\small\item\em handle the clock of the game \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_a062a840675a5b2b2cd6eeda9d8615070}\label{classgameEngine_a062a840675a5b2b2cd6eeda9d8615070}} 
-void {\bfseries life\+\_\+handler} ()
-\item 
+void \mbox{\hyperlink{classgameEngine_a062a840675a5b2b2cd6eeda9d8615070}{life\+\_\+handler}} ()
+\begin{DoxyCompactList}\small\item\em handle the life of the starship \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classgameEngine_aba15d3b8191ee346dd98fddd99deed6f}\label{classgameEngine_aba15d3b8191ee346dd98fddd99deed6f}} 
 {\bfseries game\+Engine} (\mbox{\hyperlink{classregistry}{registry}} \&\mbox{\hyperlink{classregistry}{registry}}, unsigned int port\+Number)
 \item 
@@ -212,13 +178,214 @@ void {\bfseries life\+\_\+handler} ()
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classgameEngine_a6a97fdffdbf2e513554ebf55e962c37d}\label{classgameEngine_a6a97fdffdbf2e513554ebf55e962c37d}} 
+\index{gameEngine@{gameEngine}!death\_animation@{death\_animation}}
+\index{death\_animation@{death\_animation}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{death\_animation()}{death\_animation()}}
+{\footnotesize\ttfamily void game\+Engine\+::death\+\_\+animation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+animate the explosion 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgameEngine_a501c745f4d91d113bcc134733fed882e}\label{classgameEngine_a501c745f4d91d113bcc134733fed882e}} 
+\index{gameEngine@{gameEngine}!decharge\_shoot@{decharge\_shoot}}
+\index{decharge\_shoot@{decharge\_shoot}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{decharge\_shoot()}{decharge\_shoot()}}
+{\footnotesize\ttfamily void game\+Engine\+::decharge\+\_\+shoot (\begin{DoxyParamCaption}\item[{sf\+::\+Time \&}]{elapsed }\end{DoxyParamCaption})}
+
+
+
+decharge the shoot of the starship and reset the beambar 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elapsed} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgameEngine_aa69e89cbfd25a3af284bfa5184986c96}\label{classgameEngine_aa69e89cbfd25a3af284bfa5184986c96}} 
+\index{gameEngine@{gameEngine}!get\_window@{get\_window}}
+\index{get\_window@{get\_window}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{get\_window()}{get\_window()}}
+{\footnotesize\ttfamily sf\+::\+Render\+Window \& game\+Engine\+::get\+\_\+window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+return the window 
+
+\begin{DoxyReturn}{Returns}
+sf\+::\+Render\+Window 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgameEngine_aa508d26a1d5d613a7e9f45d28b4cfe57}\label{classgameEngine_aa508d26a1d5d613a7e9f45d28b4cfe57}} 
+\index{gameEngine@{gameEngine}!init\_background@{init\_background}}
+\index{init\_background@{init\_background}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{init\_background()}{init\_background()}}
+{\footnotesize\ttfamily void game\+Engine\+::init\+\_\+background (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+init the background to make parallax 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgameEngine_a97ed4d10551f85401445be8a32848fec}\label{classgameEngine_a97ed4d10551f85401445be8a32848fec}} 
+\index{gameEngine@{gameEngine}!init\_enemy@{init\_enemy}}
+\index{init\_enemy@{init\_enemy}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{init\_enemy()}{init\_enemy()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classentity__t}{entity\+\_\+t}} game\+Engine\+::init\+\_\+enemy (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+init the enemies values according to the ecs 
+
+\begin{DoxyReturn}{Returns}
+registry 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgameEngine_ab960e4fc95fbfd728e1873ccd0aa9e12}\label{classgameEngine_ab960e4fc95fbfd728e1873ccd0aa9e12}} 
+\index{gameEngine@{gameEngine}!init\_life@{init\_life}}
+\index{init\_life@{init\_life}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{init\_life()}{init\_life()}}
+{\footnotesize\ttfamily void game\+Engine\+::init\+\_\+life (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+init the life displayer of the starship 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgameEngine_a49cda2faa076e4ca4976b20d5e5db0f4}\label{classgameEngine_a49cda2faa076e4ca4976b20d5e5db0f4}} 
+\index{gameEngine@{gameEngine}!init\_starship@{init\_starship}}
+\index{init\_starship@{init\_starship}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{init\_starship()}{init\_starship()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classentity__t}{entity\+\_\+t}} game\+Engine\+::init\+\_\+starship (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+init the starships values according to the ecs 
+
+\begin{DoxyReturn}{Returns}
+registry 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgameEngine_a55eb7358164450632532d4a7a12538ca}\label{classgameEngine_a55eb7358164450632532d4a7a12538ca}} 
+\index{gameEngine@{gameEngine}!load\_shoot@{load\_shoot}}
+\index{load\_shoot@{load\_shoot}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{load\_shoot()}{load\_shoot()}}
+{\footnotesize\ttfamily void game\+Engine\+::load\+\_\+shoot (\begin{DoxyParamCaption}\item[{sf\+::\+Time \&}]{elapsed }\end{DoxyParamCaption})}
+
+
+
+load the shoot of the starship 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elapsed} & \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classgameEngine_af8774c92709ae3c1718b5d3c070af37a}\label{classgameEngine_af8774c92709ae3c1718b5d3c070af37a}} 
 \index{gameEngine@{gameEngine}!menu@{menu}}
 \index{menu@{menu}!gameEngine@{gameEngine}}
 \doxysubsubsection{\texorpdfstring{menu()}{menu()}}
 {\footnotesize\ttfamily void game\+Engine\+::menu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-if the player click on play start game
+
+
+menu of the game / pause scene / end scene / lobby 
+
+if the player click on play start game\mbox{\Hypertarget{classgameEngine_ae6208616ce63b1d125d8d4fd63650a98}\label{classgameEngine_ae6208616ce63b1d125d8d4fd63650a98}} 
+\index{gameEngine@{gameEngine}!shoot\_system@{shoot\_system}}
+\index{shoot\_system@{shoot\_system}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{shoot\_system()}{shoot\_system()}}
+{\footnotesize\ttfamily void game\+Engine\+::shoot\+\_\+system (\begin{DoxyParamCaption}\item[{sf\+::\+Time \&}]{elapsed }\end{DoxyParamCaption})}
+
+
+
+handle the shoot of the starship 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elapsed} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgameEngine_add7e3a64cd7b1ffe9885ae321965d77e}\label{classgameEngine_add7e3a64cd7b1ffe9885ae321965d77e}} 
+\index{gameEngine@{gameEngine}!spawn\_ally\_bullet@{spawn\_ally\_bullet}}
+\index{spawn\_ally\_bullet@{spawn\_ally\_bullet}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{spawn\_ally\_bullet()}{spawn\_ally\_bullet()}}
+{\footnotesize\ttfamily void game\+Engine\+::spawn\+\_\+ally\+\_\+bullet (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+spawn the ally bullet when shoot decharge 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgameEngine_a8e1b33230e5f3454b1186b34d08a2297}\label{classgameEngine_a8e1b33230e5f3454b1186b34d08a2297}} 
+\index{gameEngine@{gameEngine}!spawn\_explosion@{spawn\_explosion}}
+\index{spawn\_explosion@{spawn\_explosion}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{spawn\_explosion()}{spawn\_explosion()}}
+{\footnotesize\ttfamily void game\+Engine\+::spawn\+\_\+explosion (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+spawn the explosion animation after the death of the enemy 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgameEngine_a779d67a725b52e6a46d038077113da61}\label{classgameEngine_a779d67a725b52e6a46d038077113da61}} 
+\index{gameEngine@{gameEngine}!spawn\_mobs@{spawn\_mobs}}
+\index{spawn\_mobs@{spawn\_mobs}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{spawn\_mobs()}{spawn\_mobs()}}
+{\footnotesize\ttfamily void game\+Engine\+::spawn\+\_\+mobs (\begin{DoxyParamCaption}\item[{int}]{n1,  }\item[{int}]{n2,  }\item[{int}]{n3,  }\item[{int}]{n4 }\end{DoxyParamCaption})}
+
+
+
+spawn the mobs the parametters given 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n1} & \\
+\hline
+{\em n2} & \\
+\hline
+{\em n3} & \\
+\hline
+{\em n4} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgameEngine_ac415b00dc61edcb74bd064b250c93337}\label{classgameEngine_ac415b00dc61edcb74bd064b250c93337}} 
+\index{gameEngine@{gameEngine}!spawn\_wave@{spawn\_wave}}
+\index{spawn\_wave@{spawn\_wave}!gameEngine@{gameEngine}}
+\doxysubsubsection{\texorpdfstring{spawn\_wave()}{spawn\_wave()}}
+{\footnotesize\ttfamily void game\+Engine\+::spawn\+\_\+wave (\begin{DoxyParamCaption}\item[{sf\+::\+Time \&}]{elapsed,  }\item[{int \&}]{wave }\end{DoxyParamCaption})}
+
+
+
+spawn the wave of enemies according to the time 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elapsed} & \\
+\hline
+{\em wave} & \\
+\hline
+\end{DoxyParams}
+
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 

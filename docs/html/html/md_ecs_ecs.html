@@ -68,8 +68,7 @@ $(function() {
 <div class="title">Ecs documentation </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><img src="assets/ecs_graph.jpg" alt="ECS graph" class="inline"/></p>
-<p>How the ecs works :</p>
+<div class="textblock"><p>How the ecs works :</p>
 <p>The ecs is composed of 5 main parts :</p><ul>
 <li>The registry</li>
 <li>The Sparse Arrays</li>
@@ -79,10 +78,10 @@ $(function() {
 </ul>
 <ol type="1">
 <li>The registry is the main part of the ecs, it's the core of it. It's the part that will manage all the other parts. In fact, the registry contains all te functions to manage the Sparse Arrays, the entities and the components. It's the part that will be used by the user to create his game.</li>
-<li>The Sparse Arrays are the part that will contain the components. It's a vector of components. The Sparse Arrays are used to store the components of the same type. For example, if you have a component <a class="el" href="structPosition.html">Position</a>, you will have a Sparse Array that will contain all the <a class="el" href="structPosition.html">Position</a> components of your game.</li>
-<li>The Components are the data that will be used by the systems. For example, if you have a component <a class="el" href="structPosition.html">Position</a>, it will contain the x and y position of an entity. to see more <a class="el" href="md_ecs_components.html">click here</a>.</li>
+<li>The Sparse Arrays are the part that will contain the components. It's a vector of components. The Sparse Arrays are used to store the components of the same type. For example, if you have a component <a class="el" href="structPosition.html" title="Position of the entity.">Position</a>, you will have a Sparse Array that will contain all the <a class="el" href="structPosition.html" title="Position of the entity.">Position</a> components of your game.</li>
+<li>The Components are the data that will be used by the systems. For example, if you have a component <a class="el" href="structPosition.html" title="Position of the entity.">Position</a>, it will contain the x and y position of an entity. to see more <a class="el" href="md_ecs_components.html">click here</a>.</li>
 <li>The entities are the all the objects of your game. For example, if you have a player, a monster and a 10 bullet, you will have 12 entities. The entities are just an id that will be used to associate components to them.</li>
-<li>The system is composed of generic functions who can be usefull not for a specific game but for all the games. For example, you can have a system that will move all the entities that have a <a class="el" href="structPosition.html">Position</a> and a <a class="el" href="structSpeed.html" title="Components of the ecs can add more if needed.">Speed</a> component.</li>
+<li>The system is composed of generic functions who can be usefull not for a specific game but for all the games. For example, you can have a system that will move all the entities that have a <a class="el" href="structPosition.html" title="Position of the entity.">Position</a> and a <a class="el" href="structSpeed.html" title="speed of the entity">Speed</a> component.</li>
 </ol>
 <p>How to use the ecs :</p>
 <ol type="1">
@@ -102,7 +101,7 @@ $(function() {
 <div class="line">}</div>
 <div class="ttc" id="aclassregistry_html"><div class="ttname"><a href="classregistry.html">registry</a></div><div class="ttdef"><b>Definition:</b> Registry.hpp:35</div></div>
 </div><!-- fragment --><ol type="1">
-<li>after you created the registry, you need to register all the components that you will use in your game. For example, if you have a <a class="el" href="structPosition.html">Position</a> component, you need to register it in the registry.</li>
+<li>after you created the registry, you need to register all the components that you will use in your game. For example, if you have a <a class="el" href="structPosition.html" title="Position of the entity.">Position</a> component, you need to register it in the registry.</li>
 </ol>
 <div class="fragment"><div class="line"><span class="keywordtype">int</span> main() {</div>
 <div class="line">    <a class="code" href="classregistry.html">registry</a> reg;</div>
@@ -112,9 +111,9 @@ $(function() {
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassregistry_html_a1c8a6043f3ea73045ae7d3ada058890d"><div class="ttname"><a href="classregistry.html#a1c8a6043f3ea73045ae7d3ada058890d">registry::register_component</a></div><div class="ttdeci">void register_component()</div><div class="ttdoc">add a new usable component for entity</div><div class="ttdef"><b>Definition:</b> Registry.hpp:96</div></div>
-<div class="ttc" id="astructDrawable_html"><div class="ttname"><a href="structDrawable.html">Drawable</a></div><div class="ttdef"><b>Definition:</b> Components.hpp:113</div></div>
-<div class="ttc" id="astructPosition_html"><div class="ttname"><a href="structPosition.html">Position</a></div><div class="ttdef"><b>Definition:</b> Components.hpp:62</div></div>
-<div class="ttc" id="astructSpeed_html"><div class="ttname"><a href="structSpeed.html">Speed</a></div><div class="ttdoc">Components of the ecs can add more if needed.</div><div class="ttdef"><b>Definition:</b> Components.hpp:22</div></div>
+<div class="ttc" id="astructDrawable_html"><div class="ttname"><a href="structDrawable.html">Drawable</a></div><div class="ttdoc">drawable is a tag to know if the entity is drawable</div><div class="ttdef"><b>Definition:</b> Components.hpp:181</div></div>
+<div class="ttc" id="astructPosition_html"><div class="ttname"><a href="structPosition.html">Position</a></div><div class="ttdoc">Position of the entity.</div><div class="ttdef"><b>Definition:</b> Components.hpp:86</div></div>
+<div class="ttc" id="astructSpeed_html"><div class="ttname"><a href="structSpeed.html">Speed</a></div><div class="ttdoc">speed of the entity</div><div class="ttdef"><b>Definition:</b> Components.hpp:22</div></div>
 </div><!-- fragment --><ol type="1">
 <li>after you registered all the components that you will use in your game, you need to create entities. if i want to create my player, i will need to create an entity and add the components that i need to it. For example, if i want to create a player with a position, a speed and a drawable components, i will need to create an entity and add the components to it.</li>
 </ol>

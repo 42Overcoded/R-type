@@ -1,0 +1,171 @@
+{
+    "patterns": [
+        {
+            "index": 0,
+            "pattern": [
+                { "x": -0.2, "y": -0.2 },
+                { "x": -0.2, "y": 0.2 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 2,
+            "switch_index": 100
+        },
+        {
+            "index": 1,
+            "pattern": [
+                { "x": 0.2, "y": 0.1 },
+                { "x": -0.5, "y": 0.2 },
+                { "x": -0.3, "y": -0.3 },
+                { "x": 0.1, "y": -0.2 },
+                { "x": -0.2, "y": -0.1 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 50,
+            "pattern_length": 5,
+            "switch_index": 100
+        },
+        {
+            "index": 2,
+            "pattern": [
+                { "x": 0, "y": -0.2 },
+                { "x": -0.2, "y": 0 },
+                { "x": 0, "y": 0.2 },
+                { "x": -0.2, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 4,
+            "switch_index": 50
+        },
+        {
+            "index": 3,
+            "pattern": [
+                { "x": 0, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "switch_index": 100
+        },
+        {
+            "index": 4,
+            "pattern": [
+                { "x": 0, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 0,
+            "switch_index": 0
+        },
+        {
+            "index": 5,
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 9,
+            "switch_index": 50,
+            "pattern": [
+                {
+                    "x": 1750,
+                    "y": 400
+                },
+                {
+                    "x": 1000,
+                    "y": 110
+                },
+                {
+                    "x": 800,
+                    "y": 800
+                },
+                {
+                    "x": 400,
+                    "y": 200
+                },
+                {
+                    "x": 1500,
+                    "y": 500
+                },
+                {
+                    "x": 1800,
+                    "y": 800
+                },
+                {
+                    "x": 1400,
+                    "y": 100
+                },
+                {
+                    "x": 900,
+                    "y": 300
+                },
+                {
+                    "x": 1600,
+                    "y": 100
+                }
+            ]
+        },
+        {
+            "index": 6,
+            "pattern": [
+                { "x": -1.6, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 1,
+            "switch_index": 0
+        },
+        {
+            "index": 7,
+            "pattern": [
+                { "x": -0.3, "y": 0 }
+            ],
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 1,
+            "switch_index": 0
+        },
+        {
+            "pattern_index": 0,
+            "pattern_type": 0,
+            "pattern_length": 9,
+            "switch_index": 50,
+            "pattern": [
+                {
+                    "x": 1750,
+                    "y": 400
+                },
+                {
+                    "x": 1000,
+                    "y": 110
+                },
+                {
+                    "x": 800,
+                    "y": 800
+                },
+                {
+                    "x": 400,
+                    "y": 200
+                },
+                {
+                    "x": 1500,
+                    "y": 500
+                },
+                {
+                    "x": 1800,
+                    "y": 800
+                },
+                {
+                    "x": 1400,
+                    "y": 100
+                },
+                {
+                    "x": 900,
+                    "y": 300
+                },
+                {
+                    "x": 1600,
+                    "y": 100
+                }
+            ]
+        }
+    ]
+}

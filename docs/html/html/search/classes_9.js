@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['rect_85',['Rect',['../structRect.html',1,'']]],
-  ['registry_86',['registry',['../classregistry.html',1,'']]]
+  ['tag_124',['Tag',['../structTag.html',1,'']]],
+  ['text_125',['Text',['../structText.html',1,'']]],
+  ['texture_126',['Texture',['../structTexture.html',1,'']]]
 ];

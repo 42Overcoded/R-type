@@ -20,7 +20,7 @@ void JsonParser::Generate_Map_init(std::string name, std::string difficulty, int
 {
     std::hash<std::string> hashFunction;
     this->int_seed = hashFunction(seed);
-    
+
     srand(this->int_seed);
     this->Generate_Map(name, difficulty, lenght);
 }
