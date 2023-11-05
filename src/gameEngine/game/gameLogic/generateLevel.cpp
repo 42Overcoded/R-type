@@ -86,21 +86,46 @@ std::vector<Generated> gameEngine::loadMap(std::string path)
     std::vector<Generated> generated;
 
     std::ifstream inputFile(path);
-    if (inputFile.is_open())
-    {
-        Generated entry;
-        while (inputFile >> entry.id >> entry.pattern >> entry.x >> entry.y)
-        {
-            if (std::find(bosses.begin(), bosses.end(), entry.id) != bosses.end()) {
-                entry.is_boss = true;
-            } else
-                entry.is_boss = false;
-            generated.push_back(entry);
-        }
-
-        inputFile.close();
-        std::sort(generated.begin(), generated.end(), order);
+    if (!inputFile.is_open()) {
+        std::cerr << "Error: Could not open the input file." << std::endl;
+        return generated;
     }
+
+    std::string line;
+    try {
+        while (std::getline(inputFile, line)) {
+            std::istringstream lineStream(line);
+            Generated entry;
+
+            if (lineStream >> entry.id >> entry.pattern >> entry.x >> entry.y) {
+                if (lineStream.eof()) {
+                    if (std::find(bosses.begin(), bosses.end(), entry.id) != bosses.end()) {
+                        entry.is_boss = true;
+                    } else {
+                        entry.is_boss = false;
+                    }
+                    generated.push_back(entry);
+                    std::cout << entry.id << " " << entry.pattern << " " << entry.x << " " << entry.y << std::endl;
+                } else {
+                    std::cerr << "Error: Line contains extra data." << std::endl;
+                    generated.clear();
+                    generated.push_back(Generated(0, 0, 0, 0));
+                    return generated;
+                }
+            } else {
+                std::cerr << "Error: Failed to parse line as four integers." << std::endl;
+                generated.clear();
+                generated.push_back(Generated(0, 0, 0, 0));
+                return generated;
+            }
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        generated.clear();
+        generated.push_back(Generated(0, 0, 0, 0));
+        return generated;
+    }
+
 
     return generated;
 }
