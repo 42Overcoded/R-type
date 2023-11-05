@@ -301,7 +301,7 @@ void gameEngine::spawnManager(void)
                     spawner[i]->spawningEntities.pop();
                 }else if (entity.entityType == 11) {
                     entity_t enemy = init_enemy(entity.entityId, entity.arg1, entity.arg2, entity.x, entity.y);
-                    if (gameState.mode == GENERATED) {
+                    if (gameState.mode == GENERATED || gameState.mode == LEVELS_G) {
                         auto &position = _registry.get_components<Position>();
                         if (position[enemy]->y == 0) {
                             position[enemy]->y = _level_info._generated[0].y;
