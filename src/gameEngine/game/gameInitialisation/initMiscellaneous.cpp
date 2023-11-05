@@ -423,6 +423,7 @@ void gameEngine::death_animation()
                     continue;
                 if (state[i]->state >= 6) {
                     Kill_entity(entity_t(i));
+                    continue;
                 }
                 state[i]->state += 1;
                 rect[i]->left += 33;
