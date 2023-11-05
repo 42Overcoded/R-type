@@ -7,6 +7,5 @@ Welcome to our developer documentation page !
 - [ECS Architecture](ecs/ecs.md "Learn the ECS Architecture")
 - [Components](ecs/components.md "Learn more about the components")
 - [Systems](ecs/system.md "Learn more about the systems")
-- [Network](network.md "Learn more about the network")
 - [Add game content](gamecontent.md "Learn how to add game content")
 - [rfc](rfc.md "Learn more about the rfc")

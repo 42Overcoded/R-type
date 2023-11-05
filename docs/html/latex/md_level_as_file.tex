@@ -1,16 +1,16 @@
-\hypertarget{md_level_as_file_autotoc_md39}{}\doxysection{Level location}\label{md_level_as_file_autotoc_md39}
-Currently, all levels we made manually are stored in the \textquotesingle{}/assets/\textquotesingle{} folder. The level name is the same as the file name. They are named as follow\+: \textquotesingle{}level1design.\+txt\textquotesingle{}, level2design.\+txt\textquotesingle{} and level3design.\+txt\textquotesingle{}.\hypertarget{md_level_as_file_autotoc_md40}{}\doxysection{Level format}\label{md_level_as_file_autotoc_md40}
-Each level is a text file, each line represents an enemy or obstacle. It is composed of 4 numbers separated by a space.\hypertarget{md_level_as_file_autotoc_md41}{}\doxysubsection{Example}\label{md_level_as_file_autotoc_md41}
+\hypertarget{md_level_as_file_autotoc_md54}{}\doxysection{Level location}\label{md_level_as_file_autotoc_md54}
+Currently, all levels we made manually are stored in the \textquotesingle{}/assets/\textquotesingle{} folder. The level name is the same as the file name. They are named as follow\+: \textquotesingle{}level1design.\+txt\textquotesingle{}, level2design.\+txt\textquotesingle{} and level3design.\+txt\textquotesingle{}.\hypertarget{md_level_as_file_autotoc_md55}{}\doxysection{Level format}\label{md_level_as_file_autotoc_md55}
+Each level is a text file, each line represents an enemy or obstacle. It is composed of 4 numbers separated by a space.\hypertarget{md_level_as_file_autotoc_md56}{}\doxysubsection{Example}\label{md_level_as_file_autotoc_md56}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{an example would be : '1 2 2000 4'}
 
 \end{DoxyCode}
- Where 1 is an id, 2 is an id, 2000 is a position and 4 is a position. \hypertarget{md_level_as_file_autotoc_md42}{}\doxysubsubsection{Enemy / Obstacle id}\label{md_level_as_file_autotoc_md42}
-The first number is the id of the enemy / obstacle, as defined in the enemy.\+json file. located in config\+Files/enemy.\+json\hypertarget{md_level_as_file_autotoc_md43}{}\doxysubsubsection{Movement pattern id}\label{md_level_as_file_autotoc_md43}
-The second number is the id of the movement pattern of this entity, as defined in the movement.\+json file. located in config\+Files/movement.\+json\hypertarget{md_level_as_file_autotoc_md44}{}\doxysubsubsection{Position}\label{md_level_as_file_autotoc_md44}
-The third number represent the x position of the entity thus at which point in the level it will appear. It is important to note that the x position should always be greater than 1920 which is the width of most screens. It is also recommended to order the entities by x position, in the level file, so we can easily see the order in which they will appear. //\+This is not mandatory but it is recommended.\textbackslash{}\hypertarget{md_level_as_file_autotoc_md45}{}\doxysubsubsection{Position}\label{md_level_as_file_autotoc_md45}
-The fourth number is the y position of the entity, in the case of some entities for example the boss, the y position is not used. in those case we use the position y in the enemy.\+json of the corresponding entity.\hypertarget{md_level_as_file_autotoc_md46}{}\doxysection{Generated levels example}\label{md_level_as_file_autotoc_md46}
+ Where 1 is an id, 2 is an id, 2000 is a position and 4 is a position. \hypertarget{md_level_as_file_autotoc_md57}{}\doxysubsubsection{Enemy / Obstacle id}\label{md_level_as_file_autotoc_md57}
+The first number is the id of the enemy / obstacle, as defined in the enemy.\+json file. located in config\+Files/enemy.\+json\hypertarget{md_level_as_file_autotoc_md58}{}\doxysubsubsection{Movement pattern id}\label{md_level_as_file_autotoc_md58}
+The second number is the id of the movement pattern of this entity, as defined in the movement.\+json file. located in config\+Files/movement.\+json\hypertarget{md_level_as_file_autotoc_md59}{}\doxysubsubsection{Position}\label{md_level_as_file_autotoc_md59}
+The third number represent the x position of the entity thus at which point in the level it will appear. It is important to note that the x position should always be greater than 1920 which is the width of most screens. It is also recommended to order the entities by x position, in the level file, so we can easily see the order in which they will appear. //\+This is not mandatory but it is recommended.\textbackslash{}\hypertarget{md_level_as_file_autotoc_md60}{}\doxysubsubsection{Position}\label{md_level_as_file_autotoc_md60}
+The fourth number is the y position of the entity, in the case of some entities for example the boss, the y position is not used. in those case we use the position y in the enemy.\+json of the corresponding entity.\hypertarget{md_level_as_file_autotoc_md61}{}\doxysection{Generated levels example}\label{md_level_as_file_autotoc_md61}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 1 2000 400}
@@ -24,5 +24,5 @@ The fourth number is the y position of the entity, in the case of some entities 
 \DoxyCodeLine{4 4 3600 0}
 
 \end{DoxyCode}
-\hypertarget{md_level_as_file_autotoc_md47}{}\doxysubsection{Note}\label{md_level_as_file_autotoc_md47}
+\hypertarget{md_level_as_file_autotoc_md62}{}\doxysubsection{Note}\label{md_level_as_file_autotoc_md62}
 The level above would be a really simple level with really low amount of enemies. It is just an example to show how the level file should be formatted. 

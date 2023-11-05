@@ -1,25 +1,7 @@
 var searchData=
 [
-  ['scale_72',['Scale',['../structScale.html',1,'']]],
-  ['scale_5fsystem_73',['scale_system',['../classSfmlSystem.html#a4adf22a2b231cc93be1f1415095eb9d3',1,'SfmlSystem']]],
-  ['score_74',['Score',['../structScore.html',1,'']]],
-  ['searchinghead_75',['SearchingHead',['../structSearchingHead.html',1,'']]],
-  ['sfmlsystem_76',['SfmlSystem',['../classSfmlSystem.html',1,'']]],
-  ['shoot_5fsystem_77',['shoot_system',['../classgameEngine.html#ae6208616ce63b1d125d8d4fd63650a98',1,'gameEngine']]],
-  ['size_78',['size',['../classSparseArray.html#a3b485311dcd6c7e4f3bffee764297b42',1,'SparseArray']]],
-  ['sparsearray_79',['SparseArray',['../classSparseArray.html',1,'']]],
-  ['spawn_5fally_5fbullet_80',['spawn_ally_bullet',['../classgameEngine.html#add7e3a64cd7b1ffe9885ae321965d77e',1,'gameEngine']]],
-  ['spawn_5fboss_5fbullet_81',['spawn_boss_bullet',['../classgameEngine.html#a719e875533a8d8137c0dacb725f366fb',1,'gameEngine']]],
-  ['spawn_5fbullet_82',['spawn_bullet',['../classgameEngine.html#a50af4be2499c42c6768e91fe750f7969',1,'gameEngine']]],
-  ['spawn_5fenemy_83',['spawn_enemy',['../classgameEngine.html#a0dfd77b3d9d8701b64f53cc20211818b',1,'gameEngine']]],
-  ['spawn_5fentity_84',['spawn_entity',['../classregistry.html#a75d49eb0c9936d57146007f06cbaf735',1,'registry']]],
-  ['spawn_5fexplosion_85',['spawn_explosion',['../classgameEngine.html#a8e1b33230e5f3454b1186b34d08a2297',1,'gameEngine']]],
-  ['spawn_5fmobs_86',['spawn_mobs',['../classgameEngine.html#a779d67a725b52e6a46d038077113da61',1,'gameEngine']]],
-  ['spawn_5fwave_87',['spawn_wave',['../classgameEngine.html#ac415b00dc61edcb74bd064b250c93337',1,'gameEngine']]],
-  ['speed_88',['Speed',['../structSpeed.html',1,'']]],
-  ['sprite_89',['Sprite',['../structSprite.html',1,'']]],
-  ['state_90',['State',['../structState.html',1,'']]],
-  ['string_5fsystem_91',['string_system',['../classSfmlSystem.html#ad3890c28813e291ed1d4c8009561abb9',1,'SfmlSystem']]],
-  ['system_92',['System',['../classSystem.html',1,'']]],
-  ['system_20documentation_93',['System documentation',['../md_ecs_system.html',1,'']]]
+  ['tag_93',['Tag',['../structTag.html',1,'']]],
+  ['text_94',['Text',['../structText.html',1,'']]],
+  ['texture_95',['Texture',['../structTexture.html',1,'']]],
+  ['texture_5fsystem_96',['texture_system',['../classSfmlSystem.html#a73b4e68021820e272b3728032ce4a4bb',1,'SfmlSystem']]]
 ];

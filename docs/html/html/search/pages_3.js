@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gamemodes_185',['gamemodes',['../md_gamemodes.html',1,'']]]
+  ['game_20mode_184',['Game mode',['../md_gamemodes.html',1,'']]]
 ];
