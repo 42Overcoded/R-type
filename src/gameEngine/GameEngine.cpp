@@ -12,8 +12,6 @@
 #include <iostream>
 #include <optional>
 #include <random>
-#include "../../network/network_c/NetworkComponent.hpp"
-#include "../../network/network_s/NetworkComponent.hpp"
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "../ecs/Registry.hpp"
@@ -26,6 +24,10 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Audio/Music.hpp>
 #include <nlohmann/json.hpp>
+#include "../../network/network_c/NetworkComponent.hpp"
+#include "../network_c/NetworkSystem.hpp"
+#include "../../network/network_s/NetworkComponent.hpp"
+#include "../network_s/NetworkSystem.hpp"
 
 void gameEngine::Kill_entity(entity_t entity)
 {
@@ -41,9 +43,14 @@ void gameEngine::Kill_entity(entity_t entity)
 
 void gameEngine::loadLevel(int level)
 {
-    std::string path[] = { "assets/level1design.txt",
-                           "assets/level2design.txt",
-                           "assets/level3design.txt"};
+    std::vector<std::string> path = { PATH_TO_ASSETS + "level1design.txt", PATH_TO_ASSETS + "level2design.txt",
+        PATH_TO_ASSETS + "level3design.txt"};
+
+    if (level > path.size())
+    {
+        std::cerr << "ERROR level higher than defined levels paths" << std::endl;
+        exit(84);
+    }
     _level_info.mob_alive = 0;
     _level_info.is_boss_alive = false;
     _level_info.level_progress = 1920;
@@ -83,62 +90,49 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
         for (auto &i : _level_info.mobs_alive) {
             std::cout << "entity: " << i.first << " id: " << i.second.id << " pattern: " << i.second.pattern << "x: " << i.second.x << " y: " << i.second.y << std::endl;
         }
+        std::cout << "total_elapsed_time: " << _level_info.total_elapsed_time << std::endl;
     }
         if (is_frozen()) {
             _clock.restart();
             return;
         }
-        if (_level_info.mob_alive == 0)
+        if (_level_info.mob_alive <= 0)
             _level_info.is_boss_alive = false;
         if (this->_level_info.is_boss_alive)
             ;
-        else if (this->_level_info._generated.size() > 0 && _level_info._generated[0].is_boss) {
-            if (_level_info.mob_alive == 0) {
+        else if (this->_level_info._generated.size() > 0 && _level_info._generated[0].is_boss) { //Boss spawn
+            _level_info.total_elapsed_time += _elapsed.asSeconds();
+            if (_level_info.mob_alive <= 0 || _level_info.total_elapsed_time > 25) {
+                _level_info.total_elapsed_time = 0;
                 if (_level_info._generated[0].id == boss_worm_id) {
                     GameStateComponent &gameState = get_game_state();
-                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                        entity_t enemy = init_worm(7);
-                        _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
-                        networkInfo[0]->spawn.push_back(8);
+                        spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 8});
                     }
                     _level_info._generated.erase(_level_info._generated.begin());
                     _level_info.mob_alive += 1;
                     _level_info.is_boss_alive = true;
                 } else {
                     GameStateComponent &gameState = get_game_state();
-                    auto &networkInfo = _registry.get_components<NetworkInfo>();
+                    auto &spawner = _registry.get_components<Spawner>();
                     if (_type == SERVER || gameState.co == OFF) {
-                        entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
-                        _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
-                        networkInfo[0]->arg1.push_back(_level_info._generated[0].id);
-                        networkInfo[0]->arg2.push_back(_level_info._generated[0].pattern);
-                        networkInfo[0]->spawn.push_back(11);
-                        auto &position = _registry.get_components<Position>();
-                        if (position[enemy]->y == 0)
-                            position[enemy]->y = _level_info._generated[0].y;
+                        spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = _level_info._generated[0].id, .arg2 = _level_info._generated[0].pattern});
                     }
                     _level_info._generated.erase(_level_info._generated.begin());
                     _level_info.mob_alive += 1;
                     _level_info.is_boss_alive = true;
                 }
             }
-        } else {
+        } else { //Normal spawn
             _level_info.level_progress += (MAGIC_VALUE * _elapsed.asSeconds());
             while (this->_level_info._generated.size() > 0 && _level_info.level_progress > _level_info._generated[0].x && _level_info._generated[0].is_boss == false) {
                 GameStateComponent &gameState = get_game_state();
-                auto &networkInfo = _registry.get_components<NetworkInfo>();
+                auto &spawner = _registry.get_components<Spawner>();
                 if (_type == CLIENT && _level_info._generated[0].id == 6)
                     sounds["truck"]->play();
                 if (_type == SERVER || gameState.co == OFF) {
-                    entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
-                    _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
-                    networkInfo[0]->arg1.push_back(_level_info._generated[0].id);
-                    networkInfo[0]->arg2.push_back(_level_info._generated[0].pattern);
-                    networkInfo[0]->spawn.push_back(11);
-                    auto &position = _registry.get_components<Position>();
-                    if (position[enemy]->y == 0)
-                        position[enemy]->y = _level_info._generated[0].y;
+                    spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = _level_info._generated[0].id, .arg2 = _level_info._generated[0].pattern});
                 }
                 _level_info._generated.erase(_level_info._generated.begin());
                 _level_info.mob_alive += 1;
@@ -168,7 +162,7 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
             return;
         }
     }
-    if (_elapsed.asSeconds() > 0.1 / (difficulty /2)) {
+    if (_elapsed.asSeconds() > 0.1 / (difficulty / 2)) {
         wave += 0.05;
         int rand       = distribution2(generator);
         float randomNb = distribution(generator);
@@ -176,69 +170,49 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
         if (randomNb / 20 < wave)
         {
             GameStateComponent &gameState = get_game_state();
-            auto &networkInfo = _registry.get_components<NetworkInfo>();
+            SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(0, 0);
-                auto &position     = _registry.get_components<Position>();
-                position[enemy]->y = std::rand() % 950;
-                networkInfo[0]->arg1.push_back(0);
-                networkInfo[0]->arg2.push_back(0);
-                networkInfo[0]->spawn.push_back(11);
+                float randomPos = (std::rand() + 1) % 950;
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 0, .arg2 = 0, .y = randomPos});
             }
         }
         if (randomNb / 10 < wave)
         {
             GameStateComponent &gameState = get_game_state();
-            auto &networkInfo = _registry.get_components<NetworkInfo>();
+            SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(1, 1);
-                auto &position     = _registry.get_components<Position>();
-                position[enemy]->y = std::rand() % 950;
-                networkInfo[0]->arg1.push_back(1);
-                networkInfo[0]->arg2.push_back(1);
-                networkInfo[0]->spawn.push_back(11);
+                float randomPos = (std::rand() + 1) % 950;
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 1, .arg2 = 1, .y = randomPos});
             }
         }
         if (randomNb < wave)
         {
             GameStateComponent &gameState = get_game_state();
-            auto &networkInfo = _registry.get_components<NetworkInfo>();
+            SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(2, 2);
-                auto &position     = _registry.get_components<Position>();
-                position[enemy]->y = std::rand() % 950;
-                networkInfo[0]->arg1.push_back(2);
-                networkInfo[0]->arg2.push_back(2);
-                networkInfo[0]->spawn.push_back(11);
+                float randomPos = (std::rand() + 1) % 950;
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 2, .arg2 = 2, .y = randomPos});
             }
         }
         if (randomNb * 3 < wave)
         {
             GameStateComponent &gameState = get_game_state();
-            auto &networkInfo = _registry.get_components<NetworkInfo>();
+            SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
             if (_type == CLIENT) {
                 sounds["truck"]->play();
             }
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(6, 6);
-                auto &position     = _registry.get_components<Position>();
-                position[enemy]->y = std::rand() % 950;
-                networkInfo[0]->arg1.push_back(6);
-                networkInfo[0]->arg2.push_back(6);
-                networkInfo[0]->spawn.push_back(11);
+                float randomPos = (std::rand() + 1) % 950;
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 6, .arg2 = 6, .y = randomPos});
             }
         }
         if (randomNb * 5 < wave)
         {
             GameStateComponent &gameState = get_game_state();
-            auto &networkInfo = _registry.get_components<NetworkInfo>();
+            SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
             if (_type == SERVER || gameState.co == OFF) {
-                entity_t enemy     = init_enemy(3, 3);
-                auto &position     = _registry.get_components<Position>();
-                position[enemy]->y = std::rand() % 950;
-                networkInfo[0]->arg1.push_back(3);
-                networkInfo[0]->arg2.push_back(3);
-                networkInfo[0]->spawn.push_back(11);
+                float randomPos = (std::rand() + 1) % 950;
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 3, .arg2 = 3, .y = randomPos});
             }
         }
         _clock.restart();
@@ -275,68 +249,76 @@ void gameEngine::register_component_to_game()
     _registry.register_component<GameLauncher>();
     _registry.register_component<Color>();
     _registry.register_component<Orientation>();
-    _registry.register_component<NetworkInfo>();
+    _registry.register_component<Spawner>();
 };
 
-void gameEngine::network_manager()
+void gameEngine::spawnManager(void)
 {
-    auto &networkInfo = _registry.get_components<NetworkInfo>();
+    SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
+    GameStateComponent &gameState = get_game_state();
+
     for (size_t i = 0; i < _registry._entity_number; i++)
     {
-        if (networkInfo[i].has_value())
+        if (spawner[i].has_value())
         {
-            for (size_t j = 0; j < networkInfo[i]->spawn.size(); j++) {
-                if (networkInfo[i]->spawn[0] == 1) {
-                    std::cout << "spawn ally bullet" << std::endl;
-                    spawn_ally_bullet(networkInfo[i]->arg1[0]);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                    std::cout << "ally bullet spawned" << std::endl;
-                }else if (networkInfo[i]->spawn[0] == 2) {
-                    spawn_boss_bullet(networkInfo[i]->arg1[0], 5);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 3) {
-                    spawn_boss_bullet(networkInfo[i]->arg1[0], 2);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 4) {
-                    spawn_bullet(networkInfo[i]->arg1[0], 0);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 5) {
-                    spawn_bullet(networkInfo[i]->arg1[0], 4);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 6) {
-                    spawn_bullet(networkInfo[i]->arg1[0], 1);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 7) {
-                    spawn_bullet(networkInfo[i]->arg1[0], 6);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 8) {
-                    init_worm(7);
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 9) {
-                    spawn_explosion(networkInfo[i]->arg1[0]);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 10) {
-                    spawn_power_up(networkInfo[i]->arg1[0], networkInfo[i]->arg2[0]);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->arg2.erase(networkInfo[i]->arg2.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                }else if (networkInfo[i]->spawn[0] == 11) {
-                    init_enemy(networkInfo[i]->arg1[0], networkInfo[i]->arg2[0]);
-                    networkInfo[i]->arg1.erase(networkInfo[i]->arg1.begin());
-                    networkInfo[i]->arg2.erase(networkInfo[i]->arg2.begin());
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
-                } else {
-                    networkInfo[i]->spawn.erase(networkInfo[i]->spawn.begin());
+            if (_type == CLIENT && gameState.co == OFF) {
+                while (spawner[i]->entitiesToSpawn.empty() == false){
+                    spawner[i]->spawningEntities.push(spawner[i]->entitiesToSpawn.front());
+                    spawner[i]->entitiesToSpawn.pop();
                 }
             }
+            while (spawner[i]->spawningEntities.empty() == false) {
+                EntitySpawnDescriptor entity = spawner[i]->spawningEntities.front();
+
+                if (entity.entityType == 1) {
+                    spawn_ally_bullet(entity.entityId, entity.clientId, entity.arg1, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 2) {
+                    spawn_boss_bullet(entity.entityId, entity.arg1, 5, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 3) {
+                    spawn_boss_bullet(entity.entityId, entity.arg1, 2, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 4) {
+                    spawn_bullet(entity.entityId, entity.arg1, 0, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 5) {
+                    spawn_bullet(entity.entityId, entity.arg1, 4, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 6) {
+                    spawn_bullet(entity.entityId, entity.arg1, 1, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 7) {
+                    spawn_bullet(entity.entityId, entity.arg1, 6, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 8) {
+                    entity_t enemy = init_worm(entity.entityId, 7, entity.x, entity.y);
+                    _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 9) {
+                    entity_t explosion = spawn_explosion(entity.entityId, entity.arg1, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 10) {
+                    spawn_power_up(entity.entityId, entity.arg1, entity.arg2, entity.x, entity.y);
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 11) {
+                    entity_t enemy = init_enemy(entity.entityId, entity.arg1, entity.arg2, entity.x, entity.y);
+                    if (gameState.mode == GENERATED || gameState.mode == LEVELS_G)  {
+                        auto &position = _registry.get_components<Position>();
+                        if (position[enemy]->y == 0) {
+                            position[enemy]->y = _level_info._generated[0].y;
+                        }
+                        _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
+                    }
+                    spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 12) {
+                    init_starship(entity.entityId, entity.clientId, entity.arg1);
+                    spawner[i]->spawningEntities.pop();
+                } else {
+                    spawner[i]->spawningEntities.pop();
+                }
+            }
+            return;
         }
     }
 }
@@ -349,7 +331,7 @@ void gameEngine::launch_game()
     {
         _window.create(sf::VideoMode(1920, 1080), "R-Type");
         _window.setFramerateLimit(60);
-        _system.load_texture(_registry, cheatCode);
+        sfmlSystems_.load_texture(_registry, cheatCode);
         musics["musicMenu"]->play();
     }
     register_component_to_game();
@@ -357,12 +339,12 @@ void gameEngine::launch_game()
     sf::Clock _clock;
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
-    wave = 0;
+    wave = 50;
     id   = 0;
     int level = 0;
 
     entity_t networkManager = _registry.spawn_entity();
-    _registry.add_component<NetworkInfo>(networkManager, NetworkInfo{});
+    _registry.add_component<Spawner>(networkManager, Spawner{});
     entity_t gameManagerEntity = _registry.spawn_entity();
     _registry.add_component<GameStateComponent>(
         gameManagerEntity, GameStateComponent{Scene::MENU, Mode::NONE});
@@ -392,8 +374,23 @@ void gameEngine::launch_game()
             menu();
             _clock.restart();
         }
+        if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE))) {
+            if (_type == SERVER) {
+                _networkSystem = std::make_unique<Network::ServerNetworkSystem>(port_, ip_);
+            } else if (_type == CLIENT) {
+                _networkSystem = std::make_unique<Network::ClientNetworkSystem>(port_, ip_);
+            }
+        }
+        if (_networkSystem != nullptr) {
+            if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
+            {
+                networkClock.restart();
+                _networkSystem->Update(_registry);
+            }
+        }
         if (gameState.scene == GAME)
         {
+            spawnManager();
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
                 continue;
             for (size_t i = 0; i < _registry._entity_number; i++)
@@ -411,12 +408,13 @@ void gameEngine::launch_game()
                 if (tag[i]->tag == "wormHead" && state[i]->index < 20 && clockk[i]->time.asSeconds() > 0.18)
                 {
                     state[i]->index++;
-                    init_worm(8);
+                    SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
+                    spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 11, .arg1 = 0, .arg2 = 8});
                     clockk[i]->clock.restart();
                     this->_level_info.mob_alive += 1;
                 }
             }
-            if (alive == 0) {
+            if (alive == 0 && (gameState.co == OFF || _type == SERVER)) {
                 gameState.scene = END;
                 if (_type == CLIENT) {
                     musics["musicGame"]->stop();
@@ -427,11 +425,11 @@ void gameEngine::launch_game()
             elapsed  = clock.getElapsedTime();
             _elapsed = _clock.getElapsedTime();
             clock.restart();
-            _system.modify_pattern(_registry);
+            gameSystems_.modify_pattern(_registry);
             if (gameState.mode == LEVELS_G) {
                 if (_level_info.mob_alive == 0 && _level_info._generated.size() == 0) {
-                    if (level < NUMBERS_OF_LEVELS)
-                        loadLevel(level++);
+                    if (_level_info._level < NUMBERS_OF_LEVELS)
+                        loadLevel(_level_info._level++);
                     else {
                         gameState.scene = END;
                     }
@@ -449,9 +447,9 @@ void gameEngine::launch_game()
             animate_enemy();
             shoot_system(elapsed);
             movement_system(_registry);
-            _system.velocity_system(_registry, elapsed);
-            _system.color_system(_registry);
-            _system.hitbox_system(_registry);
+            gameSystems_.velocity_system(_registry, elapsed);
+            sfmlSystems_.color_system(_registry);
+            gameSystems_.hitbox_system(_registry);
             death_animation();
             shoot_enemy();
             life_handler();
@@ -466,34 +464,18 @@ void gameEngine::launch_game()
                     return;
                 }
             }
-            if (gameState.co == ON)
-                network_manager();
-            _system.control_system(_registry, _window);
-            _system.set_color(_registry);
+            sfmlSystems_.control_system(_registry, _window);
+            sfmlSystems_.set_color(_registry);
             _window.clear(sf::Color::Black);
-            _system.position_system(_registry);
-            _system.set_orientation(_registry);
-            _system.rect_system(_registry);
-            _system.texture_system(_registry);
-            _system.scale_system(_registry);
-            _system.font_system(_registry);
-            _system.string_system(_registry);
-            _system.draw_system(_registry, _window);
+            sfmlSystems_.position_system(_registry);
+            sfmlSystems_.set_orientation(_registry);
+            sfmlSystems_.rect_system(_registry);
+            sfmlSystems_.texture_system(_registry);
+            sfmlSystems_.scale_system(_registry);
+            sfmlSystems_.font_system(_registry);
+            sfmlSystems_.string_system(_registry);
+            sfmlSystems_.draw_system(_registry, _window);
             _window.display();
-        }
-        if (_type == SERVER || (_type == CLIENT && (gameState.scene == ONLINE || gameState.scene == GAME))) {
-            if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE)))
-                _networkSystem = std::make_unique<Network::NetworkSystem>(port_, ip_);
-            if (_networkSystem != nullptr) {
-                if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
-                {
-                    networkClock.restart();
-                    _networkSystem->Update(_registry);
-                }
-            }
-        }
-        if ((gameState.scene == MENU || gameState.scene == OFFLINE) && _networkSystem != nullptr) {
-            _networkSystem.reset();
         }
     }
 }
@@ -522,14 +504,14 @@ void gameEngine::load_musics_and_sounds(void)
         musics.insert(std::make_pair("musicGame", nullptr));
         musics.insert(std::make_pair("musicScore", nullptr));
         musics.insert(std::make_pair("musicBoss", nullptr));
-    
+
         soundBuffers.insert(std::make_pair("soundShoot", nullptr));
         soundBuffers.insert(std::make_pair("soundPowerShoot", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion2", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion3", nullptr));
         soundBuffers.insert(std::make_pair("truck", nullptr));
-    
+
         sounds.insert(std::make_pair("truck", nullptr));
         sounds.insert(std::make_pair("soundShoot", nullptr));
         sounds.insert(std::make_pair("soundPowerShoot", nullptr));
@@ -542,26 +524,26 @@ void gameEngine::load_musics_and_sounds(void)
         musics.at("musicGame") = std::make_shared<sf::Music>();
         musics.at("musicScore") = std::make_shared<sf::Music>();
         musics.at("musicBoss") = std::make_shared<sf::Music>();
-    
+
         soundBuffers.at("truck") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundPowerShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion2") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion3") = std::make_shared<sf::SoundBuffer>();
-    
+
         sounds.at("truck") = std::make_shared<sf::Sound>();
         sounds.at("soundShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundPowerShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion2") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion3") = std::make_shared<sf::Sound>();
-    
+
         musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
         musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
         musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
         musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
-    
+
         soundBuffers["truck"]->loadFromFile("assets/musicAndSound/ALLEZ_MARCEL.mp3");
         soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
         soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
@@ -575,19 +557,19 @@ void gameEngine::load_musics_and_sounds(void)
         sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
         sounds["soundExplosion2"]->setBuffer(*soundBuffers["soundExplosion2"]);
         sounds["soundExplosion3"]->setBuffer(*soundBuffers["soundExplosion3"]);
-    
+
         musics["musicMenu"]->setVolume(30);
         musics["musicGame"]->setVolume(30);
         musics["musicScore"]->setVolume(30);
         musics["musicBoss"]->setVolume(30);
-    
+
         sounds["truck"]->setVolume(100);
         sounds["soundShoot"]->setVolume(60);
         sounds["soundPowerShoot"]->setVolume(60);
         sounds["soundExplosion"]->setVolume(60);
         sounds["soundExplosion2"]->setVolume(50);
         sounds["soundExplosion3"]->setVolume(50);
-    
+
         musics["musicMenu"]->setLoop(true);
         musics["musicScore"]->setLoop(false);
         musics["musicGame"]->setLoop(true);

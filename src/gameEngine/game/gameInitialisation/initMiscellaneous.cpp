@@ -181,11 +181,16 @@ void gameEngine::init_cheatCode(void)
 
 void gameEngine::init_background(int i) {
     std::ifstream file(PATH_TO_JSON + "background.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "background.json");
     nlohmann::json backJson;
-    file >> backJson;
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "background.json");
+        file >> backJson;
+    } catch (std::exception &e) {
+        std::cerr << "ERROR background.json : " << e.what() << std::endl;
+        exit(84);
+    }
     file.close();
 
     entity_t background = _registry.spawn_entity();
@@ -203,8 +208,7 @@ void gameEngine::init_background(int i) {
     auto &speed = _registry.get_components<Speed>();
     auto &texture = _registry.get_components<Texture>();
     auto &drawable = _registry.get_components<Drawable>();
-
-    int width = backJson["background"]["width"];
+    float width = backJson["background"]["width"];
 
     drawable[background]->drawable = true;
     texture[background]->textureTag = backJson["background"]["textureTag"];
@@ -243,11 +247,15 @@ void gameEngine::init_star_parallax(int i) {
 
 void gameEngine::init_score() {
     std::ifstream file(PATH_TO_JSON + "score.json");
-
-    if (!file.is_open())
-        throw std::runtime_error("Can't open " + PATH_TO_JSON + "score.json");
     nlohmann::json scoreJson;
-    file >> scoreJson;
+
+    try {
+        if (!file.is_open())
+            throw std::runtime_error("Can't open " + PATH_TO_JSON + "score.json");
+        file >> scoreJson;
+    } catch (std::exception &e) {
+        std::cerr << "ERROR score.json : " << e.what() << std::endl;
+    }
     file.close();
 
     entity_t score = _registry.spawn_entity();
@@ -275,7 +283,7 @@ void gameEngine::init_score() {
     scale[score]->scale = scoreJson["score"]["scale"];
 }
 
-void gameEngine::spawn_explosion(int i) {
+entity_t gameEngine::spawn_explosion(uint32_t entityId, int i, float x, float y) {
     std::ifstream file(PATH_TO_JSON + "explosion.json");
 
     if (!file.is_open())
@@ -285,7 +293,7 @@ void gameEngine::spawn_explosion(int i) {
     file.close();
 
     entity_t explosion = _registry.spawn_entity();
-    _registry.add_component<Position>(explosion, Position());
+    _registry.add_component<Position>(explosion, Position{.x = x, .y = y});
     _registry.add_component<Sprite>(explosion, Sprite());
     _registry.add_component<Drawable>(explosion, Drawable());
     _registry.add_component<Tag>(explosion, Tag());
@@ -294,6 +302,7 @@ void gameEngine::spawn_explosion(int i) {
     _registry.add_component<Texture>(explosion, Texture());
     _registry.add_component<Rect>(explosion, Rect());
     _registry.add_component<Scale>(explosion, Scale());
+    _registry.add_component<NetworkComponent>(explosion, NetworkComponent{.entityId = entityId});
 
     auto &state = _registry.get_components<State>();
     auto &drawable = _registry.get_components<Drawable>();
@@ -305,8 +314,6 @@ void gameEngine::spawn_explosion(int i) {
     auto &scale = _registry.get_components<Scale>();
 
     state[explosion]->state = boomJson["explosion"]["state"];
-    position[explosion]->x = position[i]->x;
-    position[explosion]->y = position[i]->y;
     tag[explosion]->tag = boomJson["explosion"]["tag"];
     drawable[explosion]->drawable = true;
     texture[explosion]->textureTag = boomJson["explosion"]["textureTag"];
@@ -315,9 +322,10 @@ void gameEngine::spawn_explosion(int i) {
     rect[explosion]->width = boomJson["explosion"]["rect"]["width"];
     rect[explosion]->height = boomJson["explosion"]["rect"]["height"];
     scale[explosion]->scale = boomJson["explosion"]["scale"];
+    return explosion;
 }
 
-void gameEngine::spawn_power_up(int i, int j)
+void gameEngine::spawn_power_up(uint32_t entityId, int i, int j, float x, float y)
 {
     std::ifstream file(PATH_TO_JSON + "powerup.json");
     if (!file.is_open())
@@ -327,7 +335,7 @@ void gameEngine::spawn_power_up(int i, int j)
     file.close();
 
     entity_t power = _registry.spawn_entity();
-    _registry.add_component<Position>(power, Position());
+    _registry.add_component<Position>(power, Position{.x = x, .y = y});
     _registry.add_component<Sprite>(power, Sprite());
     _registry.add_component<Drawable>(power, Drawable());
     _registry.add_component<Tag>(power, Tag());
@@ -337,6 +345,7 @@ void gameEngine::spawn_power_up(int i, int j)
     _registry.add_component<Speed>(power, Speed());
     _registry.add_component<Hitbox>(power, Hitbox());
     _registry.add_component<Scale>(power, Scale());
+    _registry.add_component<NetworkComponent>(power, NetworkComponent{.entityId = entityId});
 
     auto &state = _registry.get_components<State>();
     auto &drawable = _registry.get_components<Drawable>();
@@ -383,7 +392,7 @@ void gameEngine::death_animation()
             wormAlive = 0;
         }
     }
-    for (size_t i = 0; i < _registry._entity_number; i++) {
+    for (unsigned int i = 0; i < _registry._entity_number; i++) {
         if (!tag[i].has_value() || !position[i].has_value())
             continue;
         if (enemy[i].has_value()) {
@@ -412,6 +421,7 @@ void gameEngine::death_animation()
                     continue;
                 if (state[i]->state >= 6) {
                     Kill_entity(entity_t(i));
+                    continue;
                 }
                 state[i]->state += 1;
                 rect[i]->left += 33;
@@ -426,7 +436,7 @@ void gameEngine::death_animation()
         }
         if (enemy[i].has_value()) {
             if (health[i]->health <= 0 && tag[i]->tag != "wormHead" && tag[i]->tag != "wormBody") {
-                for (size_t j = 0; j < _registry._entity_number; j++) {
+                for (unsigned int j = 0; j < _registry._entity_number; j++) {
                     if (tag[j].has_value() && tag[j]->tag == "score")
                     {
                         state[j]->state += enemy[i]->score;
@@ -434,14 +444,12 @@ void gameEngine::death_animation()
                     }
                 }
                 GameStateComponent &gameState = get_game_state();
-                auto &networkInfo = _registry.get_components<NetworkInfo>();
+                auto &spawner = _registry.get_components<Spawner>();
                 if (_type == SERVER || gameState.co == OFF) {
-                    spawn_explosion(i);
-                    networkInfo[0]->arg1.push_back(i);
-                    networkInfo[0]->spawn.push_back(9);
+                    spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 9, .arg1 = i, .x = position[i]->x, .y = position[i]->y});
                 }
                 if (_type == SERVER || gameState.co == OFF) {
-                    int j = -1;
+                    unsigned int j = -1;
                     std::random_device rd;
                     std::mt19937 gen(rd());
                     std::uniform_int_distribution<int> distribution(0, 1080);
@@ -466,10 +474,7 @@ void gameEngine::death_animation()
                         j = 4;
                     }
                     if (j != -1) {
-                        spawn_power_up(i, j);
-                        networkInfo[0]->arg1.push_back(i);
-                        networkInfo[0]->arg2.push_back(j);
-                        networkInfo[0]->spawn.push_back(10);
+                        spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 10, .arg1 = i, .arg2 = j});
                     }
                 }
                 if (_type == CLIENT && tag[i]->tag == "enemy 1")
@@ -483,14 +488,12 @@ void gameEngine::death_animation()
                     musics["musicGame"]->play();
                 }
                 Kill_entity(entity_t(i));
-                _level_info.mob_alive -= 1;
-
                 continue;
             }
         }
     }
     if (wormAlive == 0) {
-        for (size_t j = 0; j < _registry._entity_number; j++) {
+        for (unsigned int j = 0; j < _registry._entity_number; j++) {
             if (!tag[j].has_value())
                 continue;
             if ((tag[j]->tag == "wormHead" || tag[j]->tag == "wormBody")) {
@@ -503,7 +506,8 @@ void gameEngine::death_animation()
                         text[k]->str = "Score : " + std::to_string(state[k]->state);
                     }
                 }
-                spawn_explosion(j);
+                SparseArray<Spawner> &spawner = _registry.get_components<Spawner>();
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 8, .arg1 = j, .x = position[j]->x, .y = position[j]->y});
                 Kill_entity(entity_t(j));
                 _level_info.is_boss_alive = false;
                 _level_info.mob_alive = 0;
@@ -521,10 +525,9 @@ void gameEngine::init_game()
 {
     if (_type == SERVER)
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 2; i++) {
         init_background(i);
-    for (int i = 0; i < 10; i++)
-        init_star_parallax(i);
+    }
     init_score();
 
     GameStateComponent &state = get_game_state();
@@ -535,11 +538,11 @@ void gameEngine::init_game()
             id = network[i]->clientId;
         }
     }
-    auto &networkInfo = _registry.get_components<NetworkInfo>();
+    auto &spawner = _registry.get_components<Spawner>();
     int nbPlayer= 1;
     for (int i = 0; i < _registry._entity_number; i++) {
-        if (networkInfo[i].has_value()) {
-            nbPlayer = networkInfo[i]->playersNbr;
+        if (spawner[i].has_value()) {
+            nbPlayer = spawner[i]->playersNbr;
         }
     }
     if (state.co == OFF) {
@@ -548,11 +551,7 @@ void gameEngine::init_game()
     }
     std::cout << "Id : " << id << std::endl;
     std::cout << "NbPlayer : " << nbPlayer << std::endl;
-    for (int i = 1; i != nbPlayer + 1; i++) {
-        entity_t starship = init_starship(id, i);
-        init_beambar(id);
-        init_load_shoot(id);
-        for (int i = 0; i < 3; i++)
-            init_life(i, id);
+    for (unsigned int i = 1; i != nbPlayer + 1; i++) {
+        spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 12, .arg1 = i});
     }
 }

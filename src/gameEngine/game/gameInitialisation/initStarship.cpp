@@ -1,11 +1,12 @@
 #include "../../GameEngine.hpp"
+#include <cstdint>
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
 #include <nlohmann/json.hpp>
 #include "../../../network/network_c/NetworkComponent.hpp"
 
-entity_t gameEngine::init_starship(int id, int i)
+entity_t gameEngine::init_starship(uint32_t entityId, uint32_t clientId, unsigned int i)
 {
     std::ifstream file(PATH_TO_JSON + "starship.json");
 
@@ -32,9 +33,7 @@ entity_t gameEngine::init_starship(int id, int i)
     _registry.add_component<Texture>(starship, Texture());
     _registry.add_component<Rect>(starship, Rect());
     _registry.add_component<NetworkComponent>(starship, NetworkComponent());
-    if (id == i || _type == SERVER) {
-        _registry.add_component<Control>(starship, Control());
-    }
+
     auto &clock = _registry.get_components<Clock>();
     auto &health = _registry.get_components<Health>();
     auto &state = _registry.get_components<State>();
@@ -49,7 +48,24 @@ entity_t gameEngine::init_starship(int id, int i)
     auto &drawable = _registry.get_components<Drawable>();
     auto &color = _registry.get_components<Color>();
     auto &network = _registry.get_components<NetworkComponent>();
+    auto &gameState = _registry.get_components<GameStateComponent>();
+    unsigned int gameStateIndex = 0;
 
+    for (gameStateIndex = 0; gameStateIndex < gameState.size(); gameStateIndex++) {
+        if (gameState[gameStateIndex].has_value())
+            break;
+    }
+
+    if (_type == CLIENT && gameState[gameStateIndex]->co == ON) {
+        uint32_t ownId = network[gameStateIndex]->clientId;
+
+        if (clientId == ownId) {
+            _registry.add_component<Control>(starship, Control());
+        }
+    }
+    if (_type == SERVER || gameState[gameStateIndex]->co == OFF) {
+        _registry.add_component<Control>(starship, Control());
+    }
     color[starship]->r = 255;
     color[starship]->g = 255;
     color[starship]->b = 255;
@@ -57,8 +73,8 @@ entity_t gameEngine::init_starship(int id, int i)
     drawable[starship]->drawable = true;
     health[starship]->health = starshipJson["starship"][i]["health"];
     state[starship]->state = starshipJson["starship"][i]["state"];
-    network[starship]->clientId = i;
-    state[starship]->id = i;
+    network[starship]->clientId = clientId;
+    network[starship]->entityId = entityId;
     hitbox[starship]->width = starshipJson["starship"][i]["hitbox"]["width"];
     hitbox[starship]->height = starshipJson["starship"][i]["hitbox"]["height"];
     tag[starship]->tag = starshipJson["starship"][i]["tag"];
@@ -76,7 +92,12 @@ entity_t gameEngine::init_starship(int id, int i)
     rect[starship]->top = starshipJson["starship"][i]["rect"]["top"];
     rect[starship]->width = starshipJson["starship"][i]["rect"]["width"];
     rect[starship]->height = starshipJson["starship"][i]["rect"]["height"];
-    state[starship]->_state = i;
+    state[starship]->id = i;
+    state[starship]->state = i;
+    init_beambar(clientId);
+    init_load_shoot(clientId);
+    for (int i = 0; i < 3; i++)
+        init_life(i, clientId);
     return starship;
 }
 
@@ -101,7 +122,6 @@ void gameEngine::init_load_shoot(int id)
     _registry.add_component<Scale>(load_shoot, Scale());
     _registry.add_component<State>(load_shoot, State());
     _registry.add_component<Clock>(load_shoot, Clock());
-
 
     auto &tag = _registry.get_components<Tag>();
     auto &texture = _registry.get_components<Texture>();

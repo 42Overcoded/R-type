@@ -53,7 +53,7 @@ private:
                     {
                         if (recvBuffer_.header.size == 0)
                         {
-                            std::cout << "[" << id_ << "] Get Header Success." << std::endl;
+                            // std::cout << "[" << id_ << "] ClientsManager Get Header Success." << std::endl;
                             ManageConnectionPacket();
                         }
                         else
@@ -64,8 +64,7 @@ private:
                     }
                     else
                     {
-                        std::cout << "[" << id_ << "] Get Header Fail." << std::endl;
-                        std::cerr << ec.message() << std::endl;
+                        std::cerr << "[" << id_ << "] ClientsManager Get Header Fail. (" << ec.message() << ")" << std::endl;
                         socket_->close();
                     }
                 });
@@ -79,16 +78,23 @@ private:
             case T::ServerConnect:
                 std::cout << "Server Connect" << std::endl;
 
-                std::shared_ptr<Connection<T>> newClient = std::make_shared<Connection<T>>(
-                    Connection<T>::Owner::Server, ioContext_,
-                    boost::asio::ip::udp::socket(
-                        ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)),
-                    packetsInQueue_);
-                if (clients_ == nullptr)
-                    throw std::runtime_error("clients_ is null");
-                std::cout << "New client created" << std::endl;
-                newClient->ConnectToClient(remoteEndpoint_, ++id_);
-                clients_->push_back(newClient);
+                try {
+                    std::shared_ptr<Connection<T>> newClient = std::make_shared<Connection<T>>(
+                        Connection<T>::Owner::Server, ioContext_,
+                        boost::asio::ip::udp::socket(
+                            ioContext_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)),
+                        packetsInQueue_);
+                    if (clients_ == nullptr)
+                        throw std::runtime_error("clients_ is null");
+                    std::cout << "New client created" << std::endl;
+                    std::cout << "client endpoint : " << remoteEndpoint_.address().to_string() << " port " << remoteEndpoint_.port() << std::endl;
+                    newClient->ConnectToClient(remoteEndpoint_, ++id_);
+                    clients_->push_back(newClient);
+                } catch (const std::exception &e) {
+                    std::cerr << "Error while connecting new client" <<std::endl;
+                    std::cerr << e.what() << std::endl;
+                    exit(84);
+                }
             }
             GetPacket();
         }
@@ -104,10 +110,15 @@ private:
     };
 
 public:
-    INetworkServer(uint16_t port)
+    INetworkServer(uint32_t port)
     {
         clients_ = std::make_shared<std::deque<std::shared_ptr<Connection<T>>>>();
-        clientsManager_ = std::make_unique<ClientsManager>(ioContext_, port, packetsInQueue_, clients_);
+        try {
+            clientsManager_ = std::make_unique<ClientsManager>(ioContext_, port, packetsInQueue_, clients_);
+        } catch (const std::exception &e) {
+            std::cerr << e.what() << std::endl;
+            exit(84);
+        }
         std::cout << "[SERVER] Created" << std::endl;
         Start();
     };

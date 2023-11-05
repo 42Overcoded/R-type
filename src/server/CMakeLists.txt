@@ -43,7 +43,7 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "D
     FetchContent_MakeAvailable(Boost)
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
@@ -51,15 +51,18 @@ set(INCLUDES
     ../ecs/Registry.hpp
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
-    ../ecs/ComponentsArray/Systems/ServerSystem.hpp
+    ../gameEngine/game/systems/GameSystems.hpp
     ../network/Connection.hpp
     ../network/INetworkClient.hpp
     ../network/INetworkServer.hpp
     ../network/Packet.hpp
     ../network/PacketsQueue.hpp
     ../network/Protocol.hpp
+    ../network/network_c/NetworkComponent.hpp
+    ../network/network_c/NetworkSystem.hpp
     ../network/network_s/NetworkComponent.hpp
     ../network/network_s/NetworkSystem.hpp
+    ../network/INetworkSystem.hpp
     ../jsonfile/include/Comportment.hpp
     ../jsonfile/include/JsonParser.hpp
     ../jsonfile/include/MapLevel.hpp
@@ -76,13 +79,14 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/generateLevel.cpp
     ../gameEngine/game/gameLogic/shoot.cpp
     ../gameEngine/game/gameLogic/movements.cpp
+    ../gameEngine/game/systems/GameSystems.cpp
     ../gameEngine/game/gameInitialisation/initBullets.cpp
     ../gameEngine/game/gameInitialisation/initEnemy.cpp
     ../gameEngine/game/gameInitialisation/initMiscellaneous.cpp
     ../gameEngine/game/gameInitialisation/initStarship.cpp
     ../ecs/Registry.cpp
-    ../ecs/ComponentsArray/Systems/ServerSystem.cpp
     ../network/network_s/NetworkSystem.cpp
+    ../network/network_c/NetworkSystem.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
     ../jsonfile/src/JsonParser.cpp

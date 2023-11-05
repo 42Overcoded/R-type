@@ -43,7 +43,7 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "D
     FetchContent_MakeAvailable(Boost)
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 set(INCLUDES
@@ -51,6 +51,7 @@ set(INCLUDES
     ../ecs/ComponentsArray/SparseArray.hpp
     ../ecs/ComponentsArray/Components/Components.hpp
     ../ecs/ComponentsArray/Systems/SfmlSystem.hpp
+    ../gameEngine/game/systems/GameSystems.hpp
     ../gameEngine/GameEngine.hpp
     ../gameEngine/Game.hpp
     ../network/Connection.hpp
@@ -61,6 +62,9 @@ set(INCLUDES
     ../network/Protocol.hpp
     ../network/network_c/NetworkComponent.hpp
     ../network/network_c/NetworkSystem.hpp
+    ../network/network_s/NetworkComponent.hpp
+    ../network/network_s/NetworkSystem.hpp
+    ../network/INetworkSystem.hpp
 )
 
 set(EXEC_SRC
@@ -69,6 +73,7 @@ set(EXEC_SRC
     ../ecs/ComponentsArray/Systems/SfmlSystem.cpp
     ../gameEngine/GameEngine.cpp
     ../network/network_c/NetworkSystem.cpp
+    ../network/network_s/NetworkSystem.cpp
     ../gameEngine/game/gameInitialisation/initBullets.cpp
     ../gameEngine/game/gameInitialisation/initEnemy.cpp
     ../gameEngine/game/gameInitialisation/initStarship.cpp
@@ -79,6 +84,7 @@ set(EXEC_SRC
     ../gameEngine/game/gameLogic/miscellaneous.cpp
     ../gameEngine/game/gameLogic/movements.cpp
     ../gameEngine/game/gameLogic/generateLevel.cpp
+    ../gameEngine/game/systems/GameSystems.cpp
     ../jsonfile/src/JsonParser.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp

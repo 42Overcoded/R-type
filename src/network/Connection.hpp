@@ -16,11 +16,11 @@
 #include <iostream>
 #include "Packet.hpp"
 #include "PacketsQueue.hpp"
+#include "Protocol.hpp"
 #include "boost/asio/io_context.hpp"
 #include "boost/asio/ip/udp.hpp"
 #include "boost/asio/write.hpp"
 #include <sys/types.h>
-#include "Protocol.hpp"
 
 namespace Network {
 
@@ -66,19 +66,29 @@ public:
                 std::cout << "Connecting to client" << std::endl;
                 id_             = uid;
                 remoteEndpoint_ = remoteEndpoint;
-                socket_.connect(remoteEndpoint_);
-                std::cout << "Connected to client" << std::endl;
-                Packet<T> acceptPacket;
-                acceptPacket.header.flag = T::ClientAccepted;
-                SendPacket(acceptPacket);
-                std::cout << "accept client" << std::endl;
-                Packet<T> idPacket;
-                idPacket.header.flag = T::ClientAssignID;
-                idPacket << id_;
-                SendPacket(idPacket);
-                std::cout << "assign client" << std::endl;
-                isConnected = true;
-                GetHeader();
+                socket_.async_connect(remoteEndpoint_, [this](std::error_code ec) {
+                    if (!ec)
+                    {
+                        std::cout << "Connected to client" << std::endl;
+                        Packet<T> acceptPacket;
+                        acceptPacket.header.flag = T::ClientAccepted;
+                        SendPacket(acceptPacket);
+                        std::cout << "accept client" << std::endl;
+                        Packet<T> idPacket;
+                        idPacket.header.flag = T::ClientAssignID;
+                        idPacket << id_;
+                        SendPacket(idPacket);
+                        std::cout << "assign client" << std::endl;
+                        isConnected = true;
+                        GetHeader();
+                    }
+                    else
+                    {
+                        std::cerr << "[" << id_ << "] Connect to client fail. (" << ec.message()
+                                  << ")" << std::endl;
+                        socket_.close();
+                    }
+                });
             }
         }
         else
@@ -94,11 +104,20 @@ public:
             std::cout << "Connecting to server" << std::endl;
             remoteEndpoint_ = *endpoints.begin();
             socket_.open(remoteEndpoint_.protocol());
-            socket_.connect(remoteEndpoint_);
-            Packet<T> packet;
-            packet.header.flag = T::ServerConnect;
-            SendPacket(packet);
-            std::cout << "Connect to server" << std::endl;
+            socket_.async_connect(remoteEndpoint_, [this](std::error_code ec) {
+                if (!ec)
+                {
+                    Packet<T> packet;
+                    packet.header.flag = T::ServerConnect;
+                    SendPacket(packet);
+                }
+                else
+                {
+                    std::cerr << "[" << id_ << "] Connect to server fail. (" << ec.message()
+                              << ")" << std::endl;
+                    socket_.close();
+                }
+            });
         }
         else
         {
@@ -110,7 +129,10 @@ public:
     {
         if (IsConnected())
         {
-            boost::asio::post(ioContext_, [this]() { socket_.close(); });
+            boost::asio::post(ioContext_, [this]() {
+                if (socket_.is_open())
+                    socket_.close();
+            });
             isConnected = false;
         }
     }
@@ -145,8 +167,8 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
-                              << std::endl;
+                    // std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
+                    //           << std::endl;
                     if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
                         packetsOutQueue_.Front().body.size() > 0)
                     {
@@ -157,8 +179,13 @@ protected:
                         if (ownerType_ == Owner::Client &&
                             packetsOutQueue_.Front().header.flag == T::ServerConnect)
                         {
-                            std::cout << "Open connection of server" << std::endl;
-                            socket_.connect(boost::asio::ip::udp::endpoint());
+                            unsigned int port = socket_.local_endpoint().port();
+                            // std::cout << "port: " << port << std::endl;
+                            socket_.close();
+                            socket_.open(boost::asio::ip::udp::v4());
+                            socket_.bind(boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
+                            std::cout << "Connection opened for server" << std::endl;
+                            isConnected = true;
                             GetHeader();
                         }
                         packetsOutQueue_.PopFront();
@@ -170,7 +197,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Send Header Fail." << std::endl;
+                    std::cerr << "[" << id_ << "] Send Header Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -184,7 +212,6 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    // std::cout << "Send body" << std::endl;
                     packetsOutQueue_.PopFront();
                     if (!packetsOutQueue_.IsEmpty())
                     {
@@ -193,8 +220,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Send Body Fail." << std::endl;
-                    std::cerr << ec.message() << std::endl;
+                    std::cerr << "[" << id_ << "] Send Body Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -207,16 +234,18 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Get Packet: size = " << recvBuffer_.header.size << std::endl;
+                    // std::cout << "Get Packet: size = " << recvBuffer_.header.size << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
-                        if (recvBuffer_.header.size > MaxPacketSize) {
+                        if (recvBuffer_.header.size > MaxPacketSize)
+                        {
                             std::cerr << "Packet size is too big" << std::endl;
                             recvBuffer_.header.size = 0;
                             GetHeader();
                             return;
                         }
-                        if (ownerType_ == Owner::Client && recvBuffer_.header.flag == T::ClientAccepted)
+                        if (ownerType_ == Owner::Client &&
+                            recvBuffer_.header.flag == T::ClientAccepted)
                         {
                             socket_.connect(remoteEndpoint_);
                         }
@@ -230,8 +259,9 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Get Header Fail." << std::endl;
-                    std::cerr << ec.message() << std::endl;
+                    std::cerr << "remote endpoint: " << remoteEndpoint_.address().to_string() << " port " << remoteEndpoint_.port() << std::endl;
+                    std::cerr << "[" << id_ << "] Get Header Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -248,8 +278,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Get Body Fail." << std::endl;
-                    std::cerr << ec.message() << std::endl;
+                    std::cerr << "[" << id_ << "] Get Body Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
