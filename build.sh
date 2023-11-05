@@ -6,9 +6,10 @@
 ##
 
 PACK=False
+DEBUG=False
 
-SHORT=p,h
-LONG=pack,help
+SHORT=p,h,d
+LONG=pack,help,debug
 OPTS=$(getopt -a -n build --options $SHORT --longoptions $LONG -- "$@")
 
 eval set -- "$OPTS"
@@ -25,6 +26,11 @@ do
       echo "Usage: $0 [-p|--pack]"
       exit 0
       ;;
+    -d | --debug)
+      echo "Debug mode enabled"
+      DEBUG=True
+      shift
+      ;;
     --)
       shift;
       break
@@ -40,7 +46,11 @@ original_dir=${PWD}
 
 mkdir build > /dev/null 2>&1
 cd build > /dev/null 2>&1
-cmake .. -DCMAKE_BUILD_TYPE=Release
+if [ $DEBUG = True ]; then
+  cmake .. -DCMAKE_BUILD_TYPE=Debug
+else
+  cmake .. -DCMAKE_BUILD_TYPE=Release
+fi
 cmake --build . -j 7
 if [ $PACK = True ]; then
   cpack -C CPackConfig.cmake
