@@ -87,6 +87,7 @@ private:
                     if (clients_ == nullptr)
                         throw std::runtime_error("clients_ is null");
                     std::cout << "New client created" << std::endl;
+                    std::cout << "client endpoint : " << remoteEndpoint_.address().to_string() << " port " << remoteEndpoint_.port() << std::endl;
                     newClient->ConnectToClient(remoteEndpoint_, ++id_);
                     clients_->push_back(newClient);
                 } catch (const std::exception &e) {

@@ -179,11 +179,10 @@ protected:
                         if (ownerType_ == Owner::Client &&
                             packetsOutQueue_.Front().header.flag == T::ServerConnect)
                         {
-                            std::cout << "Open connection of server" << std::endl;
                             socket_.async_connect(boost::asio::ip::udp::endpoint(), [this](std::error_code ec) {
                                 if (!ec)
                                 {
-                                    std::cout << "Connected to server" << std::endl;
+                                    std::cout << "Connection opened for server" << std::endl;
                                     isConnected = true;
                                     GetHeader();
                                 }
@@ -267,6 +266,7 @@ protected:
                 }
                 else
                 {
+                    std::cerr << "remote endpoint: " << remoteEndpoint_.address().to_string() << " port " << remoteEndpoint_.port() << std::endl;
                     std::cerr << "[" << id_ << "] Get Header Fail. (" << ec.message() << ")"
                               << std::endl;
                     socket_.close();
