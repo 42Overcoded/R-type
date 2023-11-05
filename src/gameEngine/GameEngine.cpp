@@ -12,8 +12,6 @@
 #include <iostream>
 #include <optional>
 #include <random>
-#include "../../network/network_c/NetworkComponent.hpp"
-#include "../../network/network_s/NetworkComponent.hpp"
 #include "../ecs/ComponentsArray/Components/Components.hpp"
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "../ecs/Registry.hpp"
@@ -26,6 +24,10 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Audio/Music.hpp>
 #include <nlohmann/json.hpp>
+#include "../../network/network_c/NetworkComponent.hpp"
+#include "../network_c/NetworkSystem.hpp"
+#include "../../network/network_s/NetworkComponent.hpp"
+#include "../network_s/NetworkSystem.hpp"
 
 void gameEngine::Kill_entity(entity_t entity)
 {
@@ -305,6 +307,9 @@ void gameEngine::spawnManager(void)
                         _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                     }
                     spawner[i]->spawningEntities.pop();
+                }else if (entity.entityType == 12) {
+                    init_starship(entity.entityId, entity.clientId, entity.arg1);
+                    spawner[i]->spawningEntities.pop();
                 } else {
                     spawner[i]->spawningEntities.pop();
                     std::cerr << "entityType [" << entity.entityType << "] not found" << std::endl;
@@ -366,8 +371,27 @@ void gameEngine::launch_game()
             menu();
             _clock.restart();
         }
+        if (_type == SERVER || (_type == CLIENT && (gameState.scene == ONLINE || gameState.scene == GAME))) {
+            if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE))) {
+                if (_type == SERVER)
+                    _networkSystem = std::make_unique<Network::ServerNetworkSystem>(port_, ip_);
+                else if (_type == CLIENT)
+                    _networkSystem = std::make_unique<Network::ClientNetworkSystem>(port_, ip_);
+            }
+            if (_networkSystem != nullptr) {
+                if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
+                {
+                    networkClock.restart();
+                    _networkSystem->Update(_registry);
+                }
+            }
+        }
+        if ((gameState.scene == MENU || gameState.scene == OFFLINE) && _networkSystem != nullptr) {
+            _networkSystem.reset();
+        }
         if (gameState.scene == GAME)
         {
+            spawnManager();
             if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
                 continue;
             for (size_t i = 0; i < _registry._entity_number; i++)
@@ -391,7 +415,7 @@ void gameEngine::launch_game()
                     this->_level_info.mob_alive += 1;
                 }
             }
-            if (alive == 0) {
+            if (alive == 0 && (gameState.co == OFF || _type == SERVER)) {
                 gameState.scene = END;
                 if (_type == CLIENT) {
                     musics["musicGame"]->stop();
@@ -430,7 +454,6 @@ void gameEngine::launch_game()
             death_animation();
             shoot_enemy();
             life_handler();
-            spawnManager();
         }
         if (_type == CLIENT)
         {
@@ -454,20 +477,6 @@ void gameEngine::launch_game()
             sfmlSystems_.string_system(_registry);
             sfmlSystems_.draw_system(_registry, _window);
             _window.display();
-        }
-        if (_type == SERVER || (_type == CLIENT && (gameState.scene == ONLINE || gameState.scene == GAME))) {
-            if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE)))
-                _networkSystem = std::make_unique<Network::NetworkSystem>(port_, ip_);
-            if (_networkSystem != nullptr) {
-                if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
-                {
-                    networkClock.restart();
-                    _networkSystem->Update(_registry);
-                }
-            }
-        }
-        if ((gameState.scene == MENU || gameState.scene == OFFLINE) && _networkSystem != nullptr) {
-            _networkSystem.reset();
         }
     }
 }

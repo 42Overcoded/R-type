@@ -10,19 +10,18 @@
 #include <memory>
 #include <string>
 #include "../INetworkServer.hpp"
+#include "../INetworkSystem.hpp"
 #include "../Protocol.hpp"
 #include "../ecs/Registry.hpp"
 #include <unordered_map>
 
 namespace Network {
 
-class UdpServer;
-
-class NetworkSystem : public INetworkServer<Flag>
+class ServerNetworkSystem : public INetworkServer<Flag>, public INetworkSystem
 {
 public:
-    NetworkSystem(unsigned int serverPort, std::string serverIp);
-    ~NetworkSystem();
+    ServerNetworkSystem(unsigned int serverPort, std::string &serverIp);
+    ~ServerNetworkSystem();
 
     void Update(registry &reg);
 
@@ -50,6 +49,7 @@ private:
     void OnClientDisconnect(std::shared_ptr<Connection<Flag>> client) override;
 private:
     std::unordered_map<unsigned int, bool> players_;
+    std::vector<unsigned int> assignedClientIds_;
 };
 
 };  // namespace Network

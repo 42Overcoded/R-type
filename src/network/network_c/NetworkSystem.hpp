@@ -13,13 +13,14 @@
 #include "../ecs/Registry.hpp"
 #include "../Protocol.hpp"
 #include "../INetworkClient.hpp"
+#include "../INetworkSystem.hpp"
 
 namespace Network {
-class NetworkSystem: public INetworkClient<Flag>
+class ClientNetworkSystem: public INetworkClient<Flag>, public INetworkSystem
 {
 public:
-    NetworkSystem(unsigned int serverPort, std::string serverIp);
-    ~NetworkSystem();
+    ClientNetworkSystem(unsigned int serverPort, std::string &serverIp);
+    ~ClientNetworkSystem();
 
     void Update(registry &reg);
 

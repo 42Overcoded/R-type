@@ -110,7 +110,7 @@ private:
     };
 
 public:
-    INetworkServer(uint16_t port)
+    INetworkServer(uint32_t port)
     {
         clients_ = std::make_shared<std::deque<std::shared_ptr<Connection<T>>>>();
         try {

@@ -58,8 +58,11 @@ set(INCLUDES
     ../network/Packet.hpp
     ../network/PacketsQueue.hpp
     ../network/Protocol.hpp
+    ../network/network_c/NetworkComponent.hpp
+    ../network/network_c/NetworkSystem.hpp
     ../network/network_s/NetworkComponent.hpp
     ../network/network_s/NetworkSystem.hpp
+    ../network/INetworkSystem.hpp
     ../jsonfile/include/Comportment.hpp
     ../jsonfile/include/JsonParser.hpp
     ../jsonfile/include/MapLevel.hpp
@@ -83,6 +86,7 @@ set(EXEC_SRC
     ../gameEngine/game/gameInitialisation/initStarship.cpp
     ../ecs/Registry.cpp
     ../network/network_s/NetworkSystem.cpp
+    ../network/network_c/NetworkSystem.cpp
     ../jsonfile/src/ComportmentParser.cpp
     ../jsonfile/src/GenerateMap.cpp
     ../jsonfile/src/JsonParser.cpp

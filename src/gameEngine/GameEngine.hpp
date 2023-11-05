@@ -17,8 +17,7 @@
 #include <SFML/Audio.hpp>
 #include "../ecs/ComponentsArray/Systems/SfmlSystem.hpp"
 #include "game/systems/GameSystems.hpp"
-#include "../network_c/NetworkSystem.hpp"
-#include "../network_s/NetworkSystem.hpp"
+#include "../INetworkSystem.hpp"
 #include <unordered_map>
 #include  <iostream>
 #include <memory>
@@ -46,7 +45,7 @@ class gameEngine {
          *
          * @return registry
          */
-        entity_t init_starship(int id, int i);
+        entity_t init_starship(uint32_t entityId, uint32_t clientId, unsigned int i);
         /**
          * @brief
          *
@@ -222,7 +221,7 @@ class gameEngine {
         sf::RenderWindow _window;
         SfmlSystem sfmlSystems_;
         GameSystem gameSystems_;
-        std::unique_ptr<Network::NetworkSystem> _networkSystem;
+        std::unique_ptr<Network::INetworkSystem> _networkSystem;
         Level_info _level_info;
         std::vector<keyCommands> cheatCode;
         registry _registry;
