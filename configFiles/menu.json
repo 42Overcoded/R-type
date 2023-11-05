@@ -79,8 +79,8 @@
             "tag": "generatebutton",
             "texttag": "generatetext",
             "positiontext": {
-                "x": 1000,
-                "y": 600
+                "x": 850,
+                "y": 630
             },
             "textureTag": "buttonTexture",
             "fontTag": "menuFont",
@@ -88,7 +88,7 @@
             "textscale": 1.5,
             "scale": 1,
             "position": {
-                "x": 1000,
+                "x": 700,
                 "y": 600
             }
         },
@@ -126,7 +126,7 @@
             "texttag": "endlesstext",
             "positiontext": {
                 "x": 1220,
-                "y": 275
+                "y": 475
             },
             "textureTag": "buttonTexture",
             "fontTag": "menuFont",
@@ -135,7 +135,7 @@
             "scale": 1,
             "position": {
                 "x": 1060,
-                "y": 240
+                "y": 440
             }
         },
         {
@@ -149,7 +149,7 @@
             "texttag": "adventuretext",
             "positiontext": {
                 "x": 500,
-                "y": 275
+                "y": 475
             },
             "textureTag": "buttonTexture",
             "fontTag": "menuFont",
@@ -158,53 +158,7 @@
             "scale": 1,
             "position": {
                 "x": 360,
-                "y": 240
-            }
-        },
-        {
-            "drawable": false,
-            "hitbox": {
-                "width": 500,
-                "height": 125
-            },
-            "grouptag": "online",
-            "tag": "1v1buttononline",
-            "texttag": "1v1text",
-            "positiontext": {
-                "x": 1220,
-                "y": 575
-            },
-            "textureTag": "buttonTexture",
-            "fontTag": "menuFont",
-            "text": "1 versus 1",
-            "textscale": 1.5,
-            "scale": 1,
-            "position": {
-                "x": 1060,
-                "y": 540
-            }
-        },
-        {
-            "grouptag": "online",
-            "drawable": false,
-            "hitbox": {
-                "width": 500,
-                "height": 125
-            },
-            "tag": "2v2buttononline",
-            "texttag": "2v2text",
-            "positiontext": {
-                "x": 500,
-                "y": 575
-            },
-            "textureTag": "buttonTexture",
-            "fontTag": "menuFont",
-            "text": "2 versus 2",
-            "textscale": 1.5,
-            "scale": 1,
-            "position": {
-                "x": 360,
-                "y": 540
+                "y": 440
             }
         },
         {

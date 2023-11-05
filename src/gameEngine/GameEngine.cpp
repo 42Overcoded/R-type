@@ -300,14 +300,14 @@ void gameEngine::spawnManager(void)
                     entity_t enemy = init_enemy(entity.entityId, entity.arg1, entity.arg2, entity.x, entity.y);
                     if (gameState.mode == GENERATED) {
                         auto &position = _registry.get_components<Position>();
-                        if (position[enemy]->y == 0)
+                        if (position[enemy]->y == 0) {
                             position[enemy]->y = _level_info._generated[0].y;
+                        }
                         _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                     }
                     spawner[i]->spawningEntities.pop();
                 } else {
                     spawner[i]->spawningEntities.pop();
-                    std::cerr << "entityType [" << entity.entityType << "] not found" << std::endl;
                 }
             }
             return;
