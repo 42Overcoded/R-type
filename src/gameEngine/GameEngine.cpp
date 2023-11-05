@@ -27,6 +27,18 @@
 #include <SFML/Audio/Music.hpp>
 #include <nlohmann/json.hpp>
 
+void gameEngine::Kill_entity(entity_t entity)
+{
+    _registry.kill_entity(entity);
+    for (size_t j = 0; j < _level_info.mobs_alive.size(); j++) {
+        if (_level_info.mobs_alive[j].first == entity) {
+            _level_info.mobs_alive.erase(_level_info.mobs_alive.begin() + j);
+            _level_info.mob_alive -= 1;
+            return;
+        }
+    }
+}
+
 void gameEngine::loadLevel(int level)
 {
     std::string path[] = { "assets/level1design.txt",
@@ -57,8 +69,21 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
     int MAGIC_VALUE = 50; //The higher the value, the faster the enemies spawn
     const int boss_worm_id = 7;
 
-
     if (_elapsed.asSeconds() > 0.1) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {   //Debug and display the content of _level_info)
+        std::cout << "Level progress: " << _level_info.level_progress << std::endl;
+        std::cout << "Mob alive: " << _level_info.mob_alive << std::endl;
+        std::cout << "Is boss alive: " << _level_info.is_boss_alive << std::endl;
+        std::cout << "Generated size: " << _level_info._generated.size() << std::endl;
+        std::cout << "Generated content: " << std::endl;
+        for (auto &i : _level_info._generated) {
+            std::cout << "x: " << i.x << " y: " << i.y << " id: " << i.id << " pattern: " << i.pattern << " is_boss: " << i.is_boss << std::endl;
+        }
+        std::cout << "mob_alive" << std::endl;
+        for (auto &i : _level_info.mobs_alive) {
+            std::cout << "entity: " << i.first << " id: " << i.second.id << " pattern: " << i.second.pattern << "x: " << i.second.x << " y: " << i.second.y << std::endl;
+        }
+    }
         if (is_frozen()) {
             _clock.restart();
             return;
@@ -73,7 +98,8 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     GameStateComponent &gameState = get_game_state();
                     auto &networkInfo = _registry.get_components<NetworkInfo>();
                     if (_type == SERVER || gameState.co == OFF) {
-                            entity_t enemy = init_worm(7);
+                        entity_t enemy = init_worm(7);
+                        _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                         networkInfo[0]->spawn.push_back(8);
                     }
                     _level_info._generated.erase(_level_info._generated.begin());
@@ -84,6 +110,7 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
                     auto &networkInfo = _registry.get_components<NetworkInfo>();
                     if (_type == SERVER || gameState.co == OFF) {
                         entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                        _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                         networkInfo[0]->arg1.push_back(_level_info._generated[0].id);
                         networkInfo[0]->arg2.push_back(_level_info._generated[0].pattern);
                         networkInfo[0]->spawn.push_back(11);
@@ -101,8 +128,11 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
             while (this->_level_info._generated.size() > 0 && _level_info.level_progress > _level_info._generated[0].x && _level_info._generated[0].is_boss == false) {
                 GameStateComponent &gameState = get_game_state();
                 auto &networkInfo = _registry.get_components<NetworkInfo>();
+                if (_type == CLIENT && _level_info._generated[0].id == 6)
+                    sounds["truck"]->play();
                 if (_type == SERVER || gameState.co == OFF) {
                     entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
+                    _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
                     networkInfo[0]->arg1.push_back(_level_info._generated[0].id);
                     networkInfo[0]->arg2.push_back(_level_info._generated[0].pattern);
                     networkInfo[0]->spawn.push_back(11);
@@ -179,6 +209,22 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
                 position[enemy]->y = std::rand() % 950;
                 networkInfo[0]->arg1.push_back(2);
                 networkInfo[0]->arg2.push_back(2);
+                networkInfo[0]->spawn.push_back(11);
+            }
+        }
+        if (randomNb * 3 < wave)
+        {
+            GameStateComponent &gameState = get_game_state();
+            auto &networkInfo = _registry.get_components<NetworkInfo>();
+            if (_type == CLIENT) {
+                sounds["truck"]->play();
+            }
+            if (_type == SERVER || gameState.co == OFF) {
+                entity_t enemy     = init_enemy(6, 6);
+                auto &position     = _registry.get_components<Position>();
+                position[enemy]->y = std::rand() % 950;
+                networkInfo[0]->arg1.push_back(6);
+                networkInfo[0]->arg2.push_back(6);
                 networkInfo[0]->spawn.push_back(11);
             }
         }
@@ -357,7 +403,7 @@ void gameEngine::launch_game()
                 if (tag[i]->tag == "starship")
                     alive += 1;
                 if (health[i].has_value() && health[i]->health <= 0 && tag[i]->tag == "starship") {
-                    _registry.kill_entity(entity_t(i));
+                    Kill_entity(entity_t(i));
                     continue;
                 }
                 if (tag[i]->tag == "wormHead")
@@ -507,6 +553,7 @@ void gameEngine::load_musics_and_sounds(void)
         musics.at("musicScore") = std::make_shared<sf::Music>();
         musics.at("musicBoss") = std::make_shared<sf::Music>();
     
+        soundBuffers.at("truck") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundPowerShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion") = std::make_shared<sf::SoundBuffer>();
@@ -519,6 +566,7 @@ void gameEngine::load_musics_and_sounds(void)
         soundBuffers.at("lifeBoost") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("shootBoost") = std::make_shared<sf::SoundBuffer>();
     
+        sounds.at("truck") = std::make_shared<sf::Sound>();
         sounds.at("soundShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundPowerShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion") = std::make_shared<sf::Sound>();
@@ -536,6 +584,7 @@ void gameEngine::load_musics_and_sounds(void)
         musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
         musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
     
+        soundBuffers["truck"]->loadFromFile("assets/musicAndSound/ALLEZ_MARCEL.mp3");
         soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
         soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
         soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
@@ -548,6 +597,7 @@ void gameEngine::load_musics_and_sounds(void)
         soundBuffers["lifeBoost"]->loadFromFile("assets/musicAndSound/half_life_med.mp3");
         soundBuffers["shootBoost"]->loadFromFile("assets/musicAndSound/Team_Fortress_2_SFX_-_Server_Join_Equip_Weapon_V1.mp3");
 
+        sounds["truck"]->setBuffer(*soundBuffers["truck"]);
         sounds["soundShoot"]->setBuffer(*soundBuffers["soundShoot"]);
         sounds["soundPowerShoot"]->setBuffer(*soundBuffers["soundPowerShoot"]);
         sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
