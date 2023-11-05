@@ -128,8 +128,6 @@ void gameEngine::spawn_generated_level(sf::Time &_elapsed, sf::Clock &_clock)
             while (this->_level_info._generated.size() > 0 && _level_info.level_progress > _level_info._generated[0].x && _level_info._generated[0].is_boss == false) {
                 GameStateComponent &gameState = get_game_state();
                 auto &networkInfo = _registry.get_components<NetworkInfo>();
-                if (_type == CLIENT && _level_info._generated[0].id == 6)
-                    sounds["truck"]->play();
                 if (_type == SERVER || gameState.co == OFF) {
                     entity_t enemy = init_enemy(_level_info._generated[0].id, _level_info._generated[0].pattern);
                     _level_info.mobs_alive.push_back(std::make_pair(enemy, _level_info._generated[0]));
@@ -216,9 +214,6 @@ void gameEngine::spawn_infinite_wave(sf::Time &_elapsed, sf::Clock &_clock ,floa
         {
             GameStateComponent &gameState = get_game_state();
             auto &networkInfo = _registry.get_components<NetworkInfo>();
-            if (_type == CLIENT) {
-                sounds["truck"]->play();
-            }
             if (_type == SERVER || gameState.co == OFF) {
                 entity_t enemy     = init_enemy(6, 6);
                 auto &position     = _registry.get_components<Position>();
@@ -553,7 +548,6 @@ void gameEngine::load_musics_and_sounds(void)
         musics.at("musicScore") = std::make_shared<sf::Music>();
         musics.at("musicBoss") = std::make_shared<sf::Music>();
     
-        soundBuffers.at("truck") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundPowerShoot") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion") = std::make_shared<sf::SoundBuffer>();
@@ -566,7 +560,6 @@ void gameEngine::load_musics_and_sounds(void)
         soundBuffers.at("lifeBoost") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("shootBoost") = std::make_shared<sf::SoundBuffer>();
     
-        sounds.at("truck") = std::make_shared<sf::Sound>();
         sounds.at("soundShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundPowerShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion") = std::make_shared<sf::Sound>();
@@ -584,7 +577,6 @@ void gameEngine::load_musics_and_sounds(void)
         musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
         musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
     
-        soundBuffers["truck"]->loadFromFile("assets/musicAndSound/ALLEZ_MARCEL.mp3");
         soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
         soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
         soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
@@ -597,7 +589,6 @@ void gameEngine::load_musics_and_sounds(void)
         soundBuffers["lifeBoost"]->loadFromFile("assets/musicAndSound/half_life_med.mp3");
         soundBuffers["shootBoost"]->loadFromFile("assets/musicAndSound/Team_Fortress_2_SFX_-_Server_Join_Equip_Weapon_V1.mp3");
 
-        sounds["truck"]->setBuffer(*soundBuffers["truck"]);
         sounds["soundShoot"]->setBuffer(*soundBuffers["soundShoot"]);
         sounds["soundPowerShoot"]->setBuffer(*soundBuffers["soundPowerShoot"]);
         sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
