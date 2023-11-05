@@ -5,8 +5,8 @@
 ** NetworkSystem
 */
 
-#ifndef NETWORKSYSTEM_HPP_
-#define NETWORKSYSTEM_HPP_
+#ifndef SERVERNETWORKSYSTEM_HPP_
+#define SERVERNETWORKSYSTEM_HPP_
 #include <memory>
 #include <string>
 #include "../INetworkServer.hpp"
@@ -54,4 +54,4 @@ private:
 
 };  // namespace Network
 
-#endif /* !NETWORKSYSTEM_HPP_ */
+#endif /* !SERVERNETWORKSYSTEM_HPP_ */

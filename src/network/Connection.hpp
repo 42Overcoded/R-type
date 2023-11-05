@@ -16,11 +16,11 @@
 #include <iostream>
 #include "Packet.hpp"
 #include "PacketsQueue.hpp"
+#include "Protocol.hpp"
 #include "boost/asio/io_context.hpp"
 #include "boost/asio/ip/udp.hpp"
 #include "boost/asio/write.hpp"
 #include <sys/types.h>
-#include "Protocol.hpp"
 
 namespace Network {
 
@@ -110,7 +110,10 @@ public:
     {
         if (IsConnected())
         {
-            boost::asio::post(ioContext_, [this]() { socket_.close(); });
+            boost::asio::post(ioContext_, [this]() {
+                if (socket_.is_open())
+                    socket_.close();
+            });
             isConnected = false;
         }
     }
@@ -170,7 +173,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Send Header Fail." << std::endl;
+                    std::cerr << "[" << id_ << "] Send Header Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -193,8 +197,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Send Body Fail." << std::endl;
-                    std::cerr << ec.message() << std::endl;
+                    std::cerr << "[" << id_ << "] Send Body Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -210,13 +214,15 @@ protected:
                     // std::cout << "Get Packet: size = " << recvBuffer_.header.size << std::endl;
                     if (recvBuffer_.header.size > 0)
                     {
-                        if (recvBuffer_.header.size > MaxPacketSize) {
+                        if (recvBuffer_.header.size > MaxPacketSize)
+                        {
                             std::cerr << "Packet size is too big" << std::endl;
                             recvBuffer_.header.size = 0;
                             GetHeader();
                             return;
                         }
-                        if (ownerType_ == Owner::Client && recvBuffer_.header.flag == T::ClientAccepted)
+                        if (ownerType_ == Owner::Client &&
+                            recvBuffer_.header.flag == T::ClientAccepted)
                         {
                             socket_.connect(remoteEndpoint_);
                         }
@@ -230,8 +236,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Get Header Fail." << std::endl;
-                    std::cerr << ec.message() << std::endl;
+                    std::cerr << "[" << id_ << "] Get Header Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });
@@ -248,8 +254,8 @@ protected:
                 }
                 else
                 {
-                    std::cout << "[" << id_ << "] Get Body Fail." << std::endl;
-                    std::cerr << ec.message() << std::endl;
+                    std::cerr << "[" << id_ << "] Get Body Fail. (" << ec.message() << ")"
+                              << std::endl;
                     socket_.close();
                 }
             });

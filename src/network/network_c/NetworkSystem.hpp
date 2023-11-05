@@ -5,8 +5,8 @@
 ** NetworkSystem
 */
 
-#ifndef NETWORKSYSTEM_HPP_
-#define NETWORKSYSTEM_HPP_
+#ifndef CLIENTNETWORKSYSTEM_HPP_
+#define CLIENTNETWORKSYSTEM_HPP_
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -56,4 +56,4 @@ private:
 };
 };  // namespace Nerwork
 
-#endif /* !NETWORKSYSTEM_HPP_ */
+#endif /* !CLIENTNETWORKSYSTEM_HPP_ */

@@ -64,8 +64,7 @@ private:
                     }
                     else
                     {
-                        std::cout << "[" << id_ << "] Get Header Fail." << std::endl;
-                        std::cerr << ec.message() << std::endl;
+                        std::cerr << "[" << id_ << "] Get Header Fail. (" << ec.message() << ")" << std::endl;
                         socket_->close();
                     }
                 });
