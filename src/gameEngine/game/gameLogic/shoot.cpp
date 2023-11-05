@@ -6,9 +6,11 @@
 */
 
 #include "../../GameEngine.hpp"
+#include <cstdint>
 #include <iostream>
 #include <optional>
 #include "SFML/System/Clock.hpp"
+#include "network_c/NetworkComponent.hpp"
 #include <nlohmann/json.hpp>
 
 void gameEngine::shoot_system(sf::Time &elapsed)
@@ -95,6 +97,8 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
     auto &drawable = _registry.get_components<Drawable>();
     auto &health = _registry.get_components<Health>();
     auto &spawner = _registry.get_components<Spawner>();
+    SparseArray<NetworkComponent> &network = _registry.get_components<NetworkComponent>();
+    SparseArray<Position> &position = _registry.get_components<Position>();
 
     bool is_return = false;
     for (size_t i = 0; i < _registry._entity_number; i++) {
@@ -121,8 +125,12 @@ void gameEngine::decharge_shoot(sf::Time &elapsed)
             if (clock[i]->_time.asSeconds() < 0.15)
                 return;
             GameStateComponent &gameState = get_game_state();
-            if (_type == SERVER || gameState.co == OFF) {
-                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.entityType = 1, .arg1 = i});
+            uint32_t clientId = 0;
+
+            if (network[i].has_value())
+                uint32_t clientId = network[i]->clientId;
+            if (position[i].has_value() && (_type == SERVER || gameState.co == OFF)) {
+                spawner[0]->entitiesToSpawn.push(EntitySpawnDescriptor{.clientId = clientId, .entityType = 1, .arg1 = i, .x = position[i]->x + 80, .y = position[i]->y});
             }
             clock[i]->_clock.restart();
         }

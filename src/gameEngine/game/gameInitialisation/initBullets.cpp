@@ -78,10 +78,6 @@ void gameEngine::spawn_ally_bullet(uint32_t entityId, uint32_t clientId, int i, 
             if (!tag[i].has_value()) {
                 continue;
             }
-            if (tag[i]->tag == "starship") {
-                position[bullet]->x = position[i]->x + 80;
-                position[bullet]->y = position[i]->y;
-            }
             if (tag[i]->tag == "fullbeambar") {
                 state[bullet]->state = 0;
                 hitbox[bullet]->width = starshipJson["bullet"]["hitbox"][0]["width"];
