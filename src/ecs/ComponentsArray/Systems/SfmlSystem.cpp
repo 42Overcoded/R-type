@@ -603,11 +603,11 @@ void SfmlSystem::hitbox_system(registry &r, ClientType _type, std::unordered_map
                             if (_type == CLIENT)
                                 sounds["freezeBoost"]->play();
                         }
-                        // if (tag[i]->tag == "shootBoost" || tag[i]->tag == "shield") {
-                        //     if (_type == CLIENT) {
-                        //         sounds["shootBoost"]->play();
-                        //     }
-                        // }
+                        if (tag[i]->tag == "shootBoost" || tag[i]->tag == "shield") {
+                            if (_type == CLIENT) {
+                                sounds["shootBoost"]->play();
+                            }
+                        }
                     }
                 }
             }
