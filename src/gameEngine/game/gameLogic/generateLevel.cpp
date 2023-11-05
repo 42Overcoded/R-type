@@ -105,7 +105,6 @@ std::vector<Generated> gameEngine::loadMap(std::string path)
                         entry.is_boss = false;
                     }
                     generated.push_back(entry);
-                    std::cout << entry.id << " " << entry.pattern << " " << entry.x << " " << entry.y << std::endl;
                 } else {
                     std::cerr << "Error: Line contains extra data." << std::endl;
                     generated.clear();
