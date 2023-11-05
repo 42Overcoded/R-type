@@ -5,21 +5,22 @@
 ** NetworkSystem
 */
 
-#ifndef NETWORKSYSTEM_HPP_
-#define NETWORKSYSTEM_HPP_
+#ifndef CLIENTNETWORKSYSTEM_HPP_
+#define CLIENTNETWORKSYSTEM_HPP_
 #include <cstdint>
 #include <memory>
 #include <string>
 #include "../ecs/Registry.hpp"
 #include "../Protocol.hpp"
 #include "../INetworkClient.hpp"
+#include "../INetworkSystem.hpp"
 
 namespace Network {
-class NetworkSystem: public INetworkClient<Flag>
+class ClientNetworkSystem: public INetworkClient<Flag>, public INetworkSystem
 {
 public:
-    NetworkSystem(unsigned int serverPort, std::string serverIp);
-    ~NetworkSystem();
+    ClientNetworkSystem(unsigned int serverPort, std::string &serverIp);
+    ~ClientNetworkSystem();
 
     void Update(registry &reg);
 
@@ -55,4 +56,4 @@ private:
 };
 };  // namespace Nerwork
 
-#endif /* !NETWORKSYSTEM_HPP_ */
+#endif /* !CLIENTNETWORKSYSTEM_HPP_ */

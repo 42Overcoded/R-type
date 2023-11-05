@@ -34,6 +34,10 @@ This project is part of the Epitech third year curriculum.
 - [X] ![Linux Mint](https://img.shields.io/badge/Linux%20Mint-87CF3E?&logo=Linux%20Mint&logoColor=white "Linux Mint")
 - [X] ![Windows 11](https://img.shields.io/badge/Windows%2011-%230079d5.svg?logo=Windows%2011&logoColor=white "Windows 11")
 
+## Requirements
+
+c++20 compiler or vscode compiler
+
 ## How to build application
 
 ### Linux
