@@ -502,7 +502,7 @@ void gameEngine::menu()
         }
     }
     if (gameState.scene == END) {
-        _level_info._current_level = 0;
+        this->_level_info._level = 0;
         gameState.scene = MENU;
         if (gameState.scene == MENU && _networkSystem != nullptr) {
             _networkSystem.reset();
