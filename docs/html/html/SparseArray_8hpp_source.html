@@ -122,64 +122,70 @@ $(function() {
 <div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classSparseArray.html#a1ed9d2b182b52ed5cd6b544107ef8af4">   53</a></span>&#160;        iterator <a class="code" href="classSparseArray.html#a1ed9d2b182b52ed5cd6b544107ef8af4">begin</a>() {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordflow">return</span> _data.begin();</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        };</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        const_iterator <a class="code" href="classSparseArray.html#a1ed9d2b182b52ed5cd6b544107ef8af4">begin</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keywordflow">return</span> _data.begin();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        };</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        const_iterator cbegin()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keywordflow">return</span> _data.cbegin();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        };</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        iterator end() {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordflow">return</span> _data.end();</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        };</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        const_iterator end()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordflow">return</span> _data.end();</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        };</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        const_iterator cend()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">return</span> _data.cend();</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        };</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        size_type size()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">return</span> _data.size();</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        };</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classSparseArray.html#a4bae5c04a8a771d111849babc21599bb">   81</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classSparseArray.html#a4bae5c04a8a771d111849babc21599bb">insert_at</a>(size_type pos, <span class="keyword">const</span> Component &amp;component) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">if</span> (pos &gt;= _data.size())</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                _data.resize(pos + 1);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            _data[pos] = component;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        };</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classSparseArray.html#a4bae5c04a8a771d111849babc21599bb">insert_at</a>(size_type pos, Component &amp;&amp;component) {</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">if</span> (pos &gt;= _data.size()) {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                _data.resize(pos + 1);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            }</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            _data[pos] = component;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        };</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        </div>
-<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classSparseArray.html#ab00e54b0c21ac9380db0f5c493138da0">   99</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classSparseArray.html#ab00e54b0c21ac9380db0f5c493138da0">erase</a>(size_type pos)</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">if</span> (pos &gt;= _data.size())</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                _data.resize(pos + 1);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            _data[pos] = std::nullopt;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        };</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="classSparseArray.html#a149a6e79d9c6fac27a28f8a47a9ff588">  112</a></span>&#160;        size_type <a class="code" href="classSparseArray.html#a149a6e79d9c6fac27a28f8a47a9ff588">get_index</a>(<span class="keyword">const</span> value_type &amp;type)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; _data.size(); i++) {</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                <span class="keywordflow">if</span> (_data[i] == type)</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                    <span class="keywordflow">return</span> i;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            }</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        };</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        container_t _data;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;};</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//SPARSEARRAY_HPP</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classSparseArray.html#a7fa6228501432328b3b7e5f3142829c7">   61</a></span>&#160;        const_iterator <a class="code" href="classSparseArray.html#a7fa6228501432328b3b7e5f3142829c7">begin</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">return</span> _data.begin();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        };</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classSparseArray.html#a151cffafe878041d1be19fc1f651b3fe">   69</a></span>&#160;        const_iterator <a class="code" href="classSparseArray.html#a151cffafe878041d1be19fc1f651b3fe">cbegin</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">return</span> _data.cbegin();</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        };</div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classSparseArray.html#a4d32f10955bedd6229eba1da50e79bea">   77</a></span>&#160;        iterator <a class="code" href="classSparseArray.html#a4d32f10955bedd6229eba1da50e79bea">end</a>() {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="keywordflow">return</span> _data.end();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        };</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classSparseArray.html#a9b75ec5365af5f139019f5acdc80854e">   85</a></span>&#160;        const_iterator <a class="code" href="classSparseArray.html#a9b75ec5365af5f139019f5acdc80854e">end</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordflow">return</span> _data.end();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        };</div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classSparseArray.html#a5765bcd8d4357cce3cace1be2a656d78">   93</a></span>&#160;        const_iterator <a class="code" href="classSparseArray.html#a5765bcd8d4357cce3cace1be2a656d78">cend</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordflow">return</span> _data.cend();</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        };</div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classSparseArray.html#a3b485311dcd6c7e4f3bffee764297b42">  101</a></span>&#160;        size_type <a class="code" href="classSparseArray.html#a3b485311dcd6c7e4f3bffee764297b42">size</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <span class="keywordflow">return</span> _data.size();</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        };</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classSparseArray.html#a4bae5c04a8a771d111849babc21599bb">  111</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classSparseArray.html#a4bae5c04a8a771d111849babc21599bb">insert_at</a>(size_type pos, <span class="keyword">const</span> Component &amp;component) {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="keywordflow">if</span> (pos &gt;= _data.size())</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                _data.resize(pos + 1);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            _data[pos] = component;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        };</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classSparseArray.html#a4bae5c04a8a771d111849babc21599bb">insert_at</a>(size_type pos, Component &amp;&amp;component) {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keywordflow">if</span> (pos &gt;= _data.size()) {</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                _data.resize(pos + 1);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            }</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            _data[pos] = component;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        };</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        </div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="classSparseArray.html#ab00e54b0c21ac9380db0f5c493138da0">  129</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classSparseArray.html#ab00e54b0c21ac9380db0f5c493138da0">erase</a>(size_type pos)</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <span class="keywordflow">if</span> (pos &gt;= _data.size())</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                _data.resize(pos + 1);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            _data[pos] = std::nullopt;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        };</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="classSparseArray.html#a149a6e79d9c6fac27a28f8a47a9ff588">  142</a></span>&#160;        size_type <a class="code" href="classSparseArray.html#a149a6e79d9c6fac27a28f8a47a9ff588">get_index</a>(<span class="keyword">const</span> value_type &amp;type)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; _data.size(); i++) {</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                <span class="keywordflow">if</span> (_data[i] == type)</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                    <span class="keywordflow">return</span> i;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            }</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        };</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        container_t _data;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;};</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//SPARSEARRAY_HPP</span></div>
 <div class="ttc" id="aclassSparseArray_html"><div class="ttname"><a href="classSparseArray.html">SparseArray</a></div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:17</div></div>
-<div class="ttc" id="aclassSparseArray_html_a149a6e79d9c6fac27a28f8a47a9ff588"><div class="ttname"><a href="classSparseArray.html#a149a6e79d9c6fac27a28f8a47a9ff588">SparseArray::get_index</a></div><div class="ttdeci">size_type get_index(const value_type &amp;type) const</div><div class="ttdoc">Get the index object.</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:112</div></div>
+<div class="ttc" id="aclassSparseArray_html_a149a6e79d9c6fac27a28f8a47a9ff588"><div class="ttname"><a href="classSparseArray.html#a149a6e79d9c6fac27a28f8a47a9ff588">SparseArray::get_index</a></div><div class="ttdeci">size_type get_index(const value_type &amp;type) const</div><div class="ttdoc">Get the index object.</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:142</div></div>
+<div class="ttc" id="aclassSparseArray_html_a151cffafe878041d1be19fc1f651b3fe"><div class="ttname"><a href="classSparseArray.html#a151cffafe878041d1be19fc1f651b3fe">SparseArray::cbegin</a></div><div class="ttdeci">const_iterator cbegin() const</div><div class="ttdoc">encapsulation of std::vector functions</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:69</div></div>
 <div class="ttc" id="aclassSparseArray_html_a1ed9d2b182b52ed5cd6b544107ef8af4"><div class="ttname"><a href="classSparseArray.html#a1ed9d2b182b52ed5cd6b544107ef8af4">SparseArray::begin</a></div><div class="ttdeci">iterator begin()</div><div class="ttdoc">Encapsulation of std::vector functions.</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:53</div></div>
-<div class="ttc" id="aclassSparseArray_html_a4bae5c04a8a771d111849babc21599bb"><div class="ttname"><a href="classSparseArray.html#a4bae5c04a8a771d111849babc21599bb">SparseArray::insert_at</a></div><div class="ttdeci">void insert_at(size_type pos, const Component &amp;component)</div><div class="ttdoc">link an entity with a component</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:81</div></div>
-<div class="ttc" id="aclassSparseArray_html_ab00e54b0c21ac9380db0f5c493138da0"><div class="ttname"><a href="classSparseArray.html#ab00e54b0c21ac9380db0f5c493138da0">SparseArray::erase</a></div><div class="ttdeci">void erase(size_type pos)</div><div class="ttdoc">function to delink the component of an entity / kill an entity</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:99</div></div>
+<div class="ttc" id="aclassSparseArray_html_a3b485311dcd6c7e4f3bffee764297b42"><div class="ttname"><a href="classSparseArray.html#a3b485311dcd6c7e4f3bffee764297b42">SparseArray::size</a></div><div class="ttdeci">size_type size() const</div><div class="ttdoc">encapsulation of std::vector functions</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:101</div></div>
+<div class="ttc" id="aclassSparseArray_html_a4bae5c04a8a771d111849babc21599bb"><div class="ttname"><a href="classSparseArray.html#a4bae5c04a8a771d111849babc21599bb">SparseArray::insert_at</a></div><div class="ttdeci">void insert_at(size_type pos, const Component &amp;component)</div><div class="ttdoc">link an entity with a component</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:111</div></div>
+<div class="ttc" id="aclassSparseArray_html_a4d32f10955bedd6229eba1da50e79bea"><div class="ttname"><a href="classSparseArray.html#a4d32f10955bedd6229eba1da50e79bea">SparseArray::end</a></div><div class="ttdeci">iterator end()</div><div class="ttdoc">encapsulation of std::vector functions</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:77</div></div>
+<div class="ttc" id="aclassSparseArray_html_a5765bcd8d4357cce3cace1be2a656d78"><div class="ttname"><a href="classSparseArray.html#a5765bcd8d4357cce3cace1be2a656d78">SparseArray::cend</a></div><div class="ttdeci">const_iterator cend() const</div><div class="ttdoc">encapsulation of std::vector functions</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:93</div></div>
+<div class="ttc" id="aclassSparseArray_html_a7fa6228501432328b3b7e5f3142829c7"><div class="ttname"><a href="classSparseArray.html#a7fa6228501432328b3b7e5f3142829c7">SparseArray::begin</a></div><div class="ttdeci">const_iterator begin() const</div><div class="ttdoc">encapsulation of std::vector functions</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:61</div></div>
+<div class="ttc" id="aclassSparseArray_html_a9b75ec5365af5f139019f5acdc80854e"><div class="ttname"><a href="classSparseArray.html#a9b75ec5365af5f139019f5acdc80854e">SparseArray::end</a></div><div class="ttdeci">const_iterator end() const</div><div class="ttdoc">encapsulation of std::vector functions</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:85</div></div>
+<div class="ttc" id="aclassSparseArray_html_ab00e54b0c21ac9380db0f5c493138da0"><div class="ttname"><a href="classSparseArray.html#ab00e54b0c21ac9380db0f5c493138da0">SparseArray::erase</a></div><div class="ttdeci">void erase(size_type pos)</div><div class="ttdoc">function to delink the component of an entity / kill an entity</div><div class="ttdef"><b>Definition:</b> SparseArray.hpp:129</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

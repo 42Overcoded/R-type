@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['get_5fcomponents_105',['get_components',['../classregistry.html#a3149b283b4533fa3c8d9ee360f819769',1,'registry']]],
-  ['get_5findex_106',['get_index',['../classSparseArray.html#a149a6e79d9c6fac27a28f8a47a9ff588',1,'SparseArray']]]
+  ['death_5fanimation_134',['death_animation',['../classgameEngine.html#a6a97fdffdbf2e513554ebf55e962c37d',1,'gameEngine']]],
+  ['decharge_5fshoot_135',['decharge_shoot',['../classgameEngine.html#a501c745f4d91d113bcc134733fed882e',1,'gameEngine']]],
+  ['draw_5fsystem_136',['draw_system',['../classSfmlSystem.html#a6df66ebdb4bcf9a8be72051865fd866d',1,'SfmlSystem']]]
 ];

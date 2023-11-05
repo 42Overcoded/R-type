@@ -1,7 +1,5 @@
 # Ecs documentation
 
-![ECS graph](assets/ecs_graph.jpg)
-
 How the ecs works :
 
 The ecs is composed of 5 main parts :

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['menu_27',['menu',['../classgameEngine.html#af8774c92709ae3c1718b5d3c070af37a',1,'gameEngine']]]
+  ['kill_5fentity_46',['kill_entity',['../classregistry.html#a6c967fb2267fd8eaeb155f2be5b5650c',1,'registry']]]
 ];

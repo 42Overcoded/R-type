@@ -70,13 +70,13 @@ $(function() {
 <div class="contents">
 <div class="textblock"><p>RFC Authors : <code>M. Jalbert</code>, <code>M. Peireto</code>, <code>F. Azema</code>, <code>S. Borisenko</code>, <code>J. Vignau-Espine</code> Date : <code>7 October 2023</code></p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md40"></a>
+<h1><a class="anchor" id="autotoc_md70"></a>
 Game Transmission Protocol (GTP)</h1>
-<h2><a class="anchor" id="autotoc_md41"></a>
+<h2><a class="anchor" id="autotoc_md71"></a>
 Status of this Memo</h2>
 <p>This memo is the official specification of the Game Transmission Protocol (GTP).</p>
 <p>Distribution of this memo is unlimited.</p>
-<h2><a class="anchor" id="autotoc_md42"></a>
+<h2><a class="anchor" id="autotoc_md72"></a>
 Index</h2>
 <ul>
 <li><a href="#game-transmission-protocol-gtp">Game Transmission Protocol (GTP)</a><ul>
@@ -90,133 +90,170 @@ Index</h2>
 </li>
 <li><a href="#the-gtp-model">The GTP Model</a></li>
 <li><a href="#commands">Commands</a><ul>
-<li><a href="#none">None</a></li>
-<li><a href="#connection">Connection</a></li>
-<li><a href="#disconnection">Disconnection</a></li>
-<li><a href="#controller">Controller</a></li>
-<li><a href="#position">Position</a></li>
-<li><a href="#start">Start</a></li>
-<li><a href="#end">End</a></li>
+<li><a href="#servergetping">ServerGetPing</a></li>
+<li><a href="#serverconnect">ServerConnect</a></li>
+<li><a href="#serverupdatecontrols">ServerUpdateControls</a></li>
+<li><a href="#clientaccepted">ClientAccepted</a></li>
+<li><a href="#clientdenied">ClientDenied</a></li>
+<li><a href="#clientassignid">ClientAssignID</a></li>
+<li><a href="#clientsendping">ClientSendPing</a></li>
+<li><a href="#clientaddplayer">ClientAddPlayer</a></li>
+<li><a href="#clientremoveplayer">ClientRemovePlayer</a></li>
+<li><a href="#clientcreateentity">ClientCreateEntity</a></li>
+<li><a href="#clientupdateentity">ClientUpdateEntity</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md43"></a>
+<h2><a class="anchor" id="autotoc_md73"></a>
 Introduction</h2>
 <p>The Game Transmission Protocol (GTP) is defined to make available a fast packet transmission of packet-switched computer communication in the environment of an interconnected set of computer networks. This protocol assumes that the User Datagram Protocol (UDP) <a href="https://www.ietf.org/rfc/rfc768.txt">RFC 768</a> is used as the underlying protocol.</p>
 <p>This protocol provide a procedure for games to communicate with a server. It uses UDP as a fast packet-switched computer communication protocol. Therefore the protocol is transaction oriented, and delivery and duplicate protection are not guaranteed.</p>
-<h2><a class="anchor" id="autotoc_md44"></a>
+<h2><a class="anchor" id="autotoc_md74"></a>
 Overview</h2>
 <p>In this section, the history, the terminology, and the GTP model are discussed. The terms defined in this section are only those that have special significance in GTP. Some of the terminology is very specific to the GTP model; some readers may wish to turn to the section on the GTP model while reviewing the terminology.</p>
-<h3><a class="anchor" id="autotoc_md45"></a>
+<h3><a class="anchor" id="autotoc_md75"></a>
 History</h3>
 <p>The Game Transmission Protocol come from a long tradition at the Epitech school. Every year, 3nd year students have to work in teams to create a protocol allowing a fast communication between multiple game clients an a server.</p>
 <p>This protocol has been originally developed to create a multiplayer version of the R-type game. R-Type is a horizontally scrolling shooter arcade video game developed and released by Irem in 1987 and the first game in the R-Type series. The player controls a star ship, the R-9 "Arrowhead", in its efforts to destroy the Bydo, a powerful alien race bent on wiping out all of mankind. The R-9 can acquire a glowing orbicular device called a "Force", protecting it from enemy fire and providing additional firepower. The arcade version was distributed by Nintendo in North America; it is the last arcade title Nintendo distributed.</p>
-<h3><a class="anchor" id="autotoc_md46"></a>
+<h3><a class="anchor" id="autotoc_md76"></a>
 Terminology</h3>
 <p>GTP</p>
 <div class="fragment"><div class="line">Game Transmission Protocol</div>
 </div><!-- fragment --><p>UDP</p>
 <div class="fragment"><div class="line">User Datagram Protocol</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md47"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md77"></a>
 The GTP Model</h2>
 <p>With the above definitions in mind, the following model (shown in Figure 1) may be diagrammed for an GTP service.</p>
 <div class="fragment"><div class="line">/------------------------------------\</div>
-<div class="line">|      |    |              |         |</div>
-<div class="line">| Flag | Id | Payload Size | Payload |</div>
-<div class="line">|      |    |              |         |</div>
+<div class="line">|      |              |              |</div>
+<div class="line">| Flag | Payload Size |   Payload    |</div>
+<div class="line">|      |              |              |</div>
 <div class="line">|------------------------------------|</div>
 <div class="line">|                                    |</div>
 <div class="line">|                UDP                 |</div>
 <div class="line">|                                    |</div>
 <div class="line">\------------------------------------/</div>
 </div><!-- fragment --><p>As you can see, the GTP is just on top of the UDP. That allow it to be lightweight and highly efficient.</p>
-<p><code>Flag</code> is a 1 bytes long (uint8_t) number. It define the following message. <code>Id</code> is a 8 bytes long (uint64_t) number. It is used to identify the message. <code>Size</code> is a 8 bytes long (uint64_t) number. It describe the size in bit of the payload. Value of 0 in case of no payload. <code>Payload</code> is a structure containing different information. It will change depending of the value of the header.</p>
-<h2><a class="anchor" id="autotoc_md48"></a>
+<p><code>Flag</code> is a 4 bytes long (uint32_t) number. It define the following message. <code>Size</code> is a 4 bytes long (uint32_t) number. It describe the size in bit of the payload. Value of 0 in case of no payload. <code>Payload</code> is a structure containing different information. It will change depending of the value of the header.</p>
+<h2><a class="anchor" id="autotoc_md78"></a>
 Commands</h2>
 <p>The following commands are available in the GTP protocol.</p>
-<div class="fragment"><div class="line">| Command |  Description  |</div>
-<div class="line">| ------- | ------------- |</div>
-<div class="line">| 0x00    | None          |</div>
-<div class="line">| 0x01    | Connection    |</div>
-<div class="line">| 0x02    | Disconnection |</div>
-<div class="line">| 0x03    | Controller    |</div>
-<div class="line">| 0x04    | <a class="code" href="structPosition.html">Position</a>      |</div>
-<div class="line">| 0x05    | Start         |</div>
-<div class="line">| 0x06    | End           |</div>
-<div class="ttc" id="astructPosition_html"><div class="ttname"><a href="structPosition.html">Position</a></div><div class="ttdef"><b>Definition:</b> Components.hpp:62</div></div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md49"></a>
-None</h3>
+<div class="fragment"><div class="line">| Command |  Description         |</div>
+<div class="line">| ------- | -------------------- |</div>
+<div class="line">| 0x00    | ServerGetPing        |</div>
+<div class="line">| 0x01    | ServerConnect        |</div>
+<div class="line">| 0x02    | ServerUpdateControls |</div>
+<div class="line">| 0x03    | ClientAccepted       |</div>
+<div class="line">| 0x04    | ClientDenied         |</div>
+<div class="line">| 0x05    | ClientAssignID       |</div>
+<div class="line">| 0x06    | ClientSendPing       |</div>
+<div class="line">| 0x07    | ClientAddPlayer      |</div>
+<div class="line">| 0x08    | ClientRemovePlayer   |</div>
+<div class="line">| 0x09    | ClientCreateEntity   |</div>
+<div class="line">| 0x0A    | ClientUpdateEntity   |</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md79"></a>
+ServerGetPing</h3>
 <ul>
+<li>Origin : Client</li>
 <li>Flag : 0x00</li>
-<li>Id : [...]</li>
 <li>Size : 0x00</li>
 <li>Payload : None</li>
 </ul>
 <p>Description : This command is used to check if the server is still alive.</p>
-<h3><a class="anchor" id="autotoc_md50"></a>
-Connection</h3>
+<h3><a class="anchor" id="autotoc_md80"></a>
+ServerConnect</h3>
 <ul>
+<li>Origin : Client</li>
 <li>Flag : 0x01</li>
-<li>Id : [...]</li>
 <li>Size : 0x00</li>
 <li>Payload : None</li>
+<li>Response : ClientAccepted</li>
+<li>Response : ClientAssignID</li>
 </ul>
 <p>Description : This command is used to connect to the server.</p>
-<h3><a class="anchor" id="autotoc_md51"></a>
-Disconnection</h3>
+<h3><a class="anchor" id="autotoc_md81"></a>
+ServerUpdateControls</h3>
 <ul>
+<li>Origin : Client</li>
 <li>Flag : 0x02</li>
-<li>Id : [...]</li>
-<li>Size : [...]</li>
-<li>Payload : None</li>
+<li>Size : 0x05 (bool * 5)</li>
+<li>Payload : [bool, bool, bool, bool, bool]</li>
 </ul>
-<p>Description : This command is used to disconnect from the server.</p>
-<h3><a class="anchor" id="autotoc_md52"></a>
-Controller</h3>
+<p>Description : This command is used to update the controls of the player.</p>
+<h3><a class="anchor" id="autotoc_md82"></a>
+ClientAccepted</h3>
 <ul>
+<li>Origin : Server</li>
 <li>Flag : 0x03</li>
-<li>Id : [...]</li>
-<li>Size : [...]</li>
-<li>Payload :</li>
+<li>Size : 0x00</li>
+<li>Payload : None</li>
 </ul>
-<div class="fragment"><div class="line"><span class="keywordtype">bool</span> up;</div>
-<div class="line"><span class="keywordtype">bool</span> down;</div>
-<div class="line"><span class="keywordtype">bool</span> left;</div>
-<div class="line"><span class="keywordtype">bool</span> right;</div>
-<div class="line"><span class="keywordtype">bool</span> shoot;</div>
-</div><!-- fragment --><p>Description : This command is used to send the controller state.</p>
-<h3><a class="anchor" id="autotoc_md53"></a>
-Position</h3>
+<p>Description : This command is used to confirm the connection to the server.</p>
+<h3><a class="anchor" id="autotoc_md83"></a>
+ClientDenied</h3>
 <ul>
+<li>Origin : Server</li>
 <li>Flag : 0x04</li>
-<li>Id : [...]</li>
-<li>Size : [...]</li>
-<li>Payload :</li>
+<li>Size : 0x00</li>
+<li>Payload : None</li>
 </ul>
-<div class="fragment"><div class="line"><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> id;</div>
-<div class="line"><span class="keywordtype">float</span> x;</div>
-<div class="line"><span class="keywordtype">float</span> y;</div>
-</div><!-- fragment --><p>Description : This command is used to send the position of an entity.</p>
-<h3><a class="anchor" id="autotoc_md54"></a>
-Start</h3>
+<p>Description : This command is used to deny the connection to the server.</p>
+<h3><a class="anchor" id="autotoc_md84"></a>
+ClientAssignID</h3>
 <ul>
+<li>Origin : Server</li>
 <li>Flag : 0x05</li>
-<li>Id : [...]</li>
-<li>Size : 0x00</li>
-<li>Payload : None</li>
+<li>Size : 0x04 (uint32_t)</li>
+<li>Payload : [uint32_t]</li>
 </ul>
-<p>Description : This command is used to start the game.</p>
-<h3><a class="anchor" id="autotoc_md55"></a>
-End</h3>
+<p>Description : This command is used to assign an ID to the client.</p>
+<h3><a class="anchor" id="autotoc_md85"></a>
+ClientSendPing</h3>
 <ul>
+<li>Origin : Server</li>
 <li>Flag : 0x06</li>
-<li>Id : [...]</li>
 <li>Size : 0x00</li>
 <li>Payload : None</li>
 </ul>
-<p>Description : This command is used to end the game. </p>
+<p>Description : This command is used to check if the client is still alive. (Response to ServerGetPing)</p>
+<h3><a class="anchor" id="autotoc_md86"></a>
+ClientAddPlayer</h3>
+<ul>
+<li>Origin : Server</li>
+<li>Flag : 0x07</li>
+<li>Size : 0x04 (uint32_t)</li>
+<li>Payload : [uint32_t]</li>
+</ul>
+<p>Description : This command is used to add a player to the game.</p>
+<h3><a class="anchor" id="autotoc_md87"></a>
+ClientRemovePlayer</h3>
+<ul>
+<li>Origin : Server</li>
+<li>Flag : 0x08</li>
+<li>Size : 0x04 (uint32_t)</li>
+<li>Payload : [uint32_t]</li>
+</ul>
+<p>Description : This command is used to remove a player from the game.</p>
+<h3><a class="anchor" id="autotoc_md88"></a>
+ClientCreateEntity</h3>
+<ul>
+<li>Origin : Server</li>
+<li>Flag : 0x09</li>
+<li>Size : 0x0C (uint32_t * 3)</li>
+<li>Payload : [uint32_t, uint32_t, uint32_t]</li>
+</ul>
+<p>Description : This command is used to create an entity in the game.</p>
+<h3><a class="anchor" id="autotoc_md89"></a>
+ClientUpdateEntity</h3>
+<ul>
+<li>Origin : Server</li>
+<li>Flag : 0x0A</li>
+<li>Size : 0x0C (uint32_t * 3)</li>
+<li>Payload : [uint32_t, uint32_t, uint32_t]</li>
+</ul>
+<p>Description : This command is used to update an entity in the game. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

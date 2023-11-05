@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['how_20to_20play_115',['How to play',['../md_How_to_play.html',1,'']]]
+  ['ecs_20documentation_182',['Ecs documentation',['../md_ecs_ecs.html',1,'']]],
+  ['enemies_20documentation_183',['Enemies Documentation',['../md_enemies.html',1,'']]]
 ];

@@ -191,6 +191,7 @@ void gameEngine::init_background(int i) {
         std::cerr << "ERROR background.json : " << e.what() << std::endl;
         exit(84);
     }
+
     file.close();
 
     entity_t background = _registry.spawn_entity();
@@ -208,6 +209,7 @@ void gameEngine::init_background(int i) {
     auto &speed = _registry.get_components<Speed>();
     auto &texture = _registry.get_components<Texture>();
     auto &drawable = _registry.get_components<Drawable>();
+
     float width = backJson["background"]["width"];
 
     drawable[background]->drawable = true;
@@ -256,6 +258,7 @@ void gameEngine::init_score() {
     } catch (std::exception &e) {
         std::cerr << "ERROR score.json : " << e.what() << std::endl;
     }
+
     file.close();
 
     entity_t score = _registry.spawn_entity();
@@ -284,6 +287,7 @@ void gameEngine::init_score() {
 }
 
 entity_t gameEngine::spawn_explosion(uint32_t entityId, int i, float x, float y) {
+
     std::ifstream file(PATH_TO_JSON + "explosion.json");
 
     if (!file.is_open())

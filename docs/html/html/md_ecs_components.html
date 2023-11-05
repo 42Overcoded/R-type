@@ -70,29 +70,29 @@ $(function() {
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="autotoc_md1"></a>
 What is a component ?</h1>
-<p>The Components are the data that will be used by the systems. For example, if you have a component <a class="el" href="structPosition.html">Position</a>, it will contain the x and y position of an entity. to see more</p>
+<p>The Components are the data that will be used by the systems. For example, if you have a component <a class="el" href="structPosition.html" title="Position of the entity.">Position</a>, it will contain the x and y position of an entity. to see more</p>
 <h1><a class="anchor" id="autotoc_md2"></a>
 The components:</h1>
 <p>there are a lot of components:</p>
 <ul>
-<li><a class="el" href="structPosition.html">Position</a> : the position of an entity, it contains the x and y position of an entity</li>
-<li><a class="el" href="structSpeed.html" title="Components of the ecs can add more if needed.">Speed</a> : it contains the x and y speed of an entity (float)</li>
-<li><a class="el" href="structDrawable.html">Drawable</a> : it contains a bool to know if the entity has to be drawn</li>
-<li><a class="el" href="structSprite.html">Sprite</a> : it contains the sprite of an entity (sf::Sprite)</li>
-<li><a class="el" href="structHealth.html">Health</a> : it contains the health of an entity (int)</li>
-<li><a class="el" href="structEnemyBall.html">EnemyBall</a> : the enemy ball of an entity, it contains a bool to know if the entity is an enemy ball</li>
-<li><a class="el" href="structTag.html">Tag</a> : it contains a string to know the tag / the name of an entity</li>
-<li><a class="el" href="structRect.html">Rect</a> : it contains the rect of an entity, you can acces the rect values with left, top, width and height used to animate the sprite for example</li>
-<li><a class="el" href="structState.html">State</a> : it contains an int mostly used to know the state of an entity to know where he is in his animation</li>
-<li><a class="el" href="structTexture.html">Texture</a> : it contains the textureTag who is a string that will be used to know the texture of an entity, you can acces the textures by giving the textureTag to an unordered_map stocked in system class</li>
-<li><a class="el" href="structControl.html">Control</a> : it contains a lot of bool to know the inputs given by the player</li>
-<li><a class="el" href="structScale.html">Scale</a> : it contains the scale of an entity. (float)</li>
-<li><a class="el" href="structClock.html">Clock</a> : it contains the clock and time of an entity, it's used to know the time between two shots for example (sf::Clock) (sf::Time)</li>
-<li><a class="el" href="structHitbox.html">Hitbox</a> : it contains the hitbox height and the hitbox width of an entity, it's used to know if two entities are colliding</li>
-<li><a class="el" href="structPattern.html">Pattern</a> : it contains a vector of speed, it's used to know the pattern of an entity</li>
+<li><a class="el" href="structPosition.html" title="Position of the entity.">Position</a> : the position of an entity, it contains the x and y position of an entity</li>
+<li><a class="el" href="structSpeed.html" title="speed of the entity">Speed</a> : it contains the x and y speed of an entity (float)</li>
+<li><a class="el" href="structDrawable.html" title="drawable is a tag to know if the entity is drawable">Drawable</a> : it contains a bool to know if the entity has to be drawn</li>
+<li><a class="el" href="structSprite.html" title="Sprite of the entity.">Sprite</a> : it contains the sprite of an entity (sf::Sprite)</li>
+<li><a class="el" href="structHealth.html" title="Health of the entity.">Health</a> : it contains the health of an entity (int)</li>
+<li><a class="el" href="structEnemyBall.html" title="EnemyBall is a tag to know if the entity is an enemy ball.">EnemyBall</a> : the enemy ball of an entity, it contains a bool to know if the entity is an enemy ball</li>
+<li><a class="el" href="structTag.html" title="Tag to know the type of the entity.">Tag</a> : it contains a string to know the tag / the name of an entity</li>
+<li><a class="el" href="structRect.html" title="Rect of the entity.">Rect</a> : it contains the rect of an entity, you can acces the rect values with left, top, width and height used to animate the sprite for example</li>
+<li><a class="el" href="structState.html" title="State of the entity mostly used to animate entities.">State</a> : it contains an int mostly used to know the state of an entity to know where he is in his animation</li>
+<li><a class="el" href="structTexture.html" title="textureTag is the key of the texture you can acces it by given the key to the texture map">Texture</a> : it contains the textureTag who is a string that will be used to know the texture of an entity, you can acces the textures by giving the textureTag to an unordered_map stocked in system class</li>
+<li><a class="el" href="structControl.html" title="Control of the entity to know which key is pressed.">Control</a> : it contains a lot of bool to know the inputs given by the player</li>
+<li><a class="el" href="structScale.html" title="Scale of the entity.">Scale</a> : it contains the scale of an entity. (float)</li>
+<li><a class="el" href="structClock.html" title="Clocks of the entity.">Clock</a> : it contains the clock and time of an entity, it's used to know the time between two shots for example (sf::Clock) (sf::Time)</li>
+<li><a class="el" href="structHitbox.html" title="Hitbox of the entity.">Hitbox</a> : it contains the hitbox height and the hitbox width of an entity, it's used to know if two entities are colliding</li>
+<li><a class="el" href="structPattern.html" title="Pattern of the entity.">Pattern</a> : it contains a vector of speed, it's used to know the pattern of an entity</li>
 <li><a class="el" href="structScore.html">Score</a> : it contains the score of an entity, it's used to know the score an enemy is worth</li>
-<li><a class="el" href="structText.html">Text</a> : it contains the text of an entity, and the string associate with it (sf::Text)</li>
-<li><a class="el" href="structSearchingHead.html">SearchingHead</a> : it contains a bool to know if an enemy ball is a searching head</li>
+<li><a class="el" href="structText.html" title="text of the entity">Text</a> : it contains the text of an entity, and the string associate with it (sf::Text)</li>
+<li><a class="el" href="structSearchingHead.html" title="SearchingHead is a tag to know if the entity is a searching head.">SearchingHead</a> : it contains a bool to know if an enemy ball is a searching head</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md3"></a>
 How to create a component ?</h1>
