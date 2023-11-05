@@ -314,8 +314,6 @@ entity_t gameEngine::spawn_explosion(uint32_t entityId, int i, float x, float y)
     auto &scale = _registry.get_components<Scale>();
 
     state[explosion]->state = boomJson["explosion"]["state"];
-    position[explosion]->x = position[i]->x;
-    position[explosion]->y = position[i]->y;
     tag[explosion]->tag = boomJson["explosion"]["tag"];
     drawable[explosion]->drawable = true;
     texture[explosion]->textureTag = boomJson["explosion"]["textureTag"];
