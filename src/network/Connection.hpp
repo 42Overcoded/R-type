@@ -66,19 +66,28 @@ public:
                 std::cout << "Connecting to client" << std::endl;
                 id_             = uid;
                 remoteEndpoint_ = remoteEndpoint;
-                socket_.connect(remoteEndpoint_);
-                std::cout << "Connected to client" << std::endl;
-                Packet<T> acceptPacket;
-                acceptPacket.header.flag = T::ClientAccepted;
-                SendPacket(acceptPacket);
-                std::cout << "accept client" << std::endl;
-                Packet<T> idPacket;
-                idPacket.header.flag = T::ClientAssignID;
-                idPacket << id_;
-                SendPacket(idPacket);
-                std::cout << "assign client" << std::endl;
-                isConnected = true;
-                GetHeader();
+                socket_.async_connect(remoteEndpoint_, [this](std::error_code ec) {
+                    if (!ec)
+                    {
+                        std::cout << "Connected to client" << std::endl;
+                        Packet<T> acceptPacket;
+                        acceptPacket.header.flag = T::ClientAccepted;
+                        SendPacket(acceptPacket);
+                        std::cout << "accept client" << std::endl;
+                        Packet<T> idPacket;
+                        idPacket.header.flag = T::ClientAssignID;
+                        idPacket << id_;
+                        SendPacket(idPacket);
+                        std::cout << "assign client" << std::endl;
+                        isConnected = true;
+                    }
+                    else
+                    {
+                        std::cerr << "[" << id_ << "] Connect to client fail. (" << ec.message()
+                                  << ")" << std::endl;
+                        socket_.close();
+                    }
+                });
             }
         }
         else
@@ -94,11 +103,20 @@ public:
             std::cout << "Connecting to server" << std::endl;
             remoteEndpoint_ = *endpoints.begin();
             socket_.open(remoteEndpoint_.protocol());
-            socket_.connect(remoteEndpoint_);
-            Packet<T> packet;
-            packet.header.flag = T::ServerConnect;
-            SendPacket(packet);
-            std::cout << "Connect to server" << std::endl;
+            socket_.async_connect(remoteEndpoint_, [this](std::error_code ec) {
+                if (!ec)
+                {
+                    Packet<T> packet;
+                    packet.header.flag = T::ServerConnect;
+                    SendPacket(packet);
+                }
+                else
+                {
+                    std::cerr << "[" << id_ << "] Connect to server fail. (" << ec.message()
+                              << ")" << std::endl;
+                    socket_.close();
+                }
+            });
         }
         else
         {
@@ -148,8 +166,8 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    // std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
-                    //           << std::endl;
+                    std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
+                              << std::endl;
                     if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
                         packetsOutQueue_.Front().body.size() > 0)
                     {
@@ -161,8 +179,20 @@ protected:
                             packetsOutQueue_.Front().header.flag == T::ServerConnect)
                         {
                             std::cout << "Open connection of server" << std::endl;
-                            socket_.connect(boost::asio::ip::udp::endpoint());
-                            GetHeader();
+                            socket_.async_connect(boost::asio::ip::udp::endpoint(), [this](std::error_code ec) {
+                                if (!ec)
+                                {
+                                    std::cout << "Connected to server" << std::endl;
+                                    isConnected = true;
+                                    GetHeader();
+                                }
+                                else
+                                {
+                                    std::cerr << "[" << id_ << "] Connect to server fail. (" << ec.message()
+                                              << ")" << std::endl;
+                                    socket_.close();
+                                }
+                            });
                         }
                         packetsOutQueue_.PopFront();
                         if (!packetsOutQueue_.IsEmpty())
@@ -188,7 +218,7 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    // std::cout << "Send body" << std::endl;
+                    std::cout << "Send body" << std::endl;
                     packetsOutQueue_.PopFront();
                     if (!packetsOutQueue_.IsEmpty())
                     {

@@ -53,7 +53,7 @@ private:
                     {
                         if (recvBuffer_.header.size == 0)
                         {
-                            std::cout << "[" << id_ << "] Get Header Success." << std::endl;
+                            std::cout << "[" << id_ << "] ClientsManager Get Header Success." << std::endl;
                             ManageConnectionPacket();
                         }
                         else
@@ -64,7 +64,7 @@ private:
                     }
                     else
                     {
-                        std::cerr << "[" << id_ << "] Get Header Fail. (" << ec.message() << ")" << std::endl;
+                        std::cerr << "[" << id_ << "] ClientsManager Get Header Fail. (" << ec.message() << ")" << std::endl;
                         socket_->close();
                     }
                 });
