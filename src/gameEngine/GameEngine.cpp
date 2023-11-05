@@ -371,23 +371,19 @@ void gameEngine::launch_game()
             menu();
             _clock.restart();
         }
-        if (_type == SERVER || (_type == CLIENT && (gameState.scene == ONLINE || gameState.scene == GAME))) {
-            if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE))) {
-                if (_type == SERVER)
-                    _networkSystem = std::make_unique<Network::ServerNetworkSystem>(port_, ip_);
-                else if (_type == CLIENT)
-                    _networkSystem = std::make_unique<Network::ClientNetworkSystem>(port_, ip_);
-            }
-            if (_networkSystem != nullptr) {
-                if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
-                {
-                    networkClock.restart();
-                    _networkSystem->Update(_registry);
-                }
+        if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE))) {
+            if (_type == SERVER) {
+                _networkSystem = std::make_unique<Network::ServerNetworkSystem>(port_, ip_);
+            } else if (_type == CLIENT) {
+                _networkSystem = std::make_unique<Network::ClientNetworkSystem>(port_, ip_);
             }
         }
-        if ((gameState.scene == MENU || gameState.scene == OFFLINE) && _networkSystem != nullptr) {
-            _networkSystem.reset();
+        if (_networkSystem != nullptr) {
+            if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
+            {
+                networkClock.restart();
+                _networkSystem->Update(_registry);
+            }
         }
         if (gameState.scene == GAME)
         {
