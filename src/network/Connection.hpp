@@ -80,6 +80,7 @@ public:
                         SendPacket(idPacket);
                         std::cout << "assign client" << std::endl;
                         isConnected = true;
+                        GetHeader();
                     }
                     else
                     {
