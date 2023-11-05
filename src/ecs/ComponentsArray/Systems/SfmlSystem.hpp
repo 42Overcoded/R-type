@@ -86,7 +86,7 @@ class SfmlSystem {
          *
          * @param r
          */
-        void hitbox_system(registry &r);
+        void hitbox_system(registry &r, ClientType _type, std::unordered_map<std::string, std::shared_ptr<sf::Sound>> &sounds);
         /**
          * @brief load the texture of the entities and put it in a map to not reload it when it's already loaded
          *
@@ -95,7 +95,7 @@ class SfmlSystem {
         void load_texture(registry &r, std::vector<keyCommands> cheatCode);
         void set_color(registry &r);
         void set_orientation(registry &r);
-        void color_system(registry &r);
+        void color_system(registry &r, ClientType _type, std::unordered_map<std::string, std::shared_ptr<sf::Sound>> &sounds);
         void addKeyToKeyHistory(keyCommands keyCommand);
         ~SfmlSystem() = default;
     protected:

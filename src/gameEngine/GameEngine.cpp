@@ -404,8 +404,8 @@ void gameEngine::launch_game()
             shoot_system(elapsed);
             movement_system(_registry);
             _system.velocity_system(_registry, elapsed);
-            _system.color_system(_registry);
-            _system.hitbox_system(_registry);
+            _system.color_system(_registry, _type, sounds);
+            _system.hitbox_system(_registry, _type, sounds);
             death_animation();
             shoot_enemy();
             life_handler();
@@ -482,12 +482,24 @@ void gameEngine::load_musics_and_sounds(void)
         soundBuffers.insert(std::make_pair("soundExplosion", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion2", nullptr));
         soundBuffers.insert(std::make_pair("soundExplosion3", nullptr));
-    
+        soundBuffers.insert(std::make_pair("AllerMarcel", nullptr));
+        soundBuffers.insert(std::make_pair("freezeBoost", nullptr));
+        soundBuffers.insert(std::make_pair("bombBoost", nullptr));
+        soundBuffers.insert(std::make_pair("endBoost", nullptr));
+        soundBuffers.insert(std::make_pair("lifeBoost", nullptr));
+        soundBuffers.insert(std::make_pair("shootBoost", nullptr));
+
         sounds.insert(std::make_pair("soundShoot", nullptr));
         sounds.insert(std::make_pair("soundPowerShoot", nullptr));
         sounds.insert(std::make_pair("soundExplosion", nullptr));
         sounds.insert(std::make_pair("soundExplosion2", nullptr));
         sounds.insert(std::make_pair("soundExplosion3", nullptr));
+        sounds.insert(std::make_pair("AllerMarcel", nullptr));
+        sounds.insert(std::make_pair("freezeBoost", nullptr));
+        sounds.insert(std::make_pair("bombBoost", nullptr));
+        sounds.insert(std::make_pair("endBoost", nullptr));
+        sounds.insert(std::make_pair("lifeBoost", nullptr));
+        sounds.insert(std::make_pair("shootBoost", nullptr));
 
     if (_type == CLIENT) {
         musics.at("musicMenu") = std::make_shared<sf::Music>();
@@ -500,12 +512,24 @@ void gameEngine::load_musics_and_sounds(void)
         soundBuffers.at("soundExplosion") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion2") = std::make_shared<sf::SoundBuffer>();
         soundBuffers.at("soundExplosion3") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("AllerMarcel") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("freezeBoost") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("bombBoost") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("endBoost") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("lifeBoost") = std::make_shared<sf::SoundBuffer>();
+        soundBuffers.at("shootBoost") = std::make_shared<sf::SoundBuffer>();
     
         sounds.at("soundShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundPowerShoot") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion2") = std::make_shared<sf::Sound>();
         sounds.at("soundExplosion3") = std::make_shared<sf::Sound>();
+        sounds.at("AllerMarcel") = std::make_shared<sf::Sound>();
+        sounds.at("freezeBoost") = std::make_shared<sf::Sound>();
+        sounds.at("bombBoost") = std::make_shared<sf::Sound>();
+        sounds.at("endBoost") = std::make_shared<sf::Sound>();
+        sounds.at("lifeBoost") = std::make_shared<sf::Sound>();
+        sounds.at("shootBoost") = std::make_shared<sf::Sound>();
     
         musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
         musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
@@ -517,23 +541,41 @@ void gameEngine::load_musics_and_sounds(void)
         soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
         soundBuffers["soundExplosion2"]->loadFromFile("assets/musicAndSound/roblox rocket explosion sound.mp3");
         soundBuffers["soundExplosion3"]->loadFromFile("assets/musicAndSound/Geometry Dash Death Sound Effect.mp3");
+        soundBuffers["AllerMarcel"]->loadFromFile("assets/musicAndSound/1Aller Marcel !!! (mp3cut.net)(1).mp3");
+        soundBuffers["freezeBoost"]->loadFromFile("assets/musicAndSound/Slow Motion Sound Effect.mp3");
+        soundBuffers["bombBoost"]->loadFromFile("assets/musicAndSound/Bass whoosh Sound Effect.mp3");
+        soundBuffers["endBoost"]->loadFromFile("assets/musicAndSound/Power Down Sound - New Super Mario Bros Wii.mp3");
+        soundBuffers["lifeBoost"]->loadFromFile("assets/musicAndSound/half_life_med.mp3");
+        soundBuffers["shootBoost"]->loadFromFile("assets/musicAndSound/Team_Fortress_2_SFX_-_Server_Join_Equip_Weapon_V1.mp3");
 
         sounds["soundShoot"]->setBuffer(*soundBuffers["soundShoot"]);
         sounds["soundPowerShoot"]->setBuffer(*soundBuffers["soundPowerShoot"]);
         sounds["soundExplosion"]->setBuffer(*soundBuffers["soundExplosion"]);
         sounds["soundExplosion2"]->setBuffer(*soundBuffers["soundExplosion2"]);
         sounds["soundExplosion3"]->setBuffer(*soundBuffers["soundExplosion3"]);
+        sounds["AllerMarcel"]->setBuffer(*soundBuffers["AllerMarcel"]);
+        sounds["freezeBoost"]->setBuffer(*soundBuffers["freezeBoost"]);
+        sounds["bombBoost"]->setBuffer(*soundBuffers["bombBoost"]);
+        sounds["endBoost"]->setBuffer(*soundBuffers["endBoost"]);
+        sounds["lifeBoost"]->setBuffer(*soundBuffers["lifeBoost"]);
+        sounds["shootBoost"]->setBuffer(*soundBuffers["shootBoost"]);
     
-        musics["musicMenu"]->setVolume(30);
-        musics["musicGame"]->setVolume(30);
-        musics["musicScore"]->setVolume(30);
-        musics["musicBoss"]->setVolume(30);
+        musics["musicMenu"]->setVolume(25);
+        musics["musicGame"]->setVolume(25);
+        musics["musicScore"]->setVolume(20);
+        musics["musicBoss"]->setVolume(25);
     
-        sounds["soundShoot"]->setVolume(60);
+        sounds["soundShoot"]->setVolume(50);
         sounds["soundPowerShoot"]->setVolume(60);
-        sounds["soundExplosion"]->setVolume(60);
-        sounds["soundExplosion2"]->setVolume(50);
-        sounds["soundExplosion3"]->setVolume(50);
+        sounds["soundExplosion"]->setVolume(40);
+        sounds["soundExplosion2"]->setVolume(30);
+        sounds["soundExplosion3"]->setVolume(40);
+        sounds["AllerMarcel"]->setVolume(50);
+        sounds["freezeBoost"]->setVolume(85);
+        sounds["bombBoost"]->setVolume(85);
+        sounds["endBoost"]->setVolume(85);
+        sounds["lifeBoost"]->setVolume(50);
+        sounds["shootBoost"]->setVolume(85);
     
         musics["musicMenu"]->setLoop(true);
         musics["musicScore"]->setLoop(false);

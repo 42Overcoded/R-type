@@ -489,7 +489,7 @@ void SfmlSystem::set_color(registry &r)
     }
 }
 
-void SfmlSystem::color_system(registry &r)
+void SfmlSystem::color_system(registry &r, ClientType _type, std::unordered_map<std::string, std::shared_ptr<sf::Sound>> &sounds)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -517,6 +517,8 @@ void SfmlSystem::color_system(registry &r)
                         color[j]->r = 255;
                         color[j]->g = 255;
                         color[j]->b = 255;
+                        if (_type == CLIENT)
+                            sounds["endBoost"]->play();
                         r.kill_entity(entity_t(i));
                         break;
                     }
@@ -542,7 +544,7 @@ void SfmlSystem::color_system(registry &r)
     }
 }
 
-void SfmlSystem::hitbox_system(registry &r)
+void SfmlSystem::hitbox_system(registry &r, ClientType _type, std::unordered_map<std::string, std::shared_ptr<sf::Sound>> &sounds)
 {
     auto &tag = r.get_components<Tag>();
     auto &position = r.get_components<Position>();
@@ -578,8 +580,11 @@ void SfmlSystem::hitbox_system(registry &r)
                         state[i]->id = state[j]->id;
                         clock[i]->clock.restart();
                         if (tag[i]->tag == "lifeBoost") {
-                            if (health[j]->health < 4)
+                            if (health[j]->health < 4) {
                                 health[j]->health += 1;
+                                if (_type == CLIENT)
+                                    sounds["lifeBoost"]->play();
+                            }
                             r.kill_entity(entity_t(i));
                             break;
                         }
@@ -590,8 +595,19 @@ void SfmlSystem::hitbox_system(registry &r)
                                 }
                             }
                             r.kill_entity(entity_t(i));
+                            if (_type == CLIENT)
+                                sounds["bombBoost"]->play();
                             break;
                         }
+                        if (tag[i]->tag == "ice") {
+                            if (_type == CLIENT)
+                                sounds["freezeBoost"]->play();
+                        }
+                        // if (tag[i]->tag == "shootBoost" || tag[i]->tag == "shield") {
+                        //     if (_type == CLIENT) {
+                        //         sounds["shootBoost"]->play();
+                        //     }
+                        // }
                     }
                 }
             }
