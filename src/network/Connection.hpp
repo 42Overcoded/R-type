@@ -167,8 +167,8 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
-                              << std::endl;
+                    // std::cout << "Send Packet: size = " << packetsOutQueue_.Front().header.size
+                    //           << std::endl;
                     if (packetsOutQueue_.Front().header.size > sizeof(PacketHeader<T>) &&
                         packetsOutQueue_.Front().body.size() > 0)
                     {
@@ -180,7 +180,7 @@ protected:
                             packetsOutQueue_.Front().header.flag == T::ServerConnect)
                         {
                             unsigned int port = socket_.local_endpoint().port();
-                            std::cout << "port: " << port << std::endl;
+                            // std::cout << "port: " << port << std::endl;
                             socket_.close();
                             socket_.open(boost::asio::ip::udp::v4());
                             socket_.bind(boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port));
@@ -212,7 +212,6 @@ protected:
             [this](std::error_code ec, std::size_t length) {
                 if (!ec)
                 {
-                    std::cout << "Send body" << std::endl;
                     packetsOutQueue_.PopFront();
                     if (!packetsOutQueue_.IsEmpty())
                     {
