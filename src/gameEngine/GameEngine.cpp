@@ -554,22 +554,22 @@ void gameEngine::load_musics_and_sounds(void)
         sounds.at("lifeBoost") = std::make_shared<sf::Sound>();
         sounds.at("shootBoost") = std::make_shared<sf::Sound>();
 
-        musics["musicMenu"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
-        musics["musicGame"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
-        musics["musicScore"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
-        musics["musicBoss"]->openFromFile("assets/musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
+        musics["musicMenu"]->openFromFile(PATH_TO_ASSETS + "musicAndSound/R-Type (Arcade Soundtrack) 01 Title.mp3");
+        musics["musicGame"]->openFromFile(PATH_TO_ASSETS + "musicAndSound/R-Type (Arcade Soundtrack) 02 Opening - Battle Theme (Stage 1).mp3");
+        musics["musicScore"]->openFromFile(PATH_TO_ASSETS + "musicAndSound/R-Type (Arcade Soundtrack) 13 Game Over.mp3");
+        musics["musicBoss"]->openFromFile(PATH_TO_ASSETS + "musicAndSound/R-Type (Arcade Soundtrack) 10 Boss.mp3");
 
-        soundBuffers["soundShoot"]->loadFromFile("assets/musicAndSound/star wars blaster sound effect.mp3");
-        soundBuffers["soundPowerShoot"]->loadFromFile("assets/musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
-        soundBuffers["soundExplosion"]->loadFromFile("assets/musicAndSound/explosion sound.mp3");
-        soundBuffers["soundExplosion2"]->loadFromFile("assets/musicAndSound/roblox rocket explosion sound.mp3");
-        soundBuffers["soundExplosion3"]->loadFromFile("assets/musicAndSound/Geometry Dash Death Sound Effect.mp3");
-        soundBuffers["AllerMarcel"]->loadFromFile("assets/musicAndSound/1Aller Marcel !!! (mp3cut.net)(1).mp3");
-        soundBuffers["freezeBoost"]->loadFromFile("assets/musicAndSound/Slow Motion Sound Effect.mp3");
-        soundBuffers["bombBoost"]->loadFromFile("assets/musicAndSound/Bass whoosh Sound Effect.mp3");
-        soundBuffers["endBoost"]->loadFromFile("assets/musicAndSound/Power Down Sound - New Super Mario Bros Wii.mp3");
-        soundBuffers["lifeBoost"]->loadFromFile("assets/musicAndSound/half_life_med.mp3");
-        soundBuffers["shootBoost"]->loadFromFile("assets/musicAndSound/Team_Fortress_2_SFX_-_Server_Join_Equip_Weapon_V1.mp3");
+        soundBuffers["soundShoot"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/star wars blaster sound effect.mp3");
+        soundBuffers["soundPowerShoot"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/star wars dc 15s blaster rifle sound effect.mp3");
+        soundBuffers["soundExplosion"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/explosion sound.mp3");
+        soundBuffers["soundExplosion2"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/roblox rocket explosion sound.mp3");
+        soundBuffers["soundExplosion3"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/Geometry Dash Death Sound Effect.mp3");
+        soundBuffers["AllerMarcel"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/1Aller Marcel !!! (mp3cut.net)(1).mp3");
+        soundBuffers["freezeBoost"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/Slow Motion Sound Effect.mp3");
+        soundBuffers["bombBoost"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/Bass whoosh Sound Effect.mp3");
+        soundBuffers["endBoost"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/Power Down Sound - New Super Mario Bros Wii.mp3");
+        soundBuffers["lifeBoost"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/half_life_med.mp3");
+        soundBuffers["shootBoost"]->loadFromFile(PATH_TO_ASSETS + "musicAndSound/Team_Fortress_2_SFX_-_Server_Join_Equip_Weapon_V1.mp3");
 
         sounds["soundShoot"]->setBuffer(*soundBuffers["soundShoot"]);
         sounds["soundPowerShoot"]->setBuffer(*soundBuffers["soundPowerShoot"]);
