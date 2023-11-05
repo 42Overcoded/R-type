@@ -504,6 +504,9 @@ void gameEngine::menu()
     if (gameState.scene == END) {
         _level_info._current_level = 0;
         gameState.scene = MENU;
+        if (gameState.scene == MENU && _networkSystem != nullptr) {
+            _networkSystem.reset();
+        }
         for (size_t i = 0; i < tag.size(); i++) {
             if (!tag[i].has_value())
                 continue;

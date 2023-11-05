@@ -455,19 +455,14 @@ void gameEngine::launch_game()
             sfmlSystems_.draw_system(_registry, _window);
             _window.display();
         }
-        if (_type == SERVER || (_type == CLIENT && (gameState.scene == ONLINE || gameState.scene == GAME))) {
-            if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE)))
-                _networkSystem = std::make_unique<Network::NetworkSystem>(port_, ip_);
-            if (_networkSystem != nullptr) {
-                if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
-                {
-                    networkClock.restart();
-                    _networkSystem->Update(_registry);
-                }
+        if (_networkSystem == nullptr && (_type == SERVER || (_type == CLIENT && gameState.scene == ONLINE)))
+            _networkSystem = std::make_unique<Network::NetworkSystem>(port_, ip_);
+        if (_networkSystem != nullptr) {
+            if (networkClock.getElapsedTime().asMilliseconds() > 1000 / Network::NetworkRefreshRate)
+            {
+                networkClock.restart();
+                _networkSystem->Update(_registry);
             }
-        }
-        if ((gameState.scene == MENU || gameState.scene == OFFLINE) && _networkSystem != nullptr) {
-            _networkSystem.reset();
         }
     }
 }
