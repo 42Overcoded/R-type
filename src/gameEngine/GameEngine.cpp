@@ -320,6 +320,12 @@ void gameEngine::spawnManager(void)
 
 void gameEngine::launch_game()
 {
+    using framerate = std::chrono::duration<int, std::ratio<1, 60>>;
+    auto prev = std::chrono::system_clock::now();
+    auto next = prev + framerate{1};
+    int N = 0;
+    std::chrono::system_clock::duration sum{0};
+
     init_cheatCode();
     load_musics_and_sounds();
     if (_type == CLIENT)
@@ -363,6 +369,18 @@ void gameEngine::launch_game()
         auto &state  = _registry.get_components<State>();
         int alive    = 0;
 
+        if (_type == SERVER) {
+            ::sleep_until(next);
+            next += framerate{5};
+
+            // do drawing
+            // auto now = std::chrono::system_clock::now();
+            // sum += now - prev;
+            // ++N;
+            // std::cerr << "This frame: " << std::chrono::round< std::chrono::milliseconds>(now-prev)
+            //     << "  average: " <<  std::chrono::round< std::chrono::milliseconds>(sum/N) << '\n';
+            // prev = now;
+        }
         if (gameState.scene == MENU || gameState.scene == OFFLINE || gameState.scene == ONLINE ||
             gameState.scene == END || gameState.scene == OPTIONONLINE || gameState.scene == OPTIONOFFLINE ||
             gameState.scene == GENERATE) {
@@ -386,8 +404,6 @@ void gameEngine::launch_game()
         if (gameState.scene == GAME)
         {
             spawnManager();
-            if (_type == SERVER && (networkClock.getElapsedTime().asMilliseconds() < 1000 / Network::NetworkRefreshRate))
-                continue;
             for (size_t i = 0; i < _registry._entity_number; i++)
             {
                 if (!tag[i].has_value())

@@ -82,10 +82,12 @@ void ClientNetworkSystem::manageInputs(registry &reg)
 {
     if (IsConnected())
     {
-        for (int count = 0; !Incoming().IsEmpty() && count < 10; count++)
+        for (int count = 0; !Incoming().IsEmpty() && count < 100000; count++)
         {
             Packet packet = Incoming().PopFront().packet;
             managePacketIn(reg, packet);
+            if (count == 99999)
+                std::cerr << "Too many packets in queue" << std::endl;
         }
     }
 }
