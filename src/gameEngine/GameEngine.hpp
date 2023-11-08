@@ -21,9 +21,20 @@
 #include <unordered_map>
 #include  <iostream>
 #include <memory>
+#include <thread>
 
 
 const int NUMBERS_OF_LEVELS = 3;
+
+template <class Clock, class Duration>
+void
+sleep_until(std::chrono::time_point<Clock, Duration> tp)
+{
+    using namespace std::chrono;
+    std::this_thread::sleep_until(tp - 10us);
+    while (tp >= Clock::now())
+        ;
+}
 
 class gameEngine {
     public:
